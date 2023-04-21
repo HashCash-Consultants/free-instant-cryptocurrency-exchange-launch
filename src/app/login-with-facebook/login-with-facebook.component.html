@@ -1,0 +1,87 @@
+<div>
+  <br>
+  <div class="d-flex justify-content-center">
+    <span>Or log in with</span>
+  </div>
+  <br>
+  <div class="d-flex justify-content-center">
+    <!-- <div class="col-md-4 col-sm-12 col-xs-12">
+      <button type="button" class="btn btn-outline-primary" (click)="getCurrentUrl()" style="width:100%"><i class="fa fa-facebook" aria-hidden="true"></i></button>
+
+    </div> -->
+    <div class="col-sm-4 col-md-4 col-xs-12">
+      <button type="button" class="btn btn-primary" style="width:100%" #loginRef><i class="fa fa-google" aria-hidden="true"></i></button>
+    </div>
+    <div class="col-sm-4 col-md-4 col-xs-12">
+      <button type="button" class="btn btn-primary" style="width:100%" (click)="loginWithLinkedIn()"><i class="fa fa-linkedin" aria-hidden="true"></i></button>
+    </div>
+  </div>
+  <button style="display:none" id="authModalTrigger" (click)="handleOpenAuthModal(twoFactorAuthSocial)"></button>
+  <ng-template #twoFactorAuthSocial let-modal>
+    <div  class=" lightTheme modal-header test proper-alighnment-header">
+      <h4 class="modal-title" id="modal-basic-title" style="color: black;">Security Authentication</h4>
+      
+      <div class="modal-body">
+          <p class="text-left" style="color: black;">Input otp from your google authenticator</p>
+          <!-- <p class="text-left" style="margin-top: -21px; color: black;">{{hiddenEmail}}</p> -->
+    
+          
+          <form>
+            <div class="form-group">
+              <input class="form-control" name="emailVerificationCode" id="twoFactorOtpSocial" type="password" [(ngModel)]="twoFactorOtp" placeholder="Two-Factor Authenticator code" autofocus >
+              
+    
+            </div>
+            </form>
+          <p class="text-left">
+            
+          </p>
+    
+          <button type="submit" class="btn btn-primary btn-block" [disabled]="twoFactorOtp == ''"  (click)="loginThroughOtp()" style="margin-top: 28px;">
+            Confirm
+            </button>
+    
+      </div>
+    </div>
+    </ng-template>
+    
+    <ng-template #smsAuth let-modal>
+      <div class=" lightTheme modal-header test proper-alighnment-header">
+        <div class="row">
+          <div class="col-md-3"></div>
+          <div class="col-md-6">
+            <h4 class="modal-title" id="modal-basic-title" style="color: black;">SMS Authentication</h4>
+          </div>
+          <div class="col-md-3">
+            <i class="fa fa-times" aria-hidden="true"  (click)="modal.dismiss()" style="margin: 6px 0px 0px 32px;cursor: pointer;"></i>
+          </div>
+        </div>
+    
+        <div class="modal-body">
+          <p class="text-left" style="color: black;">Input otp from your registered phone number</p>
+    
+          <form>
+            <div class="form-group">
+              <input numbersOnly class="form-control" name="emailVerificationCode" id="smsOtp" type="password" [(ngModel)]="smsOtp"
+                placeholder="OTP from registered phone no" autofocus>
+                <span class="text-primary sendCode" [ngClass]="disabledSpan ? 'disableSpanClass' : ''" *ngIf="showGetCodeButtonInSmsOtpPopup" (click)="handleSendOtpThroughSms()" 
+                > Get code</span>
+    
+            </div>
+          </form>
+          <p class="text-left">
+            <span class="text-success"> {{intervalMessageForSmsPopup}}</span>
+    
+          </p>
+    
+          <button type="button" class="btn btn-primary btn-block" [disabled]="smsOtp == '' || smsOtp == undefined"
+            style="margin-top: 28px;" (click)="handleSmsAuthSubmit()">
+            Confirm
+          </button>
+    
+        </div>
+      </div>
+    </ng-template>
+</div>
+  
+

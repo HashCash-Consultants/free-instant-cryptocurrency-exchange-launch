@@ -1,0 +1,153 @@
+<app-navbar></app-navbar>
+
+<div class="content-wrapper pt-0 pl-3">
+  <div class="otc-banner">
+    <div class="container">
+      <div class="ban-hdr">
+        <h6>Paybito OTC Trading Portal</h6>
+        </div>
+      </div>
+  </div>
+  <div style="width: 60%;margin: auto;margin-top: 10px;border-radius: .25rem;" id="myDiv" class="col-md-12 bg-dark">
+    <div style="padding-top:31px;" class="sendreceive-wallet">
+      <h4 style="text-align: center;">Request for Quote</h4>
+    </div>
+  <div class="text-center send-wallet">
+    <ngb-tabset>
+      <ngb-tab>
+        <ng-template ngbTabTitle>
+          <span (click)="reset();buyText();" class="text-left">I want to buy</span>
+        </ng-template>
+        <ng-template ngbTabContent>
+         <div>
+            <div class="form-row">
+              <div class="col-12 col-md-4 text-left">
+                <label for="inputBuyBTC" class="col-form-label">Buy</label>
+              </div>
+              <div class="col-12 col-md-8">
+                <div class="input-group">
+                  <input numeric numericType="decimal" class="form-control form-control-sm rounded"
+                    id="inputOnlyBuyAmount" placeholder="0" [(ngModel)]="onlyBuyAmount" (keyup)="getBuyVal($event);"
+                    #bam="ngModel" [class.is-invalid]="bam.dirty&&bam.invalid" disabled>
+                    <div>
+                    <select class="buywith" (change)="getCounterCurrency($event.target.value)">
+                      <option [value]="">Select</option>
+                      <option *ngFor="let item of counterCurrency" [value]="item">{{item}}</option>
+                    </select>
+                  </div>
+                </div>
+                <span class="text-danger" *ngIf="bam.dirty&&bam.invalid">Enter a valid amount</span>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-12 col-md-4 text-left">
+                <label for="inputBuyUSD" class="col-form-label">Spend</label>
+              </div>
+              <div class="col-12 col-md-8">
+                <div class="input-group mb-2">
+                  <input numeric numericType="decimal" class="form-control form-control-sm rounded"
+                    id="inputOnlyBuyTotalPrice" placeholder="0" [(ngModel)]="onlyBuyTotalPrice" disabled>
+                  <div>
+                    <select disabled class="buywith base" id="base-cur" (change)="getBaseCurrency($event.target.value)">
+                      <option  [value]="">Select</option>
+                      <option *ngFor="let item of basecurrency" [value]="item">{{item}}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-12 col-md-4 text-left">
+                <label for="inputBuyUSD" class="col-form-label">Unit Price</label>
+              </div>
+              <div class="col-12 col-md-8">
+                <div class="input-group">
+                  <input numeric numericType="decimal" class="form-control form-control-sm rounded"
+                    id="inputOnlyBuyPrice" placeholder="0" [(ngModel)]="onlyBuyPrice" readonly>
+                 
+                </div>
+                <div style="text-align: left; margin-top: 10px;padding-bottom: 10px;">
+                  <button type="button" id="mbuy" class="btn-green onlyBuyBtn btn" (click)="marketBuy()"
+                    [disabled]="bam.pristine || bam.invalid">Request</button>
+                </div>
+                
+              </div>
+            </div>
+            <span class="onlyBuyError text-red" style="display:none;font-size: 12px;">*Orderbook depth reached, price not found
+            </span>
+            <span class="onlyBuyErrorM text-red" style="display:none;font-size: 12px;">*Total price should be minimum 0.001 
+            </span>
+          </div>
+          </ng-template>
+        
+        
+      </ngb-tab>
+      <ngb-tab >
+        <ng-template ngbTabTitle>
+          <span (click)="reset();sellText()" class="text-left">I want to sell</span>
+        </ng-template>
+        <ng-template ngbTabContent>
+          <div>
+            <div class="form-row">
+              <div class="col-12 col-md-4 text-left">
+                <label for="inputSellBTC" class="col-form-label">Sell</label>
+              </div>
+              <div class="col-12 col-md-8">
+                <div class="input-group">
+                  <input numeric numericType="decimal" class="form-control form-control-sm rounded"
+                    id="inputOnlySellAmount" placeholder="0" [(ngModel)]="onlySellAmount"
+                    (keyup)="getSellVal($event)" #sam="ngModel" [class.is-invalid]="sam.dirty&&sam.invalid" disabled>
+                  <div>
+                    <select  class="buywith"  (change)="getCounterCurrency($event.target.value)">
+                      <option [value]="">Select</option>
+                      <option *ngFor="let item of counterCurrency" [value]="item">{{item}}</option>
+                    </select>
+                  </div>
+                </div>
+                <span class="text-danger" *ngIf="sam.dirty&&sam.invalid">Enter a valid amount</span>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-12 col-md-4 text-left">
+                <label for="inputSellUSD" class="col-form-label">Receive</label>
+              </div>
+              <div class="col-12 col-md-8">
+                <div class="input-group mb-2">
+                  <input numeric numericType="decimal" class="form-control form-control-sm rounded"
+                    id="inputOnlySellTotalPrice" placeholder="0" [(ngModel)]="onlySellTotalPrice" disabled>
+                  <div class="input-group-append">
+                    <select disabled class="buywith base" id="base-cur" (change)="getBaseCurrency($event.target.value)">
+                      <option  [value]="">Select</option>
+                      <option *ngFor="let item of basecurrency" [value]="item">{{item}}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-12 col-md-4 text-left">
+                <label for="inputSellUSD" class="col-form-label">Unit Price</label>
+              </div>
+              <div class="col-12 col-md-8">
+                <div class="input-group">
+                  <input numeric numericType="decimal" class="form-control form-control-sm rounded"
+                    id="inputOnlySellPrice" placeholder="0" [(ngModel)]="onlySellPrice" disabled>
+                 
+                </div>
+                <div style="text-align: left; margin-top: 10px;padding-bottom: 10px;">
+                  <button numeric numericType="decimal" id="msell" class="btn-red onlySellBtn btn"
+                    (click)="marketSell()" [disabled]="sam.invalid || sam.pristine">Request</button>
+                </div>
+              </div>
+            </div>
+            <span class="onlySellError text-red" style="display:none;font-size: 12px;">*Orderbook depth reached, price not found
+            </span>
+            <span class="onlyBuyErrorM text-red" style="display:none;font-size: 12px;">*Total price should be minimum 0.001 
+            </span>
+          </div>
+        </ng-template>
+      </ngb-tab>
+    </ngb-tabset>
+  </div>
+</div>
+</div>

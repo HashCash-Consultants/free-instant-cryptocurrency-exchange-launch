@@ -1,0 +1,13 @@
+[0115/011434.190:ERROR:crash_report_database_win.cc(455)] unexpected header
+[0115/011903.874:ERROR:crash_report_database_win.cc(455)] unexpected header
+[0115/012434.275:ERROR:directory_reader_win.cc(43)] FindFirstFile: The system cannot find the path specified. (0x3)
+[0124/153500.894:ERROR:directory_reader_win.cc(43)] FindFirstFile: The system cannot find the path specified. (0x3)
+[0124/201516.992:ERROR:scoped_process_suspend.cc(31)] NtSuspendProcess: An attempt was made to access an exiting process. (0xc000010a)
+[0124/201517.730:ERROR:process_reader_win.cc(123)] NtOpenThread: {Access Denied} A process has requested access to an object, but has not been granted those access rights. (0xc0000022)
+[0124/201517.250:ERROR:process_reader_win.cc(123)] NtOpenThread: {Access Denied} A process has requested access to an object, but has not been granted those access rights. (0xc0000022)
+[0124/201517.012:ERROR:process_reader_win.cc(123)] NtOpenThread: {Access Denied} A process has requested access to an object, but has not been granted those access rights. (0xc0000022)
+[0124/201517.972:ERROR:exception_snapshot_win.cc(99)] thread ID 17212 not found in process
+[0124/201517.972:ERROR:process_info.cc(118)] ReadProcessMemory bool __cdecl crashpad::(anonymous namespace)::ReadStruct(HANDLE, crashpad::WinVMAddress, T *) [T = crashpad::process_types::PEB<crashpad::process_types::internal::Traits64>]: Only part of a ReadProcessMemory or WriteProcessMemory request was completed. (0x12B)
+[0124/201517.977:ERROR:exception_snapshot_win.cc(99)] thread ID 700 not found in process
+[0124/201517.977:ERROR:exception_snapshot_win.cc(99)] thread ID 8112 not found in process
+[0124/201517.977:ERROR:process_info.cc(551)] ReadProcessData failed

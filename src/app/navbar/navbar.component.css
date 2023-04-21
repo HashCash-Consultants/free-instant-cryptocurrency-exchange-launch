@@ -1,0 +1,143 @@
+.modal-content{
+    background: red !important;
+}
+.btn-danger{
+    color: #fff !important;
+    background-color: #c82333 !important;
+    border-color: #bd2130 !important;
+}
+.logo-deaitls{
+    color: #fff !important;
+    font-size: 22px;
+    padding: 0px 0;
+}
+.logo-deaitls .fa-btc{
+    margin: 0 0 0 5px;
+    color: #fff;
+}
+
+.logo-deaitls img {
+    width: 62%;
+    max-width: 100%;
+  }
+  .navbar-dark .navbar-brand {
+    background: #24262d;
+    padding: 5px .6125rem;
+}
+.navbar-nav .nav-item:first-child:before{display:none;}
+.nav-item:before{content:"";position: absolute;left:0;top:11px;width:1px;height:20px;background:#3e3838;}
+.navbar-sidenav_new .nav-item:before{display:none;}
+.logo-deaitls {
+  
+    height: 48px;
+   
+}
+.proper-alighnment-header{
+    padding: 0;
+}
+#modal-basic-title{
+    margin:20px;
+}
+.modal-body{
+    padding: 30px;
+    background-color: #31313a;
+    margin: 25px 30px;
+  }
+  .test{
+    background-color: #24262d;
+}
+.modal-header{
+    border-bottom: 0 !important;
+}
+.modal-header .close{
+  margin-top: -6rem;
+  margin-right: -18px;
+  border-radius: 50%;
+  background-color: #696975;
+  padding: 0.7rem 1rem;
+}
+button.btn.btn-secondary{
+    margin: 17px;
+}
+.navbar-light{
+    background: #dedede !important;
+    padding: 6px;
+}
+
+.sideav-light{
+    background: #fafafa !important;
+
+}
+.sideav-item-light{
+    background: #fafafa !important;
+
+}
+.themeChangeButton{
+    padding-right: 27px;
+    list-style-type: none;
+}
+.btngrpinr{
+    position: relative;
+    top: 8px;
+}
+
+.night{
+    background: black;
+    }
+    .day{
+        background: rgb(227, 238, 230);
+    }
+
+
+    .themeToggleButonDark{
+     z-index: 99 !important;
+    background-color: rgb(44, 65, 66) !important;
+    border-color: transparent !important;
+    color: rgb(255, 255, 255) !important;
+    box-shadow: 0 2px 5px 0 rgb(0 0 0 / 16%), 0 2px 10px 0 rgb(0 0 0 / 12%) !important;
+
+    }
+
+    .themeToggleButonLight{
+    z-index: 99!important;
+    background-color: rgb(222, 222, 222)!important;
+    border-color: rgb(179, 180, 180)!important;
+    color: rgb(0, 0, 0)!important;
+    box-shadow: 0 2px 5px 0 rgb(0 0 0 / 16%), 0 2px 10px 0 rgb(0 0 0 / 12%)!important;
+
+    }
+
+
+    @media (max-width:480px){
+        .btngrpinr {
+            position: relative;
+            top: 8px;
+            right: 51px;
+        }
+      }
+
+    
+      
+      .loader{
+        position: absolute;
+        top:0px;
+        right:0px;
+        width:100%;
+        height:100%;
+        background-image:url('../../assets/noInternetLoader.gif') !important;
+        background-color:#6a6666;
+        background-size: 50px;
+        background-repeat:no-repeat;
+        background-position:center;
+        z-index:10000000;
+        opacity: 0.2;
+        filter: alpha(opacity=40);
+    }
+    .extraPadding{
+    margin-bottom: -13px;
+    }
+.disabledCLass{
+    pointer-events: none;
+    opacity: 0.4;
+}
+    

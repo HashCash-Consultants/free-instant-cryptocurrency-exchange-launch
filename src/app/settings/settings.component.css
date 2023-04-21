@@ -1,0 +1,228 @@
+
+.btn-green-savechanges{
+    background: #549426 !important;
+    border-radius: 1.25rem !important;
+    width: auto;
+    padding: 6px 22px;
+    text-transform: uppercase;
+    font-size: 17px;
+    position: relative;
+    left: -12px;
+}
+.settings-alighnment{
+    background: #131722;
+    padding:24px;
+}
+.mb-alighnment{
+    margin: 1px !important;
+}
+.twofabutton{
+    position: absolute;
+    right: 11px;
+    top: 15px;
+}
+.keyapicheck{
+    background-color: #131722;
+}
+
+.border-alighnment{
+    border:0;
+}
+.button-alighnment{
+    position: relative;
+}
+.twofactorbutton{
+    position: relative;
+}
+.radiobtn{
+    position: relative;
+    top: 2px;
+}
+.enablfees{
+    margin-top: 5%;
+    margin-left: -10%;
+}
+.enablefeesj{
+    display: flex;
+}
+.sign-up-from{
+    background-color: #24262d !important;
+    border: 1px solid #24262d !important;
+}
+.pointercursor{
+    cursor: pointer;
+}
+.apicol{
+    color:#ffffff !important;
+}
+#modal-basic-title{
+    margin:20px;
+}
+.modal-body{
+    padding: 30px;
+    background-color: #31313a;
+    margin: 25px 30px;
+  }
+  .test{
+    background-color: #24262d;
+}
+.modal-header{
+    border-bottom: 0 !important;
+}
+.modal-header .close{
+  margin-top: -2.5rem;
+  margin-right: -36px;
+  border-radius: 50%;
+  background-color: #696975;
+  padding: 0.7rem 1rem;
+}
+button.btn.btn-secondary{
+    margin: 17px;
+}
+.getcodebtn{
+margin-top: 32px;
+}
+.modal-body1{
+    text-align: left;
+}
+.subbtn{
+    width: 100%;
+}
+.copyid{
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+}
+.apilist{
+    margin: 0px 15px;
+    margin-bottom: 15px;
+}
+.copybtn{
+    margin-left: 10px;
+}
+.txtBox{
+    margin-bottom: 20px;
+}
+.bs-example{
+    margin-top: 8px;
+    margin-left: 0;
+    width: 100%;
+    /* background-color: #24262d; */
+}
+.bs-example .card-header{
+    background-color: #24262d;
+}
+.google-auth-token{
+    background-color: #24262d !important;
+    padding: 0px !important;
+}
+.google-auth-close-btn{
+    background-color: #24262d;
+}
+.google-auth-close-btn .close{
+    margin-top: -12rem !important;
+    
+}
+.enablefeesstructure{
+    margin-top: 20px;
+    margin-right: 15px;
+    border-radius: 0.25rem;
+}
+.otp_input{
+    border: 1px solid #24262d !important;
+}
+.transaction-fees-alighnment{
+    background-color: #31313a;
+}
+.action_btn{
+display: flex;
+ margin-right: 20px;
+ margin-top: 13px;
+}
+.apilistcls{
+    width: 100%;
+    padding: 0px 10px;
+}
+.bs-header{
+    border: 0;
+    background-color: transparent;
+}
+.entername{
+    position: absolute;
+    bottom: -20px;
+}
+#qrcd{
+    margin-bottom: 18px;
+}
+.otpsubmt{
+    margin-top: 31px !important;
+}
+.apilistheader{
+    background-color: #24262d!important;
+}
+.apilistheader-body{
+    background-color: #31313a;
+}
+.acrdan-card{
+    background-color: transparent;
+    border-radius: 0.25rem !important;
+    overflow: hidden;
+}
+.allapikey{
+    margin-right: 15px;
+}
+.apilist-header{
+    background-color: #24262d;
+    border-radius: .25rem;
+}
+.body{
+    background-color: #24262d;
+}
+
+
+.bg-black{
+    background-color: #202023 !important ;
+    
+    }
+  
+  .newRowShade{
+        background-color: #31313a ;
+        border-top: 2px solid #24262d;
+  }
+  
+  .newRowShade-light{
+    background-color: #dedede ;
+    border-top: 2px solid #fff;
+  }
+  .text-black{
+    color: #474d57 ;
+  }
+  
+  .bg-light-identity-verify{
+    background-color: #dedede ;
+  
+  }
+  .form-control-light{
+    color: #474d57;
+    background-color: #dedede;
+    border: none !important;
+  }
+  
+  .form-control-light::-webkit-input-placeholder{ 
+    color: #474d57;
+    opacity: 1; 
+  }
+  
+  .spanText-dark{
+    color: #9ba7b2;
+  }
+  
+  .spanText-light{
+    color: #474d57;
+  }
+  .bg-dark{
+    background-color: #24262d!important;
+  }
+  .bg-light-bankDetils{
+    background-color: #dedede;
+  }

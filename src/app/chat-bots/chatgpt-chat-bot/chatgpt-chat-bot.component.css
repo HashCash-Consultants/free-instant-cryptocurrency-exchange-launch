@@ -1,0 +1,99 @@
+.drawer-handle{
+    position: absolute;
+    right: 0;
+    top:60%;
+    z-index:1;
+    cursor: pointer;
+    background-color: #24262d;
+    color:#c5c6c8;
+    font-size: 25px;
+    padding: 3px 3px 1px 7px;
+    border-radius: 6px;
+    box-shadow: -8px 6px 4px 1px #0c0b0b;
+}
+
+.chat-popup {
+    display: block;
+    background: #24262d;
+    position: absolute;
+    bottom: 0;
+    right: 15px;
+    border: 3px solid #24262d;
+    z-index: 9;
+    padding: 13px 13px 6px 13px;
+    border-radius: 8px;
+    box-shadow: -20px 15px 7px -1px #0a0a0a;
+  }
+
+  .sideLite{
+    background-color: #f8f9fa !important;
+    color: #474d57;
+  }
+
+.form-container{
+    width: 320px;
+}
+
+  
+  /* When the textarea gets focus, do something */
+  .form-container input {
+    background-color: #131722;
+    outline: none;
+    margin-bottom: 20px;
+  }
+  
+  /* Set a style for the submit/send button */
+  .form-container .btn {
+    background-color: #04AA6D;
+    color: white;
+    padding: 16px 20px;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    margin-bottom:10px;
+    opacity: 0.8;
+  }
+  
+  /* Add a red background color to the cancel button */
+  .form-container .cancel {
+    background-color: red;
+  }
+  
+  /* Add some hover effects to buttons */
+  .form-container .btn:hover, .open-button:hover {
+    opacity: 1;
+  }
+  ul.no-bullets {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+  .chat-container{
+    overflow-y: scroll;
+    height: 320px;
+    width: 323px;
+  }
+  .message-bot-row{
+    background: #131722;
+    padding: 11px 53px 0px 0px;
+    width: 205px;
+    border-radius: 14px;
+    margin-top: 14px;
+    margin-left: 4px;
+    box-shadow: 2px 2px 2px #000;
+  }
+  .message-user-row{
+    background: #2a3c3e;
+    padding: 11px 48px 0px 0px;
+    width: 205px;
+    border-radius: 14px;
+    margin-left: 98px;
+    margin-top: 14px;
+    box-shadow: 2px 2px 2px #000;
+
+  }
+.form-control-light{
+  color: #474d57 !important;
+  background-color: #dedede !important;
+  border: none !important;
+}

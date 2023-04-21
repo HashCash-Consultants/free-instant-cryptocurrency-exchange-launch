@@ -1,0 +1,20 @@
+<router-outlet ></router-outlet>
+
+
+<button (click)="warn(warng)" class="d-none" id="logoutWarn">warn</button>
+<ng-template #warng class="modal-con" let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">About to Logout</h4>
+      <button type="button" class="close" aria-label="Close" id="logoutWarncl" (click)="modal.dismiss()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      You are going to logout in 20 seconds. Click continue to resume this session.
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="modal.close(); data.logout();">Cancel</button>
+      <button type="button" class="btn btn-success" (click)="modal.close(); data.Stop()" >Continue</button>
+    </div>
+  </ng-template>
+  

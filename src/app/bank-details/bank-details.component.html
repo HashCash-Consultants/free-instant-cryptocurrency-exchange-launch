@@ -1,0 +1,178 @@
+<app-navbar (themeChanged)="themeChangedHandler($event)"></app-navbar>
+
+<!-- <app-loader></app-loader> -->
+<div class="content-wrapper pt-0 pl-3" [ngClass]="Themecolor == 'Dark' ? '' : 'content-wrapper-light'">
+
+
+
+  <div class="row d-flex" data-ng-init="loginDuration();" data-ng-controller="bankDetailsCtrl">
+    <div class="col-lg-12 col-12 bank-alighnment align-self-stretch bankDetailsCtrl"
+      [ngClass]="Themecolor == 'Dark' ? 'bg-dark' : 'bg-light'">
+
+
+      <div class="p-2 rounded h-100"> 
+        <span class="font-md text-theme-dark-blue mr-2 pl-3">Bank Details
+
+          <span style="cursor: pointer;margin-left:10px;font-size:14px;">
+            <i class="fa fa-info-circle" aria-hidden="true" (click)="data.handleInfoSection('bankInfo')"></i>
+          </span>
+        </span>
+
+        <div class="info-section" id="bankInfo" style="display: none; top: 59px;margin:auto;">
+          <div class="info-header">
+            <div class="info-title">Bank Details</div>
+            <div class="info-close">
+              <i class="fa fa-times" aria-hidden="true" (click)="data.handleInfoSection('bankInfo')"></i>
+            </div>
+          </div>
+          <div class="info-body">Submit your own Bank details. When you make a withdrawal, the amount will be credited
+            to the provided bank account</div>
+        </div>
+        <div class="w-100"></div>
+        <span class='font-bold mr-2 pl-3' style="color:#168BFE;">{{main.bankDetailStatus}}</span>
+        <form id="bankDetailsForm" (ngSubmit)="f.form.valid && updateBankDetails(confirm)" #f="ngForm">
+          <!--  <ul class="list-group mt-3"> -->
+          <div class="row mt-3 pl-3 pr-3">
+            <div class="col-md-6 bank-details-alighnment bg-transparent">
+              <div class="form-row">
+                <label class="text-theme-dark-blue" for="beneficiary_name">Account Holder's Name</label>
+                <div class="input-group mb-2">
+                  <!-- disablecopypaste -->
+                  <input type="text" appOnlyAlphabet class="form-control " placeholder="Beneficiary Name" id="beneficiary_name"
+                    [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'" placeholder="Account holder's Name"
+                    [(ngModel)]="beneficiary_name" name="beneficiary_name"
+                    (change)="checkBankInputfield('beneficiary_name')"  required #name="ngModel">
+                  <!--pattern="[A-Za-z]{2,}"-->
+                </div>
+                <div *ngIf="f.submitted && name.invalid">
+                  <div *ngIf="name.errors.required" class="text-danger">Beneficiary Name is required</div>
+                  <div *ngIf="name.errors.pattern" class="text-danger">Beneficiary Name cannot contain numbers</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 bank-details-alighnment bg-transparent">
+              <div class="form-row">
+                <label class="text-theme-dark-blue" for="account_number">IBAN/Account Number</label>
+                <div class="input-group mb-2">
+                  <input type="text" class="form-control" id="account_no" [(ngModel)]="account_no" name="account_no"
+                    [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'" placeholder="Account Number"
+                    (change)="checkBankInputfield('account_no')" (keypress)="keyPressAlphaNumeric($event)" maxlength="30" required #ac="ngModel" pattern="[A-Za-z0-9]{3,}"
+                    [class.is-invalid]="ac.dirty&&ac.invalid">
+                </div>
+                <div *ngIf="f.submitted && ac.invalid">
+                  <div *ngIf="ac.errors.required" class="text-danger">IBAN/Account number is required</div>
+                  <div *ngIf="ac.errors.pattern" class="text-danger">Please provide a valid IBAN/Account number</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row mt-3 pl-3 pr-3">
+            <div class="col-md-6 bank-details-alighnment bg-transparent">
+              <div class="form-row">
+                <label class="text-theme-dark-blue" for="account_number">Account Type</label>
+                <div class="input-group mb-2">
+                  <select class="form-control" id="account_type" [(ngModel)]="accountType" name="account_type"
+                    [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'" placeholder="Account Type"
+                    (change)="checkBankInputfield('account_type')" required #act="ngModel"
+                    [class.is-invalid]="act.dirty&&act.invalid">
+                    <option value="">Select Account Type</option>
+                    <option value="Personal Savings">Personal Savings</option>
+                    <option value="Personal Checking">Personal Checking</option>
+                    <option value="Business Savings">Business Savings</option>
+                    <option value="Business Checking">Business Checking</option>
+                  </select>
+                </div>
+                <div *ngIf="f.submitted && act.invalid">
+                  <div *ngIf="act.errors.required" class="text-danger">Account type is required</div>
+                  <div *ngIf="act.errors.pattern" class="text-danger">Account type cannot contain number</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 bank-details-alighnment bg-transparent">
+              <div class="form-row row" style="    position: relative; top:32px">
+                <select class="col-md-4 form-control drln" id="bankno" (click)="clearfield()"
+                  [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'" required>
+                  <option>ROUTING NO</option>
+                  <option>IFSC CODE</option>
+                  <option>SWIFT CODE</option>
+                </select>
+                <div class="input-group col-md-8">
+                  <input type="text" class="form-control" id="routing_no" placeholder=""
+                    [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'" [(ngModel)]="routing_no"
+                    name="routing_no" (change)="checkBankInputfield('routing_no')" required #rtn="ngModel"
+                    [class.is-invalid]="rtn.dirty&&rtn.invalid" (keypress)="keyPressAlphaNumeric($event)" maxlength="30">
+                </div>
+                <div *ngIf="f.submitted && rtn.invalid">
+                  <div *ngIf="rtn.errors.required" class="text-danger">Bank identification number is a required field
+                  </div>
+                  <!-- <div *ngIf="rtn.errors.pattern" class="text-danger">Bank identification number cannot contain alphabets</div> -->
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row mt-3 pl-3 pr-3">
+            <div class="col-md-6 bank-details-alighnment bg-transparent">
+              <div class="form-row">
+                <label class="text-theme-dark-blue" for="bank_name">Bank Name</label>
+                <div class="input-group mb-2">
+                  <input type="text" class="form-control" id="bank_name"
+                    [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'" [(ngModel)]="bank_name"
+                    name="bank_name" placeholder="Bank Name" (change)="checkBankInputfield('bank_name')" required
+                    #bank="ngModel" (keypress)="keyPressAlphaNumeric($event)">
+                </div>
+                <div *ngIf="f.submitted && bank.invalid">
+                  <div *ngIf="bank.errors.required" class="text-danger">Bank name is required</div>
+                  <div *ngIf="bank.errors.pattern" class="text-danger">Bank name cannot contain numbers</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 bank-details-alighnment bg-transparent">
+              <div class="form-row">
+                <label class="text-theme-dark-blue" for="bankAddress">Bank Address</label>
+                <div class="input-group mb-2">
+                  <input appAlphaNumericOnly type="text" class="form-control" id="bankAddress"
+                    [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'" [(ngModel)]="bankAddress"
+                    name="bankAddress" placeholder="Bank Address" (change)="checkBankInputfield('bankAddress')" required
+                    #bankAdd="ngModel" >
+                </div>
+                <div *ngIf="f.submitted && bankAdd.invalid">
+                  <div *ngIf="bankAdd.errors.required" class="text-danger">Bank Address is required</div>
+                  <div *ngIf="bankAdd.errors.pattern" class="text-danger">Bank Address cannot contain numbers</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <li class="list-group-item bank-details-alighnment bg-transparent">
+
+            <!--  <p><small style="color:#007bff;">*Account Holder's name should match name provided while signing up.</small>
+              </p> -->
+            <!-- <p><small style="color:#007bff;">* Deposits/withdrawals are only available for US bank accounts</small></p> -->
+            <div class="form-row mt-2 mb-2">
+              <button type="submit" class="btn btn-green-paynow" [disabled]="f.form.pristine">SAVE CHANGES</button>
+            </div>
+          </li>
+          <!-- </ul> -->
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<ng-template #confirm let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Confirm</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body" style="margin-left: 25px;">
+    Editing these details will restrict some features until verification.
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modal.close()">No</button>
+    <button type="button" class="btn btn-warning" style="margin-right: 180px;"
+      (click)="modal.close(); yesConfirm();">Yes</button>
+  </div>
+</ng-template>

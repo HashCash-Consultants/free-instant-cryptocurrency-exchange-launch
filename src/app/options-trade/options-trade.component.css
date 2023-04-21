@@ -1,0 +1,83 @@
+@keyframes invalid {
+    from { background-color: red; }
+    to { background-color: inherit; }
+  }
+  .invalid {
+    -webkit-animation: invalid 1s infinite; /* Safari 4+ */
+    -moz-animation:    invalid 1s infinite; /* Fx 5+ */
+    -o-animation:      invalid 1s infinite; /* Opera 12+ */
+    animation:         invalid 1s infinite; /* IE 10+ */
+  }
+  .resizable-widget{
+    /* border:1px solid #131722; */
+    border: none !important;
+
+    min-height: 286px !important;
+    overflow: hidden;
+   
+}
+.resizable-widget{min-height:auto;height:360px !important;}
+.scrollable {
+  max-height: 187px !important;
+}
+@media (max-width:767px){
+  .table{
+width: 600px;
+  }
+}
+
+.trade-component{
+  /* background: #181d2b!important; */
+  background: rgb(19, 23, 34);
+}
+ /* .my-trade-table tbody {
+  display: block;
+  max-height: 300px;
+  overflow-y: scroll;
+}
+
+.my-trade-table thead, .my-trade-table tbody tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+} */
+
+/* .trade-table {
+    display: flex;
+    flex-flow: column;
+    width: 100%;
+}
+
+.trade-table thead {
+    flex: 0 0 auto;
+}
+
+.trade-table tbody {
+    flex: 1 1 auto;
+    display: block;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.trade-table tr {
+    width: 100%;
+    display: table;
+    table-layout: fixed;
+} */
+
+.trade-table thead th {
+  position: sticky;
+  top: 0;
+}
+.fee_btn{
+  position: absolute;
+  right: 21px;
+  top: 14px;
+  cursor: pointer;
+}
+th,thead{
+  font-size: 16px;
+  /* background: transparent; */
+  /* background-color: #14223d !important;
+  border: none; */
+}

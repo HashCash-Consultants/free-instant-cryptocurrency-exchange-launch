@@ -1,0 +1,138 @@
+.drg{
+    cursor: move;
+}
+.drg:active{
+    z-index:9;
+}
+.btn{
+    margin:2px;
+    /* background: transparent; */
+}
+
+.bt.active{
+    background: initial;
+}
+
+.btntitle{
+    margin-left: 5px;
+}
+
+/* .dchart {
+    height: 550px;
+} */
+
+/* .col-md-6.col_md_6_new.chart-align{
+    margin-right: -10px;
+}
+.order-align{
+    padding-right: 0;
+} */
+
+
+@media screen and (max-width: 720px) {
+    .btntitle{
+        display: none;
+    }
+}
+.night{
+    background: black;
+    }
+    .day{
+        background: rgb(227, 238, 230);
+    }
+
+    /* .content-wrapper {
+        overflow-x: hidden;
+        background: #0e9292;
+    } */
+    .screen-col{
+        float: right;
+    }
+    .app-chart-table{position: relative;z-index:99;}
+    .dpr{width:100px;float:left;margin-left:97px;position: relative;
+    top: -5px;
+    }
+    .ordercol-md-5{
+        padding-left: 9px;
+        padding-right: 9px;
+    }
+    .col_md_7_new{
+        padding-left: 9px;
+        padding-right: 9px;   
+    }
+    .order_row_ml{
+        margin-left: -9px;
+        margin-right: -9px;
+    }
+    .left-container_fluid{
+        padding-left:5px;
+        padding-right:5px;
+    }
+    .padding-2{
+        padding-right:2px !important;
+        /* margin-top: 3px; */
+        padding-left: 13px;
+    }
+    .drag-btn-alighnment{
+        border-radius: 1.25rem;
+        margin: 3px;
+        }
+    .day-light-btn{
+        border-radius: 1.5rem;
+        position: relative;
+        padding: 5px;
+        top: 0.5px;
+    }
+    @media (max-width:480px){
+        .stoploss-col{
+            margin-top: 5px;
+        }
+      }
+      .dashboardContent{
+        padding-left: 7px;
+        zoom: 80%;
+    
+    }
+    
+    
+      @media (min-width: 1500px) {
+        .dashboardContent{
+            padding-left: 10px;
+            zoom: 80%;
+            
+        
+        }
+        .left-container_fluid{
+            padding-left:5px;
+            padding-right:5px;
+        }
+    
+    }
+
+      @media (min-width: 1900px) {
+        .dashboardContent{
+            padding-left: 0px;
+            zoom: 95%;
+
+        
+        }
+        .left-container_fluid{
+            padding-left:2px;
+            padding-right:4px;
+        }
+    
+    }
+    @media (min-width: 2100px) {
+        .dashboardContent{
+            padding-left: 0px;
+            zoom: 100%;
+        
+        }
+        .left-container_fluid{
+            padding-left:0px;
+            /* padding-right:4px; */
+        }
+    
+    }
+    
+  

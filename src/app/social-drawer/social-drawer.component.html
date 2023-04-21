@@ -1,0 +1,50 @@
+<span  class="drawer-handle" id="drawerHandle" (click)="handleToggleDrawer()"><i class="fa fa-share-square" aria-hidden="true"></i></span>
+<div id="mySidenav" [ngClass]="Themecolor == 'Dark' ? 'sidenav' : 'sidenav sideLite'"  *ngIf="Themecolor != '' ">
+  <a href="javascript:void(0)" class="closebtn" (click)="handleToggleDrawer()">&times;</a>
+  <!-- <a href="#">About</a>
+  <a href="#">Services</a>
+  <a href="#">Clients</a>
+  <a href="#">Contact</a> -->
+  <div class="drawer-content">
+    <div class="row d-flex">
+      <div class="col-md-12 d-flex">
+        <label style="text-align: justify;">Ask a Question or a Suggestion to friends on Social Media</label>
+      </div>
+    </div>
+    <div class="row d-flex mt-2">
+      <div class="col-md-6 col-sm-12 sol-xs-12 d-flex">
+        <button type="button" class="btn btn-facebook" (click)="handleSelectSocialBrand('Facebook')" style="width: 120%;"><i class="fa fa-facebook" aria-hidden="true" ></i> Facebook</button>
+      </div>
+      <div class="col-md-6 col-sm-12 sol-xs-12 d-flex">
+        <button type="button" class="btn btn-info" (click)="handleSelectSocialBrand('Twitter')" style="width: 120%;"><i class="fa fa-twitter" aria-hidden="true"></i> Twitter </button>
+      </div>
+    </div>
+    <div class="row d-flex mt-2">
+      <div class="col-md-6 col-sm-12 sol-xs-12 d-flex">
+        <button type="button" class="btn btn-success" (click)="handleSelectSocialBrand('Whatsapp')" style="width: 120%;"><i class="fa fa-whatsapp" aria-hidden="true"></i> WhatsApp</button>
+      </div>
+      <div class="col-md-6 col-sm-12 sol-xs-12 d-flex">
+        <button type="button" class="btn btn-linked-in" (click)="handleSelectSocialBrand('LinkedIn')" style="width: 120%;"><i class="fa fa-linkedin" aria-hidden="true"></i> LinkedIn</button>
+      </div>
+    </div>
+      <div class="row mt-2" *ngIf="selectedSocialBrand == 'Whatsapp' || selectedSocialBrand == 'Twitter'">
+        <div class="col-md-12">
+          <label>Ask a question to a friend on {{selectedSocialBrand}}</label>
+          <input type="text" class="form-control" [(ngModel)]="questionField" placeholder="Type your question here"/>
+        </div>
+      </div>
+    <div class="row mt-2">
+      <div class="col-md-12">
+        <label *ngIf="selectedSocialBrand == 'Facebook'" style="text-align: justify;">When you click the Post your question button, a Facebook dialogue box will open. Type the question you would like to ask to your friends in the dialogue box. The question will be posted to your Facebook page timeline. </label>
+        <label *ngIf="selectedSocialBrand == 'LinkedIn'" style="text-align: justify;">When you click the Post your question button, a LinkedIn dialogue box will open. Type the question you would like to ask to your network in the dialogue box. The question will be posted to your LinkedIn. </label>
+      </div>
+    </div>  
+    <div class="row mt-3" *ngIf="selectedSocialBrand != ''">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+          <button type="button" class="btn btn-facebook" (click)="handlePostQuestion()">Post your question</button>
+        </div>
+        <div class="col-md-2"></div>
+      </div>
+  </div>
+</div>

@@ -1,0 +1,30 @@
+
+<div class="bitrump-body">   
+    <div class="container">
+        <div class="card card-login mx-auto mt-3">
+            <div class="card-header text-center text-blue bg-pbgreen bitrump-logo">
+                <!-- <img [src]="data.brokerlogo" alt=""> -->
+                <!-- <span><i class="fa fa-btc"></i></span>itrump -->
+                <!-- <h5 class="bittrmp-hedr">Please check that you are visiting <a href="https://www.xobico.com/" target="_blank">https://www.xobico.com/</a></h5> -->
+            </div>
+                <div class="card-header text-center text-blue p-0">
+                <!-- <h5 class="p-3 mb-0" style="color: #86bbb8;font-size: 18px;font-weight: lighter;"><span class="bitrump-pro">Xobico Secure-Token</span></h5> -->
+                </div>
+
+            <div class="card-body p-3 card-login-body">
+                <div class="form-group">
+                <!-- <label for="forgotpasswordInputPassword">Email</label> -->
+                <input class="form-control" id="forgotpasswordInputPassword" [(ngModel)]="email" type="email" placeholder="Email" required>
+                </div>
+
+                <button class="btn btn-primary btn-block secure-btn" (click)="secureToken(true)">Get Secure Token</button>
+                    <!-- <p [hidden]="!error" class="text-danger my-3">Email address or Password Invalid</p> -->
+
+            <div class="d-flex mt-2 forgot-pswd">
+                <div class="mt-3 text-center mr-auto"><a routerLink="/signup">Create an Account</a></div>
+                <div class="mt-3 text-center"><a routerLink="/login">Back To Sign In</a></div>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>

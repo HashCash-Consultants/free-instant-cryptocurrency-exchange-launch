@@ -1,0 +1,576 @@
+<app-navbar (themeChanged)="themeChangedHandler($event)"></app-navbar>
+
+
+<div class="content-wrapper pt-0 pl-3" [ngClass]="Themecolor == 'Dark' ? '' : 'content-wrapper-light'">
+
+  <ngb-tabset justify="fill" [ngClass]="Themecolor == 'Dark' ? 'tab-dark' : 'tab-light'" [activeId]="activeIdString">
+
+    <ngb-tab id="spot" >
+      <ng-template ngbTabTitle>
+        <!-- <h5 class="market-reset" (click)="main.transactionHistory(1)"> SPOT</h5> -->
+        <h5 class="market-reset" (click)="transactionHistory(1); saveHistoryCompNavHist('spot')"> SPOT</h5>
+
+      </ng-template>
+      <ng-template ngbTabContent>
+        <div class="row d-flex section-position" data-ng-controller="historyCtrl" data-ng-init="loginDuration();">
+          <div class="col-12 mt-3 align-self-stretch">
+            <div class="p-2 pl-3 pr-3 rounded h-100" [ngClass]="Themecolor == 'Dark' ? 'bg-dark' : 'bg-light'">
+              <div class="d-flex">
+                <div class="p-2 mr-auto">
+                  <span class="font-md  mr-2" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">
+                    Transaction History
+                    <span style="cursor: pointer;margin-left:10px;">
+                      <i class="fa fa-info-circle" aria-hidden="true" (click)="data.handleInfoSection('assetSpotInfo')" style="font-size: 14px;"></i>
+                    </span>
+                    <div class="info-section" id="assetSpotInfo" style="display: none;margin:auto; top: 10px;left:26px;">
+                      <div class="info-header">
+                        <div class="info-title">Transaction History</div>
+                        <div class="info-close">
+                          <i class="fa fa-times" aria-hidden="true" (click)="data.handleInfoSection('assetSpotInfo')" ></i>
+                        </div>
+                      </div>
+                      <div class="info-body">
+                        <p>This section displays the SPOT trade details, send, receive, and can see the invoice of each trade.</p>
+                      </div>
+                    </div>
+                  </span>
+                </div>
+                <div class="p-2">
+                  <div class="btn-group btn-group-sm" role="group" aria-label="transaction-history">
+                    <button type="button" class="btn btn-dark font-xs filter-button all_btn btn_active"
+                      (click)="getDuration('all')">All</button>
+                    <button type="button" class="btn btn-dark font-xs filter-button last_week_btn"
+                      (click)="getDuration('last week')">Last Week</button>
+                    <button type="button" class="btn btn-dark font-xs filter-button last_month_btn"
+                      (click)="getDuration('last month')">Last Month</button>
+                    <!--<button type="button" class="btn btn-dark font-xs filter-button btn_active" data-ng-click="getDuration('one_day')">1D</button>-->
+                  </div>
+                </div>
+              </div>
+              <div class="w-100 mt-2"></div>
+              <div class="table-responsive-sm">
+                <table class="table table-sm table-hover">
+                  <thead>
+                    <tr  [ngClass]="Themecolor == 'Dark' ? 'bg-black text-white' : 'tableHeader-bg-light text-black'">
+                      <th style="width: 20%;" scope="col" class="tablefirstRow">Date - Time</th>
+                      <th style="width: 20%;" scope="col">Transaction ID</th>
+                      <th style="width: 20%;" scope="col">Type</th>
+                      <th style="width: 20%;" scope="col">Asset</th>
+                      <th style="width: 10%;" scope="col">Status</th>
+                    </tr>
+                  </thead>
+                  
+                  <tbody class="historyTableBody" >
+                      <tr [ngClass]="Themecolor == 'Dark' ? 'newRowShade' : 'newRowShade-light'" *ngFor="let data of historyDetailsMod">
+                      <td class="rowPadding">{{data.timestamp}}</td>
+                      <td class="rowPadding">{{data.transactionId}}</td>
+                      <td class="rowPadding" *ngIf="data.action == 'Buy' || data.action == 'Sell'">{{data.action}}<input style="background-color:#00b75a; color:#fff; border-radius:5px;padding:5px 10px;margin:0 25px" type="button" class="actiontoggle gift-js-open-modal" [attr.data-txnid]="data.transactionId" value="Invoice"></td>
+                      <td class="rowPadding" *ngIf="data.action != 'Buy' && data.action != 'Sell'">{{data.action}}</td>
+                      <td class="rowPadding" *ngIf="data.action != 'Decline'">{{data.tradeAssetAmount}}</td>
+                      <td class="rowPadding" *ngIf="data.action == 'Decline'">{{data.baseCurrency}} {{data.tradeAssetAmount}}</td>
+                      <td class="rowPadding" class="{{data.statusClass}}">{{data.status}}</td>
+                      </tr>
+                      
+                    <!-- <tr *ngFor="let l of spotTxnList">
+                      <td style="padding: 10px 0;border-bottom: 1px solid #ddd;">{{l.transactionTimestamp |
+                        date:'medium'}}</td>
+                      <td *ngIf="l.orderId !== null" style="padding: 10px 0;border-bottom: 1px solid #ddd;">{{l.orderid
+                        }}</td>
+                      <td *ngIf="l.orderId === null" style="padding: 10px 0;border-bottom: 1px solid #ddd;">
+                        {{l.transactionId }}</td>
+                      <td *ngIf="l.action === 'Buy'" style="padding: 10px 0;border-bottom: 1px solid #ddd;"
+                        [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">{{l.action}}<input
+                          style="background-color:#00b75a; color:#fff; border-radius:5px;padding:5px 10px;margin:0 25px"
+                          type="button" class="actiontoggle gift-js-open-modal" [attr.data-txnid]="l.transactionId"
+                          value="Invoice"></td>
+                      <td *ngIf="l.action === 'Sell'" style="padding: 10px 0;border-bottom: 1px solid #ddd;"
+                        [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">{{l.action}}<input
+                          style="background-color:#00b75a; color:#fff; border-radius:5px;padding:5px 10px;margin:0 25px"
+                          type="button" class="actiontoggle gift-js-open-modal" [attr.data-txnid]="l.transactionId"
+                          value="Invoice"></td>
+                      <td
+                        *ngIf="l.action !== 'Sell' && l.action !== 'Buy' && l.action !== 'Buyoffer' && l.action !== 'Selloffer'"
+                        style="padding: 10px 0;border-bottom: 1px solid #ddd;" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">{{l.action }}</td>
+                      <td *ngIf="l.action === 'Buyoffer'" style="padding: 10px 0;border-bottom: 1px solid #ddd;"
+                        [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Buy Offer</td>
+                      <td *ngIf="l.action === 'Selloffer'" style="padding: 10px 0;border-bottom: 1px solid #ddd;"
+                        [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Sell Offer</td>
+
+                      <td *ngIf="l.action === 'Buy'" style="padding: 10px 0;border-bottom: 1px solid #ddd;"><span [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">{{l.tradeAssetAmount}}</span></td>
+                      <td *ngIf="l.action === 'Buyoffer'" style="padding: 10px 0;border-bottom: 1px solid #ddd;"><span [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">{{l.tradeAssetAmount}}</span></td>
+                      <td *ngIf="l.action === 'Sell'" style="padding: 10px 0;border-bottom: 1px solid #ddd;"><span [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">{{l.tradeAssetAmount}}</span></td>
+                      <td *ngIf="l.action === 'Buydel'" style="padding: 10px 0;border-bottom: 1px solid #ddd;"><span [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">{{l.tradeAssetAmount}}</span></td>
+                      <td *ngIf="l.action === 'Selldel' && list.creditAmount == 0" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"><span [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">{{l.currency | uppercase}}{{l.debitAmount}} Dr</span></td>
+                      <td *ngIf="l.action === 'Selldel' && list.creditAmount != 0" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"><span [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">{{l.currency | uppercase}}{{l.creditAmount}} Cr</span></td>
+                      <td *ngIf="(l.action === 'Rollback' || l.action === 'rollback' || l.action === 'RollBack') && (list.creditAmount !=0) && (list.baseCurrency == '' || list.baseCurrency == null)" style="padding: 10px 0;border-bottom: 1px solid #ddd;"><span [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">{{l.currency}}{{list.creditAmount}} Cr</span></td>
+                      <td *ngIf="l.action === 'Buymodify'" style="padding: 10px 0;border-bottom: 1px solid #ddd;"><span [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">{{l.tradeAssetAmount}}</span></td>
+                      <td *ngIf="l.action === 'Sellmodify'" style="padding: 10px 0;border-bottom: 1px solid #ddd;"><span [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">{{l.tradeAssetAmount}}</span></td>
+                      <td *ngIf="l.action === 'Selloffer'" style="padding: 10px 0;border-bottom: 1px solid #ddd;"><span [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">{{l.tradeAssetAmount}}</span></td>
+                      <td *ngIf="l.action === 'Send' || l.action === 'Sent'" style="padding: 10px 0;border-bottom: 1px solid #ddd;">
+                        <span *ngIf="l.debitAmount != 0" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">{{l.tradeAssetAmount}}</span>
+                      </td>
+
+
+                      <td *ngIf="l.status == '0'" class="text-orange">Pending</td>
+                      <td *ngIf="l.status == '1'" class="text-green">Confirmed</td>
+                      <td *ngIf="l.status != '2' && l.status != '1'" class="text-red">{{l.action}}</td>
+                    </tr> -->
+                  </tbody>
+                </table>
+              </div>
+              <div class="row">
+                <div class="col-12">
+                  <div class="float-sm-right btn-group btn-group-sm pagination_div" role="group"
+                    aria-label="transaction-history">
+                    <!-- <ngb-pagination [collectionSize]="collection" [(page)]="page" [directionLinks]="false" (click)="pager(page);" ></ngb-pagination> -->
+                    <div class="btn-group">
+                      <button class="btn btn-info" (click)="pager(1)" [disabled]="page==1">
+                        <i class="fa fa-angle-double-left" aria-hidden="true"></i>
+                      </button>
+                      <button class="btn btn-info" (click)="pagerPre(page)" [disabled]="page==1">
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                      </button>
+                      <button class="btn btn-info {{page==p?'active':''}} {{((p<page+5)&&(p>page-5))?'':'d-none'}}"
+                        (click)="pager(p);" *ngFor="let p of pgn">{{p}}</button>
+                      <button class="btn btn-info" (click)="pagerNext(page)" [disabled]="page==pgn.length">
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                      </button>
+                      <button class="btn btn-info" (click)="pager(pgn.length)" [disabled]="page==pgn.length">
+                        <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </ngb-tab>
+
+    <!-- <ngb-tab id="margin">
+      <ng-template ngbTabTitle>
+        <h5 class="market-reset"> MARGIN</h5>
+      </ng-template>
+      <ng-template ngbTabContent>
+        <ngb-tabset justify="fill" class="childTab">
+          <ngb-tab id="iso">
+            <ng-template ngbTabTitle>
+              <h5 class="market-reset" (click)="handleSelectMarginType(1)"> ISOLATED 3X</h5>
+            </ng-template>
+            <ng-template ngbTabContent>
+              <div class="col-12 mt-3 align-self-stretch">
+                <div class="p-2 pl-3 pr-3 rounded h-100" [ngClass]="Themecolor == 'Dark' ? 'bg-dark' : 'bg-light'">
+                  <span class="font-lg text-green">
+                  </span>
+                  <div class="w-100 mt-2"></div>
+                  <div class="table-responsive-sm">
+                    <span class="font-md " [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-dark'">Margin Transaction History</span>
+                    <table class="table table-sm table-hover">
+                      <thead>
+                        <tr [ngClass]="Themecolor == 'Dark' ? 'bg-black text-white' : 'tableHeader-bg-light text-black'">
+                          <th scope="col" class="tablefirstRow">{{marginTransactionId}}</th>
+                          <th scope="col">{{marginTimeStamp}}</th>
+                          <th scope="col">{{marginDescription}}</th>
+                          <th scope="col">{{marginTxnType}}</th>
+                          <th scope="col">{{marginDebit}}</th>
+                          <th scope="col">{{margincrebit}}</th>
+                          <th scope="col">{{marginoperationMode}}</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+
+                        <tr [ngClass]="Themecolor == 'Dark' ? 'bg-black text-white' : 'tableHeader-bg-light'"  *ngFor="let p of marginTransactionValues; let i=index">
+                          <td style="width:12.25%;padding: 10px 0;" class="tablefirstRow" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">
+                            {{p.transactionId}}</td>
+                          <td style="width:12.25%;padding: 10px 0;" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">
+                            {{p.transactionDate}}</td>
+                        
+                          <td style="width:12.25%;padding: 10px 0;" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">
+                            {{p.description}}
+                          </td>
+                          <td style="width:12.25%;padding: 10px 0;" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">
+                            {{p.transactionType}}</td>
+                          <td style="width:12.25%;padding: 10px 0;" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">
+                            {{p.debit}}</td>
+                          <td style="width:12.25%;padding: 10px 0;" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">
+                            {{p.credit}}</td>
+                          <td style="width:12.25%;padding: 10px 0;" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">
+                            {{p.operationMode}}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+
+            </ng-template>
+          </ngb-tab>
+          <ngb-tab id="cross">
+            <ng-template ngbTabTitle>
+              <h5 class="market-reset" (click)="handleSelectMarginType(2)"> CROSS 3X</h5>
+            </ng-template>
+            <ng-template ngbTabContent>
+              <div class="col-12 mt-3 align-self-stretch">
+                <div class="p-2 pl-3 pr-3 rounded h-100" [ngClass]="Themecolor == 'Dark' ? 'bg-dark' : 'bg-light'">
+                  <span class="font-lg text-green">
+                  </span>
+                  <div class="w-100 mt-2"></div>
+                  <div class="table-responsive-sm">
+                    <span class="font-md " [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Margin Transaction History</span>
+                    <table class="table table-sm table-hover">
+                      <thead>
+                        <tr class="" [ngClass]="Themecolor == 'Dark' ? 'bg-black text-white' : 'tableHeader-bg-light text-black'">
+                          <th scope="col" class="tablefirstRow">{{marginTransactionId}}</th>
+                          <th scope="col">{{marginTimeStamp}}</th>
+                          <th scope="col">{{marginDescription}}</th>
+                          <th scope="col">{{marginTxnType}}</th>
+                          <th scope="col">{{marginDebit}}</th>
+                          <th scope="col">{{margincrebit}}</th>
+                          <th scope="col">{{marginoperationMode}}</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr [ngClass]="Themecolor == 'Dark' ? 'newRowShade' : 'newRowShade-light'"   *ngFor="let p of marginTransactionValues; let i=index">
+                          <td style="width:12.25%;padding: 10px 0;" class="tablefirstRow" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">
+                            {{p.transactionId}}</td>
+                          <td style="width:12.25%;padding: 10px 0;" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">
+                            {{p.transactionDate}}</td>
+                          
+                          <td style="width:12.25%;padding: 10px 0;" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">
+                            {{p.description}}
+                          </td>
+                          <td style="width:12.25%;padding: 10px 0;" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">
+                            {{p.transactionType}}</td>
+                          <td style="width:12.25%;padding: 10px 0;" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">
+                            {{p.debit}}</td>
+                          <td style="width:12.25%;padding: 10px 0;" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">
+                            {{p.credit}}</td>
+                          <td style="width:12.25%;padding: 10px 0;" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">
+                            {{p.operationMode}}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+
+            </ng-template>
+          </ngb-tab>
+        </ngb-tabset>
+        
+      </ng-template>
+    </ngb-tab> -->
+<!-- future transaction history -->
+    <ngb-tab id="future">
+      <ng-template ngbTabTitle>
+        <h5 class="market-reset" (click)="saveHistoryCompNavHist('future')"> FUTURES</h5>
+      </ng-template>
+      <ng-template ngbTabContent>
+        <div class="row d-flex section-position" data-ng-controller="historyCtrl" data-ng-init="loginDuration();">
+          <div class="col-12 mt-3 align-self-stretch">
+            <div class="p-2 pl-3 pr-3 rounded h-100" [ngClass]="Themecolor == 'Dark' ? 'bg-dark' : 'bg-light'">
+              <div class="d-flex">
+                <div class="p-2 mr-auto">
+                  <span class="font-md mr-2" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">
+                    Futures Transactions History
+                    <span style="cursor: pointer;margin-left:10px;">
+                      <i class="fa fa-info-circle" aria-hidden="true" (click)="data.handleInfoSection('futureTranscationInfo')" style="font-size: 14px;"></i>
+                    </span>
+                    <div class="info-section" id="futureTranscationInfo" style="display: none;margin:auto; top: 10px;left:26px;">
+                      <div class="info-header">
+                        <div class="info-title">Futures Transactions History</div>
+                        <div class="info-close">
+                          <i class="fa fa-times" aria-hidden="true" (click)="data.handleInfoSection('futureTranscationInfo')"></i>
+                        </div>
+                      </div>
+                      <div class="info-body">
+                        <p>This section displays the FUTURES trade details, margin, and Funding. There will be 3 rows for each trade.</p>
+                      </div>
+                    </div>
+                  </span>
+                </div>
+                <!-- <div class="p-2">
+                  <div class="btn-group btn-group-sm" role="group" aria-label="transaction-history">
+                    <button type="button" class="btn btn-dark font-xs filter-button all_btn btn_active" (click)="getDuration('all')">All</button>
+                    <button type="button" class="btn btn-dark font-xs filter-button last_week_btn" (click)="getDuration('last week')">Last Week</button>
+                    <button type="button" class="btn btn-dark font-xs filter-button last_month_btn" (click)="getDuration('last month')">Last Month</button>
+                   
+                  </div>
+                </div> -->
+              </div>
+              <div class="w-100 mt-2"></div>
+              <div class="table-responsive-sm">
+                <table class="table table-sm table-hover"style="padding: 10px">
+                  <thead>
+                    <tr class="" [ngClass]="Themecolor == 'Dark' ? 'bg-black text-white' : 'tableHeader-bg-light text-black'">
+                      <!-- <th style="width: 20%;" scope="col">Date - Time</th>
+                      <th style="width: 20%;" scope="col">Transaction ID</th>
+                      <th style="width: 10%;" scope="col">Type</th>
+                      <th style="width: 20%;" scope="col">Contract Name</th>
+                      <th style="width: 20%;" scope="col">Quantity</th>
+                      <th style="width: 10%;" scope="col">Debit/Credit</th> -->
+                      <th style="width: 10%;" scope="col" *ngFor="let h of futuresTxnListHeader">{{h}}</th>
+                    </tr>
+                  </thead>
+                  <tbody class="">
+                    <!--  <tr>
+                          <td colspan="5" class="text-center py-3">
+                            <img src="./assets/svg-loaders/puff.svg" width="50" alt="">
+                          </td>
+                        </tr> -->
+                        <tr [ngClass]="Themecolor == 'Dark' ? 'newRowShade' : 'newRowShade-light'" *ngFor="let list of futuresTxnList">
+                          <td style="padding: 10px 0;" class="tablefirstRow" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">{{list.transactionId}}</td>
+                           <td  style="padding: 10px 0;" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">{{list.transactionDate}}</td>
+                           <td style="padding: 10px 0;" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">{{list.description}}</td>
+                           <td style="padding: 10px 0;" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">{{list.transactionType}}</td>
+
+                           <td style="padding: 10px 0;" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'" *ngIf="list.debit!=0">{{list.debit}}</td>
+                           <td style="padding: 10px 0;" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'" *ngIf="list.debit==0">-</td>
+
+                           <td style="padding: 10px 0;" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'" *ngIf="list.credit!=0">{{list.credit}}</td>
+                           <td style="padding: 10px 0;" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'" *ngIf ="list.credit==0">-</td>
+
+                           <td style="padding: 10px 0;" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'" scope="col">{{list.operationMode}}</td>
+
+                           <td style="padding: 10px 0;" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'" scope="col" *ngIf="list.leverage!=0">{{list.leverage}}X</td>
+                           <td style="padding: 10px 0;" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'" scope="col" *ngIf="list.leverage==0">-</td>
+                           <!-- <td style="width: 5%;" scope="col"></td> -->
+                           <td style="padding: 10px 0;" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'" scope="col">{{list.contractName}}</td>
+
+                           <td style="padding: 10px 0;" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'" scope="col" >-</td>
+
+                           <td style="padding: 10px 0;" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'" scope="col" *ngIf="list.intCharge!=0">{{list.intCharge}}</td>
+                           <td style="padding: 10px 0;" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'" scope="col" *ngIf="list.intCharge==0">-</td>
+
+                           <td style="padding: 10px 0;" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'" scope="col" *ngIf="list.amount!=0">{{list.amount}}</td>
+                           <td style="padding: 10px 0;" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'" scope="col" *ngIf="list.amount==0">-</td>
+                         </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="row">
+                <div class="col-12">
+                  <div class="float-sm-right btn-group btn-group-sm pagination_div" role="group"
+                    aria-label="transaction-history">
+                    <!-- <ngb-pagination [collectionSize]="collection" [(page)]="page" [directionLinks]="false" (click)="pager(page);" ></ngb-pagination> -->
+                    <div class="btn-group">
+                      <button class="btn btn-info" (click)="pagerFutures(1)" [disabled]="fpage==1"> 
+                        <i class="fa fa-angle-double-left" aria-hidden="true"></i>
+                      </button>
+                      <button class="btn btn-info" (click)="pagerFuturesPre(fpage)" [disabled]="fpage==1">
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                      </button>
+                      <button class="btn btn-info {{fpage==p?'active':''}} {{((p<fpage+5)&&(p>fpage-5))?'':'d-none'}}"
+                        (click)="pagerFutures(p);" *ngFor="let p of fpgn">{{p}}</button>
+                      <button class="btn btn-info" (click)="pagerFuturesNext(fpage)" [disabled]="fpage==fpgn.length">
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                      </button>
+                      <button class="btn btn-info" (click)="pagerFutures(fpgn.length)" [disabled]="fpage==fpgn.length">
+                        <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </ngb-tab>
+    <!-- option transaction history -->
+    <ngb-tab id="option">
+      <ng-template ngbTabTitle>
+        <h5 class="market-reset" (click)="saveHistoryCompNavHist('option')"> OPTIONS</h5>
+      </ng-template>
+      <ng-template ngbTabContent>
+        <div class="row d-flex section-position" data-ng-controller="historyCtrl" data-ng-init="loginDuration();">
+          <div class="col-12 mt-3 align-self-stretch">
+            <div class="p-2 pl-3 pr-3 rounded h-100" [ngClass]="Themecolor == 'Dark' ? 'bg-dark' : 'bg-light'">
+              <div class="d-flex">
+                <div class="p-2 mr-auto">
+                  <span class="font-md  mr-2" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">
+                    Option Transactions History
+                    <span style="cursor: pointer;margin-left:10px;">
+                      <i class="fa fa-info-circle" aria-hidden="true" (click)="data.handleInfoSection('optionTranscationInfo')" style="font-size: 14px;"></i>
+                    </span>
+                    <div class="info-section" id="optionTranscationInfo" style="display: none;margin:auto; top: 10px;left:26px;">
+                      <div class="info-header">
+                        <div class="info-title">Options Transaction History</div>
+                        <div class="info-close">
+                          <i class="fa fa-times" aria-hidden="true" (click)="data.handleInfoSection('optionTranscationInfo')"></i>
+                        </div>
+                      </div>
+                      <div class="info-body">
+                        <p>This section displays the FUTURES trade details, margin, and Funding. There will be 3 rows for each trade.</p>
+                      </div>
+                    </div>
+                  </span>
+                  </div>
+                <!-- <div class="p-2">
+                  <div class="btn-group btn-group-sm" role="group" aria-label="transaction-history">
+                    <button type="button" class="btn btn-dark font-xs filter-button all_btn btn_active" (click)="getDuration('all')">All</button>
+                    <button type="button" class="btn btn-dark font-xs filter-button last_week_btn" (click)="getDuration('last week')">Last Week</button>
+                    <button type="button" class="btn btn-dark font-xs filter-button last_month_btn" (click)="getDuration('last month')">Last Month</button>
+                   
+                  </div>
+                </div> -->
+              </div>
+              <div class="w-100 mt-2"></div>
+              <div class="table-responsive-sm">
+                <table class="table table-sm table-hover">
+                  <thead>
+                   <tr  [ngClass]="Themecolor == 'Dark' ? 'bg-black text-white' : 'tableHeader-bg-light text-black'">
+                      <th style="width: 10%;" scope="col" *ngFor="let h of optionTxnListHeader">{{h}}</th>
+                      <!-- <th style="width: 10%;" scope="col">Date - Time</th>
+                      <th style="width: 10%;" scope="col">Transaction ID</th>
+                      <th style="width: 10%;" scope="col">Type</th>
+                      <th style="width: 10%;" scope="col">Contract Name</th>
+                      <th style="width: 10%;" scope="col">Quantity</th>
+                      <th style="width: 10%;" scope="col">Debit/Credit</th>
+                      <th style="width: 5%;" scope="col">Margin Type</th>
+                      <th style="width: 10%;" scope="col">Leverage</th>
+                      <th style="width: 10%;" scope="col">Interest (Dr/Cr)</th>
+                      <th style="width: 10%;" scope="col">Description</th> -->
+                    </tr>
+                  </thead>
+                  <tbody class="">
+                    <!--  <tr>
+                          <td colspan="5" class="text-center py-3">
+                            <img src="./assets/svg-loaders/puff.svg" width="50" alt="">
+                          </td>
+                        </tr> -->
+                   <tr [ngClass]="Themecolor == 'Dark' ? 'newRowShade' : 'newRowShade-light'" *ngFor="let list of optionTxnList">
+                     <td width="10%" style="width:12.25%;padding: 10px 0;" class="tablefirstRow" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">{{list.transactionId}}</td>
+                      <td width="10%" style="width:12.25%;padding: 10px 0;" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">{{list.transactionDate | date:'short' }}</td>
+                      <td width="10%" style="width:12.25%;padding: 10px 0;" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">{{list.description}}</td>
+                      <td width="10%" style="width:20.25%;padding: 10px 0;" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">{{list.transactionType}}</td>
+                      <td width="10%" style="width:12.25%;padding: 10px 0;" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'" *ngIf="list.debit != 0">{{list.debit}}</td>
+                      <td width="10%" style="width:12.25%;padding: 10px 0;" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'" *ngIf="list.debit == 0">-</td>
+                      <td width="10%" style="width:12.25%;padding: 10px 0;" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'" *ngIf="list.credit != 0">{{list.credit}}</td>
+                      <td width="10%" style="width:12.25%;padding: 10px 0;" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'" *ngIf="list.credit == 0">-</td>
+                      <td style="width: 10%; padding: 10px 0;" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'" scope="col">{{list.operationMode}}</td>
+                      <td style="width: 10%;" style="width:12.25%;padding: 10px 0;" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'" scope="col" *ngIf="list.leverage != 0">{{list.leverage}}X</td>
+                      <td style="width: 10%;" style="width:12.25%;padding: 10px 0;" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'" scope="col" *ngIf="list.leverage == 0">-</td>
+                      <!-- <td style="width: 5%;" scope="col"></td> -->
+                      <td style="width: 10%;"style="width:12.25%;padding: 10px 0;"  [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'" scope="col">{{list.contractName | uppercase}}</td>
+                      <td style="width: 10%;" style="width:12.25%;padding: 10px 17px;" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'" scope="col" *ngIf="list.txnCharge != 0">{{list.txnCharge}}</td>
+                      <td style="width: 10%;" style="width:12.25%;padding: 10px 17px;" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'" scope="col" *ngIf="list.txnCharge == 0">-</td>
+                      <td style="width: 10%;" style="width:12.25%;padding: 10px 17px;" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'" scope="col" *ngIf="list.intCharge != 0">{{list.intCharge}}</td>
+                      <td style="width: 10%;" style="width:12.25%;padding: 10px 17px;" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'" scope="col" *ngIf="list.intCharge == 0">-</td>
+                      <td style="width: 10%;" style="width:12.25%;padding: 10px 17px;" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'" scope="col" *ngIf="list.amount != 0">{{list.amount}}</td>
+                      <td style="width: 10%;" style="width:12.25%;padding: 10px 17px;" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'" scope="col" *ngIf="list.amount == 0">-</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="row">
+                <div class="col-12">
+                  <div class="float-sm-right btn-group btn-group-sm pagination_div" role="group"
+                    aria-label="transaction-history">
+                    <!-- <ngb-pagination [collectionSize]="collection" [(page)]="page" [directionLinks]="false" (click)="pager(page);" ></ngb-pagination> -->
+                    <div class="btn-group">
+                      <button class="btn btn-info" (click)="pagerOptions(1)" [disabled]="page==1">
+                        <i class="fa fa-angle-double-left" aria-hidden="true"></i>
+                      </button>
+                      <button class="btn btn-info" (click)="pagerOptionsPre(page)" [disabled]="page==1">
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                      </button>
+                      <button class="btn btn-info {{page==p?'active':''}} {{((p<page+5)&&(p>page-5))?'':'d-none'}}"
+                        (click)="pagerOptions(p);" *ngFor="let p of main.pgn">{{p}}</button>
+                      <button class="btn btn-info" (click)="pagerOptionsNext(page)" [disabled]="page==main.pgn.length">
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                      </button>
+                      <button class="btn btn-info" (click)="pagerOptions(main.pgn.length)" [disabled]="page==main.pgn.length">
+                        <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </ngb-tab>
+  </ngb-tabset>
+</div>
+
+
+
+
+<div class="send_gift_dashboard_modal-overlay">
+  <div class="send_gift_dashboard_modal">
+
+    <div class="dashboard_modal__header">
+      <h5 class="modal-title text-center text-white pt-2">Trading Invoice</h5>
+      <span class="dashboard_modal_bal"></span><a href="javascript:void(0)" class="gift-js-close-modal">X</a>
+    </div>
+    <div class="modal-body">
+      <div clas="row">
+        <div class="col-md-12">
+          <ul class="list-group mb-2">
+            <li class="list-group-item">
+              <div class="d-flex">
+                <div class="mr-auto text-dark">Action:</div>
+                <div><span class="text-blue font-weight-bold font-sm actiondata"></span></div>
+              </div>
+            </li>
+
+            <li class="list-group-item">
+              <div class="d-flex">
+                <div class="mr-auto text-dark">Asset Pair:</div>
+                <div><span class="text-blue font-weight-bold font-sm assetpairdata"></span></div>
+              </div>
+            </li>
+            <li class="list-group-item">
+              <div class="d-flex">
+                <div class="mr-auto text-dark">Trade Qty:</div>
+                <div><span class="text-blue font-weight-bold font-sm tradeqtydata"></span></div>
+              </div>
+            </li>
+            <li class="list-group-item" id="swft-noI">
+              <div class="d-flex">
+                <div class="mr-auto text-dark">Trade Price:</div>
+                <div><span class="text-blue font-weight-bold font-sm tradepricedata"></span></div>
+              </div>
+            </li>
+            <li class="list-group-item">
+              <div class="d-flex">
+                <div class="mr-auto text-dark">Value:</div>
+                <div><span class="text-blue font-weight-bold font-sm valuedata"></span></div>
+              </div>
+            </li>
+            <li class="list-group-item">
+              <div class="d-flex">
+                <div class="mr-auto text-dark">Txn Charge:</div>
+                <div><span class="text-blue font-weight-bold font-sm txnchrgdata"></span></div>
+              </div>
+            </li>
+            <li class="list-group-item">
+              <div class="d-flex">
+                <div class="mr-auto text-dark">Gst:</div>
+                <div><span class="text-blue font-weight-bold font-sm gstdata"></span></div>
+              </div>
+            </li>
+            <li class="list-group-item">
+              <div class="d-flex">
+                <div class="mr-auto text-dark">Total Value:</div>
+                <div><span class="text-blue font-weight-bold font-sm totalvaluedata"></span></div>
+              </div>
+            </li>
+            <li class="list-group-item">
+              <div class="d-flex">
+                <div class="mr-auto text-dark">Transaction Timestamp:</div>
+                <div><span class="text-blue font-weight-bold font-sm timestampdata"></span></div>
+              </div>
+            </li>
+          </ul>
+          <!-- <div class="col-12 d-flex">
+              <button class="btn btn-success btn-sm mx-auto" (click)="modal.close()">OK</button>
+            </div> -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

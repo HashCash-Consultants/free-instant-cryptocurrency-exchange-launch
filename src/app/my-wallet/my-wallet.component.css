@@ -1,0 +1,256 @@
+a{
+    padding: 0 0.2em;
+}
+.nav-tabs .nav-link {
+    border: none;
+    color: gray !important;
+}
+.batchmsg{
+    color:#8c8a8a;
+}
+.sendotherclosemodal{
+    position: relative;
+    top: 18px;
+}
+.hcxnativebtn{
+    padding: 5px 10px;
+    background-color: #24262d;
+    color: #fff !important;
+    border-radius: 0.25rem;
+}
+.proper-alighnment-header{
+    padding: 0;
+}
+.test{
+    background-color: #24262d;
+}
+.modal-body1{
+    padding: 30px;
+    background-color: #31313a;
+    margin: 25px 30px;
+  }
+  .modal-header1{
+    border-bottom: 0 !important;
+}
+.modal-header1 .close1{
+    margin-right: 0;
+    border-radius: 50%;
+    background-color: #696975;
+    /* padding: 0.7rem 1rem; */
+    border: 0;
+    width: 30px;
+    height: 30px;
+    font-size: 20px;
+    /* text-align: right; */
+    position: absolute;
+    right: -10px;
+    top: -15px;
+}
+.hcxnativercv{
+    padding-bottom: 13px;
+}
+#rzp-button1{
+    margin-top: 18px;
+    margin-left: 10%;
+}
+.small{
+    margin-left: -50%;
+}
+.ng-draggable {
+    cursor: grab;
+  }
+   
+  .ng-dragging {
+    cursor: grabbing;
+  }
+  #myDiv{
+      /* position: absolute; */
+    background-color: #24262d;
+    border:0px;
+  }
+  .modal-content {
+    background: transparent !important;
+    border: 0 !important;
+}
+.maxsendamountforerc{
+   width: 100%;
+   
+}
+.maxSendAmount{
+    width: 100%;
+}
+.error-msg-validation{
+    margin: 0;
+}
+.error-msg{
+    margin: 0;
+    position:relative; 
+    padding-left: 15px;
+}
+.successmsg{
+    margin: 0;
+    position:relative; 
+    /* padding-left: 15px; */
+}
+.send-wallet{
+    position: relative;
+    flex: 1 1 auto;
+    padding: 30px;
+    background-color: #31313a;
+    margin: 25px 30px;
+}
+.sendreceive-wallet{
+    border-bottom: 0 !important;
+}
+.modal-header .close{
+    margin-top: -4.8rem;
+    margin-right: -37px;
+    border-radius: 50%;
+    background-color: #696975;
+    padding: 0.7rem 1rem;
+  }
+  .maxamount{
+      padding-left: 0;
+     
+  }
+
+/* .successmsg:after{
+    position: absolute;
+    content: '';
+    background: green;
+    width: 9px;
+    height: 9px;
+    border-radius: 100%;
+    left: 0;
+    top: 6px;
+}
+.error-msg:after {
+    position: absolute;
+    content: '';
+    background: red;
+    width: 9px;
+    height: 9px;
+    border-radius: 100%;
+    left: 0;
+    top: 6px;
+} */
+
+@media(max-width:767px){
+.maxSendAmount{
+    margin-left: -28px;
+    padding: 6px 10px;
+}
+.maxsendamountforerc{
+    margin-left: -28px;
+    padding: 6px 10px;
+}
+}
+/* ::ng-deep .nav-tabs .nav-link {
+    padding: 0 !important;
+} */
+
+.nav-tabs .nav-link {
+  padding: 0 !important;
+}
+
+.newRowShade{
+background-color: #31313a ;
+border-top: 6px solid #24262d;
+
+
+}
+.bg-black{
+background-color: #202023 !important ;
+
+}
+td{
+    border-bottom: none !important;
+}
+/* tbody{
+    background-color: #202023 !important ;
+} */
+
+.modal-header{
+    border-bottom: none !important;
+  }
+  .tablefirstRow{
+    padding-left: 10px !important;
+    }
+
+
+    .bg-black{
+        background-color: #202023 !important ;
+        
+        }
+      
+      .newRowShade{
+            background-color: #31313a ;
+            border-top: 2px solid #24262d;
+      }
+      
+      .newRowShade-light{
+        background-color: #dedede ;
+        border-top: 2px solid #fff;
+      }
+      .text-black{
+        color: #474d57 ;
+      }
+      
+      .bg-light-identity-verify{
+        background-color: #dedede ;
+      
+      }
+      .form-control-light{
+        color: #474d57 !important;
+        background-color: #dedede !important;
+        border: none !important;
+      }
+      
+      
+      .form-control-light::-webkit-input-placeholder{ 
+        color: #474d57;
+        opacity: 1; 
+      }
+
+      .form-control-light-search{
+        color: #474d57 !important;
+        background-color: #fff !important;
+        border: none !important;
+      }
+      .form-control-light-search::-webkit-input-placeholder{ 
+        color: #474d57;
+        opacity: 1; 
+      }
+      
+      .spanText-dark{
+        color: #9ba7b2;
+      }
+      
+      .spanText-light{
+        color: #474d57;
+      }
+      .bg-dark{
+        background-color: #24262d!important;
+      }
+      .bg-light-bankDetils{
+        background-color: #dedede;
+      }
+      .newRowShade{
+        background-color: #31313a ;
+        border-top: 2px solid #24262d;
+    }
+    
+    .newRowShade-light{
+    background-color: #dedede ;
+    border-top: 2px solid #fff;
+    }
+    .text-yellow{
+      color: #c99400  !important;
+    }
+
+   .telInput .form-control::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+      color: #d7dce1 !important;
+      opacity: 1; /* Firefox */
+    }
+
+ 

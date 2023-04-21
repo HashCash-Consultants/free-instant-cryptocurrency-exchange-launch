@@ -1,0 +1,21 @@
+.buywith{
+    background-color: #38393a;
+    color: #fff;
+    border: 0;
+    padding: 1;
+    padding: 3px;
+    border-radius: .25rem;
+    margin-left: 20px;
+}
+.otc-banner{
+    padding: 50px 0;
+    text-align: center;
+}
+.otc-banner h6 {
+    font-size: 30px;
+    border-radius: .25rem;
+}
+
+.content-wrapper-light{
+    height: 100% !important;
+}

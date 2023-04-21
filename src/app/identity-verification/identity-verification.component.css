@@ -1,0 +1,355 @@
+input[type="radio"], input[type="checkbox"] {
+    box-sizing: border-box;
+    padding: 0;
+    margin-left: 20px;
+}
+#id_form{
+    padding: 0 15px;
+}
+.image-modification{
+    width: 50%;
+}
+.image-alighnment{
+width: 50%;
+height: auto;
+}
+.identitity-alighnment{
+    padding-right:5px !important;
+}
+.profile-picture{
+    width: 70px;
+    height: 70px !important;
+    border-radius: 50% !important;
+    position: relative;
+    top: -8px;
+}
+.profile_pic{
+    margin-bottom: 10px;
+}
+
+.back-side-addressproof{
+    margin-top: -10px;
+}
+.profile-picture-addressproof{
+    top: -30px;
+}
+.btn-green-savechanges{
+    background: #549426 !important;
+    border-radius: 1.25rem !important;
+    width: 145px;
+    margin-top: 6px;
+}
+.section-position-identify{
+    margin-right: 0;
+}
+
+
+.pp-ht1{
+    position: absolute;
+    margin-top: 95px !important; 
+}
+/* .pp-ht2{
+    position: absolute;
+    margin-top: 88px !important; 
+} */
+/* .pp-ht3{
+    position: absolute;
+    margin-top: 88px !important; 
+} */
+.disc-row{
+    margin: -37px 0 0 0px;
+}
+.disc-row h3{
+    color : #D19F57
+}
+.disc-row h4{
+    color : #D19F57
+}
+.disc-row p{
+    color : #ffff
+}
+.status-section{
+    margin-top: 70px;
+}
+.identity-page .form-control {
+    color: #fff;
+    background-color: #131722;
+    border: 1px solid #131722;
+}
+.text-field::-webkit-input-placeholder {
+    color: #999;
+}
+.identity-page .text-blue {
+    color: #020862 !important;
+}
+.straight-border{
+    height: 1px;
+    background: #fff;
+    position: relative;
+    bottom: -135px;
+    max-width: 67%;
+
+}
+.valid-desc{
+    margin-top: 30px;
+}
+.point-circle{
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #fff;
+    display: inline-block;
+}
+.minHeightImage{
+    min-height: 100px;
+}
+.dateofbirth{
+    /* margin-bottom: 29px; */
+    margin-left: 0px;
+}
+/* .smalldate{
+    margin-left: 0px;
+    position: absolute;
+    top: 167px;
+} */
+.monthField{
+    width: 250px;
+}
+
+.bg-black{
+    background-color: #202023 !important ;
+    
+    }
+
+.newRowShade{
+        background-color: #31313a ;
+        border-top: 2px solid #24262d;
+}
+
+.newRowShade-light{
+    background-color: #dedede ;
+    border-top: 2px solid #fff;
+}
+.text-black{
+    color: #474d57 ;
+}
+
+.bg-light-identity-verify{
+    background-color: #dedede ;
+
+}
+.form-control-light{
+    color: #474d57;
+    background-color: #f8f9fa;
+    border: none !important;
+}
+
+.form-control-light::-webkit-input-placeholder{ 
+    color: #474d57;
+    opacity: 1; 
+  }
+
+  .spanText-dark{
+    color: #9ba7b2;
+  }
+
+  .spanText-light{
+    color: #474d57;
+  }
+
+@media (max-width: 767px) { 
+    .identity-verify{
+        min-height: auto;
+    }
+    .pp-ht1 {
+        position: static;
+        margin-top: 10px !important;
+        
+    }
+    .pp-ht2{
+        position: static;
+        margin-top: 0px !important;
+        
+    }
+    .pp-ht3{
+        position: static;
+        margin-top: 10px;
+    }
+    .pan_card_pic{
+        margin: 20px 0;
+    }
+    .ddmmyy{
+        height: auto;
+    }
+    .smalldate{
+        position: relative !important;
+    }
+   
+}
+ @media (min-width: 1500px) { 
+    .identity-verify{
+        min-width: 691px !important;
+    }
+    .pp-ht {
+        position: absolute;
+        margin-top: 93px !important;
+        
+    }
+    .pp-ht3{
+        position: static;
+        margin-top: 0px; 
+    }
+}
+@media (min-width: 1800px) { 
+    .identity-verify{
+        min-width: 838px !important;
+    }
+    .pp-ht {
+        position: absolute;
+        margin-top: 93px !important;
+        
+    }.pp-ht2{
+        position: static;
+        margin-top: 1px !important; 
+    }
+    .pp-ht3{
+        position: static;
+        margin-top: 0px; 
+    }
+    
+}
+
+@media (min-width: 1900px) { 
+    .identity-verify{
+        min-width: 880px !important;
+    }
+    .pp-ht {
+        position: absolute;
+        margin-top: 93px !important;
+        
+    }
+    .pp-ht2{
+        position: absolute;
+        margin-top: 106px !important; 
+    }
+    .pp-ht3{
+        position: absolute;
+        margin-top: 105px !important; 
+    }
+    
+}
+
+@media (min-width: 2100px) { 
+    .identity-verify{
+        min-width: 990px !important;
+    }
+    .pp-ht {
+        position: absolute;
+        margin-top: 93px !important;
+        
+    }
+    .pp-ht2{
+        position: absolute;
+        margin-top: 106px !important; 
+    }
+    .pp-ht3{
+        position: absolute;
+        margin-top: 105px !important; 
+    }
+    .smalldate{
+        position: absolute;
+        margin-top: 166px;
+    }
+    .dconame1{
+        position: absolute;
+        margin-top: 80px !important;
+    }
+
+}
+@media (min-width: 2400px) { 
+    .identity-verify{
+        min-width: 1130px !important;
+    }
+    .smalldate{
+        position: absolute;
+        margin-top: 166px;
+    }
+}
+@media (min-width: 2500px) { 
+    .identity-verify{
+        min-width: 1178px !important;
+    }
+    .pp-ht {
+        position: absolute;
+        margin-top: 93px !important;
+        
+    }
+    .pp-ht2{
+        position: absolute;
+        margin-top: 106px !important; 
+    }
+    .pp-ht3{
+        position: absolute;
+        margin-top: 106px !important; 
+    }
+    
+    #docname2{
+    position: relative;
+    margin-top: 13px !important;
+    margin-right: 41px !important;
+   }
+
+} 
+
+@media (min-width: 2600px ) { 
+    .identity-verify{
+        min-width: 1225px !important;
+    }
+    .pp-ht {
+        position: absolute;
+        margin-top: 93px !important;
+        
+    }
+    .pp-ht2{
+        position: absolute;
+        margin-top: 106px !important; 
+    }
+    .pp-ht3{
+        position: absolute;
+        margin-top: 106px !important; 
+    }
+    #docname2{
+    position: relative;
+    margin-top: 13px !important;
+    margin-right: 78px !important;
+   }
+}  
+
+@media (min-width: 2800px) { 
+    .identity-verify{
+        min-width: 1317px !important;
+    }
+    .pp-ht {
+        position: absolute;
+        margin-top: 93px !important;
+        
+    }
+    .pp-ht3{
+        position: absolute;
+        margin-top: 88px !important; 
+    }
+    #docname2{
+    position: relative;
+    margin-top: 13px !important;
+    margin-right: 78px !important;
+   }
+}  
+
+.disableButtonClass{
+    cursor: none;
+    pointer-events: none;
+    background: #6c6868 !important;
+    color: white;
+  }
+
+

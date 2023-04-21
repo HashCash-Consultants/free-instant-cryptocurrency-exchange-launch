@@ -1,0 +1,23 @@
+.bitrump-body{background:#f2f2f2;padding:56px 0 0 0;position: absolute;left:0;right:0;top:0;bottom:0;}
+.bitrump-body .card-login{border:none;box-shadow:none;}
+.bitrump-body .card-header{background:transparent;box-shadow:none;border:none;}
+.bitrump-body .bittrmp-hedr{color: #383535;font-weight: 400;font-size: 16px;margin-top:30px;}
+.bitrump-body .bittrmp-hedr a{color: #383535;}
+.bitrump-body .card-header .bitrump-pro{background:#fff;border-radius:20px;padding:8px 40px;color:#333131;font-weight:700;box-shadow:0 1px 2px 0 rgba(0, 0, 0, 0.01), 0px 0px 0px 0 rgba(0, 0, 0, 0.12);}
+.card-login-body{background:#fff;margin-top:30px;box-shadow:0 1px 2px 0 rgba(0, 0, 0, 0.02), 0px 0px 0px 0 rgba(0, 0, 0, 0.12);padding:50px 50px !important; border-radius:5px;}
+.card-login-body .nav-fill{display:none;}
+.card-login-body .nav-link.active{border-bottom:none !important;}
+.card-login-body .form-control:focus{box-shadow:none;}
+.card-login-body .form-control{border:none !important;border-bottom:1px solid #ddd !important;background:#fff;color:#848e9c;padding-left:0;font-size:15px;}
+.card-login-body input::placeholder {font-weight:600; font-size:15px;color: #848e9c;opacity: 1; /* Firefox */}
+.card-login-body input:-ms-input-placeholder {font-weight:600; font-size:15px;/* Internet Explorer 10-11 */color: #848e9c;}
+.card-login-body input::-ms-input-placeholder { font-weight:600;font-size:15px; font-weight:600;/* Microsoft Edge */color: #848e9c;}
+.card-login-body input:-webkit-autofill,.card-login-body input:-webkit-autofill:hover, .card-login-body input:-webkit-autofill:focus,.card-login-body input:-webkit-autofill:active{box-shadow: 0 0 0 30px #fff inset;
+-webkit-text-fill-color: #848e9c!important;}
+.card-login-body input:-moz-autofill,.card-login-body input:-moz-autofill:hover, .card-login-body input:-moz-autofill:focus,.card-login-body input:-moz-autofill:active{box-shadow: 0 0 0 30px #fff inset;
+-moz-text-fill-color: #848e9c!important;}
+.card-login-body .form-group{margin-bottom:2rem;}
+.card-login-body .secure-btn{padding-top:8px !important;padding-bottom:8px !important;
+background:#17aa9d;color:#212833;border-color:transparent;box-shadow:none;font-weight:600;}
+.card-login-body .forgot-pswd a{font-size:14px;font-weight:600;color:#17aa9d;}
+.card-login-body .forgot-pswd{color:#333131;font-size:14px;}

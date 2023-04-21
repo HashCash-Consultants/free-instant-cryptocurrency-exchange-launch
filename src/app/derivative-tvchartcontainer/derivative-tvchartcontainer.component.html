@@ -1,0 +1,26 @@
+<div class="loading-paybito">
+  <div class="img text-center">
+    <img class="loadImg" [src]="data?.BROKERLOADER" width="50" alt="">
+    <h3 style="font-size: 14px;" class="text-white mt-3">Loading...</h3>
+  </div>
+</div>
+<div class="infoChart">
+  <div class="icon-section pull-left">
+    <i class="fa fa-info-circle" aria-hidden="true" (click)="data.handleInfoSection('tvChartInfo')"></i>
+  </div>
+  <div class="info-section" id="tvChartInfo" style="display: none;">
+    <div class="info-header">
+      <div class="info-title"> Chart</div>
+      <div class="info-close">
+        <i class="fa fa-times" aria-hidden="true" (click)="data.handleInfoSection('tvChartInfo')"></i>
+      </div>
+    </div>
+    <div class="info-body">
+      Displays trade chart for 1 minute, 15 minutes, 30 minutes, 1 hour, 4 hours, 1 day, 2 days, 3 days,1 week, 3 weeks, 1 month, 6 months, and years as well.
+    </div>
+  </div>
+</div> 
+<div [ngClass]="Themecolor == 'Dark' ? 'tvChartBorder' : 'tvChartBorder-light'">
+
+<div class="app-tv-chart-container" id="tv_chart_container"></div>
+</div>

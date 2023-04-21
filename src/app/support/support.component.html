@@ -1,0 +1,33 @@
+<app-navbar></app-navbar>
+<div class="content-wrapper pt-0 pl-3">
+        <div class="row d-flex" data-ng-controller="supportCtrl" data-ng-init="loginDuration();">
+                <div class="col-12 col-md-8 col-sm-10 mt-3 align-self-stretch">
+                  <div class="bg-dark p-2 rounded h-100">
+                    <span class="font-md text-white mr-2 pl-3">Paybito Support</span>
+                    <div class="w-100"></div>
+                        <form (ngSubmit)="f.form.valid && supportMail()" #f="ngForm">
+                            <ul class="list-group mt-3">
+                              <li class="list-group-item bg-transparent">
+                                <div class="form-row">
+                                  <label for="bank_name">Subject</label>
+                                  <div class="input-group mb-2">
+                                    <input type="text" class="form-control" id="subject" [(ngModel)]="subject" name="subject" placeholder="Enter Subject"   required>
+                                  </div>
+                                </div>
+                                <div class="form-row">
+                                  <label for="account_number">Message</label>
+                                  <div class="input-group mb-2">
+                                    <textarea class="form-control" id="message" [(ngModel)]="message" name="message" placeholder="Enter Message" required></textarea>
+                                  </div>
+                                </div>
+                                <div class="form-row mt-2 mb-2">
+                                  <button type="submit" class="btn btn-green" [disabled]="f.form.invalid">SEND</button>
+                                </div>
+                              </li>
+                            </ul>
+                          </form>
+                  </div>
+                </div>
+              </div>
+            <a class="scroll-to-top rounded" href="#page-top"> <i class="fa fa-angle-up"></i> </a>
+</div>

@@ -1,0 +1,314 @@
+<app-navbar></app-navbar>
+
+<div class="content-wrapper pt-0 pl-3" [ngClass]="Themecolor == 'Dark' ? '' : 'content-wrapper-light'">
+  <!-- <div class="otc-banner">
+    <div class="container">
+      <div class="ban-hdr">
+        <h6>The Easiest Way to Trade</h6>
+        </div>
+      </div>
+  </div> -->
+  <div style="width: 80%;margin: auto;margin-top: 10px;border-radius: .25rem;" class=" p-2 pl-3 pr-3" [ngClass]="Themecolor == 'Dark' ? 'bg-dark' : 'bg-light'">
+   <br/>
+   
+            
+  <h5 class="text-theme-dark-blue mb-3" >Instant Buy</h5>
+  <br/>
+  <div class="row mt-2 buycurrency">
+  <div class="col-md-3">
+    <div style="align-items: center;" class="d-flex">
+      <div style="margin-right: 10px;" class="text-theme-dark-blue" [ngClass]="Themecolor == 'Dark' ? 'text-white': 'text-black' ">Buy</div>
+      <select class="buywith" [ngClass]="Themecolor == 'Dark' ? 'form-control': 'form-control-light' " (change)="getCounterCurrency($event.target.value)">
+        <option [value]="">Select</option>
+        <option *ngFor="let item of counterCurrency" [value]="item">{{item}}</option>
+      </select>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div style="align-items:center;" class="d-flex">
+      <div style="margin-right: 10px;" class="text-theme-dark-blue"  [ngClass]="Themecolor == 'Dark' ? 'text-white': 'text-black' ">With</div>
+      <select disabled class="buywith base" [ngClass]="Themecolor == 'Dark' ? 'form-control': 'form-control-light' " id="base-cur-basic" (change)="getBaseCurrency($event.target.value)">
+        <option [value]="">Select</option>
+        <option *ngFor="let item of basecurrency" [value]="item">{{item}}</option>
+      </select>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <span class="btn btn-dark font-xs filter-button btn_active fee_btn pull-right" (click)="handleOpenFeeModal(feeModal)">FEES</span>
+  </div>
+</div>
+
+<div style="display: none;" class="row mt-2 sellcurrency">
+  <div class="col-md-3">
+    <div style="align-items: center;" class="d-flex">
+      <div style="margin-right: 10px;" class="text-theme-dark-blue" [ngClass]="Themecolor == 'Dark' ? 'text-white': 'text-black' ">Sell</div>
+      <select class="buywith" (change)="getCounterCurrencyforsell($event.target.value)">
+        <option [value]="">Select</option>
+        <option *ngFor="let item of counterCurrency" [value]="item">{{item}}</option>
+      </select>
+    </div>
+  </div>
+  <div class="col-md-2">
+    <div style="align-items:center;" class="d-flex">
+      <div style="margin-right: 10px;" class="text-theme-dark-blue" [ngClass]="Themecolor == 'Dark' ? 'text-white': 'text-black' ">For</div>
+      <select disabled class="buywith base" id="base-cur-bas" (change)="getBaseCurrency($event.target.value)">
+        <option [value]="">Select</option>
+        <option *ngFor="let item of basecurrency" [value]="item">{{item}}</option>
+      </select>
+    </div>
+  </div>
+</div>
+  <div class="row">
+    <div class="col-md-6">
+    
+  <ngb-tabset justify="fill" *ngIf="!market" activeId="market" id="marketTab"  class="basic">
+    <ngb-tab  id="market">
+      <!-- <ng-template ngbTabTitle>
+        <h5 style="text-align: left;" class="market-reset"> MARKET</h5>
+      </ng-template> -->
+      <ng-template ngbTabContent>
+      
+        <ngb-tabset type="pills" class="{{(buySellPillsClassStatus==true)?'buy-pills-basic':'sell-pills-basic'}}">
+          <ngb-tab>
+            <ng-template ngbTabTitle>
+              <span (click)="reset();buyText();makeClassToggle(true)" class="text-left1 buybtn buyspan">Buy</span>
+            </ng-template>
+            <ng-template ngbTabContent>
+              <div class="tab-pane tab-pan-wrap" id="market-buy" role="tabpanel" aria-labelledby="market-buy-tab">
+                <span class="balance_assets">
+                  <span class="font-sm text-theme-dark-blue">{{selelectedSellingAssetBalance}}<small> {{base_currency |
+                        uppercase}}</small>
+                  </span>
+                  <span class="font-xs mr-1 deposit-withdraw-btn" *ngIf="valid">
+                    <span class="diposit-hover">DEPOSIT</span>
+                    <img src="./assets/img/send.png" style="width: 20px;" routerLink="/deposit-funds" />
+
+                  </span>
+                  <span class="font-xs mr-1 deposit-withdraw-btn" *ngIf="!valid">
+                    <span class="diposit-hover">RECEIVE</span>
+                    <img src="./assets/img/pay.png" style="width: 20px;" routerLink="/my-wallet" />
+                  </span>
+
+                </span>
+                <div class="form-row">
+                  <div class="col-12 col-md-4 text-left">
+                    <label for="inputBuyBTC" class="col-form-label newlabel" [ngClass]="Themecolor == 'Dark' ? '' : 'text-black'">Buying Amount</label>
+                  </div>
+                  <div class="col-12 col-md-8">
+                    <div class="input-group">
+                      <input numeric numericType="decimal" class=" form-control-sm rounded" [ngClass]="Themecolor == 'Dark' ? 'form-control' : 'form-control-light'"
+                        id="inputOnlyBuyAmount" placeholder="0" [(ngModel)]="onlyBuyAmount" (keyup)="getBuyVal($event);"
+                        #bam="ngModel" [class.is-invalid]="bam.dirty&&bam.invalid" disabled>
+                      <div class="input-group-append">
+                        <div class="input-group-text bg-transparent border-0 " [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">{{counter_currency}}
+                        </div>
+                      </div>
+                    </div>
+                    <span class="text-danger text-theme-dark-blue" *ngIf="bam.dirty&&bam.invalid">Enter a valid amount</span>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="col-12 col-md-4 text-left">
+                    <label for="inputBuyUSD" class="col-form-label newlabel" [ngClass]="Themecolor == 'Dark' ? '' : 'text-black'">Price</label>
+                  </div>
+                  <div class="col-12 col-md-8">
+                    <div class="input-group">
+                      <input numeric numericType="decimal" class=" form-control-sm rounded" [ngClass]="Themecolor == 'Dark' ? 'form-control' : 'form-control-light'"
+                        id="inputOnlyBuyPrice" placeholder="0" [(ngModel)]="onlyBuyPrice" readonly>
+                      <div class="input-group-append">
+                        <div class="input-group-text bg-transparent border-0 " [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">{{base_currency}}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="col-12 col-md-4 text-left">
+                    <label for="inputBuyUSD" class="col-form-label newlabel" [ngClass]="Themecolor == 'Dark' ? '' : 'text-black'">Total Price</label>
+                  </div>
+                  <div class="col-12 col-md-8">
+                    <div class="input-group mb-2">
+                      <input numeric numericType="decimal" class=" form-control-sm rounded" [ngClass]="Themecolor == 'Dark' ? 'form-control' : 'form-control-light'"
+                        id="inputOnlyBuyTotalPrice" placeholder="0" [(ngModel)]="onlyBuyTotalPrice" disabled>
+                      <div class="input-group-append">
+                        <div class="input-group-text bg-transparent border-0 " [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">{{base_currency}}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row mb-2 ">
+                  <div class="col-12 col-md-8 offset-md-4">
+                    <button type="button" id="mbuy" class="btn-green onlyBuyBtn btn" (click)="marketBuy()"
+                      [disabled]="bam.pristine || bam.invalid">BUY</button>
+                  </div>
+                </div>
+                <span class="onlyBuyError text-red" style="display:none;font-size: 10px;">*Orderbook depth reached, price not found
+                </span>
+                <span class="onlyBuyErrorM text-red" style="display:none;font-size: 10px;">*Total price should be minimum 0.001 
+                </span>
+              </div>
+            </ng-template>
+
+          </ngb-tab>
+
+          <ngb-tab>
+            <ng-template ngbTabTitle>
+              <span (click)="reset();sellText();makeClassToggle(false)" class="text-left1 sellbtn sellspan">Sell</span>
+            </ng-template>
+            <ng-template ngbTabContent>
+              <div class="tab-pane tab-pan-wrap" id="market-sell" role="tabpanel" aria-labelledby="market-sell-tab">
+                <span class="balance_assets">
+                <span class="font-sm text-theme-dark-blue">{{selelectedBuyingAssetBalance}}<small>
+                    {{counter_currency | uppercase}}</small></span>
+                <span class="font-xs mr-1 deposit-withdraw-btn">
+                  <span class="diposit-hover">RECEIVE</span>
+                  <img src="./assets/img/pay.png" style="width: 20px;" routerLink="/my-wallet" />
+                </span>
+                </span>
+                <div class="form-row">
+                  <div class="col-12 col-md-4 text-left">
+                    <label for="inputSellBTC" class="col-form-label newlabel" [ngClass]="Themecolor == 'Dark' ? '' : 'text-black'">Selling Amount</label>
+                  </div>
+                  <div class="col-12 col-md-8">
+                    <div class="input-group">
+                      <input numeric numericType="decimal" class=" form-control-sm rounded" [ngClass]="Themecolor == 'Dark' ? 'form-control' : 'form-control-light'"
+                        id="inputOnlySellAmount" placeholder="0" [(ngModel)]="onlySellAmount"
+                        (keyup)="getSellVal($event)" #sam="ngModel" [class.is-invalid]="sam.dirty&&sam.invalid" disabled>
+                      <div class="input-group-append">
+                        <div class="input-group-text bg-transparent border-0" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">{{counter_currency}}
+                        </div>
+                      </div>
+                    </div>
+                    <span class="text-danger" *ngIf="sam.dirty&&sam.invalid">Enter a valid amount</span>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="col-12 col-md-4 text-left">
+                    <label for="inputSellUSD" class="col-form-label newlabel" [ngClass]="Themecolor == 'Dark' ? '' : 'text-black'">Price</label>
+                  </div>
+                  <div class="col-12 col-md-8">
+                    <div class="input-group">
+                      <input numeric numericType="decimal" class=" form-control-sm rounded" [ngClass]="Themecolor == 'Dark' ? 'form-control' : 'form-control-light'"
+                        id="inputOnlySellPrice" placeholder="0" [(ngModel)]="onlySellPrice" disabled>
+                      <div class="input-group-append">
+                        <div class="input-group-text bg-transparent border-0" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">{{base_currency}}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="col-12 col-md-4 text-left">
+                    <label for="inputSellUSD" class="col-form-label newlabel" [ngClass]="Themecolor == 'Dark' ? '' : 'text-black'">Total Price</label>
+                  </div>
+                  <div class="col-12 col-md-8">
+                    <div class="input-group mb-2">
+                      <input numeric numericType="decimal" class=" form-control-sm rounded" [ngClass]="Themecolor == 'Dark' ? 'form-control' : 'form-control-light'"
+                        id="inputOnlySellTotalPrice" placeholder="0" [(ngModel)]="onlySellTotalPrice" disabled>
+                      <div class="input-group-append">
+                        <div class="input-group-text bg-transparent border-0" [ngClass]="Themecolor == 'Dark' ? '' : 'text-black'">{{base_currency}}
+                        </div>
+                      </div> 
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row mb-2">
+                  <div class="col-12 col-md-8 offset-md-4">
+                    <button numeric numericType="decimal" id="msell" class="btn-red onlySellBtn btn"
+                      (click)="marketSell()" [disabled]="sam.invalid || sam.pristine">SELL</button>
+                  </div>
+                </div>
+                <span class="onlySellError text-red" style="display:none;font-size: 10px;">*Orderbook depth reached, price not found
+                </span>
+                <span class="onlyBuyErrorM text-red" style="display:none;font-size: 10px;">*Total price should be minimum 0.001 
+                </span>
+              </div>
+            </ng-template>
+          </ngb-tab>
+
+        </ngb-tabset>
+
+      </ng-template>
+    </ngb-tab>
+  </ngb-tabset>
+</div>
+<div class="col-md-6">
+  
+  <div class="line"></div>
+  <div class="vertical-line"></div>
+  <h6 class="text-theme-dark-blue" style="margin: 26px; font-weight: bold;size: 18px;" [ngClass]="Themecolor == 'Dark' ? '' : 'text-black'">Guide:</h6>
+  <ul  [ngClass]="Themecolor == 'Dark' ? 'list-of-norms' : 'list-of-norms-light'">
+    <li>Select the cryptocurrency you want to buy.</li>
+    <li>Select the cryptocurrency or fiat you want to "Sell" in order to "Buy" the above selected cryptocurrency.</li>
+    <li>Enter the amount of Cryptocurrency you wish to buy next to "Buying Amount".</li>
+    <li>Review the price that will automatically populate afterwards.</li>  
+    <li>Review the total trade cost next to "Total Price".</li>  
+    <li>Once you are happy with all elements, click on "Buy" and the transaction will excute as ordered.</li>  
+  </ul>
+</div>
+</div>
+</div>
+</div>
+<ng-template #feeModal let-modal>
+  <div class="modal-header" style="background: #3d3e42; color: #fff;">
+    <h4 class="modal-title" id="modal-basic-title">Fees </h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body" style="background: #3d3e42; color: #fff; font-family: system-ui;">
+    <h5 style="font-family: -webkit-pictograph;">Summary - 30 Days</h5>
+    <table class="table table-borderless">
+      <thead>
+        <tr>
+          <th scope="col" class="text-center" style="border-right: 2px solid rgb(91, 91, 94); background-color: rgb(39, 51, 56); color: rgb(211, 221, 221);">Total Volume</th>
+          <th scope="col" class="text-center" style="border-right: 2px solid rgb(91, 91, 94); background-color: rgb(39, 51, 56); color: rgb(211, 221, 221);">Total Fees Accrued</th>
+          <th scope="col" class="text-center" style="border-right: 2px solid rgb(91, 91, 94); background-color: rgb(39, 51, 56); color: rgb(211, 221, 221);">Current Maker Fees</th>
+          <th scope="col" class="text-center" style="border-right: 2px solid rgb(91, 91, 94); background-color: rgb(39, 51, 56); color: rgb(211, 221, 221);">Current Taker Fees</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="text-center">
+          <td style="border-right: 2px solid #5b5b5e;">$ {{userExchnageFee.totalVolume}}</td>
+          <td style="border-right: 2px solid #5b5b5e;">$ {{userExchnageFee.totalFees}}</td>
+          <td style="border-right: 2px solid #5b5b5e;">{{userExchnageFee.makerFee}}%</td>
+          <td>{{userExchnageFee.takerFee}}%</td>
+        </tr>
+        
+      </tbody>
+    </table>
+    <p style="font-size: 14px;">Your fee tier is based upon total USD trading volume over the trailing 30 day period. Total Volume includes volume for trading Pairs in BASIC, SPOT and OTC trading only. Transactions made on books quoted in USD, e.g. BTC-USD, are counted as the total USD amount of each filled order. Transactions made on non-USD books are converted to USD based on the most recent fill price on the respective book.</p>
+    <h5 style="font-family: -webkit-pictograph;">Exchange Fees</h5>
+    <table class="table table-borderless">
+      <thead>
+        <tr>
+          <th scope="col"  width="45%" style="border-right: 2px solid rgb(91, 91, 94); background-color: rgb(39, 51, 56); color: rgb(211, 221, 221);"><span style="margin-left: 22px;"> Tier (30 day trailing)</span></th>
+          <th scope="col"  width="30%" style="border-right: 2px solid rgb(91, 91, 94); background-color: rgb(39, 51, 56); color: rgb(211, 221, 221);"><span>Maker Fee</span></th>
+          <th scope="col" width="30%" style="border-right: 2px solid rgb(91, 91, 94); background-color: rgb(39, 51, 56); color: rgb(211, 221, 221);"><span>Taker Fee</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let fee of exchangeFees">
+          <td  width="45%"style="border-right: 2px solid #5b5b5e;"><span style="margin-left: 22px;">{{fee.volumeFrom}} <i class="fa fa-minus" aria-hidden="true"></i> {{fee.volumeTo}}</span></td>
+          <td  width="30%"style="border-right: 2px solid #5b5b5e;">{{fee.makerFee}}</td>
+          <td width="30%">{{fee.takerFee}}</td>
+        </tr>
+        
+      </tbody>
+    </table>
+    <p style="font-size: 14px;">{{data.exchnage}} uses a maker-taker fee model for determining its trading fees. Orders that provide liquidity (maker orders) are charged different fees than orders that take liquidity (taker orders).
+      <b>Fees are calculated based on the current pricing tier you are in when the order is placed, and not on the tier you would be in after a trade is completed.</b> When you place an order at the market price that gets filled immediately, you are considered a taker.
+      When you place an order which is not immediately matched by an existing order, that order is placed on the order book. If another customer places an order that matches yours, you are considered the maker.
+      When you place an order that gets partially matched immediately, you pay a taker fee for that portion. The remainder of the order is placed on the order book and, when matched, is considered a maker order.</p>
+      <div class="row">
+        <div class="col-2"></div>
+        <div class="col-8 text-center">
+
+          <button type="button" class="btn btn-secondary" (click)="modal.close()">Close</button>
+        </div>
+        <div class="col-2"></div>
+      </div>
+  </div>
+  
+</ng-template>

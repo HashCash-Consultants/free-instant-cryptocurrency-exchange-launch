@@ -1,0 +1,791 @@
+<span class="btn btn-dark font-xs filter-button btn_active fee_btn" (click)="handleOpenFeeModal(feeModal)">
+  FEES
+</span>
+<span style="cursor: pointer;position:absolute;right:92px;top:11px;font-size:15px;">
+  <i class="fa fa-info-circle" aria-hidden="true" (click)="data.handleInfoSection('tradeFeeInfo')" style="font-size:15px;"></i>
+</span>
+<div class="info-section" id="tradeFeeInfo" style="display: none;margin:auto; top: 10px;">
+  <div class="info-header">
+    <div class="info-title" style="font-size:20px;font-weight:100;">FEES</div>
+    <div class="info-close">
+      <i class="fa fa-times" aria-hidden="true" (click)="data.handleInfoSection('tradeFeeInfo')"></i>
+    </div>
+  </div>
+  <div class="info-body">
+    <p style="font-weight:100;font-size:17px;">Check current Maker Fees, Taker Fees, and your Total trading volume.</p>
+  </div>
+</div>
+
+<div [ngResizable]="data.resize" class="trade-component p-2 pl-3 pr-3 rounded h-100 resizable-widget">
+  <ngb-tabset [ngClass]="Themecolor == 'Dark' ? 'tab-dark' : 'tab-light'" [activeId]="activeIdString">
+    <ngb-tab id="trades">
+      <ng-template ngbTabTitle>
+        <!-- <h6 (click)="data.renderDataForMyTradeOptions();GetTradeDetail();handleSelectTab('1')" id="trade" [ngStyle]="{color : (Themecolor == 'Dark' && selectedTab != '1') ? '#fcfcfc' : (Themecolor == 'Dark' && selectedTab == '1')? '#007bff' :(Themecolor != 'Dark' && selectedTab == '1') ? '#007bff' : 'black' }" style="padding:8px 10px -2px 10px;">MY TRADES</h6> -->
+        <h6 (click)="data.renderDataForMyTradeOptions();GetTradeDetail();handleSelectTab('1');saveLastTabTradeComp('trades')" id="trade"  style="padding:8px 10px -2px 10px;">
+          TRADE HISTORY
+        </h6>
+      
+      </ng-template>
+      <ng-template ngbTabContent>
+        <div style="top: 83px;right: 28px;position: absolute;">
+          
+          <div class="info-section" id="optionTradeHistoryInfo" style="display: none;left: -595px;top: 10px;" >
+            <div class="info-header">
+              <div class="info-title">TRADE HISTORY</div>
+              <div class="info-close">
+                <i class="fa fa-times" aria-hidden="true" (click)="data.handleInfoSection('optionTradeHistoryInfo')"></i>
+              </div>
+            </div>
+            <div class="info-body">
+              Trade History shows all successful BUY and SELL trades.
+            </div>
+          </div>
+        </div>
+        <div class="tab-pane active" id="my-trades" role="tabpanel" aria-labelledby="my-trades-tab">
+
+          <div class="btn-group btn-group-sm" role="group" aria-label="my-trades-filter" style="margin-top:1px;float: left !important;">
+            <button type="button"
+              class="btn btn-dark font-xs filter-button {{(myTradeTableDisplayStatus==0)?'btn_active':''}}"
+              data-filter="all" (click)="myTradeDisplay(0)">ALL</button>
+            <button type="button"
+              class="btn btn-dark font-xs text-green filter-button {{(myTradeTableDisplayStatus==1)?'btn_active':''}}"
+              data-filter="buy" (click)="myTradeDisplay(1)">BUY</button>
+            <button type="button"
+              class="btn btn-dark font-xs text-red filter-button {{(myTradeTableDisplayStatus==2)?'btn_active':''}}"
+              data-filter="sell" (click)="myTradeDisplay(2)">SELL</button>
+              <div class="icon-section pull-left" style="padding-left: 8px;">
+                <i class="fa fa-info-circle" aria-hidden="true" (click)="data.handleInfoSection('optionTradeHistoryInfo')"></i>
+              </div>
+          </div>
+          <div style="float: right !important;margin-right: 5px;">
+            <div class="form-check" style="padding-top: 8px;">
+              <input class="form-check-input" type="checkbox" value="" [checked]="myTradeTableAllPairs" id="flexCheckDefault" (change)="checkValueMyTrade($event)">
+              <label class="form-check-label" for="flexCheckDefault">
+                Show all pairs
+              </label>
+            </div>
+           </div>
+          <br/>
+          <br/>
+          <div class="table-responsive-sm" *ngIf="!myTradeTableAllPairs">
+            <div [ngClass]="Themecolor == 'Dark' ? 'table-responsive scrollable' : 'table-responsive scrollable_light'">
+              <table class="table table-sm trade-table">
+                <thead>
+                 <tr class="bg-header">
+                    <th scope="col">Time</th>
+                    <th scope="col">Contract</th>
+                    <th scope="col">Offer Type</th>
+                    <th scope="col">Amount</th>
+                    <th scope="col">Entry Price</th>
+                    <th scope="col">Mark Price</th>
+                    <th scope="col">Liq. Price</th>
+                    <th scope="col">PNL $(%)</th>
+                    <th scope="col">Action</th>
+                    </tr>
+                
+                </thead>
+                <tbody id="myTradeBody" *ngIf="tradehistrybyId !=null" class="">
+
+                  <tr>
+                    <td colspan="8" *ngIf="isloading" class="text-center">
+                      <img src="./assets/svg-loaders/three-dots.svg" alt="" width="50">
+                    </td>
+                  </tr>
+                  <tr class="{{'filter'+' '+m.action|lowercase }}" *ngFor="let m of tradehistrybyId">
+                    <td class="">{{m.transactionTimeStamp}}</td>
+                    <td class="">{{m.asset_pair}}<small style="margin-left:5px; background-color: #616F8D; color:#ffff; padding: 3px !important; border-radius:5px;">{{m.leverage}}X</small></td>
+                    <td class="" *ngIf="m.offer_type==7">OPTIONS</td>
+                   <!--  <td class="" *ngIf="m.offer_type==6">CROSS</td>
+                    <td class="" *ngIf="m.offer_type==2">NO LEV</td> -->
+                    <td class="text-green" *ngIf="m.action=='buy'">{{getTradeAmount(m)}} {{m.buying_asset_code}}</td>
+                    <td class="text-danger" *ngIf="m.action=='sell'">{{getTradeAmount(m)}} {{m.selling_asset_code}}</td>
+                    <td class="">{{m.price | number : '1.0-2'}}</td>
+                    <td class="">{{m.markPrice | number : '1.0-2'}}</td>
+                    <td class="" *ngIf="getLiqPrice(m) == true">{{m.liqPrice | number : '1.0-2'}}</td>
+                    <td class="" *ngIf="getLiqPrice(m) == false">-</td>
+                    <td class="" style="margin-left:5px;" [ngClass]="handlePnlPositiveValue(m.pnl) ? 'text-green' : 'text-danger' ">{{m.pnl}}</td>
+                    <td class="" *ngIf="m.leverage > 1 && m.mpTransactionId != 0 && m.mpTransactionId != null"><button class="btn btn-dark btn-ex-sm" (click)="handleCloseButton(m,buyofferForFuture)">Close</button></td>
+                    
+                  </tr>
+                  <tr *ngIf="Nodata1">
+                    <td colspan="8" class="text-center text-danger">No Data</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="table-responsive-sm" *ngIf="myTradeTableAllPairs">
+            <div [ngClass]="Themecolor == 'Dark' ? 'table-responsive scrollable' : 'table-responsive scrollable_light'">
+              <table class="table table-sm trade-table">
+                <thead>
+                 <tr class="bg-header">
+                  <th scope="col">Time</th>
+                  <th scope="col">Contract</th>
+                  <th scope="col">Offer Type</th>
+                  <th scope="col">Amount</th>
+                  <th scope="col">Entry Price</th>
+                  <th scope="col">Mark Price</th>
+                  <th scope="col">Liq. Price</th>
+                  <th scope="col">PNL $(%)</th>
+                  <th scope="col">Action</th>
+                    </tr>
+                
+                </thead>
+                <tbody id="myTradeBody1" *ngIf="tradehistrybyIdNewData.length > 0">
+
+                  <tr>
+                    <td colspan="8" *ngIf="isloading" class="text-center">
+                      <img src="./assets/svg-loaders/three-dots.svg" alt="" width="50">
+                    </td>
+                  </tr>
+                  <tr  *ngFor="let data of tradehistrybyIdNewData"  [ngClass]="'trade trade'+data.action">
+                    <td class="">{{data.transactionTimeStamp}}</td>
+                    <td class="">{{data.asset_pair}}<small style="margin-left:5px; background-color: #616F8D; color:#ffff; padding: 3px !important; border-radius:5px;">{{data.leverage}}X</small></td>
+                    <td class="" >{{data.offer_type}}</td>
+                    <td  class="text-green" *ngIf="data.action=='buy'">{{getTradeAmount(data)}}{{data.buying_asset_code}}</td>
+                    <td  class="text-danger" *ngIf="data.action=='sell'">{{getTradeAmount(data)}}{{data.selling_asset_code}}</td>
+                   
+
+                   <td class="">{{data.price | number : '1.0-2'}}</td>
+                   <td class="">{{data.markPrice | number : '1.0-2'}}</td>
+                   <td class="" >{{data.liqPrice}}</td>
+                   <td class="" style="margin-left:5px;" [ngClass]="handlePnlPositiveValue(data.pnl) ? 'text-green' : 'text-danger' ">{{data.pnl}}</td>
+
+                   <td class="" ><button class="btn btn-dark btn-ex-sm" (click)="handleCloseButton(data,buyofferForFuture)">Close</button></td>
+                  
+                  </tr>
+                  <!-- <tr *ngIf="Nodata1">
+                    <td colspan="8" class="text-center text-danger">No Data</td>
+                  </tr> -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </ngb-tab>
+    <ngb-tab id="offers">
+      <ng-template ngbTabTitle>
+        <!-- <h6 (click)="data.renderDataForMyOfferOptions();getOfferLists();handleSelectTab('2')" class="get-offer" [ngStyle]="{color : (Themecolor == 'Dark' && selectedTab != '2') ? '#fcfcfc' : (Themecolor == 'Dark' && selectedTab == '2')? '#007bff' :(Themecolor != 'Dark' && selectedTab == '2') ? '#007bff' : 'black' }" style="padding: 8px 10px -2px 10px;">MY OFFERS</h6> -->
+        <h6 (click)="data.renderDataForMyOfferOptions();getOfferLists();handleSelectTab('2');saveLastTabTradeComp('offers')" class="get-offer"  style="padding: 8px 10px -2px 10px;">
+          OPEN ORDERS
+        </h6>
+      
+      </ng-template>
+      <ng-template ngbTabContent>
+        <div style="top: 83px;right: 28px;position: absolute;">
+          
+          <div class="info-section" id="optionOpenOrderInfo" style="display: none;left: -595px;top: 10px;" >
+            <div class="info-header">
+              <div class="info-title"> OPEN ORDERS</div>
+              <div class="info-close">
+                <i class="fa fa-times" aria-hidden="true" (click)="data.handleInfoSection('optionOpenOrderInfo')"></i>
+              </div>
+            </div>
+            <div class="info-body">
+              Open Orders shows all BUY and SELL Offers waiting to be executed.
+            </div>
+          </div>
+        </div>
+        <div class="tab-pane" id="my-offer" role="tabpanel" aria-labelledby="my-offer-tab">
+          <div class="btn-group btn-group-sm" role="group" aria-label="my-trades-filter" style="margin-top:1px;float: left !important;">
+            <button type="button"
+              class="btn btn-dark font-xs filter-button {{(filterMyOfferStatus=='ALL')?'btn_active':''}}"
+              data-filter="all" (click)="filterMyOffer('ALL')">ALL</button>
+            <button type="button"
+              class="btn btn-dark font-xs text-green filter-button {{(filterMyOfferStatus==1)?'btn_active':''}}"
+              data-filter="buy" (click)="filterMyOffer(1)">BUY</button>
+            <button type="button"
+              class="btn btn-dark font-xs text-red filter-button {{(filterMyOfferStatus==2)?'btn_active':''}}"
+              data-filter="sell" (click)="filterMyOffer(2)">SELL</button>
+              <div class="icon-section pull-left" style="padding-left: 8px;">
+                <i class="fa fa-info-circle" aria-hidden="true" (click)="data.handleInfoSection('optionOpenOrderInfo')"></i>
+              </div>
+          </div>
+          <div style="float: right !important;margin-right: 5px;">
+            <div class="form-check" style="padding-top: 8px;">
+              <input class="form-check-input" type="checkbox" value="" [checked]="myOfferTableAllPairs" id="flexCheckDefault" (change)="checkValueMyOffer($event)">
+              <label class="form-check-label" for="flexCheckDefault">
+                Show all pairs
+              </label>
+            </div>
+          </div>
+          <br/>
+          <br/>
+          <div class="table-responsive-sm" *ngIf="!myOfferTableAllPairs">
+            <div [ngClass]="Themecolor == 'Dark' ? 'table-responsive scrollable' : 'table-responsive scrollable_light'">
+              <table class="table table-sm my-offer-table">
+                <thead>
+                 <tr class="bg-header">
+                    <th scope="col">Time</th>
+                    <th scope="col">Offer Id</th>
+                    <th scope="col">Amount</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Total Value</th>
+                    <th scope="col">Offer Type</th>
+                    <th scope="col">Lev</th>
+                    <th scope="col">Buy-Sell</th>
+                    <th scope="col">Edit</th>
+                    <th scope="col">Delete</th>
+                  </tr>
+                      
+                </thead>
+                <tbody id="myOfferBody" class="myoffer-block" *ngIf="tradeofferbyId !=null && filterMyOfferStatus != 1 && filterMyOfferStatus != 2">
+                  <tr *ngFor="let m of tradeofferbyId">
+                    <td>{{m.transactionTimeStamp | date:'medium'}}</td>
+                    <td class="">{{m.offer_id}}</td>
+                    <td class="">{{getTradeAmount(m)}}</td>
+                    <td class="">{{getTradePrice(m)}}</td>
+                    <td class="">{{(getTradeAmount(m)*getTradePrice(m)).toFixed(tradep)}}</td>
+                    <td class="" *ngIf="m.offer_type==7">OPTIONS</td>
+                    <!-- <td class="" *ngIf="m.offer_type==6">CROSS</td>
+                    <td class="" *ngIf="m.offer_type==2">NO LEV</td> -->
+                    <td class="">{{m.leverage}}X</td>
+                    <td class="text-{{m.txn_type=='1'?'success':'danger'}}" *ngIf="m.txn_type==1">Buy</td>
+                    <td class="text-{{m.txn_type=='1'?'success':'danger'}}" *ngIf="m.txn_type==2">Sell</td>
+                    <td *ngIf="m.offer_type =='0'"><button class="btn btn-dark btn-ex-sm" (click)="getOfferDetails(modify,m.offer_id)">Modify</button></td>
+                    <td *ngIf="m.offer_type !='0'"><button class="btn btn-dark btn-ex-sm" (click)="getmarginOfferDetails(modify_m,m.offer_id)">Modify</button></td>
+                    <td *ngIf="m.offer_type =='0'"><button class="btn btn-dark btn-ex-sm"(click)="deleteTrade(delete,m.offer_id,m.txn_type,m.price,m.amount,m.marginType,m.leverage)">Delete</button></td>
+                    <td *ngIf="m.offer_type !='0'"><button class="btn btn-dark btn-ex-sm"(click)="deleteTrade(delete_m,m.offer_id,m.txn_type,m.price,m.amount,m.marginType,m.leverage)">Delete</button></td>
+                  </tr>
+
+                </tbody>
+
+                <tbody id="myOfferBody" class="myoffer-block" *ngIf="tradeofferbyIdBuy.length >0 && filterMyOfferStatus == 1">
+                  <tr *ngFor="let m of tradeofferbyIdBuy">
+                    <td>{{m.transactionTimeStamp | date:'medium'}}</td>
+                    <td class="">{{m.offer_id}}</td>
+                    <td class="">{{getTradeAmount(m)}}</td>
+                    <td class="">{{getTradePrice(m)}}</td>
+                    <td class="">{{(getTradeAmount(m)*getTradePrice(m)).toFixed(tradep)}}</td>
+                    <td class="" *ngIf="m.offer_type==7">OPTIONS</td>
+                    <!-- <td class="" *ngIf="m.offer_type==6">CROSS</td>
+                    <td class="" *ngIf="m.offer_type==2">NO LEV</td> -->
+                    <td class="">{{m.leverage}}X</td>
+                    <td class="text-{{m.txn_type=='1'?'success':'danger'}}" *ngIf="m.txn_type==1">Buy</td>
+                    <td class="text-{{m.txn_type=='1'?'success':'danger'}}" *ngIf="m.txn_type==2">Sell</td>
+                    <td *ngIf="m.offer_type =='0'"><button class="btn btn-dark btn-ex-sm" (click)="getOfferDetails(modify,m.offer_id)">Modify</button></td>
+                    <td *ngIf="m.offer_type !='0'"><button class="btn btn-dark btn-ex-sm" (click)="getmarginOfferDetails(modify_m,m.offer_id)">Modify</button></td>
+                    <td *ngIf="m.offer_type =='0'"><button class="btn btn-dark btn-ex-sm"(click)="deleteTrade(delete,m.offer_id,m.txn_type,m.price,m.amount,m.marginType,m.leverage)">Delete</button></td>
+                    <td *ngIf="m.offer_type !='0'"><button class="btn btn-dark btn-ex-sm"(click)="deleteTrade(delete_m,m.offer_id,m.txn_type,m.price,m.amount,m.marginType,m.leverage)">Delete</button></td>
+                  </tr>
+
+                </tbody>
+
+
+                <tbody id="myOfferBody" class="myoffer-block" *ngIf="tradeofferbyIdSell.length >0 && filterMyOfferStatus == 2">
+                  <tr *ngFor="let m of tradeofferbyIdSell">
+                    <td>{{m.transactionTimeStamp | date:'medium'}}</td>
+                    <td class="">{{m.offer_id}}</td>
+                    <td class="">{{getTradeAmount(m)}}</td>
+                    <td class="">{{getTradePrice(m)}}</td>
+                    <td class="">{{(getTradeAmount(m)*getTradePrice(m)).toFixed(tradep)}}</td>
+                    <td class="" *ngIf="m.offer_type==7">OPTIONS</td>
+                    <!-- <td class="" *ngIf="m.offer_type==6">CROSS</td>
+                    <td class="" *ngIf="m.offer_type==2">NO LEV</td> -->
+                    <td class="">{{m.leverage}}X</td>
+                    <td class="text-{{m.txn_type=='1'?'success':'danger'}}" *ngIf="m.txn_type==1">Buy</td>
+                    <td class="text-{{m.txn_type=='1'?'success':'danger'}}" *ngIf="m.txn_type==2">Sell</td>
+                    <td *ngIf="m.offer_type =='0'"><button class="btn btn-dark btn-ex-sm" (click)="getOfferDetails(modify,m.offer_id)">Modify</button></td>
+                    <td *ngIf="m.offer_type !='0'"><button class="btn btn-dark btn-ex-sm" (click)="getmarginOfferDetails(modify_m,m.offer_id)">Modify</button></td>
+                    <td *ngIf="m.offer_type =='0'"><button class="btn btn-dark btn-ex-sm"(click)="deleteTrade(delete,m.offer_id,m.txn_type,m.price,m.amount,m.marginType,m.leverage)">Delete</button></td>
+                    <td *ngIf="m.offer_type !='0'"><button class="btn btn-dark btn-ex-sm"(click)="deleteTrade(delete_m,m.offer_id,m.txn_type,m.price,m.amount,m.marginType,m.leverage)">Delete</button></td>
+                  </tr>
+
+                </tbody>
+                 
+
+                <tbody class="myoffer-block" *ngIf="tradeofferbyId==null && filterMyOfferStatus != 1 && filterMyOfferStatus != 2 ">
+
+                  <tr>
+
+                    <td colspan="8" class="text-center text-danger">No Data</td>
+                  </tr>
+                </tbody>
+                <tbody class="myoffer-block" *ngIf="tradeofferbyIdBuy.length ==0 && filterMyOfferStatus == 1">
+
+                  <tr>
+
+                    <td colspan="8" class="text-center text-danger">No Data</td>
+                  </tr>
+                </tbody>
+
+
+                <tbody class="myoffer-block" *ngIf="tradeofferbyIdSell.length ==0 && filterMyOfferStatus == 2">
+
+                  <tr>
+
+                    <td colspan="8" class="text-center text-danger">No Data</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="table-responsive-sm" *ngIf="myOfferTableAllPairs">
+            <div [ngClass]="Themecolor == 'Dark' ? 'table-responsive scrollable' : 'table-responsive scrollable_light'">
+              <table class="table table-sm my-offer-table">
+                <thead>
+                 <tr class="bg-header">
+                    <th scope="col">Time</th>
+                    <th scope="col">Offer Id</th>
+                    <th scope="col">Amount</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Total Value</th>
+                    <th scope="col">Offer Type</th>
+                    <th scope="col">Lev</th>
+                    <th scope="col">Buy-Sell</th>
+                    <th scope="col">Edit</th>
+                    <th scope="col">Delete</th>
+                  </tr>
+                      
+                </thead>
+                
+
+                <tbody id="myOfferBody" class="myoffer-block" *ngIf="tradeofferbyIdNewData !=null">
+                  <tr *ngFor="let m of tradeofferbyIdNewData" [class]="'txnrow type'+m.type">
+                    <td>{{m.transactionTimeStamp }}</td>
+                    <td class="">{{m.offer_id}}</td>
+                    <td class="">{{getTradeAmount(m)}}</td>
+                    <td class="">{{getTradePrice(m)}}</td>
+                    <td class="">{{(getTradeAmount(m)*getTradePrice(m)).toFixed(tradep)}}</td>
+                    <td class="" >{{m.offer_type}}</td>
+                    <td class="">{{m.leverage}}X</td>
+                    <td class="text-success" *ngIf="m.type=='Buy'">Buy</td>
+                    <td class="text-danger" *ngIf="m.type=='Sell'">Sell</td>
+                    <td *ngIf="m.offer_type =='0'"><button class="btn btn-dark btn-ex-sm" (click)="getOfferDetails(modify,m.offer_id)">Modify</button></td>
+                    <td *ngIf="m.offer_type !='0'"><button class="btn btn-dark btn-ex-sm" (click)="getmarginOfferDetails(modify_m,m.offer_id)">Modify</button></td>
+                    <td *ngIf="m.offer_type =='0'"><button class="btn btn-dark btn-ex-sm"(click)="deleteTrade(delete,m.offer_id,m.type,m.price,m.amount,m.marginType,m.leverage)">Delete</button></td>
+                    <td *ngIf="m.offer_type !='0'"><button class="btn btn-dark btn-ex-sm"(click)="deleteTrade(delete_m,m.offer_id,m.type,m.price,m.amount,m.marginType,m.leverage)">Delete</button></td>
+                  </tr>
+
+                </tbody>
+
+
+                
+                 
+
+               
+                
+
+
+                
+              </table>
+            </div>
+          </div>
+         
+        </div>
+      </ng-template>
+    </ngb-tab>
+    <ngb-tab>
+    <!--   <ng-template ngbTabTitle>
+        <h5 (click)="getStopLossOfferForBuy()">STOP-LIMIT</h5>
+      </ng-template> -->
+      <!-- <ng-template ngbTabContent>
+        <ngb-tabset type="pills">
+          <ngb-tab>
+            <ng-template ngbTabTitle><span class="text-left" (click)="getStopLossOfferForBuy()">Buy</span></ng-template>
+            <ng-template ngbTabContent>
+              <div class="table-responsive-sm ">
+                <table class="table table-sm my-offer-table">
+                  <thead>
+                   <tr class="bg-header">
+                      <th scope="col">Time</th>
+                      <th scope="col">Offer Id</th>
+                      <th scope="col">Amount</th>
+                      <th scope="col">Stop-limit Price</th>
+                      <th scope="col">Trigger Price</th>
+                      <th scope="col">Buy-Sell</th>
+                      <th scope="col">Edit</th>
+                      <th scope="col">Delete</th>
+                    </tr>
+                    <td colspan="8" *ngIf="flag3" class="text-center">
+                      <img src="./assets/svg-loaders/three-dots.svg" alt="" width="50">
+                    </td>
+                  </thead>
+                  <tbody id="stopLossBodyw" *ngIf="buydata">
+
+                    <tr *ngFor="let s of buydata">
+                      <td>{{s.timestamp | date:'medium' }}</td>
+                      <td>{{s.offerId }}</td>
+                      <td>{{getStoplossAmount(s)}}</td>
+                      <td>{{getStoplossPrice(s)}}</td>
+                      <td>{{getStoplossTriggerPrice(s)}}</td>
+                      <td class="text-success">Buy</td>
+                      <td>
+                        <button
+                          (click)="modifyStoploss(modifystoploss,s.offerId,s.quantity,s.stopPrice,s.triggerPrice,'Buy')"
+                          class="btn btn-dark btn-ex-sm">Modify</button>
+                      </td>
+                      <td>
+                        <button class="btn btn-dark btn-ex-sm"
+                          (click)="delStoploss(delstoploss,s.offerId,s.quantity,s.stopPrice,s.triggerPrice,'Buy')">Delete</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td colspan="8" class="text-center text-danger" *ngIf="buydata.length==0">No Data Available</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </ng-template>
+          </ngb-tab>
+          <ngb-tab>
+            <ng-template ngbTabTitle><span class="text-left" (click)="getStopLossOfferForSell()">Sell</span>
+            </ng-template>
+            <ng-template ngbTabContent>
+              <div class="table-responsive-sm">
+                <table class="table table-sm my-offer-table">
+                  <thead>
+                   <tr class="bg-header">
+                      <th scope="col">Time</th>
+                      <th scope="col">Offer Id</th>
+                      <th scope="col">Amount</th>
+                      <th scope="col">Stop-limit Price</th>
+                      <th scope="col">Trigger Price</th>
+                      <th scope="col">Buy-Sell</th>
+                      <th scope="col">Edit</th>
+                      <th scope="col">Delete</th>
+                    </tr>
+                    <tr>
+                      <td colspan="8" *ngIf="flag4" class="text-center">
+                        <img src="./assets/svg-loaders/three-dots.svg" alt="" width="50">
+                      </td>
+                    </tr>
+                  </thead>
+                  <tbody id="stopLossBodyw" *ngIf="selldata">
+
+                    <tr *ngFor="let s of selldata">
+                      <td>{{s.timestamp | date:'medium' }}</td>
+                      <td>{{s.offerId }}</td>
+                      <td>{{getStoplossAmount(s)}}</td>
+                      <td>{{getStoplossPrice(s)}}</td>
+                      <td>{{getStoplossTriggerPrice(s)}}</td>
+                      <td class="text-danger">Sell</td>
+                      <td>
+                        <button
+                          (click)="modifyStoploss(modifystoploss,s.offerId,s.quantity,s.stopPrice,s.triggerPrice,'Sell')"
+                          class="btn btn-dark  btn-ex-sm">Modify</button>
+
+                      </td>
+                      <td>
+                        <button class="btn btn-dark  btn-ex-sm"
+                          (click)="delStoploss(delstoploss,s.offerId,s.quantity,s.stopPrice,s.triggerPrice,'Sell')">Delete</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td colspan="8" class="text-center text-danger" *ngIf="selldata.length==0">No Data Available</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </ng-template>
+          </ngb-tab>
+        </ngb-tabset>
+      </ng-template> -->
+    </ngb-tab>
+  </ngb-tabset>
+
+</div>
+
+<ng-template #modify let-modal>
+  <div [ngClass]="Themecolor == 'Dark' ? '' : 'lightTheme'" class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Manage Offer</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  
+  <div [ngClass]="Themecolor == 'Dark' ? '' : 'lightTheme'" class="modal-body modifyModal">
+    <ngb-tabset [ngClass]="Themecolor == 'Dark' ? 'tab-dark-modal' : 'tab-light-modal'" (tabChange)="amounttab($event)">
+      <ngb-tab title="Amount Update">
+        <ng-template ngbTabContent>
+         
+    <div class="form-group">
+      <label for="">Amount</label>
+      <input numeric numericType="decimal" class="form-control form-control-sm rounded right" [ngClass]="Themecolor == 'Dark' ? '' : 'lightThemeForm'" [(ngModel)]="tabmodifyamount" name="a"
+        #a="ngModel" appBuystoplimitdierctive [limit]="tradem">
+    </div>
+    <div class="form-group">
+      <label for="">Price</label>
+      <input type="number" readonly class="form-control form-control-sm rounded right" [ngClass]="Themecolor == 'Dark' ? '' : 'lightThemeForm'" [(ngModel)]="tabmodifyPrice" name="b"
+        #b="ngModel">
+    </div>
+    <div class="form-group">
+      <label for="">Total Volume</label>
+      <input type="number" class="form-control form-control-sm rounded right"
+      [ngClass]="Themecolor == 'Dark' ? '' : 'lightThemeForm'"
+        [value]="(tabmodifyamount*tabmodifyPrice).toFixed(tradep)" readonly>
+    </div>
+  
+  <div [ngClass]="Themecolor == 'Dark' ? '' : 'lightTheme'" class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modal.close()">Cancel</button>
+    <button type="button" class="btn btn-success" (click)="manageOfferAmount(); modal.close() "
+      [disabled]="a.pristine&&b.pristine">Submit</button>
+  </div>
+
+</ng-template>
+</ngb-tab>
+<ngb-tab (click)="Pricetab()" title="Price Update">
+  <ng-template ngbTabContent>
+   
+<div class="form-group">
+<label for="">Amount</label>
+<input type="number" readonly class="form-control form-control-sm rounded right" [ngClass]="Themecolor == 'Dark' ? '' : 'lightThemeForm'" [(ngModel)]="modifyAmount" name="a"
+  #a="ngModel">
+</div>
+<div class="form-group">
+<label for="">Price</label>
+<input numeric numericType="decimal" class="form-control form-control-sm rounded right" [ngClass]="Themecolor == 'Dark' ? '' : 'lightThemeForm'" [(ngModel)]="modifyPrice" name="b"
+  #b="ngModel" appBuystoplimitdierctive [limit]="tradep">
+</div>
+<div class="form-group">
+<label for="">Total Volume</label>
+<input type="number" class="form-control form-control-sm rounded right abc"
+[ngClass]="Themecolor == 'Dark' ? '' : 'lightThemeForm'"
+  [value]="(modifyAmount*modifyPrice).toFixed(tradep)" readonly>
+</div>
+
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" (click)="modal.close()">Cancel</button>
+<button type="button" class="btn btn-success" (click)="manageOfferPrice(); modal.close() "
+[disabled]="a.pristine&&b.pristine">Submit</button>
+</div>
+</ng-template>
+</ngb-tab>
+  </ngb-tabset>
+</div>
+</ng-template>
+
+<ng-template #modify_m let-modal>
+  <div [ngClass]="Themecolor == 'Dark' ? '' : 'lightTheme'" class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Manage Offer</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  
+  <div [ngClass]="Themecolor == 'Dark' ? '' : 'lightTheme'" class="modal-body modifyModal">
+    <ngb-tabset [ngClass]="Themecolor == 'Dark' ? 'tab-dark-modal' : 'tab-light-modal'" (tabChange)="amounttab($event)">
+      <ngb-tab  title="Amount Update">
+        <ng-template ngbTabContent>
+         
+    <div class="form-group">
+      <label for="">Amount</label>
+      <input numeric numericType="decimal" class="form-control form-control-sm rounded right" [ngClass]="Themecolor == 'Dark' ? '' : 'lightThemeForm'" [(ngModel)]="tabmodifyamount" name="a"
+        #a="ngModel" appBuystoplimitdierctive [limit]="tradem">
+    </div>
+    <div class="form-group">
+      <label for="">Price</label>
+      <input type="number" readonly class="form-control form-control-sm rounded right" [ngClass]="Themecolor == 'Dark' ? '' : 'lightThemeForm'" [(ngModel)]="tabmodifyPrice" name="b"
+        #b="ngModel">
+    </div>
+    <div class="form-group">
+      <label for="">Total Volume</label>
+      <input type="number" class="form-control form-control-sm rounded right"
+      [ngClass]="Themecolor == 'Dark' ? '' : 'lightThemeForm'"
+        [value]="(tabmodifyamount*tabmodifyPrice).toFixed(tradep)" readonly>
+    </div>
+  
+  <div [ngClass]="Themecolor == 'Dark' ? '' : 'lightTheme'" class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modal.close()">Cancel</button>
+    <button type="button" class="btn btn-success" (click)="manageOfferAmount(); modal.close() "
+      [disabled]="a.pristine&&b.pristine">Submit</button>
+  </div>
+
+</ng-template>
+</ngb-tab>
+<ngb-tab (click)="Pricetab()" title="Price Update">
+  <ng-template ngbTabContent>
+   
+<div class="form-group">
+<label for="">Amount</label>
+<input type="number" readonly [ngClass]="Themecolor == 'Dark' ? '' : 'lightThemeForm'" class="form-control form-control-sm rounded right" [(ngModel)]="modifyAmount" name="a"
+  #a="ngModel">
+</div>
+<div class="form-group">
+<label for="">Price</label>
+<input numeric numericType="decimal" [ngClass]="Themecolor == 'Dark' ? '' : 'lightThemeForm'" class="form-control form-control-sm rounded right" [(ngModel)]="modifyPrice" name="b"
+  #b="ngModel" appBuystoplimitdierctive [limit]="tradep">
+</div>
+<div class="form-group">
+<label for="">Total Volume</label>
+<input type="number" class="form-control form-control-sm rounded right abc"
+[ngClass]="Themecolor == 'Dark' ? '' : 'lightThemeForm'"
+  [value]="(modifyAmount*modifyPrice).toFixed(tradep)" readonly>
+</div>
+
+<div [ngClass]="Themecolor == 'Dark' ? '' : 'lightTheme'" class="modal-footer">
+<button type="button" class="btn btn-secondary" (click)="modal.close()">Cancel</button>
+<button type="button" class="btn btn-success" (click)="manageOfferPrice(); modal.close() "
+[disabled]="a.pristine&&b.pristine">Submit</button>
+</div>
+</ng-template>
+</ngb-tab>
+  </ngb-tabset>
+</div>
+</ng-template>
+
+<ng-template #delete let-modal>
+  <div [ngClass]="Themecolor == 'Dark' ? '' : 'lightTheme'" class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Delete Offer</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div [ngClass]="Themecolor == 'Dark' ? '' : 'lightTheme'" class="modal-body">
+    <p class="text-center">Are you sure want to delete this offer?</p>
+  </div>
+  <div [ngClass]="Themecolor == 'Dark' ? '' : 'lightTheme'" class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modal.close()">No</button>
+    <button type="button" class="btn btn-warning" (click)="modal.close(); delOffer()">Yes</button>
+  </div>
+</ng-template>
+
+<ng-template #delete_m let-modal>
+  <div [ngClass]="Themecolor == 'Dark' ? '' : 'lightTheme'" class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Delete Offer</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div [ngClass]="Themecolor == 'Dark' ? '' : 'lightTheme'" class="modal-body">
+    <p class="text-center">Are you sure want to delete this offer?</p>
+  </div>
+  <div [ngClass]="Themecolor == 'Dark' ? '' : 'lightTheme'" class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modal.close()">No</button>
+    <button type="button" class="btn btn-warning" (click)="modal.close(); delOffer()">Yes</button>
+  </div>
+</ng-template>
+
+<ng-template #modifystoploss let-modal>
+  <div [ngClass]="Themecolor == 'Dark' ? '' : 'lightTheme'" class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Manage Stop-limit</h4>
+    <button numeric numericType="decimal" class="close" aria-label="Close" (click)="modal.dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div [ngClass]="Themecolor == 'Dark' ? '' : 'lightTheme'" class="modal-body">
+    <div class="form-group">
+      <label for="">Amount</label>
+      <input numeric numericType="decimal" class="form-control form-control-sm rounded right" [ngClass]="Themecolor == 'Dark' ? '' : 'lightThemeForm'" [(ngModel)]="modifySlAmount" name="a"
+        #a="ngModel" appBuystoplimitdierctive [limit]="tradem">
+    </div>
+    <div class="form-group">
+      <label for="">Stop-limit Price</label>
+      <input numeric numericType="decimal" class="form-control form-control-sm rounded right" [ngClass]="Themecolor == 'Dark' ? '' : 'lightThemeForm'" [(ngModel)]="modifySlPrice" name="b"
+        #b="ngModel" appBuystoplimitdierctive [limit]="tradep">
+    </div>
+    <div class="form-group">
+      <label for="">Trigger Price</label>
+      <input numeric numericType="decimal" class="form-control form-control-sm rounded right" [ngClass]="Themecolor == 'Dark' ? '' : 'lightThemeForm'" [(ngModel)]="modifySlTrigger" name="c"
+        #c="ngModel" appBuystoplimitdierctive [limit]="tradep">
+    </div>
+  </div>
+  <div [ngClass]="Themecolor == 'Dark' ? '' : 'lightTheme'" class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modal.close()">Cancel</button>
+    <button type="button" class="btn btn-success" (click)="manageStoploss(); modal.close()"
+      [disabled]="a.pristine&&b.pristine&&c.pristine">Submit</button>
+  </div>
+</ng-template>
+
+<ng-template #delstoploss let-modal>
+  <div [ngClass]="Themecolor == 'Dark' ? '' : 'lightTheme'" class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Delete Stop-limit</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div [ngClass]="Themecolor == 'Dark' ? '' : 'lightTheme'" class="modal-body">
+    <p class="text-center">Are you sure want to delete this stop-limit?</p>
+  </div>
+  <div [ngClass]="Themecolor == 'Dark' ? '' : 'lightTheme'" class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modal.close()">No</button>
+    <button type="button" class="btn btn-warning" (click)="modal.close(); removeStoploss()">Yes</button>
+  </div>
+</ng-template>
+<ng-template #buyofferForFuture let-modal>
+  <div [ngClass]="Themecolor == 'Dark' ? '' : 'lightTheme'" class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">{{selectedCounterType}} Offer</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div [ngClass]="Themecolor == 'Dark' ? '' : 'lightTheme'" class="modal-body">
+    <p class="text-center">Are you sure you want to close this position?</p>
+  </div>
+  <div [ngClass]="Themecolor == 'Dark' ? '' : 'lightTheme'" class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modal.close()">No</button>
+    <button type="button" class="btn btn-warning" (click)="modal.close();handleConfirmCloseButton()">Yes</button>
+  </div>
+</ng-template>
+
+
+<ng-template #feeModal let-modal>
+  <div class="modal-header" [ngClass]="Themecolor == 'Dark' ? '' : 'lightTheme'">
+    <h4 class="modal-title" id="modal-basic-title">Fees </h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body" [ngClass]="Themecolor == 'Dark' ? '' : 'lightTheme'" style=" font-family: Roboto">
+    <h5 style="font-family: -webkit-pictograph;">Summary - 30 Days</h5>
+    <table class="table table-borderless">
+      <thead>
+        <tr>
+          <th scope="col" class="text-center" style="border-right: 2px solid rgb(91, 91, 94); background-color: rgb(39, 51, 56); color: rgb(211, 221, 221);">Total Volume</th>
+          <th scope="col" class="text-center" style="border-right: 2px solid rgb(91, 91, 94); background-color: rgb(39, 51, 56); color: rgb(211, 221, 221);">Total Fees Accrued</th>
+          <th scope="col" class="text-center" style="border-right: 2px solid rgb(91, 91, 94); background-color: rgb(39, 51, 56); color: rgb(211, 221, 221);">Total Interest Accrued</th>
+          <th scope="col" class="text-center" style="border-right: 2px solid rgb(91, 91, 94); background-color: rgb(39, 51, 56); color: rgb(211, 221, 221);">Total Interest Earned</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="text-center">
+          <td style="border-right: 2px solid #5b5b5e;">$ {{userExchnageFee.totalVolume}}</td>
+          <td style="border-right: 2px solid #5b5b5e;">$ {{userExchnageFee.totalFees}}</td>
+          <td style="border-right: 2px solid #5b5b5e;">$ {{userExchnageFee.totalIntAccrued}}</td>
+          <td>$ {{userExchnageFee.totalIntEarned}}  </td>
+        </tr>
+        
+      </tbody>
+    </table>
+    <!-- <p style="font-size: 14px;">Your fee tier is based upon total USD trading volume over the trailing 30 day period. Total Volume includes volume for trading Pairs in BASIC, SPOT and OTC trading only. Transactions made on books quoted in USD, e.g. BTC-USD, are counted as the total USD amount of each filled order. Transactions made on non-USD books are converted to USD based on the most recent fill price on the respective book.</p> -->
+    <h5 style="font-family: -webkit-pictograph;">Exchange Fees</h5>
+    <table class="table table-borderless">
+      <thead>
+        <tr>
+          <th scope="col"  width="10%" style="border-right: 2px solid rgb(91, 91, 94); background-color: rgb(39, 51, 56); color: rgb(211, 221, 221);"><span style="margin-left: 22px;margin-right: 34px;"> Currency </span></th>
+          <th scope="col"  width="10%" style="border-right: 2px solid rgb(91, 91, 94); background-color: rgb(39, 51, 56); color: rgb(211, 221, 221);"><span> Transaction Charge </span></th>
+          <th scope="col"  width="30%" style="border-right: 2px solid rgb(91, 91, 94); background-color: rgb(39, 51, 56); color: rgb(211, 221, 221);"><span> Total Daily Interest Paid by Borrower (%) </span></th>
+          <th scope="col"  width="30%" style="border-right: 2px solid rgb(91, 91, 94); background-color: rgb(39, 51, 56); color: rgb(211, 221, 221);"><span>Interest Earned by Lender of Total (%)</span></th>
+          <th scope="col"  width="30%"style="border-right: 2px solid rgb(91, 91, 94); background-color: rgb(39, 51, 56); color: rgb(211, 221, 221);"><span>Interest Earned by Exchange of Total (%)</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let fee of exchangeFees">
+          <td  width="10%"style="border-right: 2px solid #5b5b5e;"><span style="margin-left: 22px;"> {{fee.CURRENCY_NAME}}  </span></td>
+          <td  width="10%"style="border-right: 2px solid #5b5b5e;"> {{fee.TXN_CHARGE}}  </td>
+          <td  width="30%"style="border-right: 2px solid #5b5b5e;"> {{fee.INTEREST}}  </td>
+          <td  width="30%"style="border-right: 2px solid #5b5b5e;"> {{fee.LENDER_EARNED_INTEREST}}  </td>
+          <td width="30%"> {{fee.EXCHANGE_EARNED_INTEREST}}  </td>
+        </tr>
+        
+        
+      </tbody>
+    </table>
+    <!-- <p style="font-size: 14px;">PayBito uses a maker-taker fee model for determining its trading fees. Orders that provide liquidity (maker orders) are charged different fees than orders that take liquidity (taker orders).
+      <b>Fees are calculated based on the current pricing tier you are in when the order is placed, and not on the tier you would be in after a trade is completed.</b> When you place an order at the market price that gets filled immediately, you are considered a taker.
+      When you place an order which is not immediately matched by an existing order, that order is placed on the order book. If another customer places an order that matches yours, you are considered the maker.
+      When you place an order that gets partially matched immediately, you pay a taker fee for that portion. The remainder of the order is placed on the order book and, when matched, is considered a maker order.</p> -->
+      <div class="row">
+        <div class="col-2"></div>
+        <div class="col-8 text-center">
+
+          <button type="button" class="btn btn-secondary" (click)="modal.close()">Close</button>
+        </div>
+        <div class="col-2"></div>
+      </div>
+  </div>
+  
+</ng-template>

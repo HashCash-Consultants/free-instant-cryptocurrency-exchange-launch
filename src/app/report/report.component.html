@@ -1,0 +1,575 @@
+<app-navbar (themeChanged)="themeChangedHandler($event)"></app-navbar>
+<div class="content-wrapper pt-0 pl-3" [ngClass]="Themecolor == 'Dark' ? '' : 'content-wrapper-light'">
+      
+  <form name="form" #f="ngForm" style="margin-top: 20px;">
+    <span class="" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-dark'" style="font-size:25px;">
+      Spot Reports
+      <span style="cursor: pointer;margin-left:10px;">
+        <i class="fa fa-info-circle" aria-hidden="true" (click)="data.handleInfoSection('reportSpotInfo')" style="font-size:14px;"></i>
+      </span>
+      <div class="info-section" id="reportSpotInfo" style="display: none;margin:auto; top: 10px;left:26px;">
+        <div class="info-header">
+          <div class="info-title" style="font-size: 18px;">Spot Reports</div>
+          <div class="info-close">
+            <i class="fa fa-times" aria-hidden="true" (click)="data.handleInfoSection('reportSpotInfo')" style="font-size:18px;position:relative;bottom:10px;"></i>
+          </div>
+        </div>
+        <div class="info-body">
+          <p style="font-size:17px;">This report section displays the report for Spot transactions.</p>
+        </div>
+      </div>
+    </span>
+
+  <div class="row d-flex section-position" data-ng-init="loginDuration();" data-ng-controller="myWalletCtrl">
+    <div class="col-12 mt-3 align-self-stretch">
+      <div class="p-2 pl-3 pr-3 rounded h-100" [ngClass]="Themecolor == 'Dark' ? 'bg-dark' : 'bg-light'">
+        <!-- <span class="font-md text-white mr-2">Spot Reports</span> -->
+        
+
+        <div class="row ">
+          <div class="col-md-6 form-group">
+            <label>Select Report:</label>
+            <div class="input-group">
+                <select class="form-control" [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'"  (change)="OnChange($event.target.value)" name="reportval" [(ngModel)]="reportarray" required>
+                  <option  value="">Select Report Category </option>
+                  <option *ngFor="let item of reportlist" [value]="item.ID"  >{{item.VIEW_NAME_SHOW}}</option>
+                </select>
+            </div>
+          </div>
+        
+  
+          <div class="col-md-2 form-group"  *ngIf="show!=1">
+            <label>From Date:</label>
+            <div class="input-group">
+                <input  class="form-control" [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'" placeholder="FROM DATE"
+                       name="dp" [(ngModel)]="fromdate" [maxDate]='{year:currentYear,month:currentMonth,day:currentDay}'  ngbDatepicker #ds="ngbDatepicker" (click)="ds.toggle()">
+                <div class="input-group-append">
+                  <button class="btn btn-secondary" (click)="ds.toggle()" type="button">
+                      <i class="fa fa-calendar" aria-hidden="true"></i>
+                  </button>
+                </div>
+            </div>
+          </div>
+          <div class="col-md-2 form-group"  *ngIf="show!=1">
+              <label>To Date:</label>
+              <div class="input-group">
+                  <input  class="form-control" [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'" placeholder="TO DATE"
+                         name="dp" [(ngModel)]="todate" [maxDate]='{year:currentYear,month:currentMonth,day:currentDay}'  bsDaterangepicker
+                          ngbDatepicker #do="ngbDatepicker" (click)="do.toggle()">
+                  <div class="input-group-append">
+                    <button class="btn btn-secondary" (click)="do.toggle()"  type="button">
+                        <i class="fa fa-calendar" aria-hidden="true"></i>
+                    </button>
+                  </div>
+                </div>
+          </div>
+
+</div>
+<div *ngIf="show==1">
+    <div class="row ">
+        <div class="col-md-3 form-group">
+            <select class="form-control" [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'"  [(ngModel)]="selectyear" name="yearname">
+            <option class="form-control" hidden value="0" disabled >Select Financial Year </option>
+            <option *ngFor="let itemyear of fiancialyear"  [value]="itemyear.YEAR" >{{itemyear.FINANCIAL_YEAR}}</option>
+          </select>
+        </div>
+    </div>
+</div>
+  <div class="row col-md-5">
+    <div>&nbsp;</div>
+    <div class="col-md-12">
+      <button  type="submit" class="btn" style="margin-top: 2%;color: #fff;background-color: #28a745;border-color: #28a745;margin-left: -10px;" (click)="finddata(datavalue,reportarray,1,disclosureModal,resultModal)" >Submit</button>
+    </div>
+  </div>
+  <br/>
+    </div>
+  </div>
+</div>
+</form>
+<div [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'" data-ng-init="loginDuration();" data-ng-controller="myWalletCtrl" *ngIf="showSpotReport">
+  <div class="col-12 mt-3 align-self-stretch">
+    <div class="p-2 pl-3 pr-3 rounded h-100 customer-report-widget" [ngClass]="Themecolor == 'Dark' ? 'bg-dark' : 'bg-light'">
+      <span class="font-md  mr-2" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">CUSTOMER REPORT WIDGET</span>
+      <a *ngIf="showExportButton==1" class="btn btn-sm btn-primary" style="cursor: pointer;margin-left: 750px;margin-bottom: 20px;margin-top: 20px;" id="downloadCSVBtn" href="{{downloadUrl}}" target="_blank" download>Export CSV</a>
+      <div class="table-responsive-sm" style="overflow: auto;">
+
+          <div *ngIf="this.repu ==3; else restOfTheTable">
+              <table class="table table-sm table-hover" id="reportTable">
+            <tr [ngClass]="Themecolor == 'Dark' ? 'bg-black text-white' : 'tableHeader-bg-light'">
+              <th *ngFor="let data of datastore">{{data}}</th>
+            </tr>
+            <tr [ngClass]="Themecolor == 'Dark' ? 'newRowShade' : 'newRowShade-light'">
+              <td *ngFor="let data of fundingheader">{{data[1]}}</td>
+            </tr>
+            </table>
+          </div>
+  
+          <ng-template #restOfTheTable>
+              <table class="table table-sm table-hover" id="reportTable">
+                  <tr [ngClass]="Themecolor == 'Dark' ? 'bg-black text-white' : 'tableHeader-bg-light'" >
+                  <th *ngFor="let datas of datastore">{{datas}}</th>
+                  </tr>
+  
+                  <tr [ngClass]="Themecolor == 'Dark' ? 'newRowShade' : 'newRowShade-light'" *ngFor="let data of fundingheader;index as index" id="{{index+1}}" class="tableRow tableRow_{{index+1}}">
+                    <td *ngFor="let count of data;index as i">{{data[i]}}</td>
+                  </tr>
+                </table>
+          </ng-template>
+       <!-- <span>{{datastore}}</span>-->
+        <!-- <table class="table table-sm table-hover" id="reportTable">
+          <tr class="bg-black text-white">
+          <th *ngFor="let datas of datastore">{{datas}}</th>
+          </tr>
+        
+          <tr>
+            <td *ngFor="let data of fundingheader;index as index">{{data[1]}}</td>
+          </tr>
+        </table> -->
+      </div>
+      <!-- <div class="row mt-3">
+
+        <div class="col-12 paginationButton text-right">
+          <button *ngIf="showPrevButton==1" class="btn btn-sm btn-secondary mr-2 prev" (click)="showPreviousList()">Previous</button>
+          <button *ngIf="showNextButton==1" class="btn btn-sm btn-secondary next" (click)="showNextList()">Next</button>
+          <button  *ngIf="pagiLength>7" class="btn btn-sm btn-secondary ml-2" (click)="showPreviousList()">Prev</button>
+          <button *ngFor="let item of pagiArr; index as i "  class="btn btn-sm btn-secondary ml-2" (click)="pagi(i+1)">{{i+1}}</button>
+          <button  *ngIf="pagiLength>7" class="btn btn-sm btn-secondary ml-2" (click)="showNextList()">Next</button>
+        </div>
+      </div> -->
+      <div class="row">
+        <div class="col-12">
+          <div class="float-sm-right btn-group btn-group-sm pagination_div" role="group" aria-label="transaction-history">
+            <!-- <ngb-pagination [collectionSize]="collection" [(page)]="page" [directionLinks]="false" (click)="pager(page);" ></ngb-pagination> -->
+            <div class="btn-group">
+                <button class="btn btn-info" (click)="pager(1)" [disabled]="page==1">
+                    <i class="fa fa-angle-double-left" aria-hidden="true"></i>
+                </button>
+              <button class="btn btn-info" (click)="pagerPre(page)" [disabled]="page==1">
+                  <i class="fa fa-angle-left" aria-hidden="true"></i>
+              </button>
+              <button class="btn btn-info {{page==p?'active':''}} {{((p<page+5)&&(p>page-5))?'':'d-none'}}" 
+                (click)="pager(p);" *ngFor="let p of pagiArr">{{p}}</button>
+              <button class="btn btn-info" (click)="pagerNext(page)" [disabled]="page==pagiArr.length">
+                  <i class="fa fa-angle-right" aria-hidden="true"></i>
+              </button>
+              <button class="btn btn-info" (click)="pager(pagiArr.length)" [disabled]="page==pagiArr.length">
+                  <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+   </div>
+ </div>
+
+ <!-- pagenation start -->
+
+<!-- pagenation end -->
+</div>
+<form name="form" #f="ngForm">
+  <br/>
+  <span class="font-md mr-2" style="font-size:25px;" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">
+    Futures Reports
+    <span style="cursor: pointer;margin-left:10px;">
+      <i class="fa fa-info-circle" aria-hidden="true" (click)="data.handleInfoSection('reportFutureInfo')" style="font-size:14px;"></i>
+    </span>
+    <div class="info-section" id="reportFutureInfo" style="display: none;margin:auto; top:374px;left:26px;">
+      <div class="info-header">
+        <div class="info-title" style="font-size: 18px;">Futures Reports</div>
+        <div class="info-close">
+          <i class="fa fa-times" aria-hidden="true" (click)="data.handleInfoSection('reportFutureInfo')" style="font-size:18px;position:relative;bottom:10px;"></i>
+        </div>
+      </div>
+      <div class="info-body">
+        <p style="font-size: 17px;">This report section displays the report for Futures transactions.</p>
+      </div>
+    </div>
+  </span>
+
+  <div class="row d-flex section-position" data-ng-init="loginDuration();" data-ng-controller="myWalletCtrl">
+    <div class="col-12 mt-3 align-self-stretch">
+      <div class="p-2 pl-3 pr-3 rounded h-100" [ngClass]="Themecolor == 'Dark' ? 'bg-dark' : 'bg-light'">
+       
+
+        <div class="row">
+          <div class="col-md-6 form-group">
+            <label >Select Report:</label>
+            <div class="input-group">
+              <select class="form-control" [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'" (change)="OnChangeFuture($event.target.value)"  name="reportval"
+                [(ngModel)]="futurereportarray" required>
+                <option hidden value="">Select Report Category </option>
+                <option *ngFor="let item of futurereportlist" [value]="item.id">{{item.reportName}}</option>
+              </select>
+            </div>
+          </div>
+        <div class="col-md-2 form-group" *ngIf="fshow!=1">
+          <label >From Date:</label>
+          <div class="input-group">
+            <input class="form-control" [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'" placeholder="FROM DATE" name="dp" [(ngModel)]="ffromdate"
+              [maxDate]='{year:currentYear,month:currentMonth,day:currentDay}' ngbDatepicker #ds="ngbDatepicker"
+              (click)="ds.toggle()">
+            <div class="input-group-append">
+              <button class="btn btn-secondary" (click)="ds.toggle()" type="button">
+                <i class="fa fa-calendar" aria-hidden="true"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-2 form-group" *ngIf="fshow!=1">
+          <label >To Date:</label>
+          <div class="input-group">
+            <input class="form-control" [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'" placeholder="TO DATE" name="dp" [(ngModel)]="ftodate"
+              [maxDate]='{year:currentYear,month:currentMonth,day:currentDay}' bsDaterangepicker ngbDatepicker
+              #do="ngbDatepicker" (click)="do.toggle()">
+            <div class="input-group-append">
+              <button class="btn btn-secondary" (click)="do.toggle()" type="button">
+                <i class="fa fa-calendar" aria-hidden="true"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+        <div *ngIf="fshow==1">
+          <div class="row ">
+            <div class="col-md-3 form-group">
+              <select class="form-control" [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'" [(ngModel)]="fselectyear" name="yearname">
+                <option class="form-control" hidden value="0" disabled>Select Financial Year </option>
+                <option *ngFor="let itemyear of fiancialyear" [value]="itemyear.YEAR">{{itemyear.FINANCIAL_YEAR}}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="row mb-2">
+          <div class="col-md-12">
+            <button type="submit" class="btn" style="margin-top: 2%;color: #fff;background-color: #28a745;border-color: #28a745;margin-left: 4px;" (click)="finddatafuture(datavalue,futurereportarray,1,disclosureModal,resultModal)">Submit</button>
+          </div>
+        </div>
+        <br/>
+      </div>
+    </div>
+  </div>
+</form>
+<div [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'" data-ng-init="loginDuration();" data-ng-controller="myWalletCtrl" *ngIf="showFutureReport">
+  <div class="col-12 mt-3 align-self-stretch">
+    <div class="p-2 pl-3 pr-3 rounded h-100 customer-report-widget" [ngClass]="Themecolor == 'Dark' ? 'bg-dark' : 'bg-light'">
+      <span class="font-md  mr-2" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">CUSTOMER REPORT WIDGET FOR FUTURE</span>
+      <a *ngIf="fshowExportButton==1" class="btn btn-sm btn-primary"
+        style="cursor: pointer;margin-left: 750px;margin-bottom: 20px;margin-top: 20px;" id="downloadCSVBtn"
+        href="{{fdownloadUrl}}" target="_blank" download>Export CSV</a>
+      <div class="table-responsive-sm" style="overflow: auto;" >
+
+        <!-- <div *ngIf="this.repu ==3; else restOfTheTable">
+          <table class="table table-sm table-hover" id="reportTable">
+            <tr>
+              <th *ngFor="let data of fundingheaderfuture">{{data}}</th>
+            </tr>
+            <tr>
+              <td *ngFor="let data of fresults">{{data}}</td>
+            </tr>
+          </table>
+        </div> -->
+
+       
+          <table class="table table-sm table-hover" id="reportTable">
+            <!-- <tr class="bg-header"> -->
+            <tr [ngClass]="Themecolor == 'Dark' ? 'bg-black text-white' : 'tableHeader-bg-light'">
+
+              <th *ngFor="let datas of fundingheaderfuture">{{datas}}</th>
+            </tr>
+
+            <tr [ngClass]="Themecolor == 'Dark' ? 'newRowShade' : 'newRowShade-light'" *ngFor="let data of fresults;index as index" id="{{index+1}}"
+              class="tableRow tableRow_{{index+1}}">
+              <td *ngFor="let count of data;index as i">{{data[i]}}</td>
+            </tr>
+          </table>
+       
+        <!-- <span>{{datastore}}</span>-->
+        <!-- <table class="table table-sm table-hover" id="reportTable">
+       <tr class="bg-header">
+        <th *ngFor="let datas of datastore">{{datas}}</th>
+        </tr>
+      
+        <tr>
+          <td *ngFor="let data of fundingheader;index as index">{{data[1]}}</td>
+        </tr>
+      </table> -->
+      </div>
+      <!-- <div class="row mt-3">
+
+      <div class="col-12 paginationButton text-right">
+        <button *ngIf="showPrevButton==1" class="btn btn-sm btn-secondary mr-2 prev" (click)="showPreviousList()">Previous</button>
+        <button *ngIf="showNextButton==1" class="btn btn-sm btn-secondary next" (click)="showNextList()">Next</button>
+        <button  *ngIf="pagiLength>7" class="btn btn-sm btn-secondary ml-2" (click)="showPreviousList()">Prev</button>
+        <button *ngFor="let item of pagiArr; index as i "  class="btn btn-sm btn-secondary ml-2" (click)="pagi(i+1)">{{i+1}}</button>
+        <button  *ngIf="pagiLength>7" class="btn btn-sm btn-secondary ml-2" (click)="showNextList()">Next</button>
+      </div>
+    </div> -->
+      <div class="row">
+        <div class="col-12">
+          <div class="float-sm-right btn-group btn-group-sm pagination_div" role="group"
+            aria-label="transaction-history">
+           
+            <div class="btn-group">
+              <button class="btn btn-info" (click)="pagerf(1)" [disabled]="page==1">
+                <i class="fa fa-angle-double-left" aria-hidden="true"></i>
+              </button>
+              <button class="btn btn-info" (click)="pagerPref(page)" [disabled]="page==1">
+                <i class="fa fa-angle-left" aria-hidden="true"></i>
+              </button>
+              <button class="btn btn-info {{page==p?'active':''}} {{((p<page+5)&&(p>page-5))?'':'d-none'}}"
+                (click)="pagerf(p);" *ngFor="let p of pagiArr">{{p}}</button>
+              <button class="btn btn-info" (click)="pagerNextf(page)" [disabled]="page==pagiArr.length">
+                <i class="fa fa-angle-right" aria-hidden="true"></i>
+              </button>
+              <button class="btn btn-info" (click)="pagerf(pagiArr.length)" [disabled]="page==pagiArr.length">
+                <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- pagenation start -->
+
+  <!-- pagenation end -->
+</div>
+<br/>
+<form name="form" #f="ngForm">
+  <span class="font-md mr-2" style="font-size:25px;" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">
+    Options Reports
+    <span style="cursor: pointer;margin-left:10px;">
+      <i class="fa fa-info-circle" aria-hidden="true" (click)="data.handleInfoSection('reportOptionInfo')" style="font-size:14px;"></i>
+    </span>
+    <div class="info-section" id="reportOptionInfo" style="display: none;margin:auto; top:622px;left:26px;">
+      <div class="info-header">
+        <div class="info-title" style="font-size: 20px;">Options Reports</div>
+        <div class="info-close">
+          <i class="fa fa-times" aria-hidden="true" (click)="data.handleInfoSection('reportOptionInfo')" style="font-size:18px;position:relative;bottom:10px;"></i>
+        </div>
+      </div>
+      <div class="info-body">
+        <p style="font-size: 17px;">This report section displays the report for Options transactions.</p>
+      </div>
+    </div>
+  </span>
+
+  <div class="row d-flex section-position" data-ng-init="loginDuration();" data-ng-controller="myWalletCtrl">
+    <div class="col-12 mt-3 align-self-stretch">
+      <div class=" p-2 pl-3 pr-3 rounded h-100" [ngClass]="Themecolor == 'Dark' ? 'bg-dark' : 'bg-light'">
+        <br/>
+        <br/>
+
+        <div class="row">
+          <div class="col-md-6 form-group">
+            <label >Select Report:</label>
+            <div class="input-group">
+              <select class="form-control" [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'" (change)="OnChangeOptions($event.target.value)" name="reportval"
+                [(ngModel)]="optionsreportarray" required>
+                <option hidden value="">Select Report Category </option>
+                <option *ngFor="let item of optioneportlist" [value]="item.id">{{item.reportName}}</option>
+              </select>
+            </div>
+          </div>
+        <div class="col-md-2 form-group" *ngIf="oshow!=1">
+          <label >From Date:</label>
+          <div class="input-group">
+            <input class="form-control" [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'" placeholder="FROM DATE" name="dp" [(ngModel)]="ofromdate"
+              [maxDate]='{year:currentYear,month:currentMonth,day:currentDay}' ngbDatepicker #ds="ngbDatepicker"
+              (click)="ds.toggle()">
+            <div class="input-group-append">
+              <button class="btn btn-secondary" (click)="ds.toggle()" type="button">
+                <i class="fa fa-calendar" aria-hidden="true"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-2 form-group" *ngIf="oshow!=1">
+          <label >To Date:</label>
+          <div class="input-group">
+            <input class="form-control" [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'" placeholder="TO DATE" name="dp" [(ngModel)]="otodate"
+              [maxDate]='{year:currentYear,month:currentMonth,day:currentDay}' bsDaterangepicker ngbDatepicker
+              #do="ngbDatepicker" (click)="do.toggle()">
+            <div class="input-group-append">
+              <button class="btn btn-secondary" (click)="do.toggle()" type="button">
+                <i class="fa fa-calendar" aria-hidden="true"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+        <div *ngIf="oshow==1">
+          <div class="row ">
+            <div class="col-md-3 form-group">
+              <select class="form-control" [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'" [(ngModel)]="oselectyear" name="yearname">
+                <option class="form-control" hidden value="0" disabled>Select Financial Year </option>
+                <option *ngFor="let itemyear of fiancialyear" [value]="itemyear.YEAR">{{itemyear.FINANCIAL_YEAR}}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="row mb-2">
+          <br/>
+          <div class="col-md-12">
+            <button type="submit" class="btn" style="margin-top: 0.5%;color: #fff;background-color: #28a745;border-color: #28a745;margin-left: 4px;"
+              (click)="optionfuture(datavalue,optionsreportarray,1,disclosureModal,resultModal)">Submit</button>
+          </div>
+          <br/>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+
+
+<div [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-dark'" data-ng-init="loginDuration();" data-ng-controller="myWalletCtrl" *ngIf="showOptionReport">
+  <div class="col-12 mt-3 align-self-stretch">
+    <div class=" p-2 pl-3 pr-3 rounded h-100 customer-report-widget" [ngClass]="Themecolor == 'Dark' ? 'bg-black' : 'bg-light'">
+      <span class="font-md  mr-2" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">CUSTOMER REPORT WIDGET FOR OPTIONS</span>
+      <a *ngIf="oshowExportButton==1" class="btn btn-sm btn-primary"
+        style="cursor: pointer;margin-left: 750px;margin-bottom: 20px;margin-top: 20px;" id="downloadCSVBtn"
+        href="{{odownloadUrl}}" target="_blank" download>Export CSV</a>
+      <div class="table-responsive-sm" style="overflow: auto;">
+
+        <!-- <div *ngIf="this.repu ==3; else restOfTheTable">
+          <table class="table table-sm table-hover" id="reportTable">
+            <tr>
+              <th *ngFor="let data of fundingheaderfuture">{{data}}</th>
+            </tr>
+            <tr>
+              <td *ngFor="let data of fresults">{{data}}</td>
+            </tr>
+          </table>
+        </div> -->
+
+       
+          <table class="table table-sm table-hover" id="reportTable">
+            <tr [ngClass]="Themecolor == 'Dark' ? 'bg-black text-white' : 'tableHeader-bg-light'">
+              <th *ngFor="let datas of fundingheaderoption">{{datas}}</th>
+            </tr>
+
+            <tr [ngClass]="Themecolor == 'Dark' ? 'newRowShade' : 'newRowShade-light'" *ngFor="let data of oresults;index as index" id="{{index+1}}"
+              class="tableRow tableRow_{{index+1}}">
+              <td *ngFor="let count of data;index as i">{{data[i]}}</td>
+            </tr>
+          </table>
+       
+        <!-- <span>{{datastore}}</span>-->
+        <!-- <table class="table table-sm table-hover" id="reportTable">
+       <tr class="bg-header">
+        <th *ngFor="let datas of datastore">{{datas}}</th>
+        </tr>
+      
+        <tr>
+          <td *ngFor="let data of fundingheader;index as index">{{data[1]}}</td>
+        </tr>
+      </table> -->
+      </div>
+      <!-- <div class="row mt-3">
+
+      <div class="col-12 paginationButton text-right">
+        <button *ngIf="showPrevButton==1" class="btn btn-sm btn-secondary mr-2 prev" (click)="showPreviousList()">Previous</button>
+        <button *ngIf="showNextButton==1" class="btn btn-sm btn-secondary next" (click)="showNextList()">Next</button>
+        <button  *ngIf="pagiLength>7" class="btn btn-sm btn-secondary ml-2" (click)="showPreviousList()">Prev</button>
+        <button *ngFor="let item of pagiArr; index as i "  class="btn btn-sm btn-secondary ml-2" (click)="pagi(i+1)">{{i+1}}</button>
+        <button  *ngIf="pagiLength>7" class="btn btn-sm btn-secondary ml-2" (click)="showNextList()">Next</button>
+      </div>
+    </div> -->
+      <div class="row">
+        <div class="col-12">
+          <div class="float-sm-right btn-group btn-group-sm pagination_div" role="group"
+            aria-label="transaction-history">
+           
+            <div class="btn-group">
+              <button class="btn btn-info" (click)="pagero(1)" [disabled]="page==1">
+                <i class="fa fa-angle-double-left" aria-hidden="true"></i>
+              </button>
+              <button class="btn btn-info" (click)="pagerPreo(page)" [disabled]="page==1">
+                <i class="fa fa-angle-left" aria-hidden="true"></i>
+              </button>
+              <button class="btn btn-info {{page==p?'active':''}} {{((p<page+5)&&(p>page-5))?'':'d-none'}}"
+                (click)="pagero(p);" *ngFor="let p of pagiArr">{{p}}</button>
+              <button class="btn btn-info" (click)="pagerNexto(page)" [disabled]="page==pagiArr.length">
+                <i class="fa fa-angle-right" aria-hidden="true"></i>
+              </button>
+              <button class="btn btn-info" (click)="pagero(pagiArr.length)" [disabled]="page==pagiArr.length">
+                <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- pagenation start -->
+
+  <!-- pagenation end -->
+</div>
+
+<!-- excel -->
+ <!-- <div class="row" style="margin-top: 3%" *ngIf="datastore != null">
+
+      <div class="col-md-3   form-group" style="margin-left: 40%;">
+        <label>Select </label>
+        <div class="input-group" >
+            <select class="form-control" [(ngModel)]="selectpdf" required>
+              <option  hidden value="selectoption" disabled>Select one option</option>
+              <option>Excel</option>
+              <option>Csv</option>
+              <option>Pdf</option>
+            </select>
+        </div>
+      </div>
+      <div class="col-md-4" >
+        <button class="btn btn-success" style="margin-top: 7%">Submit</button>
+      </div>
+
+</div> -->
+
+<ng-template #disclosureModal let-modal>
+  <div id="myDiv">
+  <div class="modal-header" [ngClass]="Themecolor == 'Dark' ? '' : 'lightTheme'">
+    <h4 class="modal-title" id="modal-basic-title receiveModalLabel">Reports</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  
+  <div class="modal-body text-center" [ngClass]="Themecolor == 'Dark' ? '' : 'lightTheme'" style="margin-top: -20px;">
+    <p>Report data over seven days will be sent to your registered email.</p>
+    <div class="row mt-2">
+      <div class="col-2"></div>
+      <button class="btn btn-success col-3" (click)="modal.dismiss();handleReportForSendingViaEmail(urlForMailingReport,resultModal)">Proceed</button>
+      <div class="col-2"></div>
+      <button class="btn btn-danger col-3" (click)="modal.dismiss()">Cancel</button>
+      <div class="col-2"></div>
+    </div>
+    
+    </div>
+  </div>
+</ng-template>
+<ng-template #resultModal let-modal>
+  <div id="myDiv">
+  <div class="modal-header sendreceive-wallet" [ngClass]="Themecolor == 'Dark' ? '' : 'lightTheme'">
+    <h4 class="modal-title" id="modal-basic-title receiveModalLabel">Reports</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  
+  <div class="modal-body text-center send-wallet" [ngClass]="Themecolor == 'Dark' ? '' : 'lightTheme'" style="margin-top: -20px;">
+    <p>The data will be sent to your registered email within 15 minutes.</p>
+    <div class="row mt-2">
+      <div class="col-4"></div>
+      <button class="btn btn-success col-4" (click)="modal.dismiss()">Ok</button>
+      <div class="col-4"></div>
+    </div>
+    
+    </div>
+  </div>
+</ng-template>
