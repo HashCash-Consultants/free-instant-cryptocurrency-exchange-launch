@@ -14,8 +14,7 @@ this.BROKERID = <YOUR BROKER ID > // Add your broker id here
 
 
 # Build
-1. use command npm i --force.
-2. To run the application locally use command (Optional)
+1. To run the application locally use command (Optional)
 ng serve -o
 2. To build for production use following code
 ng build –prod
