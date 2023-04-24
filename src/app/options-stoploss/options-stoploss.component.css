@@ -1,0 +1,472 @@
+.form-control:active {
+    border: 1px solid cornflowerblue;
+  }
+  .resizable-widget {
+    min-height: 300px !important;
+    /* border: 1px solid #131722; */
+    border: none !important;
+
+    overflow: hidden;
+  }
+  .btc-balance {
+    background-color: #181d2b !important;
+  }
+  .stoploss-component{
+    /* background: #181d2b!important; */
+    background: rgb(19, 23, 34);
+    position: relative;
+    /* top: -29px; */
+  }
+  .text-white {
+    color: #96979a !important;
+  }
+  .bg_new_class {
+    padding-bottom: 33px !important;
+  }
+  .text-box-row {
+    margin-top: 0.4rem;
+  }
+  .asset-left-pad {
+    padding-right: 0.3rem !important;
+  }
+  .asset-right-pad {
+    padding-left: 0.3rem !important;
+  }
+  .deposit-withdraw-btn {
+    width: 89px;
+  }
+  .balance_assets .font-sm {
+    margin-right: 10px;
+    margin-bottom: 10px;
+  }
+  .tab-pan-wrap {
+    position: relative;
+  }
+  .balance_assets {
+    position: absolute;
+    right: 37px;
+    top: -41px;
+  }
+  .balance_assets .deposit-withdraw-btn {
+    width: 57px !important;
+  }
+  .deposit-withdraw-btn .diposit-hover {
+    position: absolute;
+    opacity: 0;
+    visibility: hidden;
+    top: 0px;
+    left: -12px;
+    -moz-transition: all 600ms linear;
+    -webkit-transition: all 600ms linear;
+    -ms-transition: all 600ms linear;
+    -o-transition: all 600ms linear;
+    transition: all 600ms linear;
+  }
+  .deposit-withdraw-btn {
+    position: relative;
+  }
+  .deposit-withdraw-btn:hover .diposit-hover {
+    opacity: 1;
+    visibility: visible;
+    top: -18px;
+    left: -12px;
+  }
+  .resizable-widget {
+    min-height: auto;
+    /* height: 360px; */
+    height: auto !important;
+
+  }
+  .form-row {
+    margin-bottom: 2px !important;
+  }
+  .stoploss-from-control{
+    color: #fff;
+     background-color: #22252e;
+      border: 1px solid #22252e;
+  }
+  .text-red {
+    color: #ea4704 !important;
+    font-size: 10px;
+  }
+  .market-pills .nav-item a.nav-link.active {
+      padding-bottom: 3px;
+  }
+  
+    /* style for range slider start */
+    
+    /* .range {
+      position: relative;
+      width: 99%;
+      height: 5px;
+    }
+    
+    .range input {
+      width: 96%;
+      position: absolute;
+      top: 2px;
+      -webkit-appearance: none;
+    }
+    .range input::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      margin: -8px 0 0;
+      border-radius: 50%;
+      background: #37adbf;
+      cursor: pointer;
+      border: 0 !important;
+    }
+    .range input::-moz-range-thumb {
+      width: 18px;
+      height: 18px;
+      margin: -8px 0 0;
+      border-radius: 50%;
+      background: #37adbf;
+      cursor: pointer;
+      border: 0 !important;
+    }
+    .range input::-ms-thumb {
+      width: 18px;
+      height: 18px;
+      margin: -8px 0 0;
+      border-radius: 50%;
+      background: #37adbf;
+      cursor: pointer;
+      border: 0 !important;
+    }
+    .range input::-webkit-slider-runnable-track {
+      width: 100%;
+      height: 2px;
+      cursor: pointer;
+      background: #b2b2b2;
+    }
+    .range input::-moz-range-track {
+      width: 100%;
+      height: 2px;
+      cursor: pointer;
+      background: #b2b2b2;
+    }
+    .range input::-ms-track {
+      width: 100%;
+      height: 2px;
+      cursor: pointer;
+      background: #b2b2b2;
+    }
+    .range input:focus {
+      background: none;
+      outline: none;
+    }
+    .range input::-ms-track {
+      width: 100%;
+      cursor: pointer;
+      background: transparent;
+      border-color: transparent;
+      color: transparent;
+    }
+    
+    .range-labels {
+      margin: 18px 0px 0;
+      padding: 0;
+      list-style: none;
+      width: 635px;
+    }
+    .range-labels li {
+      position: relative;
+      float: left;
+      width: 16.66%;
+      text-align: left;
+      color: #b2b2b2;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .range-labels li::before {
+      position: absolute;
+      top: -25px;
+      right: 0;
+      left: 0;
+      content: "";
+      width: 9px;
+      height: 9px;
+      background: #b2b2b2;
+      border-radius: 50%;
+    }
+    .range-labels .active {
+      color: #37adbf;
+    }
+    .range-labels .selectedli::before {
+      color: #37adbf;
+      background: #37adbf;
+    }
+    .range-labels .selectedli {
+      color: #37adbf;
+    }
+    .range-labels .active.selectedli::before {
+      display: none;
+    } */
+    
+    /* style for range slider end */
+  
+  
+    /* New range slider start */
+    /* input[type=range] {
+      -webkit-appearance: none;
+      margin: 20px 0;
+      width: 100%;
+    }
+    input[type=range]:focus {
+      outline: none;
+    }
+    input[type=range]::-webkit-slider-runnable-track {
+      width: 100%;
+      height: 4px;
+      cursor: pointer;
+      animate: 0.2s;
+      background: #03a9f4;
+      border-radius: 25px;
+    }
+    input[type=range]::-webkit-slider-thumb {
+      height: 20px;
+      width: 20px;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 0 4px 0 rgba(0,0,0, 1);
+      cursor: pointer;
+      -webkit-appearance: none;
+      margin-top: -8px;
+    }
+    input[type=range]:focus::-webkit-slider-runnable-track {
+      background: #03a9f4;
+    }
+    .range-wrap{
+      width: 500px;
+      position: relative;
+    }
+    .range-value{
+      position: absolute;
+      top: -50%;
+      margin-left: 15px;
+    }
+    .range-value span{
+      width: 30px;
+      height: 24px;
+      line-height: 24px;
+      text-align: center;
+      background: #03a9f4;
+      color: #fff;
+      font-size: 12px;
+      display: block;
+      position: absolute;
+      left: 50%;
+      transform: translate(-50%, 0);
+      border-radius: 6px;
+    }
+    .range-value span:before{
+      content: "";
+      position: absolute;
+      width: 0;
+      height: 0;
+      border-top: 10px solid #03a9f4;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      top: 100%;
+      left: 50%;
+      margin-left: -5px;
+      margin-top: -1px;
+    } */
+    .slider {
+      width: 100%;
+      margin: 16px auto;
+    }
+    
+    input[type="range"] {
+      -webkit-appearance: none !important;
+      width: 100%;
+      height: 15px;
+      background-color: #7d818c;
+      border: 1px solid #7d818c;
+      border-radius: 10px;
+      margin: auto;
+      transition: all 0.3s ease;
+    }
+    input[type="range"]:hover {
+      background-color: #7d818c;
+    }
+    
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none !important;
+      width: 20px;
+      height: 20px;
+      background-color: #fff;
+      border-radius: 30px;
+      box-shadow: 0px 0px 3px #fff;
+      transition: all 0.5s ease;
+    }
+    input[type="range"]::-webkit-slider-thumb:hover {
+      background-color: #fff;
+    }
+    input[type="range"]::-webkit-slider-thumb:active {
+      box-shadow: 0px 0px 1px #fff;
+    }
+    
+    #rangevalue {
+      text-align: center;
+      font-family: "Quantico", sans-serif;
+      font-size: 18px;
+      display: block;
+      margin: auto;
+      padding: 10px 0px;
+      width: 100%;
+      color: #579E81;
+    }
+    
+    /* New range slider end */
+  
+     .header-button{
+      display: block;
+      position: absolute;
+      z-index: 99999;
+      /* left: 372px; */
+      margin-top: 56px;
+      right: 21px;
+    }
+    .header-button li {
+      display: inline-block;
+      list-style: none;
+      margin-right: 4px;
+    }
+    input[type=number]::-webkit-inner-spin-button, 
+    input[type=number]::-webkit-outer-spin-button { 
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        margin: 0; 
+    }
+    text-left-light{
+      color:#000 !important
+    }
+    .dark-modal{
+      background: #3d3e42 !important;
+       color: #fff !important;
+    }
+    .grey-texts{
+      color:#99AACE;
+    }
+    .white-texts{
+      color: #fff;
+    }
+    .text-black{
+      color: #000 !important;
+    }
+    .leverageBox-dark{
+      background: #616f8d;
+      border: #616f8d;
+      color: #fff
+    }
+    .leverageBox-light{
+      background: #616f8d;
+      border: #616f8d;
+      color: #fff;
+    }
+
+    #customRange3{
+      width: 87%;
+      margin-top: 10px;
+      
+    }
+    #customRange3 {
+      -webkit-appearance: none;
+      background-color: #282e40;
+      height: 8px;
+      overflow: hidden;
+      border-radius: 2rem;
+      cursor: pointer;
+      border: none !important;
+    
+    }
+    
+    #customRange3::-webkit-slider-runnable-track {
+      -webkit-appearance: none;
+      height: 8px;
+    }
+    
+    #customRange3::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      background: #007bff;
+      border-radius: 50%;
+      box-shadow: -210px 0 0 200px #007bff;
+      cursor: pointer;
+      height: 8px;
+      width: 8px;
+      border: 0;
+    }
+    
+    #customRange3::-moz-range-thumb {
+      background: #007bff;
+      border-radius: 10%;
+      box-shadow: -1010px 0 0 1000px #007bff;
+      cursor: pointer;
+      height: 8px;
+      width: 8px;
+      border: 0;
+    }
+    
+    #customRange3::-moz-range-track {
+      background-color: #282e40;
+    }
+    #customRange3::-moz-range-progress {
+      background-color: #007bff;
+      height: 8px
+    }
+    #customRange3::-ms-fill-upper {
+      background-color: #282e40;
+    }
+    #customRange3::-ms-fill-lower {
+      background-color: #007bff;
+    }
+    
+    .changeBackgroundSlider{
+      background-color: #007bff !important;
+    
+    }
+    .loading {
+      width: 100%;
+      height: 100%;
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      background-color: rgb(19 23 34 / 0%);
+      z-index: 10000000;
+    
+    }
+    .loading-wheel {
+      width: 20px;
+      height: 20px;
+      margin-top: -40px;
+      margin-left: -40px;
+      
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      
+      border-width: 30px;
+      border-radius: 50%;
+      -webkit-animation: spin 1s linear infinite;
+      z-index: 10000000;
+    }
+    .style-2 .loading-wheel {
+      border-style: double;
+      border-color: #ccc transparent;
+      z-index: 10000000;
+    
+    }
+    @-webkit-keyframes spin {
+      0% {
+          -webkit-transform: rotate(0);
+      }
+      100% {
+          -webkit-transform: rotate(-360deg);
+      }
+    }

@@ -1,0 +1,402 @@
+<app-navbar (themeChanged)="themeChangedHandler($event)"></app-navbar>
+
+<div class="content-wrapper pt-0 pl-3" [ngClass]="Themecolor == 'Dark' ? '' : 'content-wrapper-light'"> 
+  <div class="row header-alignment d-flex section-position" data-ng-controller="withdrawCtrl" data-ng-init="loginDuration();">
+    <div class="col-xl-7 col-lg-6 col-12 pr-lg-0 mt-3 align-self-stretch">
+      <div class="p-2 pl-3 pr-3 rounded h-100" [ngClass]="Themecolor == 'Dark' ? 'bg-dark' : 'bg-light'">
+        <span class="font-lg text-green">
+        </span>
+        
+        <div class="table-responsive-sm">
+          <table class="table table-sm table-hover tab-fiat">
+            <thead>
+              <tr [ngClass]="Themecolor == 'Dark' ? 'bg-black text-white' : 'tableHeader-bg-light text-black'">
+                <th scope="col" >Fiat</th>
+                <th scope="col" style="padding-left: 98px !important;">Balance</th>
+                <th scope="col" style="padding-right:88px !important;">Action
+                  <div class="newPosition" >
+                    <div class="icon-section pull-left headerInfoBtn">
+                      <i class="fa fa-info-circle" aria-hidden="true" (click)="data.handleInfoSection('withdrawSectionInfo')"></i>
+                    </div>
+                    <div class="info-section" id="withdrawSectionInfo" style="display: none; left: 126px !important;">
+                      <div class="info-header">
+                        <div class="info-title"> WITHDRAW</div>
+                        <div class="info-close">
+                          <i class="fa fa-times" aria-hidden="true" (click)="data.handleInfoSection('withdrawSectionInfo')"></i>
+                        </div>
+                      </div>
+                      <div class="info-body">
+                        User can withdraw the amount and the amount will be credited to the bank account you have provided in the Bank info menu and displayed in the Customer Bank Details
+                      </div>
+                    </div>
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody  [ngClass]="Themecolor == 'Dark' ? 'depositSectionHeaderDark' : 'depositSectionHeaderLight'">
+              <tr *ngFor="let b of main.fiatCurrencyList; let i=index"  [ngClass]="Themecolor == 'Dark' ? 'depositSectionRowDark' : 'depositSectionRowLight'">
+               
+               <td  *ngIf="b.isWithdraw == 1" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'" style="font-weight: bold;">{{b.currencyCode|uppercase}}</td>
+                <td *ngIf="b.isWithdraw == 1"  [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'" style="padding-left: 98px !important;">{{b.closingBalance | number : '1.2-2' }}</td>
+                <td *ngIf="b.isWithdraw == 1" >
+                  <a *ngIf="b.currencyType==1 && b.closingBalance !=0"  [ngClass]="Themecolor == 'Dark' ? 'text-white deposit-btn' : 'text-black deposit-btn'" (click)="getWithdrawModal(withdraw,b.currencyCode,b.closingBalance,b.currencyId)"
+                    href="javascript:void(0);" style="font-size: 15px !important;">WITHDRAW</a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <ng-template #withdraw let-modal>
+      <div id="myDiv" [ngClass]="Themecolor == 'Dark' ? '' : 'lightTheme'">
+      <div [ngClass]="Themecolor == 'Dark' ? '' : 'lightTheme'" class="modal-header sendreceive-wallet">
+        <h4 class="modal-title " id="modal-basic-title receiveModalLabel">Withdraw</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div [ngClass]="Themecolor == 'Dark' ? '' : 'lightThemeModalBody'" class="modal-body text-center send-wallet">
+      <div class="row withdraw-body">
+      <div class="form-group row">
+        <div class="col-12 col-5 depo-text">
+          <label style="font-size:13px;" for="inputSellBTC" class="col-form-label " [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Enter Withdrawal Amount</label>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-12 col-7">
+          <div class="input-group mb-2">
+            <input type="text" step="0.01" class=" rounded only_amount" [ngClass]="Themecolor == 'Dark' ? 'form-control' : 'form-control-light'" id="withdraw_fund_amount" [(ngModel)]="withdraw_fund_amount"
+              placeholder="0.00" #am="ngModel" (keyup)="validateWithdrawAmount()" required appTwodecimalpoint>
+            <div *ngIf ="CurrencyCode =='USD'" class="input-group-append">
+              <div class="input-group-text bg-transparent border-0 " [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">USD</div>
+            </div>
+            <div *ngIf ="CurrencyCode =='AED'" class="input-group-append">
+              <div class="input-group-text bg-transparent border-0 " [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">AED</div>
+            </div>
+            <div *ngIf ="CurrencyCode =='INR'" class="input-group-append">
+              <div class="input-group-text bg-transparent border-0 " [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">INR</div>
+            </div>
+            <div *ngIf ="CurrencyCode =='EUR'" class="input-group-append">
+              <div class="input-group-text bg-transparent border-0 " [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">€</div>
+            </div>
+            <div *ngIf ="CurrencyCode =='SGD'" class="input-group-append">
+              <div class="input-group-text bg-transparent border-0 " [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">SGD</div>
+            </div>
+          </div>
+          <small *ngIf="CurrencyCode =='USD'">
+            <small class="" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Minimum of $ {{minvalue}} and Maximum $ {{maxvalue}} can be withdrawn</small>
+          </small>
+          <small *ngIf="CurrencyCode =='AED'">
+            <small class="" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Minimum of {{minvalueAed}}د.إ and Maximum {{maxvalueAed}}د.إ can be withdrawn</small>
+          </small>
+          <small *ngIf="CurrencyCode =='EUR'">
+            <small class="" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Minimum of €{{minvalueEur}} and Maximum €{{maxvalueEur}} can be withdrawn</small>
+          </small>
+          <small *ngIf="CurrencyCode =='SGD'">
+            <small class="" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Minimum of SGD{{minvalueSgd}} and Maximum SGD{{maxvalueSgd}} can be withdrawn</small>
+          </small>
+          <small *ngIf="CurrencyCode =='INR'">
+            <small class="" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Minimum of ₹{{minvalueInr}} and Maximum ₹{{maxvalueInr}} can be withdrawn</small>
+          </small>
+        </div>
+      </div>
+      </div>
+    
+      <div class="form-group row mb-2">
+        <div class="col-4"></div>
+        <div class="col-8 offset-md-2 withdrawBtn" *ngIf="CurrencyCode =='USD'">
+          <button type="submit" class="btn btn-green usdbtn-ldr" id="wfn" [disabled]="!isValidAmount||withdraw_fund_amount<minvalue||withdraw_fund_amount>maxvalue" (click)="determineLockStatusForWithdraw(twoFactorAuth)">WITHDRAW</button>
+          <div style="display: none;" id="loaderimgusd">
+            <img  src="./assets/svg-loaders/three-dots.svg" alt="" width="50">
+          </div>
+        </div>
+        <div class="col-4"></div>
+        <div class="col-8 offset-md-2 withdrawBtn" *ngIf="CurrencyCode =='AED'">
+          <button type="submit" class="btn btn-green aedbtn-ldr" id="wfn" [disabled]="!isValidAmount||withdraw_fund_amount<minvalueAed||withdraw_fund_amount>maxvalueAed" (click)="determineLockStatusForWithdraw(twoFactorAuth)">WITHDRAW</button>
+          <div style="display: none;" id="loaderimgaed">
+            <img src="./assets/svg-loaders/three-dots.svg" alt="" width="50">
+          </div>
+        </div>
+        <div class="col-4"></div>
+        <div class="col-8 offset-md-2 withdrawBtn" *ngIf="CurrencyCode =='EUR'">
+          <button type="submit" class="btn btn-green eurbtn-ldr" id="wfn" [disabled]="!isValidAmount||withdraw_fund_amount<minvalueEur||withdraw_fund_amount>maxvalueEur" (click)="determineLockStatusForWithdraw(twoFactorAuth)">WITHDRAW</button>
+          <div style="display: none;" id="loaderimgeur">
+            <img src="./assets/svg-loaders/three-dots.svg" alt="" width="50">
+          </div>
+        </div>
+        <div class="col-4"></div>
+        <div class="col-8 offset-md-2 withdrawBtn" *ngIf="CurrencyCode =='SGD'">
+          <button type="submit" class="btn btn-green sgdbtn-ldr" id="wfn" [disabled]="!isValidAmount||withdraw_fund_amount<minvalueSgd||withdraw_fund_amount>maxvalueSgd" (click)="determineLockStatusForWithdraw(twoFactorAuth)">WITHDRAW</button>
+          <div style="display: none;" id="loaderimgsgd">
+            <img src="./assets/svg-loaders/three-dots.svg" alt="" width="50">
+          </div>
+        </div>
+        <div class="col-4"></div>
+        <div class="col-8 offset-md-2 withdrawBtn" *ngIf="CurrencyCode =='INR'">
+          <button type="submit" class="btn btn-green inrbtn-ldr" id="wfn" [disabled]="!isValidAmount||withdraw_fund_amount<minvalueInr||withdraw_fund_amount>maxvalueInr" (click)="determineLockStatusForWithdraw(twoFactorAuth)">WITHDRAW</button>
+          <div style="display: none;" id="loaderimginr">
+            <img src="./assets/svg-loaders/three-dots.svg" alt="" width="50">
+          </div>
+        </div>
+      </div>
+     
+    </div>
+  </div>
+    </ng-template>
+    <div class="col-xl-5 col-lg-6 col-12 mt-3 align-self-stretch">
+      <div class="p-2 pl-3 pr-3 rounded h-100" [ngClass]="Themecolor == 'Dark' ? 'bg-dark' : 'bg-light'"> <span [ngClass]="Themecolor == 'Dark' ? 'font-md text-white mr-2' : 'font-md text-black mr-2'">Customer Bank Details</span>
+        <div style="top: 10px;left: 266px;position: absolute;">
+          <div class="icon-section pull-left">
+            <i class="fa fa-info-circle" aria-hidden="true" (click)="data.handleInfoSection('withdrawBankInfo')"></i>
+          </div>
+          <div class="info-section" id="withdrawBankInfo" style="display: none;top: 59px;left: -182px;">
+            <div class="info-header">
+              <div class="info-title"> Customer Bank Details</div>
+              <div class="info-close">
+                <i class="fa fa-times" aria-hidden="true" (click)="data.handleInfoSection('withdrawBankInfo')"></i>
+              </div>
+            </div>
+            <div class="info-body">
+              Any Withdrawal you make shall be credited to this bank account
+            </div>
+          </div>
+        </div>
+        <div><span [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">*Withdrawal will be credited to the below account</span></div>
+        <ul class="list-group mb-2">
+          <li [ngClass]="Themecolor == 'Dark' ? 'list-group-item user-deposit-data' : 'list-group-item-light user-deposit-data'">
+            <div class="d-flex">
+              <div [ngClass]="Themecolor == 'Dark' ? 'mr-auto text-white' : 'mr-auto text-black'">Account Holder:</div>
+              <div><span class=" font-weight-bold font-sm">{{beneficiaryName}}</span></div>
+            </div>
+          </li>
+          <li [ngClass]="Themecolor == 'Dark' ? 'list-group-item user-deposit-data' : 'list-group-item-light user-deposit-data'">
+            <div class="d-flex">
+              <div [ngClass]="Themecolor == 'Dark' ? 'mr-auto text-white' : 'mr-auto text-black'">Bank Account No:</div>
+              <div><span class=" font-weight-bold font-sm">{{accountNo}}</span></div>
+            </div>
+          </li>
+          
+          <li [ngClass]="Themecolor == 'Dark' ? 'list-group-item user-deposit-data' : 'list-group-item-light user-deposit-data'">
+            <div class="d-flex">
+              <div [ngClass]="Themecolor == 'Dark' ? 'mr-auto text-white' : 'mr-auto text-black'">Account Type:</div>
+              <div><span class=" font-weight-bold font-sm">{{accountType}}</span></div>
+            </div>
+          </li>
+          <li [ngClass]="Themecolor == 'Dark' ? 'list-group-item user-deposit-data' : 'list-group-item-light user-deposit-data'" *ngIf="routingNo=='' && ibanno=='' || ifsccode!=''">
+            <div class="d-flex">
+              <div [ngClass]="Themecolor == 'Dark' ? 'mr-auto text-white' : 'mr-auto text-black'">IFSC:</div>
+              <div><span class=" font-weight-bold font-sm">{{ifsccode}}</span></div>
+            </div>
+          </li>
+          <li [ngClass]="Themecolor == 'Dark' ? 'list-group-item user-deposit-data' : 'list-group-item-light user-deposit-data'" [ngClass]="Themecolor == 'Dark' ? 'list-group-item user-deposit-data' : 'list-group-item-light user-deposit-data'" *ngIf="routingNo=='' && ifsccode=='' || ibanno!=''">
+            <div class="d-flex">
+              <div [ngClass]="Themecolor == 'Dark' ? 'mr-auto text-white' : 'mr-auto text-black'">SWIFT CODE:</div>
+              <div><span class=" font-weight-bold font-sm">{{ibanno}}</span></div>
+            </div>
+          </li>
+          <li [ngClass]="Themecolor == 'Dark' ? 'list-group-item user-deposit-data' : 'list-group-item-light user-deposit-data'" *ngIf="ibanno =='' && ifsccode=='' || routingNo !=''">
+            <div class="d-flex">
+              <div [ngClass]="Themecolor == 'Dark' ? 'mr-auto text-white' : 'mr-auto text-black'">Routing No.:</div>
+              <div><span class=" font-weight-bold font-sm">{{routingNo}}</span></div>
+            </div>
+          </li>
+          <li [ngClass]="Themecolor == 'Dark' ? 'list-group-item user-deposit-data' : 'list-group-item-light user-deposit-data'">
+            <div class="d-flex">
+              <div [ngClass]="Themecolor == 'Dark' ? 'mr-auto text-white' : 'mr-auto text-black'">Bank Name:</div>
+              <div><span class=" font-weight-bold font-sm">{{bankName}}</span></div>
+            </div>
+          </li>
+          <li [ngClass]="Themecolor == 'Dark' ? 'list-group-item user-deposit-data' : 'list-group-item-light user-deposit-data'">
+            <div class="d-flex">
+              <div [ngClass]="Themecolor == 'Dark' ? 'mr-auto text-white' : 'mr-auto text-black'">Bank Address:</div>
+              <div><span class=" font-weight-bold font-sm">{{bankAddress}}</span></div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+</div>
+<div class="row">
+
+  <div class="col-12 mt-3 align-self-stretch">
+    <div class="p-2 pl-3 pr-3 rounded h-100 customer-report-widget" [ngClass]="Themecolor == 'Dark' ? 'bg-dark' : 'bg-light'">
+      <div class="d-flex">
+        <div class="p-2 mr-auto"><span class="font-md mr-2" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Withdrawal History</span>
+          <div style="top: 19px;left: 236px;position: absolute;">
+            <div class="icon-section pull-left">
+              <i class="fa fa-info-circle" aria-hidden="true" (click)="data.handleInfoSection('withdrawHistoryInfo')"></i>
+            </div>
+            <div class="info-section" id="withdrawHistoryInfo" style="display: none;left: 94px;top: 20px;">
+              <div class="info-header">
+                <div class="info-title">Withdrawal History</div>
+                <div class="info-close">
+                  <i class="fa fa-times" aria-hidden="true" (click)="data.handleInfoSection('withdrawHistoryInfo')"></i>
+                </div>
+              </div>
+              <div class="info-body">
+                This displays the Date, Withdrawal id, Currency, Debited Amount, Transaction Charge, Withdrawal Credit and Status of the Withdrawal order requested by you
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="w-100 mt-2"></div>
+      <div class="table-responsive-sm">
+        <table class="table table-sm table-hover">
+          <thead>
+            <tr  [ngClass]="Themecolor == 'Dark' ? 'bg-black text-white' : 'tableHeader-bg-light text-black'">
+              <th style="width: 14.28%;" scope="col">Date</th>
+              <th style="width: 14.28%;" scope="col">Withdrawal Id</th>
+              <th style="width: 14.28%;" scope="col">Currency</th>
+              <th style="width: 14.28%;" scope="col">Debited Amount</th>
+              <th style="width: 14.28%;" scope="col">Transaction Charge</th>
+              <th style="width: 14.28%;" scope="col">Withdrawal Credit</th>
+              <th style="width: 14.28%;" scope="col">Status</th>
+            </tr>
+          </thead>
+          <tbody *ngIf="withdrawtradelist !=''">
+            <tr [ngClass]="Themecolor == 'Dark' ? 'text-white txnSectionRowDark' : 'text-black depositSectionRowLight'"*ngFor="let w of withdrawtradelist" >
+              <td style="width: 14.28%;">{{w.timestamp}}</td>
+              <td style="width: 14.28%;">{{w.withdrawalId}}</td>
+              <td style="width: 14.28%;">{{w.currency}}</td>
+              <td style="width: 14.28%;">{{w.amount}}</td>
+              <td style="width: 14.28%;">{{w.txnCharge}}</td>
+              <td style="width: 14.28%;">{{w.amount - w.txnCharge}}</td>
+              <td style="width: 14.28%;" *ngIf="w.status=='Confirmed'" class="text-green">{{w.status}}</td>
+              <td style="width: 14.28%;" *ngIf="w.status=='Declined'" class="text-red">{{w.status}}</td>
+              <td style="width: 14.28%;" *ngIf="w.status=='Pending'" class="text-orange">{{w.status}}</td>
+              <!-- <ng-template #noconfm>
+                <td style="width: 14.28%;" class="text-orange">{{w.status}}</td>
+              </ng-template> -->
+            </tr>
+          </tbody>
+          <tbody *ngIf="withdrawtradelist ==''">
+            <tr>
+              <td>
+                No Data
+              </td>
+
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div class="float-sm-right btn-group btn-group-sm pagination_div" role="group"
+            aria-label="transaction-history">
+            <!-- <ngb-pagination [collectionSize]="collection" [(page)]="page" [directionLinks]="false" (click)="pager(page);" ></ngb-pagination> -->
+            <div class="btn-group">
+              <button class="btn btn-info" (click)="pager(1)" [disabled]="page==1">
+                <i class="fa fa-angle-double-left" aria-hidden="true"></i>
+              </button>
+              <button class="btn btn-info" (click)="pagerPre(page)" [disabled]="page==1">
+                <i class="fa fa-angle-left" aria-hidden="true"></i>
+              </button>
+              <button class="btn btn-info {{page==p?'active':''}} {{((p<page+5)&&(p>page-5))?'':'d-none'}}"
+                (click)="pager(p);" *ngFor="let p of pgn">{{p}}</button>
+              <button class="btn btn-info" (click)="pagerNext(page)" [disabled]="page==pgn.length">
+                <i class="fa fa-angle-right" aria-hidden="true"></i>
+              </button>
+              <button class="btn btn-info" (click)="pager(pgn.length)" [disabled]="page==pgn.length">
+                <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+    <div class="modal fade" id="otpModal" tabindex="-1" role="dialog" aria-labelledby="receiveModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title " id="receiveModalLabel">OTP</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form autocomplete="off">
+              <div class="form-row text-center">
+                <div class="col-12">
+                  <input type="password" class="form-control" id="withdrawOtp" [(ngModel)]="withdrawOtp" name="withdrawOtp">
+                  <a href="javascript:void(0);" (click)="resendOtpForOutgoing()" class="float-right">Resend OTP</a>
+                </div>
+                <div class="col-12 generate_address_btn mt-5">
+                  <button type="submit" class="btn btn-green send_btn" style="display:none;" (click)="handleOpenTwoFactorModal(twoFactorAuth)">WITHDRAW</button>
+                  <button type="submit" class="btn btn-green get_Otp_btn" (click)="resendOtpForOutgoing()">GET OTP</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <ng-template #twoFactorAuth let-modal>
+    <div  class="modal-header test proper-alighnment-header">
+      <h4 class="modal-title" id="modal-basic-title" style="color: brgb(248, 240, 240);">Security Authentication</h4>
+      
+      <div class="modal-body">
+          <!-- <p class="text-left" style="color: rgb(248, 240, 240);">Input otp from your google authenticator</p> -->
+          <!-- <p class="text-left" style="margin-top: -21px; color: black;">{{hiddenEmail}}</p> -->
+    
+          
+          <form>
+            <div class="form-group">
+              <p class="text-left" style="color: rgb(248, 240, 240);">Input otp from your registered email address</p>
+              <div class="row">
+                <div class="col-md-8">
+                  <input numbersOnly class="form-control " name="emailVerificationCode" id="emailOtp" type="password" [(ngModel)]="emailOtp" placeholder="OTP" autofocus >
+                  
+                </div>
+                <button (click)="getCodeFromEmail()" class="btn getbtn btn-primary" [disabled]="isGetCodeButtonDisabled">Get Code</button>
+              </div> 
+              
+            </div>
+            <div class="form-group">
+              <span id="messageotp">{{messageotp}}</span>
+            </div>
+            <div class="form-group">
+              <p class="text-left" style="color: rgb(248, 240, 240);">Input otp from your registered phone number</p>
+              <div class="row">
+                <div class="col-md-8">
+                  <input numbersOnly class="form-control " name="emailVerificationCode" id="smsOtp" type="password" [(ngModel)]="smsOtp" placeholder="OTP" autofocus >
+                  
+                </div>
+                <button (click)="getCodeFromSmsForExternalWallet()" class="btn getbtn btn-primary" [disabled]="isGetCodeButtonForSmsDisabled">Get Code</button>
+              </div> 
+              
+            </div>
+            <div class="form-group">
+              <span id="messageotp">{{messageotpforsms}}</span>
+            </div>
+            <div class="form-group">
+              <p class="text-left" style="color: rgb(248, 240, 240);">Input otp from your google authenticator</p>
+              <input class="form-control" name="emailVerificationCode" id="twoFactorOtp" type="password" [(ngModel)]="twoFactorOtp" placeholder="Two-Factor Authenticator code" autofocus >
+              
+    
+            </div>
+            </form>
+          <p class="text-left">
+            
+          </p>
+    
+          <button type="submit" class="btn btn-primary btn-block" [disabled]="twoFactorOtp == '' || twoFactorOtp == undefined"  (click)="withdrawFund();modal.dismiss();" style="margin-top: 28px;">
+            Confirm
+            </button>
+    
+            <!-- <p [hidden]="!error" class="text-danger text-center my-3">{{errormessage}}</p>
+                      <div id="unverifiesusermsgd" style="display: none;">
+                          <div style='display: flex;justify-content: space-between;align-items: center;'>
+                              Resend device verification mail &nbsp; &nbsp; <button id='verifyuser' class='btn btn-success'>RESEND</button>
+                          </div>
+                      </div>
+                      <div id="countermsg" style="display: none;"></div> -->
+        
+        
+      </div>
+    </div>
+    </ng-template>

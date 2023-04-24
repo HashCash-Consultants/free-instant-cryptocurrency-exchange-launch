@@ -1,0 +1,37 @@
+<div [ngResizable]="data.resize" class="" id="chartHolder">
+  <div>
+    <div class="row no-gutters">
+      <div class="col-12 col-sm-12 col-md-5">
+        <div ngbDropdown class="">
+          <div  class="col-12 col-sm-12 col-md-12 font-sm text-green"
+          style="border: 0px solid #F5475D; height:30px;">
+          <div>
+            <span class="float-left mt-2 pl-2 plist" style="font-size:14px;color:rgb(153, 152, 152)">Last Price:
+
+              <span *ngIf="data.ACTION == 'buy'; else buy_value">
+                <ng2-odometer style="color:#F5475D" else style="color:#21CB80;" [number]="data.ltpdata" [config]="{ format: '(,ddd).dddddd' }"></ng2-odometer> / <span [ngStyle]="{color : Themecolor == 'Dark' ? '#f1b900' : '#2b2a2a'}" *ngIf="this.data.selectedSellingAssetText=='INR'"> ₹ </span><span [ngStyle]="{color : Themecolor == 'Dark' ? '#f1b900' : '#2b2a2a'}" *ngIf="this.data.selectedSellingAssetText =='USD' || this.data.selectedSellingAssetText=='USDT'"> $ </span>
+                <ng2-odometer class="ctpdata-value" style="color:red;" else [ngStyle]="{color : Themecolor == 'Dark' ? '#f1b900' : '#2b2a2a'}" [number]="data.ctpdata" [config]="{ format: '(,ddd).ddddd' }"></ng2-odometer><span [ngStyle]="{color : Themecolor == 'Dark' ? '#f1b900' : '#2b2a2a'}" *ngIf="this.data.selectedSellingAssetText=='AED'"> د.إ</span>
+             </span>
+ 
+             <ng-template #buy_value>
+               <ng2-odometer style="color:#21CB80;" else style="color:#F5475D;" [number]="data.ltpdata" [config]="{ format: '(,ddd).dddddd' }"></ng2-odometer> / <span  [ngStyle]="{color : Themecolor == 'Dark' ? '#f1b900' : '#2b2a2a'}" *ngIf="this.data.selectedSellingAssetText=='INR'"> ₹ </span><span [ngStyle]="{color : Themecolor == 'Dark' ? '#f1b900' : '#2b2a2a'}" *ngIf="this.data.selectedSellingAssetText =='USD' || this.data.selectedSellingAssetText=='USDT'"> $ </span>
+               <ng2-odometer class="ctpdata-value" style="color:#F5475D;" else [ngStyle]="{color : Themecolor == 'Dark' ? '#f1b900' : '#2b2a2a'}" [number]="data.ctpdata" [config]="{ format: '(,ddd).ddddd' }"></ng2-odometer><span [ngStyle]="{color : Themecolor == 'Dark' ? '#f1b900' : '#2b2a2a'}" *ngIf="this.data.selectedSellingAssetText=='AED'"> د.إ</span>
+             </ng-template>
+              
+              <span style="margin-left: 2%" style="font-size: 14px;color:rgb(153, 152, 152)">&nbsp;&nbsp;&nbsp;ROC % :</span>
+              <small class="font-sm ml-2" *ngIf="data.negetive != true"
+              style="color:#21CB80; font-size: 14px;">{{data.rocdata}}</small>
+              <small class="font-sm ml-2" *ngIf="data.negetive  == true" style="color:#F5475D; font-size: 14px;">{{data.rocdata}}</small>
+            </span>
+          </div>
+          <p class="vasset-24h vasset" style="line-height: 36px;margin-left:15px; border: 0px solid blue">
+            <span style="margin-left: 2%" style="font-size: 14px;color:rgb(153, 152, 152)">24H Volume:</span>
+            <small class="font-sm ml-2" style="font-size: 14px;" [ngStyle]="{color : Themecolor == 'Dark' ? 'white' : '#818080'}">&nbsp;{{data.volumndata}}</small>
+          </p>
+        </div>
+        </div>
+      </div>
+    </div>
+    <div class="w-100 mb-2"></div>
+  </div>
+</div>

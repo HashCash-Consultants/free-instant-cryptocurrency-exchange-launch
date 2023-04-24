@@ -1,0 +1,150 @@
+<!-- <app-loader></app-loader> -->
+<div class="bitrump-body">
+
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <div class="container-fluid">
+      <a class="navbar-brand1" href="#">
+        <!-- <img src="./assets/img/logo-white-paybito.png" alt="..." style="width:70%"> -->
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+      </div>
+    </div>
+  </nav>
+  <section class="testimonial" id="testimonial" style="padding-top: 16px;">
+    <div class="container" style="background-color: #fdffff">
+      <div class="row d-flex" style="padding-top: 30px;">
+        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 my-auto text-center">
+          <span [ngClass]="step > 1 ? 'stepper-active' : 'stepper-inactive'"><i *ngIf="step > 1" class="fa fa-check-circle-o" aria-hidden="true"></i> Account Details</span>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 my-auto text-center">
+          <span [ngClass]="step > 2 ? 'stepper-active' : 'stepper-inactive'"><i *ngIf="step > 2" class="fa fa-check-circle-o" aria-hidden="true"></i> Membership/Broker Id</span>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 my-auto text-center">
+          <span [ngClass]="step > 3 ? 'stepper-active' : 'stepper-inactive'"><i *ngIf="step > 3" class="fa fa-check-circle-o" aria-hidden="true"></i> Password</span>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 my-auto text-center">
+          <span [ngClass]="step > 4 ? 'stepper-active' : 'stepper-inactive'"><i *ngIf="step > 4" class="fa fa-check-circle-o" aria-hidden="true"></i> Referral Code</span>
+        </div>
+      </div>
+      <div class="row d-flex mt-5">
+        <div class="col-lg-3"></div>
+        <div class="col-lg-6">
+          <form class="mb-5">
+            <div class="form-group" *ngIf="step == 1">
+              <input type="text" class="form-control validate" pattern="^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$"
+                name="name" [(ngModel)]="facebookname" required placeholder="Name *" #name="ngModel"
+                [class.is-invalid]="name.dirty&&name.invalid">
+              <span class="text-danger" *ngIf="(name.dirty&&name.invalid)">Enter a valid name</span>
+            </div>
+            <div class="form-group" *ngIf="step == 1">
+              <!-- <label for="signupInputEmail">Email</label><span class="required">*</span> -->
+              <input class="form-control validate" [class.is-invalid]="email.dirty && email.invalid" name="email"
+                id="signupInputEmail" [(ngModel)]="facebookemail" placeholder="Enter Email *" (change)="checkEmail()"
+                appForbiddenName="bob" required #email="ngModel" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
+              <span class="text-danger" *ngIf="email.dirty && email.invalid">Enter a valid email</span>
+            </div>
+            <div class="form-group" *ngIf="step == 1">
+              <!-- <label for="signupInputPhone">Phone Number</label><span class="required">*</span> -->
+              <div class="row" style="margin-left: 0px;margin-right: -3px;">
+                <input type="text" class="form-control validate" name="dial_code" required pattern="[0-9]{8,15}"
+                  #phone="ngModel" [class.is-invalid]="phone.dirty&&phone.invalid" minlength="8" maxlength="15"
+                  [(ngModel)]="userphone" (blur)="checkPhone()" (ng2TelOutput)="getNumber($event)"
+                  (intlTelInputObject)="telInputObject($event)" 
+                  [ng2TelInputOptions]="{initialCountry: selectedCountryNameAlias}"
+                  (countryChange)="onCountryChange($event)" ng2TelInput
+                  style="padding-left: 53px;" placeholder="Enter Phone *" />
+
+              </div>
+              <span class="text-danger phoneError" *ngIf="phone.dirty&&phone.invalid">Enter a valid phone
+                number</span>
+
+            </div>
+            <div class="form-group" *ngIf="step == 2">
+              <input class="form-control validate" [class.is-invalid]="brokerId.dirty && brokerId.invalid"
+                name="brokerId" id="signupInputBroker" [(ngModel)]="broker" #brokerId="ngModel"
+                placeholder="Enter membership ID / Broker ID *" required #brokerId="ngModel" autocomplete="off" (change)="handleBrokerIdCheck($event)">
+                <span class="field-icon-info" (click)="handleInfoModal(brokerInfoModal)"><i class="fa fa-info-circle"
+                  aria-hidden="true"></i></span>
+              <span class="text-danger" *ngIf="brokerId.dirty && brokerId.invalid">Enter a valid membership ID / Broker
+                ID</span>
+            </div>
+            <div class="form-group" *ngIf="step == 3">
+              <input class="form-control validate" name="password" id="signupInputPassword" name='password'
+                [(ngModel)]="userpassword" type="password"  #password="ngModel" placeholder="Enter Password *" (blur)="checkPassword()"
+                (change)="confirmPassword($event)" (keyup)="confirmPassword($event)" required
+                pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$!@.])[a-zA-Z0-9$!.@]{8,35}$" #password="ngModel"
+                [class.is-invalid]="password.invalid&&password.dirty">
+              <span toggle="#signupInputPassword" (click)="showHide()"
+                class="fa fa-fw fa-eye-slash field-icon showHide-password"></span>
+              <span class="text-danger" *ngIf="password.dirty&&password.invalid">
+                The password should be of minimum 8,maximum 35 characters and must contain at least one uppercase, one
+                lowercase, number and a special character($@#.!).
+              </span>
+            </div>
+            <div class="form-group" *ngIf="step == 3">
+              <input class="form-control validate" name="repassword1" id="signupInputRetypePassword" type="password"
+                placeholder="Retype Password *" [(ngModel)]="userrepassword1" (keyup)="confirmPassword($event)"
+                (change)="confirmPassword($event)" required
+                pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$!@.])[a-zA-Z0-9$!.@]{8,35}$" #repassword1="ngModel"
+                [class.is-invalid]="repassword1.invalid&&repassword1.dirty">
+              <span class="confirm_password_text"></span>
+            </div>
+            <div class="form-group referral-code" *ngIf="step == 4">
+              <!-- <label for="signupInputReferralCode">Referral Code (Optional)</label> -->
+              <input class="form-control validate" [class.is-invalid]="referralCode.dirty && referralCode.invalid" name="referralCode"
+                  id="signupInputReferralCode" [(ngModel)]="userreferralCode" placeholder="Referral Code (Optional)"
+                  (mouseout)="checkReferralCode()" appForbiddenName="bob" #referralCode="ngModel">
+              <span class="text-danger" *ngIf="referralCode.dirty && referralCode.invalid">Enter a valid Referral Code </span>
+         </div>
+         <div [ngStyle]="step == 5 ? {'display': 'block'} : {'display': 'none'}"  class="col-md-4 mb-2" style="margin-left: 100px;">
+          <re-captcha id="recaptcha" name="recaptcha" #recaptcha="ngModel" (resolved)="resolved($event)" [(ngModel)]="captcha" required ></re-captcha>
+          <div class="invalid-feedback">
+            <div>This field is required.</div>
+          </div>
+        </div>
+         <div class="row" style="margin-left: 66px;margin-right: 72px;">
+           <button class="btn btn-secondary col-md-5" *ngIf="step > 1" type="button" (click)="handleBackButtonClick()"
+             style="width: 125px;"> Back</button>
+             <div class="col-md-2"></div>
+           <button class="btn btn-primary col-md-5" *ngIf="step != 5" type="button" (click)="handleNextButtonClick()"
+             style="width: 125px;" [disabled]="step == 4 && invalid && userreferralCode != ''"> Next</button>
+           <button class="btn btn-primary col-md-5" *ngIf="step == 5 " type="button" (click)="handleSubmitButtonClick()"
+             style="width: 125px;" [disabled]="!captchaNextButton"> Submit</button>
+         </div>
+
+         <div class="row">
+          <button class="brn btn-success" style="
+          margin-left: 14px;
+          margin-top: 18px;
+      "(click)="data.logout()">Goto Login</button>
+
+         </div>
+          </form>
+        </div>
+        <div class="col-lg-3"></div>
+      </div>
+
+    </div>
+  </section>
+
+</div>
+<ng-template #brokerInfoModal let-modal>
+  <!-- <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Info</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div> -->
+  <div class="modal-body" style="margin-top: 39px;margin-left: 44px;">
+    <p>PayBito Broker / Membership ID is PAYB18022021121103.</p>
+    <p>Please use this or the one provided by your Broker.</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="modal.dismiss()">Close</button>
+  </div>
+</ng-template>

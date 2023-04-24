@@ -1,0 +1,1540 @@
+<app-navbar (themeChanged)="themeChangedHandler($event)"></app-navbar>
+<!-- <app-loader></app-loader> -->
+<div class="content-wrapper pt-0 pl-3" [ngClass]="Themecolor == 'Dark' ? '' : 'content-wrapper-light'">
+
+  <div class="row d-flex section-position settingCtrl" data-ng-init="loginDuration();" data-ng-controller="settingCtrl">
+    <h5 style="margin-left:35px;margin-top:20px;font-weight: 500;"
+      [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Account Settings</h5>
+    <div class="col-md-12 col-12 mt-3 align-self-stretch" data-ng-init="getUserAppSetting()">
+      <div class="p-2 rounded h-100" [ngClass]="Themecolor == 'Dark' ? 'bg-dark' : 'bg-light'">
+        <span class="font-md text-theme-dark-blue mr-2 pl-3" style="font-size: 21px;font-weight: 500;"
+          [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">2 Factor Authentication (2FA)
+          <span style="cursor: pointer;margin-left:10px;font-size:14px;">
+            <i class="fa fa-info-circle" aria-hidden="true" (click)="data.handleInfoSection('twofainfo')"></i>
+          </span>
+        </span>
+
+        <div class="info-section" id="twofainfo" style="display:none;margin:auto;position:absolute;">
+          <div class="info-header">
+            <div class="info-title" style="font-size: 20px;">2 Factor Authentication (2FA)</div>
+            <div class="info-close">
+              <i class="fa fa-times" aria-hidden="true" (click)="data.handleInfoSection('twofainfo')"></i>
+            </div>
+          </div>
+          <div class="info-body">Click on the toggle button to activate 2-factor authentication. A barcode will appear.
+            You have to scan this barcode through the google authenticator app and enter the code in the below field.
+            After that, you will be logged out automatically and the 2FA will be on for future login. </div>
+        </div>
+
+        <div class="w-100"></div>
+        <!-- <hr style="height: 1px;background-color: #37373b;border: none; margin-left: 16px; margin-right:16px;"> -->
+        <ul class="list-group mt-3">
+          <li class="list-group-item border-alighnment bg-transparent">
+            <div class="row d-flex align-items-center button-alighnment">
+              <p class="row  d-flex text-theme-dark-blue" style="padding-left: 24px; color: #9ba7b2;">To secure your
+                account, please
+                download Google Authenticator from your App Store, then select the slider opposite "Log in" to slide to
+                the right and it will show a popup with a QR code to scan.</p>
+              <!-- <div class="col-md-12 mb-alighnment text-theme-dark-blue settings-alighnment">2 Factor Authentication
+                (2FA)</div> -->
+            </div>
+            <!-- <li class="list-group-item border-alighnment bg-transparent"> -->
+            <div class="row d-flex align-items-center twofactorbutton">
+              <div class="col-6 col-lg-6 mb-alighnment settings-alighnment text-theme-dark-blue"
+                [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'bg-light-bankDetils text-black'">Activate 2FA at Log
+                in
+                <div class="twofabutton">
+                  <div class="custom-switch custom-switch-label-onoff">
+                    <div class="well">
+                      <i class="fa fa-toggle-on active" *ngIf="(twoFactorStatusForView==1)"
+                        (click)="changeStatusFor2FactorAuth(twoFactorAuthSpecific);"></i>
+                      <i class="fa fa-toggle-on fa-rotate-180 inactive" *ngIf="(twoFactorStatusForView==0)"
+                        (click)="changeStatusFor2FactorAuth(twoFactorAuthSpecific);"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+          <!-- <li class="list-group-item bg-transparent border-alighnment">
+            <button class="btn btn-sm  btn-green-savechanges" (click)="passModal(passChange)">Change Password</button>
+          </li> -->
+        </ul>
+      </div>
+    </div>
+    <div class="col-md-12 col-12 mt-3 align-self-stretch" data-ng-init="getUserAppSetting()">
+      <div class="p-2 rounded h-100" [ngClass]="Themecolor == 'Dark' ? 'bg-dark' : 'bg-light'">
+        <span class="font-md text-theme-dark-blue mr-2 pl-3" style="font-size: 21px;font-weight: 500;"
+          [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Phone Number Authentication
+          <span style="cursor: pointer;margin-left:10px;font-size:14px;">
+            <i class="fa fa-info-circle" aria-hidden="true" (click)="data.handleInfoSection('phoneauthinfo')"></i>
+          </span>
+        </span>
+
+        <div class="info-section" id="phoneauthinfo" style="display:none;margin:auto;position:absolute;">
+          <div class="info-header">
+            <div class="info-title" style="font-size: 20px;">Phone number authentication</div>
+            <div class="info-close">
+              <i class="fa fa-times" aria-hidden="true" (click)="data.handleInfoSection('phoneauthinfo')"></i>
+            </div>
+          </div>
+          <div class="info-body">Turn on phone authentication for added security. You will be required to turn this
+            security feature on to withdraw crypto assets from the exchange to an external address.</div>
+        </div>
+
+        <div class="w-100"></div>
+        <!-- <hr style="height: 1px;background-color: #37373b;border: none; margin-left: 16px; margin-right:16px;"> -->
+        <ul class="list-group mt-3">
+          <li class="list-group-item border-alighnment bg-transparent">
+            <div class="row d-flex align-items-center button-alighnment">
+              <!-- <p class="row  d-flex text-theme-dark-blue" style="padding-left: 24px; color: #9ba7b2;">To secure your
+                account, please
+                download Google Authenticator from your App Store, then select the slider opposite "Log in" to slide to
+                the right and it will show a popup with a QR code to scan.</p> -->
+              <!-- <div class="col-md-12 mb-alighnment text-theme-dark-blue settings-alighnment">2 Factor Authentication
+                (2FA)</div> -->
+            </div>
+            <!-- <li class="list-group-item border-alighnment bg-transparent"> -->
+            <div class="editSection">
+              <div class="row" style="margin-bottom: 10px;">
+
+
+                <div class="col-md-7 col-sm-12">
+
+                  <div class="row">
+                    <div class="col-md-6 col-sm-12">
+
+                      <div class="row">
+                        <div class="col-md-6 col-sm-12">
+
+                          <p [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"
+                            *ngIf="isPhoneAuthEditButtonEnabled" style="margin-top:6px;font-size: 14px;">
+                            +{{showHiddenPhonenumber()}}</p>
+                          <input type="text" class="form-control validate" [ngClass]="Themecolor == 'Dark' ? 'form-control': 'form-control-light' " name="dial_code" required
+                            (keyup)="handleValidatePhoneNo()" [(ngModel)]="editablePhone"
+                            [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'"
+                            (countryChange)="onCountryChange($event)"
+                            [ng2TelInputOptions]="{dialCode: selectedCountryPhone}" ng2TelInput
+                            style="padding-left: 53px;" placeholder="Enter Phone no."
+                            *ngIf="isPhoneAuthSendOtpButtonEnabled" />
+
+                        </div>
+
+
+                        <div class="col-md-6 col-sm-12" *ngIf="showConfirmButton">
+                          <input type="password" class="form-control" [(ngModel)]="otpForNewMobileVerify"
+                            placeholder="Enter OTP" />
+                          <small style="margin-left: 4px;"
+                            [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">{{phoneVerificationcountdownmessage}}</small>
+                        </div>
+
+
+                      </div>
+
+                    </div>
+                    <div class="col-md-6 col-sm-12">
+
+                      <div class="row" style="margin-bottom: 10px;margin-top: 4px;">
+                        <div class="d-flex justify-content-between">
+
+                          <button class="btn btn-primary" [disabled]="!isPhoneAuthEditButtonEnabled"
+                            (click)="handleEditableField()">Change Phone Number</button> &nbsp;
+
+                          <!-- <button class="btn btn-primary"
+                            [disabled]="!isPhoneAuthSendOtpButtonEnabled || editablePhone='' || isPhoneVerifyTimerOn"
+                            (click)="handleSendOtpForPhoneVerification()">Send OTP</button>  -->
+                            <button class="btn btn-primary"
+                            [disabled]="!isPhoneAuthSendOtpButtonEnabled || editablePhone=='' "
+                            (click)="handleSendOtpForPhoneVerification()">Send OTP</button> &nbsp;
+
+                          <button class="btn btn-primary" *ngIf="showConfirmButton"
+                            (click)="handleConfirmButton()">Confirm</button>
+
+                        </div>
+
+                      </div>
+
+                    </div>
+
+                  </div>
+
+
+                </div>
+
+
+                <div class="col-md-4">
+
+                </div>
+
+
+
+
+              </div>
+
+            </div>
+            <div class="row">
+              <p class="col-lg-6 col-md-6 col-sm-12 col-xs-12 text-white">You can enable Multi-Factor Authentication (MFA) to protect your account. If you do, Paybito [company name: Hashcash Consultants LLC] will send you a unique password each time you sign in. Do you want to enable this feature?</p>
+            </div>
+            <div class="row d-flex align-items-center twofactorbutton">
+              <div class="col-6 col-lg-6 mb-alighnment settings-alighnment text-theme-dark-blue"
+                [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'bg-light-bankDetils text-black'">Activate phone
+                authentication at Log
+                in
+                <span style="cursor: pointer;margin-left:10px;font-size:14px;">
+                  <i class="fa fa-info-circle" aria-hidden="true"
+                    (click)="data.handleInfoSection('phoneauthtoggleinfo')"></i>
+                </span>
+                <div class="info-section" id="phoneauthtoggleinfo" style="display:none;margin:auto;position:absolute;">
+                  <div class="info-header">
+                    <div class="info-title" style="font-size: 20px;">Phone number authentication</div>
+                    <div class="info-close">
+                      <i class="fa fa-times" aria-hidden="true"
+                        (click)="data.handleInfoSection('phoneauthtoggleinfo')"></i>
+                    </div>
+                  </div>
+                  <div class="info-body">If this is turned on, you will be asked a phone OTP at login. Once you turn
+                    this on or off, you will be logged out automatically.</div>
+                </div>
+                <div class="twofabutton">
+                  <div class="custom-switch custom-switch-label-onoff">
+                    <div class="well">
+                      <i class="fa fa-toggle-on active" *ngIf="(phoneAuthStatusFromUiEnd=='1')"
+                        (click)="handlePhoneValidationOff(smsAuthModal);"></i>
+                      <i class="fa fa-toggle-on fa-rotate-180 inactive" *ngIf="(phoneAuthStatusFromUiEnd=='0')"
+                        (click)="handlePhoneValidationOn();"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+          <!-- <li class="list-group-item bg-transparent border-alighnment">
+            <button class="btn btn-sm  btn-green-savechanges" (click)="passModal(passChange)">Change Password</button>
+          </li> -->
+        </ul>
+      </div>
+    </div>
+    <!-- CHANGE PASSWORD Modal-->
+    <div class="modal fade" id="changePasswordModal" tabindex="-1" role="dialog"
+      aria-labelledby="changepasswordModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+          <div class="modal-header">
+            <h5 class="modal-title text-blue" id="changepasswordModalLabel">Change Password</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close"> <span
+                aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form id="changePasswordForm" name="changePaswordForm"
+              data-ng-submit="handleOpenTwoFactorModal(changePaswordForm.$valid,twoFactorAuth)" autocomplete="off"
+              novalidate>
+              <div class="form-row">
+                <div class="col-4 text-right">
+                  <label for="inputoldpassword" class="col-form-label">Old Password</label>
+                </div>
+                <div class="col-8">
+                  <input type="password" class="form-control" id="inputoldpassword" name="oldPassword"
+                    data-ng-model="oldPassword" placeholder="Old Password" required>
+                </div>
+              </div>
+              <div class="form-row mt-2">
+                <div class="col-4 text-right">
+                  <label for="inputnewpassword" class="col-form-label">New Password</label>
+                </div>
+                <div class="col-8">
+                  <input type="password" class="form-control" id="inputnewpassword" name="newPassword"
+                    data-ng-model="newPassword" placeholder="New Password" data-ng-keyup="matchPassword()" required>
+                </div>
+              </div>
+              <div class="form-row mt-2">
+                <div class="col-4 text-right">
+                  <label for="inputretype-newpassword" class="col-form-label">Retype New Password</label>
+                </div>
+                <div class="col-8">
+                  <input type="password" class="form-control" id="inputretype-newpassword" name="retypePassword"
+                    data-ng-model="retypePassword" placeholder="Retype New Password" data-ng-keyup="matchPassword()"
+                    required>
+                  <small class="match_error"></small>
+                </div>
+              </div>
+
+              <div class="form-row mt-2 mb-2">
+                <div class="col-8 offset-4">
+                  <button type="submit" class="btn btn-green generate_password_otp_btn" disabled>CHANGE
+                    PASSWORD</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="p-2 enablefeesstructure" [ngClass]="Themecolor == 'Dark' ? 'bg-dark' : 'bg-light'">
+    <div class="row mb-alighnment transaction-fees-alighnment text-white"
+      [ngClass]="Themecolor == 'Dark' ? 'bg-dark' : 'bg-light'">
+      <h5 class="p-3" style="font-weight: 500;" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">
+        Enable transaction fees in HCX
+        <span style="cursor: pointer;margin-left:10px;font-size:14px;">
+          <i class="fa fa-info-circle" aria-hidden="true"
+            (click)="data.handleInfoSection('transactionFeesEnableInfo')"></i>
+        </span>
+      </h5>
+      <div class="info-section" id="transactionFeesEnableInfo"
+        style="display:none;margin:auto;position:absolute;top:346px;">
+        <div class="info-header">
+          <div class="info-title">Enable transaction fees in HCX</div>
+          <div class="info-close">
+            <i class="fa fa-times" aria-hidden="true" (click)="data.handleInfoSection('transactionFeesEnableInfo')"></i>
+          </div>
+        </div>
+        <div class="info-body">To activate this feature, you must carry a minimum of 10 HCX in your wallet. After
+          activating this feature your transaction fees will be deducted in HCX only with a 25% discount on transaction
+          charges.</div>
+      </div>
+
+      <div>
+        <div class="enablefeesj">
+          <div class="radio p-3 radiobtn">
+            <label [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">
+              <input type="radio" name="enableHCX" id="enablehcx" value="On" (click)="setradio('On')"> ON
+
+            </label>
+          </div>
+          <div class="radio p-3 radiobtn">
+            <label [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">
+              <input type="radio" name="enableHCX" id="disablehcx" value="Off" (click)="setradio('Off')" checked>OFF
+            </label>
+          </div>
+          <!-- <span class="text-theme-dark-blue" style="margin: 19px 0px 0 35px;font-weight: 900;"> Coming Soon ! </span> -->
+        </div>
+      </div>
+    </div>
+    <!-- <hr style="height: 1px;background-color: #37373b;border: none; margin-left: 16px; margin-right:16px;"> -->
+    <div class="row mb-alighnment transaction-fees-alighnment"
+      [ngClass]="Themecolor == 'Dark' ? 'bg-dark' : 'bg-light'">
+      <!-- <div class="p-3">
+        <p class="text-white" style="color: #9ba7b2 !important;">*Save 25% in trading fees</p>
+        <p class="text-white" style="color: #9ba7b2 !important;">*You should have a minimum balance of 10 HCX in your HCX wallet to turn this feature on</p>
+      </div> -->
+      <div class="p-3">
+        <p [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">*Save 25% in trading fees</p>
+        <p [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">*You should have a minimum balance of 10 HCX
+          in your HCX wallet to turn this feature on</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="p-2 enablefeesstructure " [ngClass]="Themecolor == 'Dark' ? 'bg-dark' : 'bg-light'">
+    <div>
+      <div class="row mb-alighnment transaction-fees-alighnment settingCtrl"
+        [ngClass]="Themecolor == 'Dark' ? 'bg-dark' : 'bg-light'">
+        <div class="col-md-3 mt-3 align-self-stretch">
+          <div class="p-2 rounded h-100">
+            <h5 class="text-theme-dark-blue p-3" style="font-weight: 500;"
+              [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">
+              Change Password
+              <span style="cursor: pointer;margin-left:10px;font-size: 14px;">
+                <i class="fa fa-info-circle" aria-hidden="true"
+                  (click)="data.handleInfoSection('changePasswordInfo')"></i>
+              </span>
+            </h5>
+          </div>
+
+          <div class="info-section" id="changePasswordInfo"
+            style="display:none;margin:auto;position:absolute;top:0px;left:317px;">
+            <div class="info-header">
+              <div class="info-title">Change Password</div>
+              <div class="info-close">
+                <i class="fa fa-times" aria-hidden="true" (click)="data.handleInfoSection('changePasswordInfo')"></i>
+              </div>
+            </div>
+            <div class="info-body">You can change your login password by providing your old and new passwords.</div>
+          </div>
+
+        </div>
+      </div>
+      <!-- <hr style="height: 1px;background-color: #ccc;border: none; margin-left: 16px; margin-right:16px;"> -->
+      <div class="row mb-alighnment transaction-fees-alighnment settingCtrl"
+        [ngClass]="Themecolor == 'Dark' ? 'bg-dark' : 'bg-light'">
+        <div style="padding-bottom: 30px;" class="col-md-12 mt-3 align-self-stretch">
+          <form>
+            <div class="form-row row">
+              <div class="col-3">
+                <input type="password" class="form-control" [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'"
+                  placeholder="Old Password" name="old" [(ngModel)]="oldPassword">
+              </div>
+              <div class="col-3">
+                <input type="password" class="form-control" [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'"
+                  placeholder="New Password" id="nePassword" name="new" [(ngModel)]="newPassword"
+                  (keyup)="matchPassword()">
+                <span toggle="#nePassword" (click)="handleShowHidePassword()"
+                  class="fa fa-fw fa-eye-slash field-icon showHide-password"
+                  style="position: absolute;top: 13px;right: 10px; "></span>
+                <small style="color:red">{{passwordValidationErrorForNewPassword}}</small><br>
+
+              </div>
+              <div class="col-3">
+                <input type="password" class="form-control" [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'"
+                  placeholder="Confirm Password" name="retype" [(ngModel)]="retypePassword" (keyup)="matchPassword()">
+                <small class="match_error"></small>
+              </div>
+              <div class="col-3">
+                <button class="btn btn-success" (click)="handleOpenTwoFactorModal(twoFactorAuth,'changePassword')"
+                  [disabled]="!match">
+                  Change Password
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </div>
+
+
+  </div>
+
+
+
+  <div class="p-2 enablefeesstructure " [ngClass]="Themecolor == 'Dark' ? 'bg-dark' : 'bg-light'">
+    <div>
+      <div class="row mb-alighnment transaction-fees-alighnment settingCtrl"
+        [ngClass]="Themecolor == 'Dark' ? 'bg-dark' : 'bg-light'">
+        <div class="col-md-3 mt-3 align-self-stretch">
+          <div class="p-2 rounded h-100">
+            <h5 class="text-theme-dark-blue" style="font-weight: 500;"
+              [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">
+              Deactivate my account
+              <span style="cursor: pointer;margin-left:10px;font-size: 14px;">
+                <i class="fa fa-info-circle" aria-hidden="true"
+                  (click)="data.handleInfoSection('deactivateAccountInfo')"></i>
+              </span>
+
+            </h5>
+          </div>
+
+          <div class="info-section" id="deactivateAccountInfo"
+            style="display:none;margin:auto;position:absolute;top:0px;left:317px;">
+            <div class="info-header">
+              <div class="info-title">Deactivate my account</div>
+              <div class="info-close">
+                <i class="fa fa-times" aria-hidden="true" (click)="data.handleInfoSection('deactivateAccountInfo')"></i>
+              </div>
+            </div>
+            <div class="info-body">Clicking on this button will block your account. To activate it again you have to
+              request your admin.</div>
+          </div>
+
+        </div>
+      </div>
+      <!-- <hr style="height: 1px;background-color: #ccc;border: none; margin-left: 16px; margin-right:16px;"> -->
+      <div class="row mb-alighnment transaction-fees-alighnment settingCtrl"
+        [ngClass]="Themecolor == 'Dark' ? 'bg-dark' : 'bg-light'">
+        <div class="col-md-12 align-self-stretch">
+          <form>
+            <div class="form-row row">
+              <div class="col-3">
+                <button type="" class="btn btn-secondary ml-2"
+                  (click)="handleDeactivateConfirmPopup(deactivateconfirm)">
+                  Deactivate
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </div>
+
+
+  </div>
+
+  <div class="p-2 enablefeesstructure" [ngClass]="Themecolor == 'Dark' ? 'bg-dark' : 'bg-light'">
+    <div>
+      <div class="row mb-alighnment transaction-fees-alighnment"
+        [ngClass]="Themecolor == 'Dark' ? 'bg-dark' : 'bg-light'">
+        <div class="col-md-2 mt-3 align-self-stretch">
+          <div class="p-2 rounded h-100">
+            <h4 [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">
+              Create API
+              <span style="cursor: pointer;margin-left:10px;font-size: 14px;">
+                <i class="fa fa-info-circle" aria-hidden="true" (click)="data.handleInfoSection('creaapiinfo')"></i>
+              </span>
+            </h4>
+            <!-- <hr> -->
+          </div>
+
+          <div class="info-section" id="creaapiinfo"
+            style="display:none;margin:auto;position:absolute;top:-108px;left:317px;">
+            <div class="info-header">
+              <div class="info-title">Create API</div>
+              <div class="info-close">
+                <i class="fa fa-times" aria-hidden="true" (click)="data.handleInfoSection('creaapiinfo')"></i>
+              </div>
+            </div>
+            <div class="info-body">You must have your 2 Factor Authentication turned on. Enter the API Key name and
+              Click create button. The security validation popup will appear. You will find the button under the name
+              "Get Code". Click on Get Code and type the code from the email in the email verification code field. Then
+              enter the google authenticator code in the google verification code field and click on Submit button.
+              Click on the Check box to give permission (Read, Deposit, Withdraw, and Trade) for API then click on the
+              SAVE button to create the API. </div>
+          </div>
+
+        </div>
+      </div>
+      <!-- <hr style="height: 1px;background-color: #37373b;border: none; margin-left: 16px; margin-right:16px;"> -->
+      <div class="row mb-alighnment transaction-fees-alighnment"
+        [ngClass]="Themecolor == 'Dark' ? 'bg-dark' : 'bg-light'">
+        <div style="padding-bottom: 30px;" class="col-md-4 mt-3 align-self-stretch">
+          <p [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Give the API key a label</p>
+          <form #formCtrl="ngForm">
+            <div class="row">
+              <div class="col-md-8" style="position: relative;">
+                <input type="text" class="form-control otp_input validate"
+                  [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'" autocomplete="off" name="name"
+                  id="signupInputname" placeholder="Enter key label" [(ngModel)]="settingsObj.name"
+                  pattern="[A-Za-z\s]{3,40}" required #name="ngModel" [class.is-invalid]="name.dirty&&name.invalid">
+                <span class="text-danger entername" *ngIf="name.dirty&&name.invalid">Enter a name</span>
+
+              </div>
+              <div class="col-md-2">
+                <button type="submit" class="btn btn-primary" (click)="Create(key)" [disabled]="!formCtrl.form.valid"
+                  id="submit_btn">Create </button>
+              </div>
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="bs-example">
+      <div class="accordion" id="accordionExample">
+        <div class="card bs-header">
+          <div>
+            <div class="card-body mb-alighnment transaction-fees-alighnment"
+              [ngClass]="Themecolor == 'Dark' ? 'bg-dark' : 'bg-light'">
+              <div class="row">
+                <!-- <div class="col-md-4">
+              <div class="p-3" id="qrcd">
+                <qrcode [qrdata]="rcv" [size]="256" [level]="'M'"></qrcode>
+              </div>
+            </div> -->
+
+                <div class="col-md-8 body">
+                  <form>
+                    <h4 class="modal-title apicol">API Key</h4>
+                    <div class="copyid">
+                      <input type="text" class="form-control apikey" placeholder="api key" [value]="apikey" #myId
+                        readonly style="background-color: #131722;">
+                      <button class="btn btn-primary copybtn" (click)="copy(myId)">Copy</button>
+                    </div>
+                    <h4 class="modal-title apicol">Secret Key</h4>
+                    <div class="copyid">
+                      <input type="text" class="form-control secretkey" placeholder="secret key" [value]="secretkey"
+                        #mysecretId readonly style="background-color: #131722;">
+                      <button class="btn btn-primary copybtn" (click)="copy(mysecretId)">Copy</button>
+                    </div>
+                    <div class="mt-3">
+                      <h4 class="apicol">API restrictions</h4>
+                      <div *ngFor="let type of apitype;" class="form-check-inline apikeycheckbox">
+                        <input type="checkbox" name="apikeycheck" id="checkapi-{{type.apiTypeId}}"
+                          class="form-check-input apikeycheck apikeycheckcreate apikeycheckcreate-{{type.apiTypeName}}" value="{{type.apiTypeId}}" disabled>{{type.apiTypeName}}
+                      </div>
+                    </div>
+                    <!-- <div class="mt-3">
+                      <h4 class="apicol">IP access restrictions</h4>
+                      <div  class="form-check-inline apikeycheckbox">
+                        <input  type="radio" name="ipres" id="checkapiunrestrict"
+                          class="form-check-input " [value]="0" [(ngModel)]="ipRestrictStatus" (click)="handleIpCheckSelection(0)">Unrestricted (Less Secure)
+                      </div>
+                      <div  class="form-check-inline apikeycheckbox">
+                        <input  type="radio" name="ipres" id="checkapirestrict"
+                          class="form-check-input " [value]="1" [(ngModel)]="ipRestrictStatus" (click)="handleIpCheckSelection(1)">Restrict access to trusted IPs only (Recommended)
+                      </div>
+                    </div> -->
+                    <!-- <div class="row mt-3">
+                      <div class="col-md-12">
+                        <ul class="ip">
+                          <li class="ip ip-bubble mr-2" *ngFor="let ip of ipListTemp">
+                            <small class="text-white">{{ip}} </small>
+                          </li>
+                          
+                        </ul>
+                      </div>
+                    </div> -->
+                    <!-- <div class="row mt-2" *ngIf="ipRestrictStatus == 1">
+                      <div class="col-md-12">
+                        <input type="text" class="form-control" (keyup)="handleAddIpAddress($event)" placeholder="Enter IP address"/>
+                        <small class="text-white">Press "Enter" add new ip address</small>
+                      </div>
+                    </div> -->
+
+                    <!-- <div class="action_btn">
+                       <button class="btn btn-success saveapikey" (click)="saveApiKey()">Save</button>
+                      <button class="btn btn-success saveapikey"
+                        (click)="handleOpenTwoFactorModalForSaveApi(saveApiAuthModal,'saveAPI')">Save</button>
+                      <button style="margin-left: 30px;" class="btn btn-danger" (click)="cancelApiKey()">Cancel</button>
+                    </div> -->
+
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div style="padding:10px" class=" enablefeesstructure" [ngClass]="Themecolor == 'Dark' ? 'bg-dark' : 'bg-light'">
+    <div class="transaction-fees-alighnment apilist-header">
+      <div style="justify-content: space-between; align-items: center;" class="d-flex" [ngClass]="Themecolor == 'Dark' ? 'bg-dark' : 'bg-light'">
+        <div class="mt-3 listapikey">
+          <div class="p-2 rounded h-100 listofapi">
+            <h4 [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">API List</h4>
+          </div>
+        </div>
+        <div class="allapikey">
+          <button class="btn btn-primary" id="submit_btn" (click)="Delete(Api)">Delete all API</button>
+        </div>
+      </div>
+    </div>
+
+    <div *ngFor="let apilist of apikeylist; let i = index" class="bs-example">
+      <div class="accordion" id="accordionExample">
+        <div class="card acrdan-card">
+          <div class="apilistheader">
+            <!-- <div class="card-header">
+          <div class="row">
+            <div class="col-md-8">
+              <button type="button" class="btn btn-link collapsed">{{apilist.keyName}}</button>
+            </div>
+          </div>
+        </div> -->
+            <div class="card-body apilistheader-body" [ngClass]="Themecolor == 'Dark' ? 'bg-dark' : 'bg-light'">
+              <div class="row">
+                <!-- <div class="col-md-4">
+                  <div style="display: flex;" class="form-check-inline">
+                    
+                    <input type="text" name="apikeycheck" class="form-control form-check-input keyname"
+                    [ngClass]="Themecolor == 'Dark' ? 'form-control': 'form-control-light' " [attr.data-id]='apilist.id' [value]="apilist.keyName" id="apiKeyName[{{i}}]">
+                    
+                  </div>
+                </div> -->
+
+                <div *ngIf="apikeylist.length!=0" class="col-md-12 d-flex">
+                  <div class="apilistcls col-md-1 text-white"
+                    [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">
+                    <h6 class="modal-title" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Name</h6>
+                    <div class="copyid">
+                      <span [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">{{apilist.keyName}}</span>
+                    </div>
+                  </div>
+                  <div class="apilistcls col-md-1 text-white"
+                    [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">
+                    <h6 class="modal-title" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Id</h6>
+                    <div class="copyid">
+                      <span [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">{{apilist.id}}</span>
+                    </div>
+                  </div>
+                  <div class="apilistcls col-md-2 text-white"
+                    [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">
+                    <h6 class="modal-title" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Public key</h6>
+                    <div class="copyid">
+                      <span style="font-size: 11px;width: 127px;" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">{{apilist.publicKey}}</span>
+                    </div>
+                  </div>
+                  <div class="apilistcls text-white" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">
+                    <h6 class="modal-title" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Date</h6>
+                    <div class="copyid">
+                      <span [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">{{apilist.createdOn}}</span>
+                    </div>
+                  </div>
+                  <div class="apilistcls text-white" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">
+                    <h6 [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">API restrictions</h6>
+                    <div *ngFor="let type of apitype;" class="form-check-inline apikeycheckbox">
+                      <input type="checkbox" name="keyapicheck" class="form-check-input keyapicheck" 
+                        value="{{type.apiTypeId}}" (change)="chnageapikeyfunc($event,apilist,type)"
+                        [checked]="functionname(apilist,type)" disabled><span [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"> {{type.apiTypeName}} </span>
+                    </div>
+                  </div>
+                  <div class="apilistcls text-white" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">
+                    <h6 [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">IP access restrictions</h6>
+                    <div  class="form-check">
+                      <!-- <label class="ip-bubble-default">1.1.11.1</label>
+                      <label class="ip-bubble-default">1.1.11.1</label>
+                      <label class="ip-bubble-default">1.1.11.1</label> -->
+                      <span class="text-white">{{apilist.ipAddress}}</span>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="row">
+                      <div class="col-md-6">
+                        <button class="btn btn-primary update-apikey"
+                          (click)="handleOpenEditApiModal(apilist)">Edit</button>
+                       <!--  <button class="btn btn-primary update-apikey"
+                          (click)="editApiKey(apilist,i);handleOpenTwoFactorModal(twoFactorAuth,'updateAPI')">Update</button> -->
+                      </div>
+                      <div class="col-md-6">
+                        <button style="margin-left: 28px;" [attr.data-id]="apilist.id"
+                          (click)="deleteSingleApiKey($event);openAuthModalForDelete()"
+                          class="btn btn-primary">Delete</button>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- qr modal -->
+  <ng-template #authCode let-modal>
+    <div class="modal-header google-auth-close-btn">
+      <img style="width: 17%;" src="./assets/img/authenticator.png" alt="">
+      <h4 class="modal-title" id="modal-basic-title">Google Authentication</h4>
+      <!-- <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+        <span aria-hidden="true">&times;</span>
+      </button> -->
+    </div>
+    <div class="modal-body text-center google-auth-token" [ngClass]="Themecolor == 'Dark' ? '' : 'lightThemeModalBody'">
+      <h4 class="text-center text-white">Please do not click the back button or reload the page </h4>
+      <div class="p-3" id="qrcd">
+        <qrcode [qrdata]="twoFactorAuthKey" [size]="256" [level]="'M'"></qrcode>
+      </div>
+      <div>
+        <p style="color: #24262d;font-size: 13px;text-align: justify;" class="text-white">Save this emergency recovery
+          key</p>
+        <p style="color: #24262d;font-size: 13px;text-align: justify;" class="text-white">
+          If you lose access to your phone, you won't be able to log in to your account without this key. Print, copy or
+          write down this key without letting anyone see it.</p>
+        <p style="color: #24262d;font-size: 13px;text-align: justify;" class="text-white">Seriously, save this key!</p>
+      </div>
+      <div class="row" style="margin: 7px 0 7px 0;">
+        <span class="col-md-8 text-white" style="color: #24262d;font-size: 15px;">{{twoFactorSecureToken}}</span>
+        <div class="col-md-4">
+          <input type="text" id="twoFactorSecureToken" value="{{twoFactorSecureToken}}" style="display: none;" />
+          <button class="btn btn-primary" style="margin-top: -5px;" (click)="copySecureCode()">Copy</button>
+        </div>
+      </div>
+      <form>
+        <input type="text" class="form-control" [(ngModel)]="google_auth_otp" name="otp"
+          placeholder="Google Authentication Code" autofocus autocomplete="off">
+        <button type="submit" class="btn btn-success m-3 otpsubmt" [disabled]="google_auth_otp == '' || google_auth_otp == undefined || google_auth_otp == null"
+          (click)="sendGoogleAuthOtp(twoFactorAuthSpecific);">Submit</button>
+      </form>
+    </div>
+    <div class="modal-footer">
+    </div>
+  </ng-template>
+
+  <!-- change password modal -->
+  <ng-template #passChange let-modal style="background-color: #31313a;">
+    <div class="modal-header" style="background-color: #31313a;">
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <h4 class="modal-title" id="modal-basic-title">Change Password</h4>
+    </div>
+    <div class="modal-body text-center" style="background-color: #31313a;margin: 0 !important;">
+      <div class="form-group row">
+        <div class="col-md-4 text-right">Old Password</div>
+        <div class="col-md-8"><input type="password" class="form-control" [(ngModel)]="oldPassword"
+            placeholder="Old Password"></div>
+      </div>
+      <div class="form-group row">
+        <div class="col-md-4 text-right">New Password</div>
+        <div class="col-md-8"><input type="password" class="form-control" [(ngModel)]="newPassword"
+            placeholder="New Password"></div>
+      </div>
+      <div class="form-group row">
+        <div class="col-md-4 text-right">Confirm New Password</div>
+        <div class="col-md-8"><input type="password" class="form-control" [(ngModel)]="retypePassword"
+            (keyup)="matchPassword()" placeholder="Confirm New Password"></div>
+      </div>
+      <small style="color:red">{{passwordValidationError}}</small><br>
+      <small class="match_error"></small>
+      <div class="form-group row">
+        <div class="col-md-4"></div>
+        <div class="col-md-8 text-left">
+          <button class="btn btn-success" (click)="confirmBeforeResetPassword(true,resetpasswordModal); modal.close();"
+            *ngIf="match">
+            Change Password
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </ng-template>
+
+  <ng-template #key let-modal>
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <div class="modal-body1 mx-3">
+          <div>
+            <h4 style="left: 10px;">Security verification</h4>
+            <p>To secure your account,please complete the following verification</p>
+          </div>
+          <div class="row">
+            <div class="col-md-8 mb-5">
+              <label for="orangeForm-email">E-mail verification code</label>
+              <input type="email" id="orangeForm-email" class="form-control validate">
+              <span>{{messageotp}}</span>
+            </div>
+            <div class="col-md-2 getcodebtn">
+              <button (click)="getCodeFromEmail('createapikey')" class="btn getbtn btn-primary"
+                [disabled]="isGetCodeButtonDisabled">Get Code</button>
+              <div id="countermsg" style="display: none;"></div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-8 mb-5">
+              <label for="orangeForm-phoneOtp">Phone verification code</label>
+              <input type="password" id="orangeForm-phoneOtp" class="form-control validate" [(ngModel)]="phoneOtpForSaveApi">
+              <!-- <span>{{messageotp}}</span> -->
+            </div>
+            <div class="col-md-2 ">
+              <button (click)="handleSendSmsOtpForSaveApiVerification()" class="btn getbtn btn-primary"
+                [disabled]="!isGetCodeForSmsOtpEnabledForSaveApi" style="margin: 30px 0 0 0;">Get Code</button>
+                <span id="">{{intervalMessageForSaveApi}}</span>
+              
+            </div>
+          </div>
+          
+          <div class="row">
+            <div class="mb-4 col-md-12">
+              <label for="orangeForm-pass">Google verification code</label>
+              <input type="number" id="orangeForm-passkey" class="form-control validate vfygoogleauth">
+              <span>Enter the 6 digit code from Google Authenticator</span>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer d-flex justify-content-center">
+          <button (click)="generateKeys();modal.close()" class="btn subbtn btn-primary">Submit</button>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template #resetpasswordModal let-modal>
+    <div class="modal-header test proper-alighnment-header">
+      <!-- <h4 class="modal-title" id="modal-basic-title">Ready to Leave?</h4> -->
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <!-- <div class="modal-body">
+    Select "Logout" below if you are ready to end your current session.
+  </div> -->
+      <div class="modal-body">
+        <p>You will now be logged out</p>
+        <button type="button" class="btn btn-secondary" (click)="modal.close()">Cancel</button>
+        <button type="button" class="btn btn-danger" (click)="changePassword();modal.close()">Confirm</button>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template #Api let-modal>
+    <div class="modal-header test proper-alighnment-header">
+      <!-- <h4 class="modal-title" id="modal-basic-title">Ready to Leave?</h4> -->
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <!-- <div class="modal-body">
+    Select "Logout" below if you are ready to end your current session.
+  </div> -->
+      <div class="modal-body">
+        <p>are you sure you want to delete all API keys?</p>
+        <button type="button" class="btn btn-secondary" (click)="modal.close()">Cancel</button>
+        <button type="button" class="btn btn-danger" (click)="confirmDelete()">Confirm</button>
+      </div>
+    </div>
+  </ng-template>
+
+
+  <ng-template #deactivateconfirm let-modal>
+    <div class="modal-header test proper-alighnment-header">
+      <!-- <h4 class="modal-title" id="modal-basic-title">Ready to Leave?</h4> -->
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <!-- <div class="modal-body">
+    Select "Logout" below if you are ready to end your current session.
+  </div> -->
+      <div class="modal-body">
+        <p>This process is irreversible. You will lose access to your account and all your data would be deleted. Are
+          you sure you want to deactivate your account?</p>
+        <button type="button" class="btn btn-danger" (click)="handleDeactivateAccount()">Yes, I want to
+          deactivate</button>
+        <button type="button" class="btn btn-secondary" (click)="modal.close()">Cancel</button>
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template #twoFactorAuth let-modal>
+    <div class="modal-header test proper-alighnment-header">
+      <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+          <h4 class="modal-title" id="modal-basic-title" style="color: brgb(248, 240, 240);">Security Authentication</h4>
+
+        </div>
+        <div class="col-md-3">
+          <i class="fa fa-times" aria-hidden="true"  (click)="modal.dismiss()" style="margin: 6px 0px 0px 32px;cursor: pointer;"></i>
+        </div>
+      </div>
+
+      <div class="modal-body">
+        <p class="text-left" style="color: rgb(248, 240, 240);">Input otp from your google authenticator</p>
+        <!-- <p class="text-left" style="margin-top: -21px; color: black;">{{hiddenEmail}}</p> -->
+
+
+        <form>
+          <div class="form-group">
+            <input class="form-control" name="emailVerificationCode" id="twoFactorOtp" type="password"
+              [(ngModel)]="twoFactorOtp" placeholder="Two-Factor Authenticator code" autofocus>
+
+
+          </div>
+        </form>
+        <p class="text-left">
+
+        </p>
+
+        <button type="submit" class="btn btn-primary btn-block"
+          [disabled]="twoFactorOtp == '' || twoFactorOtp == undefined"
+          (click)="handleTwoFactorAuthSubmit();modal.dismiss();" style="margin-top: 28px;">
+          Confirm
+        </button>
+
+        <!-- <p [hidden]="!error" class="text-danger text-center my-3">{{errormessage}}</p>
+                      <div id="unverifiesusermsgd" style="display: none;">
+                          <div style='display: flex;justify-content: space-between;align-items: center;'>
+                              Resend device verification mail &nbsp; &nbsp; <button id='verifyuser' class='btn btn-success'>RESEND</button>
+                          </div>
+                      </div>
+                      <div id="countermsg" style="display: none;"></div> -->
+
+
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template #twoFactorAuthSpecific let-modal>
+    <div class="modal-header test proper-alighnment-header">
+      <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+          <h4 class="modal-title" id="modal-basic-title" style="color: brgb(248, 240, 240);">Security Authentication</h4>
+
+        </div>
+        <div class="col-md-3">
+          <i class="fa fa-times" aria-hidden="true"  (click)="modal.dismiss()" style="margin: 6px 0px 0px 32px;cursor: pointer;"></i>
+        </div>
+      </div>
+
+      <div class="modal-body">
+
+        <!-- <p class="text-left" style="margin-top: -21px; color: black;">{{hiddenEmail}}</p> -->
+
+
+        <form>
+          <div class="form-group">
+            <p class="text-left" style="color: rgb(248, 240, 240);">Input otp from your registered email address</p>
+            <div class="row">
+              <div class="col-md-8">
+                <input class="form-control " numbersOnly name="emailVerificationCode" id="emailOtpSpecific" type="password"
+                  [(ngModel)]="emailOtpSpecific" placeholder="OTP" autocomplete="email">
+
+              </div>
+              <button (click)="getCodeFromEmail('2fa')" class="btn getbtn btn-primary"
+                [disabled]="isGetCodeButtonDisabledSpecific">Get Code</button>
+            </div>
+
+          </div>
+          <div class="form-group">
+            <span id="messageotpSpecific">{{messageotpSpecific}}</span>
+          </div>
+          <div class="form-group" *ngIf="exist2FaKey == '1' || specificModalStatus == 'post'">
+            <p class="text-left" style="color: rgb(248, 240, 240);">Input otp from your google authenticator</p>
+            <input class="form-control" name="emailVerificationCode" id="twoFactorOtpSpecific" type="password"
+              [(ngModel)]="twoFactorOtpSpecific" placeholder="Two-Factor Authenticator code" autocomplete="ga">
+
+
+          </div>
+        </form>
+        <p class="text-left">
+
+        </p>
+        <div *ngIf="specificModalStatus == 'pre'">
+
+          <button type="submit" class="btn btn-primary btn-block" *ngIf="exist2FaKey == '0'"
+            [disabled]="emailOtpSpecific == '' || emailOtpSpecific == undefined"
+            (click)="handleOtpPopupSubmitfor2FactorAuth(authCode);modal.dismiss();" style="margin-top: 28px;">
+            Confirm
+          </button>
+          <button type="submit" class="btn btn-primary btn-block" *ngIf="exist2FaKey == '1'"
+            [disabled]="emailOtpSpecific == '' || emailOtpSpecific == undefined || twoFactorOtpSpecific == '' || twoFactorOtpSpecific == undefined"
+            (click)="handleOtpPopupSubmitfor2FactorAuth(authCode);modal.dismiss();" style="margin-top: 28px;">
+            Confirm
+          </button>
+        </div>
+        <div *ngIf="specificModalStatus == 'post'">
+          <button type="submit" class="btn btn-primary btn-block" *ngIf="exist2FaKey == '0'"
+            [disabled]="emailOtpSpecific == '' || emailOtpSpecific == undefined || twoFactorOtpSpecific == '' || twoFactorOtpSpecific == undefined"
+            (click)="updateUserAppSettings();modal.dismiss();" style="margin-top: 28px;">
+            Confirm
+          </button>
+          <button type="submit" class="btn btn-primary btn-block" *ngIf="exist2FaKey == '1'"
+            [disabled]="emailOtpSpecific == '' || emailOtpSpecific == undefined || twoFactorOtpSpecific == '' || twoFactorOtpSpecific == undefined"
+            (click)="updateUserAppSettings();modal.dismiss();" style="margin-top: 28px;">
+            Confirm
+          </button>
+        </div>
+
+
+
+
+      </div>
+    </div>
+  </ng-template>
+  <ng-template #smsAuthModal let-modal>
+    <div class="modal-header test proper-alighnment-header">
+
+      <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+          <h4 class="modal-title" id="modal-basic-title" style="color: brgb(248, 240, 240);">SMS Authentication</h4>
+
+        </div>
+        <div class="col-md-3">
+          <i class="fa fa-times" aria-hidden="true"  (click)="modal.dismiss()" style="margin: 6px 0px 0px 32px;cursor: pointer;"></i>
+        </div>
+      </div>
+      
+
+      <div class="modal-body">
+
+
+        <!-- <p class="text-left" style="margin-top: -21px; color: black;">{{hiddenEmail}}</p> -->
+
+
+        <form>
+          <div class="form-group">
+            <p class="text-left" style="color: rgb(248, 240, 240);">Input otp from your Authentication app</p>
+            <div class="row">
+              <div class="col-md-12">
+                <input class="form-control " name="emailVerificationCode" id="gaOtpForSms" type="password"
+                  [(ngModel)]="gaOtpForSms" placeholder="OTP" autofocus autocomplete="otp">
+
+              </div>
+
+            </div>
+
+          </div>
+          <!-- <div class="form-group">
+                <p class="text-left" style="color: rgb(248, 240, 240);">Input otp from your registered email address</p>
+                <div class="row">
+                  <div class="col-md-8">
+                    <input class="form-control " name="emailVerificationCode" id="emailOtpForSms" type="password" [(ngModel)]="emailOtpForSms" placeholder="OTP" autofocus >
+                    
+                  </div>
+                  <button (click)="getCodeFromEmail('smsauth')" class="btn getbtn btn-primary" [disabled]="isGetCodeButtonDisabledForSmsAuth">Get Code</button>
+                </div> 
+                
+              </div>
+              <div class="form-group">
+                <span id="messageotpSpecific">{{countdownForEmailOtpUsedInSmsAuthModal}}</span>
+              </div> -->
+          <!-- <div class="form-group">
+                <p class="text-left" style="color: rgb(248, 240, 240);">Input otp from your registered phone number</p>
+                <div class="row">
+                  <div class="col-md-8">
+                    <input class="form-control " name="emailVerificationCode" id="phoneOtpForSms" type="password" [(ngModel)]="phoneOtpForSms" placeholder="OTP" autofocus >
+                    
+                  </div>
+                  <button (click)="handleSendSmsOtpForSmsAuthVerification()" class="btn getbtn btn-primary" [disabled]="!isGetCodeForSmsOtpEnabled">Get Code</button>
+                </div> 
+                
+              </div>
+              <div class="form-group">
+                <span id="">{{intervalMessage}}</span>
+              </div> -->
+        </form>
+        <p class="text-left">
+
+        </p>
+
+        <div>
+          <button type="submit" class="btn btn-primary btn-block"
+            [disabled]="gaOtpForSms == '' || gaOtpForSms == undefined "
+            (click)="handleSubmitPhoneValidationStatus('off');modal.dismiss();" style="margin-top: 28px;">
+            Confirm
+          </button>
+
+        </div>
+
+
+
+
+      </div>
+    </div>
+  </ng-template>
+  <ng-template #smsAuthModalForPhoneChange let-modal>
+    <div class="modal-header test proper-alighnment-header">
+      <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+          <h4 class="modal-title" id="modal-basic-title" style="color: brgb(248, 240, 240);">Change Phone Number</h4>
+
+        </div>
+        <div class="col-md-3">
+          <i class="fa fa-times" aria-hidden="true"  (click)="modal.dismiss()" style="margin: 6px 0px 0px 32px;cursor: pointer;"></i>
+        </div>
+      </div>
+      
+
+      <div class="modal-body">
+
+        <!-- <p class="text-left" style="margin-top: -21px; color: black;">{{hiddenEmail}}</p> -->
+
+
+        <form>
+
+          <div class="form-group" *ngIf="!isSmsOtpProceedClicked">
+            <p class="text-left" style="color: rgb(248, 240, 240);">Input otp from your <b>registered phone number</b></p>
+            <p class="text-white">We sent a text message to you at {{registeredPhone}}. Enter the eight digit code in that message to confirm your phone number.</p>
+            <div class="row">
+              <div class="col-md-8">
+                <input class="form-control " name="emailVerificationCode" id="smsOtpForRegisteredNo" type="password"
+                  [(ngModel)]="smsOtpForRegisteredNo" placeholder="OTP" autofocus>
+
+              </div>
+              <button (click)="handleSendOtpForPhoneVerification()" class="btn getbtn btn-primary"
+                [disabled]="isDisableSendOtpButtonForRegisteredPhone">Send OTP</button>
+            </div>
+
+          </div>
+          <div class="form-group" *ngIf="!isSmsOtpProceedClicked">
+            <span id="messageotpSpecific">{{phoneVerificationcountdownmessage}}</span>
+          </div>
+          <div class="form-group" *ngIf="isSmsOtpProceedClicked">
+            <p class="text-left" style="color: rgb(248, 240, 240);">Input otp from your <b>new phone number</b></p>
+            <p class="text-white">We sent a text message to you at {{this.selectedCountryPhone + this.editablePhone}}. Enter the eight digit code in that message to confirm your phone number.</p>
+            <div class="row">
+              <div class="col-md-8">
+                <input class="form-control " name="emailVerificationCode" id="smsOtpForNewNo" type="password"
+                  [(ngModel)]="smsOtpForNewNo" placeholder="OTP" autofocus>
+
+              </div>
+              <button (click)="handleSendOtpForNewPhone()" class="btn getbtn btn-primary"
+                [disabled]="isDisableSendOtpButtonForNewPhone">Send OTP</button>
+            </div>
+
+          </div>
+          <div class="form-group" *ngIf="isSmsOtpProceedClicked">
+            <span id="messageotpSpecific">{{phoneVerificationcountdownmessage}}</span>
+          </div>
+
+        </form>
+        <p class="text-left">
+
+        </p>
+
+        <div *ngIf="!isSmsOtpProceedClicked">
+          <button type="submit" class="btn btn-primary btn-block"
+            [disabled]="smsOtpForRegisteredNo == '' || smsOtpForRegisteredNo == undefined "
+            (click)="handleProceedButtonClick()" style="margin-top: 28px;">
+            Proceed
+          </button>
+        </div>
+        <div *ngIf="isSmsOtpProceedClicked">
+          <button type="submit" class="btn btn-primary btn-block"
+            [disabled]="smsOtpForNewNo == '' || smsOtpForNewNo == undefined "
+            (click)="handleConfirmButton();modal.dismiss();" style="margin-top: 28px;">
+            Confirm
+          </button>
+
+        </div>
+
+
+
+
+      </div>
+    </div>
+  </ng-template>
+ 
+  <ng-template #editApiModal let-modal>
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <div class="modal-body1 mx-3">
+        
+        
+        <div class="row">
+          <div class="col-md-12 mt-3">
+            <h5 class="text-white">Edit API</h5>
+          </div>
+          
+        </div>
+        <div class="row mt-3">
+          <div class="col-md-12">
+            <label class="text-white">API Name : </label><input type="text" class="form-control" id="keyNameForEdit" value="{{apiKeyDataForEdit.keyName}}" (keyup)="validateApiKeyName($event)">
+          </div>  
+          <div class="col-md-12">
+
+            <label class="text-white">Public Key : </label>
+          </div>
+          <div class="col-md-12">
+
+            <span class="text-white ml-2">{{apiKeyDataForEdit.publicKey}}</span>
+          </div>
+          <div class="col-md-12">
+
+            <label class="text-white">Secret Key : </label>
+          </div>
+          <div class="col-md-12">
+
+            <span class="text-white ml-2">{{apiKeyDataForEdit.secretKey}}</span>
+          </div>
+          
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <label>API Restrictions</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div *ngFor="let type of apitypeForEdit;" class="form-check-inline apikeycheckbox">
+              <input type="checkbox" name="keyapicheckedit" class="form-check-input keyapicheck" 
+                value="{{type.apiTypeId}}" [disabled]="ipListTemp.length <= 0" [checked]="functionname(apiKeyDataForEdit,type)"><span [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"> {{type.apiTypeName}} </span>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <label>IP Access Restrictions</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div  class="form-check-inline apikeycheckbox">
+              <input  type="radio" name="ipres" id="checkapiunrestrict"
+                class="form-check-input " [value]="0" [(ngModel)]="ipRestrictStatus" (click)="handleIpCheckSelection(0)">Unrestricted (Less Secure)
+            </div>
+            <div  class="form-check-inline apikeycheckbox">
+              <input  type="radio" name="ipres" id="checkapirestrict"
+                class="form-check-input " [value]="1" [(ngModel)]="ipRestrictStatus" (click)="handleIpCheckSelection(1)">Restrict access to trusted IPs only (Recommended)
+            </div>
+          </div>
+        </div>
+        <div class="row" *ngIf="ipRestrictStatus == 1">
+          <div class="col-md-12">
+            <input type="text" class="form-control" (keyup)="handleAddIpAddress($event)"/><small class="text-white">Press "Enter" add new ip address</small>
+          </div>
+          <div class="col-md-12 mt-3">
+            <ul class="ip">
+              <li class="ip ip-bubble mr-2" *ngFor="let ip of ipListTemp">
+                <small class="text-white">{{ip}} <span (click)="handleDeleteIp(ip)"><i class="fa fa-times" aria-hidden="true"></i></span></small>
+              </li>
+              
+            </ul>
+          </div>
+        </div>
+        <button type="button" class="btn btn-primary" (click)="openAfterEditAuthModal()" [disabled]="isEditButtonForApiDisable">Save</button>
+        <button type="button" class="btn btn-secondary" (click)="modal.dismiss();">Close</button>
+        
+      </div>
+      
+    </div>
+  </div>
+</ng-template>
+<ng-template #saveApiAuthModal let-modal>
+  <div class="modal-header test proper-alighnment-header">
+
+    <div class="row">
+      <div class="col-md-3"></div>
+      <div class="col-md-6">
+        <h4 class="modal-title" id="modal-basic-title" style="color: brgb(248, 240, 240);"> Authentication</h4>
+
+      </div>
+      <div class="col-md-3">
+        <i class="fa fa-times" aria-hidden="true"  (click)="modal.dismiss()" style="margin: 6px 0px 0px 32px;cursor: pointer;"></i>
+      </div>
+    </div>
+    
+
+    <div class="modal-body">
+
+
+      <!-- <p class="text-left" style="margin-top: -21px; color: black;">{{hiddenEmail}}</p> -->
+
+
+      <form>
+        
+        <div class="form-group">
+              <p class="text-left" style="color: rgb(248, 240, 240);">Input otp from your registered email address</p>
+              <div class="row">
+                <div class="col-md-8">
+                  <input class="form-control " name="emailVerificationCode" id="emailOtpForSms" type="password" [(ngModel)]="emailOtpForSaveApi" placeholder="OTP" autofocus autocomplete="email">
+                  
+                </div>
+                <button (click)="getCodeFromEmail('saveauth')" class="btn getbtn btn-primary" [disabled]="isGetCodeButtonDisabledForSmsAuth">Get Code</button>
+              </div> 
+              
+            </div>
+            <div class="form-group">
+              <span id="messageotpSpecific">{{countdownForEmailOtpUsedInSaveApiModal}}</span>
+            </div>
+        <div class="form-group">
+              <p class="text-left" style="color: rgb(248, 240, 240);">Input otp from your registered phone number</p>
+              <div class="row">
+                <div class="col-md-8">
+                  <input class="form-control " name="emailVerificationCode" id="phoneOtpForSms" type="password" [(ngModel)]="phoneOtpForSaveApi" placeholder="OTP" autofocus autocomplete="phone">
+                  
+                </div>
+                <button (click)="handleSendSmsOtpForSaveApiVerification()" class="btn getbtn btn-primary" [disabled]="!isGetCodeForSmsOtpEnabledForSaveApi">Get Code</button>
+              </div> 
+              
+            </div>
+            <div class="form-group">
+              <span id="">{{intervalMessageForSaveApi}}</span>
+            </div>
+            <div class="form-group">
+              <p class="text-left" style="color: rgb(248, 240, 240);">Input otp from your Authentication app</p>
+              <div class="row">
+                <div class="col-md-12">
+                  <input class="form-control " name="emailVerificationCode" id="gaOtpForSaveApi" type="password"
+                    [(ngModel)]="gaOtpForSms" placeholder="OTP" autofocus autocomplete="ga">
+    
+                </div>
+    
+              </div>
+    
+            </div>
+      </form>
+      <p class="text-left">
+
+      </p>
+
+      <div>
+        <button type="submit" class="btn btn-primary btn-block"
+          [disabled]="gaOtpForSaveApi == '' || gaOtpForSaveApi == undefined || smsOtpForSaveApi == '' || smsOtpForSaveApi == undefined || emailOtpForSaveApi == '' || emailOtpForSaveApi == undefined "
+          (click)="this.saveApiKey();modal.dismiss();" style="margin-top: 28px;">
+          Confirm
+        </button>
+
+      </div>
+
+
+
+
+    </div>
+  </div>
+</ng-template>
+<ng-template #afterEditAuthModal let-modal>
+  
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <div class="modal-body1 mx-3">
+        <div>
+          <h4 style="left: 10px;">Security verification</h4>
+          <p>To secure your account,please complete the following verification</p>
+        </div>
+        <div class="row">
+          <div class="col-md-8 mb-5">
+            <label for="orangeForm-email-edit">E-mail verification code</label>
+            <input type="email" id="orangeForm-email-edit" [(ngModel)]="emailOtpForEdit" class="form-control validate">
+            <span>{{messageotp}}</span>
+          </div>
+          <div class="col-md-2 getcodebtn">
+            <button (click)="getCodeFromEmail('updateapikey')" class="btn getbtn btn-primary"
+              [disabled]="isGetCodeButtonDisabled">Get Code</button>
+            <div id="countermsg" style="display: none;"></div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-8 mb-5">
+            <label for="orangeForm-phoneOtp-edit">Phone verification code</label>
+            <input type="password" id="orangeForm-phoneOtp-edit" class="form-control validate" [(ngModel)]="phoneOtpForEdit">
+            <!-- <span>{{messageotp}}</span> -->
+          </div>
+          <div class="col-md-2 ">
+            <button (click)="handleSendSmsOtpForEditApiVerification()" class="btn getbtn btn-primary"
+              [disabled]="!isGetCodeForSmsOtpEnabledForEditApi" style="margin: 30px 0 0 0;">Get Code</button>
+              <span id="">{{intervalMessageForEditApi}}</span>
+            
+          </div>
+        </div>
+        <div class="row">
+          <div class="mb-4 col-md-12">
+            <label for="orangeForm-pass-edit">Google verification code</label>
+            <input type="number" id="orangeForm-passkey-edit" class="form-control validate vfygoogleauth" [(ngModel)]="gaOtpForEdit">
+            <span>Enter the 6 digit code from Google Authenticator</span>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer d-flex justify-content-center">
+        <button (click)="updateApiKeys()" class="btn subbtn btn-primary" [disabled]="gaOtpForEdit == '' && emailOtpForEdit == '' && phoneOtpForEdit == ''">Submit</button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #preDeleteAuthModal let-modal>
+  
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <div class="modal-body1 mx-3">
+        <div>
+          <h4 style="left: 10px;">Security verification</h4>
+          <p>To secure your account,please complete the following verification</p>
+        </div>
+        <div class="row">
+          <div class="col-md-8 mb-5">
+            <label for="orangeForm-email-delete">E-mail verification code</label>
+            <input type="email" id="orangeForm-email-delete" [(ngModel)]="emailOtpForDelete" class="form-control validate">
+            <span>{{messageotp}}</span>
+          </div>
+          <div class="col-md-2 getcodebtn">
+            <button (click)="getCodeFromEmail('deleteapikey')" class="btn getbtn btn-primary"
+              [disabled]="isGetCodeButtonDisabled">Get Code</button>
+            <div id="countermsg" style="display: none;"></div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-8 mb-5">
+            <label for="orangeForm-phoneOtp-delete">Phone verification code</label>
+            <input type="password" id="orangeForm-phoneOtp-delete" class="form-control validate"[(ngModel)]="phoneOtpForDelete">
+            <!-- <span>{{messageotp}}</span> -->
+          </div>
+          <div class="col-md-2 ">
+            <button (click)="handleSendSmsOtpForDeleteApiVerification()" class="btn getbtn btn-primary"
+              [disabled]="!isGetCodeForSmsOtpEnabledForDeleteApi" style="margin: 30px 0 0 0;">Get Code</button>
+              <span id="">{{intervalMessageForDeleteApi}}</span>
+            
+          </div>
+        </div>
+        <div class="row">
+          <div class="mb-4 col-md-12">
+            <label for="orangeForm-pass-delete">Google verification code</label>
+            <input type="number" id="orangeForm-passkey-delete" class="form-control validate vfygoogleauth" [(ngModel)]="gaOtpForDelete">
+            <span>Enter the 6 digit code from Google Authenticator</span>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer d-flex justify-content-center">
+        <button (click)="deleteApiKeyCall()" class="btn subbtn btn-primary" [disabled]="gaOtpForDelete == '' && emailOtpForDelete == '' && phoneOtpForDelete == ''">Submit</button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+  <!-- <ng-template #checkboxedit let-modal>
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <div class="modal-body1 mx-3">
+        
+        <div *ngIf="apikeylist.apiTypeName" class="row">
+          <div class="col-md-8 mb-5">
+            <label for="orangeForm-email">Name</label>
+            <input type="text" id="orangeForm-email" [value]="apilist.keyName" class="form-control validate">
+          </div>
+          <div class="modal-footer d-flex justify-content-center">
+            <button [attr.data-id]="apilist.id" (click)="editApiKey($event); modal.close()" class="btn subbtn btn-primary">Submit</button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="mt-3">
+            <h4>API restrictions</h4>
+            <div *ngFor="let type of apitype;" class="form-check-inline apikeycheckbox">
+                <input type="checkbox"  name="apikeycheck" class="form-check-input apikeycheck" value="{{type.apiTypeId}}" [checked]="functionname(apikeylist,type)">{{type.apiTypeName}}
+            
+            </div>
+          </div>
+        </div>
+        
+      </div>
+      
+    </div>
+  </div>
+</ng-template> -->
+  <!-- <li class="list-group-item bg-transparent border-alighnment">
+  <button class="btn btn-sm  btn-green-savechanges" (click)="passModal(passChange)">Change Password</button>
+</li>
+</ul>
+</div>
+</div> -->
+  <!-- CHANGE PASSWORD Modal-->
+  <!-- <div class="modal fade" id="changePasswordModal" tabindex="-1" role="dialog" aria-labelledby="changepasswordModalLabel"
+aria-hidden="true">
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+<div class="modal-header">
+  <h5 class="modal-title text-blue" id="changepasswordModalLabel">Change Password</h5>
+  <button class="close" type="button" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">×</span>
+  </button>
+</div>
+<div class="modal-body">
+  <form id="changePasswordForm" name="changePaswordForm" data-ng-submit="confirmBeforeResetPassword(changePaswordForm.$valid,resetpasswordModal)"
+    autocomplete="off" novalidate>
+    <div class="form-row">
+      <div class="col-4 text-right">
+        <label for="inputoldpassword" class="col-form-label">Old Password</label>
+      </div>
+      <div class="col-8">
+        <input type="password" class="form-control" id="inputoldpassword" name="oldPassword" data-ng-model="oldPassword"
+          placeholder="Old Password" required>
+      </div>
+    </div>
+    <div class="form-row mt-2">
+      <div class="col-4 text-right">
+        <label for="inputnewpassword" class="col-form-label">New Password</label>
+      </div>
+      <div class="col-8">
+        <input type="password" class="form-control" id="inputnewpassword" name="newPassword" data-ng-model="newPassword"
+          placeholder="New Password" data-ng-keyup="matchPassword()" required>
+      </div>
+    </div>
+    <div class="form-row mt-2">
+      <div class="col-4 text-right">
+        <label for="inputretype-newpassword" class="col-form-label">Retype New Password</label>
+      </div>
+      <div class="col-8">
+        <input type="password" class="form-control" id="inputretype-newpassword" name="retypePassword"
+          data-ng-model="retypePassword" placeholder="Retype New Password" data-ng-keyup="matchPassword()"
+          required>
+          <small style="color:red">{{passwordValidationError}}</small><br>
+        <small class="match_error"></small>
+      </div>
+    </div>
+
+    <div class="form-row mt-2 mb-2">
+      <div class="col-8 offset-4">
+        <button type="submit" class="btn btn-green generate_password_otp_btn" disabled>CHANGE PASSWORD</button>
+      </div>
+    </div>
+  </form>
+</div>
+</div>
+</div>
+</div> -->

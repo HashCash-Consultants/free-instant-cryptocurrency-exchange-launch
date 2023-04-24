@@ -1,0 +1,1529 @@
+<div wire:loading class="fixed top-0 left-0 right-0 bottom-0 w-full h-screen z-50 overflow-hidden bg-gray-700 opacity-1 flex flex-col items-center justify-center" *ngIf="stpLoader">
+</div>
+<div class="loading style-2" *ngIf="stpLoader"><div class="loading-wheel"></div></div>
+<div [ngResizable]="data.resize" class="stoploss-component p-2 pl-3 pr-3 rounded resizable-widget">
+
+  <button (click)="reset()" class="reset d-none">reset</button>
+  <button (click)="warnKyc(content)" class="d-none" id="warn">click</button>
+  <ul class="header-button">
+    <!-- <li *ngIf="showOrderTypeDropdown">
+      <label>Order-Type</label>
+    </li> -->
+    <!-- <li *ngIf="showOrderTypeDropdown">
+      <select class="form-control" name="orderType" [(ngModel)]="selectedOrderType">
+        <option value="IOC">IOC</option>
+        <option value="FOK">FOK</option>
+        <option value="OCO">OCO</option>
+        <option value="GTC">GTC</option>
+        <option value="ICEBERG">ICEBERG</option>
+      </select>
+    </li> -->
+    <li>
+      <button type="button" class="btn btn-outline-primary" (click)="handleOpenCrossModal(leverageCrossModal)"
+      style="color: rgb(255, 255, 255);background-color: rgb(44, 65, 66);border-color: transparent;padding-top: 2px;padding-bottom: 2px;width: 78px;">
+        
+            <span *ngIf="selectedLeverageMarginType == 2">
+              CROSS
+            </span>
+        
+        <span *ngIf="selectedLeverageMarginType == 1">ISO</span>
+      </button>
+        <span style="cursor: pointer;margin-left:10px;margin-right:10px;">
+          <i class="fa fa-info-circle" aria-hidden="true" (click)="data.handleInfoSection('futureCrossInfo')"></i>
+        </span>
+          <div class="info-section" id="futureCrossInfo" style="display: none;margin:auto; top: 10px;position:relative;left:30px;">
+            <div class="info-header">
+              <div class="info-title" style="font-size:20px;font-weight:100;">CROSS</div>
+              <div class="info-close">
+                <i class="fa fa-times" aria-hidden="true" (click)="data.handleInfoSection('futureCrossInfo')"></i>
+              </div>
+            </div>
+            <div class="info-body">
+              <p style="font-weight:100;font-size:17px;">Click on this button to change the Margin Mode (CROSS to ISOLATED or vice versa).</p>
+            </div>
+          </div>
+    </li>
+    <li>
+      <button type="button" class="btn btn-outline-primary" (click)="handleOpenXModal(leverageXModal)" style="color: rgb(255, 255, 255);background-color: rgb(44, 65, 66);border-color: transparent;padding-top: 2px;padding-bottom: 2px;width: 60px">{{selectedCrossRange}}</button>
+      <span style="cursor: pointer;margin-left:10px;">
+        <i class="fa fa-info-circle" aria-hidden="true" (click)="data.handleInfoSection('futureLeaverageInfo')"></i>
+      </span>
+        <div class="info-section" id="futureLeaverageInfo" style="display: none;margin:auto; top: 10px;position:relative;left:-51px;">
+          <div class="info-header">
+            <div class="info-title" style="font-size:20px;font-weight:100;">Leverage</div>
+            <div class="info-close">
+              <i class="fa fa-times" aria-hidden="true" (click)="data.handleInfoSection('futureLeaverageInfo')"></i>
+            </div>
+          </div>
+          <div class="info-body">
+            <p style="font-weight:100;font-size:17px;">Click on the leverage button (2X) to adjust the leverage for your trade. You can increase leverage to 125 times your actual balance.</p>
+          </div>
+        </div>
+    </li>
+  </ul>
+  <ngb-tabset [ngClass]="Themecolor == 'Dark' ? 'market-spot' : 'market-spot-light'" justify="fill" *ngIf="!spot" activeId="spot">
+    <ngb-tab id="spot">
+      <ng-template ngbTabTitle>
+        <h6 class="market-reset" (click)="handleShowOrderTypeDropdown('FUTURES');makeClassToggle(true)">FUTURES</h6>
+      </ng-template>
+      <div class="abc-stoploss">
+      <ng-template ngbTabContent>
+
+        <!--first parent tab-->
+        <ngb-tabset  type="pills" [ngClass]="Themecolor == 'Dark' ? '' : 'pills-light'" class="market-pills sub-pills">
+          <ngb-tab id="market">
+            <ng-template ngbTabTitle>
+              <span>
+                <h6 class="market-reset" (click)="handleShowOrderTypeDropdown('MARKET');makeClassToggle(true)">
+                   MARKET
+                </h6>
+                <span style="cursor: pointer;margin-left:10px; position: relative; left: 62px;top: -31px;font-size: 13px;">
+                  <i class="fa fa-info-circle" aria-hidden="true" (click)="data.handleInfoSection('marketFutureInfo')"></i>
+                </span>
+              </span>
+            </ng-template>
+           
+           
+            <ng-template ngbTabContent>
+              <div class="info-section" id="marketFutureInfo" style="display: none;margin:auto; top: 100px;">
+                <div class="info-header">
+                  <div class="info-title" style="font-size:20px;font-weight:100;">MARKET</div>
+                  <div class="info-close">
+                    <i class="fa fa-times" aria-hidden="true" (click)="data.handleInfoSection('marketFutureInfo')"></i>
+                  </div>
+                </div>
+                <div class="info-body">
+                  <p style="font-weight:100;font-size:17px;">Users can Buy and Sell at the current market price.
+                    Enter "Buying Amount" and click on BUY to place a BUY Market order.
+                    Enter "Selling Amount" and click on SELL to place a SELL Market order.</p>
+                </div>
+              </div>
+              <ngb-tabset type="pills" class="{{(buySellPillsClassStatus==true)?'buy-pills':'sell-pills'}}">
+                <ngb-tab>
+                  <ng-template ngbTabTitle>
+                    <span (click)="reset();makeClassToggle(true)" class="text-left">Buy</span>
+                  </ng-template>
+                  <ng-template class="market-but-spot" ngbTabContent>
+                    <div class="tab-pan-wrap" id="market-buy" role="tabpanel" aria-labelledby="market-buy-tab">
+                      <span class="balance_assets market_span">
+                        <span class="font-sm ">{{selelectedSellingAssetBalance}}<small> {{selectedSellingAssetText |
+                              uppercase}}</small>
+                        </span>
+                        <span class="font-xs mr-1 deposit-withdraw-btn" *ngIf="valid">
+                          <span class="diposit-hover">DEPOSIT</span>
+                          <img src="./assets/img/send.png" style="width: 20px;" routerLink="/deposit-funds" />
+      
+                        </span>
+                        <span class="font-xs mr-1 deposit-withdraw-btn" *ngIf="!valid">
+                          <span class="diposit-hover">RECEIVE</span>
+                          <img src="./assets/img/pay.png" style="width: 20px;" routerLink="/my-wallet" />
+                        </span>
+      
+                      </span>
+                      <div class="form-row">
+                        <div class="col-12 col-md-4 text-left">
+                          <label for="inputBuyBTC" class="col-form-label">Amount</label>
+                        </div>
+                        <div class="col-12 col-md-8 leftMargin">
+                          <div class="input-group">
+                            
+                              <!-- <input autocomplete="off" type="textbox" class="form-control form-control-sm rounded" [(ngModel)]="onlyBuyAmount" id="inputOnlyBuyAmount" placeholder="0"  (keyup)="getBuyVal($event)" #bam="ngModel" [class.is-invalid]="bam.dirty&&bam.invalid" name="b" ></div> -->
+                            <input autocomplete="off" numeric numericType="decimal" class="stoploss-from-control form-control form-control-sm rounded"
+                              id="inputOnlyBuyAmount" placeholder="0" [(ngModel)]="onlyBuyAmount" (keyup)="getBuyVal($event);validatemarketbuy()"
+                              #bam="ngModel" [class.is-invalid]="bam.dirty&&bam.invalid" appBuystoplimitdierctive [limit]="tradem">
+                           
+                            <div class="input-group-append">
+                              <div class="input-group-text bg-transparent border-0 text-white">{{selectedBuyingAssetText |
+                                uppercase}}
+                              </div>
+                            </div>
+                          </div>
+                          <span class="text-danger" *ngIf="bam.dirty&&bam.invalid">Enter a valid amount</span>
+                        </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="col-12 col-md-4 text-left">
+                          <label for="inputBuyUSD" class="col-form-label">Price</label>
+                        </div>
+                        <div class="col-12 col-md-8 leftMargin">
+                          <div class="input-group">
+                            <input autocomplete="off" numeric numericType="decimal" class="form-control form-control-sm rounded"
+                              id="inputOnlyBuyPrice" placeholder="0" [(ngModel)]="onlyBuyPrice" readonly>
+                            <div class="input-group-append">
+                              <div class="input-group-text bg-transparent border-0 text-white">{{selectedSellingAssetText |
+                                uppercase}}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="col-12 col-md-4 text-left">
+                          <label for="inputBuyUSD" class="col-form-label">Total Price</label>
+                        </div>
+                        <div class="col-12 col-md-8 leftMargin">
+                          <div class="input-group mb-2">
+                            <input autocomplete="off" numeric numericType="decimal" class="stoploss-from-control form-control form-control-sm rounded"
+                              id="inputOnlyBuyTotalPrice" placeholder="0" [(ngModel)]="onlyBuyTotalPrice" (keyup)="handleAmountFromTotalPrice($event,'buy')">
+                            <div class="input-group-append">
+                              <div class="input-group-text bg-transparent border-0 text-white">{{selectedSellingAssetText |
+                                uppercase}}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="col-12 col-md-4 text-left">
+                          <label for="inputBuyBTC" class="col-form-label"></label>
+                        </div>
+                        <div class="col-12 col-md-8 removePadding">
+                          <div class="input-group mb-2">
+                            <input type="range" class="form-range" value="0" min="0" max="4" step="1" id="customRange3" name="sliderValueBuy" (change)="getBuySliderVal($event)">
+
+                            <!-- <input numeric numericType="decimal" class="form-control form-control-sm rounded"
+                              id="inputOnlyBuyTotalPrice" placeholder="0" [(ngModel)]="onlyBuyTotalPrice" disabled> -->
+                            <div class="input-group-append">
+                              <div class="input-group-text bg-transparent border-0 text-white"> {{sliderValueBuy}}%
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        
+                      </div>
+                      <div class="form-row mb-2 ">
+                        <div class="col-12 col-md-8 offset-md-4">
+                          <button type="button" id="marketbuy" style="margin-top: -14px;" class="btn-green onlyBuyBtn btn" (click)="marketBuy()"
+                            [disabled]="bam.pristine || bam.invalid">BUY</button>
+                        </div>
+                      </div>
+                      <span class="onlyBuyError text-red" style="display:none;font-size: 16px">*Orderbook depth reached, price not found
+                      </span>
+                      <span class="marketbuyerror text-red" style="display:none;font-size: 16px">*Amount should be greater than 0.0001 
+                      </span>
+                    </div>
+                  </ng-template>
+      
+                </ngb-tab>
+      
+                <ngb-tab>
+                  <ng-template ngbTabTitle>
+                    <span (click)="sellReset();makeClassToggle(false)" class="text-left">Sell</span>
+                  </ng-template>
+                  <ng-template ngbTabContent>
+                    <div class="tab-pan-wrap" id="market-sell" role="tabpanel" aria-labelledby="market-sell-tab">
+                      <span class="balance_assets market_span">
+                        <span class="font-sm">{{selectedContractBalance}}<small *ngIf="selectedCrossRange == '1X'">
+                          {{selectedBuyingAssetText | uppercase}}</small><small *ngIf="selectedCrossRange != '1X'">
+                          {{selectedSellingAssetText | uppercase}}</small></span>
+                      <span class="font-xs mr-1 deposit-withdraw-btn">
+                        <span class="diposit-hover">RECEIVE</span>
+                        <img src="./assets/img/pay.png" style="width: 20px;" routerLink="/my-wallet" />
+                      </span>
+                      </span>
+                      <div class="form-row">
+                        <div class="col-12 col-md-4 text-left">
+                          <label for="inputSellBTC" class="col-form-label">Amount</label>
+                        </div>
+                        <div class="col-12 col-md-8 leftMargin">
+                          <div class="input-group">
+                            <input autocomplete="off" numeric numericType="decimal" class="stoploss-from-control form-control form-control-sm rounded"
+                              id="inputOnlySellAmount" placeholder="0" [(ngModel)]="onlySellAmount"
+                              (keyup)="getSellVal($event);validatemarketsell()" #sam="ngModel" [class.is-invalid]="sam.dirty&&sam.invalid" appBuystoplimitdierctive [limit]="tradem">
+                            <div class="input-group-append">
+                              <div class="input-group-text bg-transparent border-0 text-white">{{selectedBuyingAssetText |
+                                uppercase}}
+                              </div>
+                            </div>
+                          </div>
+                          <span class="text-danger" *ngIf="sam.dirty&&sam.invalid">Enter a valid amount</span>
+                        </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="col-12 col-md-4 text-left">
+                          <label for="inputSellUSD" class="col-form-label">Price</label>
+                        </div>
+                        <div class="col-12 col-md-8 leftMargin">
+                          <div class="input-group">
+                            <input autocomplete="off" numeric numericType="decimal" class="form-control form-control-sm rounded"
+                              id="inputOnlySellPrice" placeholder="0" [(ngModel)]="onlySellPrice" disabled>
+                            <div class="input-group-append">
+                              <div class="input-group-text bg-transparent border-0 text-white">{{selectedSellingAssetText |
+                                uppercase}}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="col-12 col-md-4 text-left">
+                          <label for="inputSellUSD" class="col-form-label">Total Price</label>
+                        </div>
+                        <div class="col-12 col-md-8 leftMargin">
+                          <div class="input-group mb-2">
+                            <input autocomplete="off" numeric numericType="decimal" class="stoploss-from-control form-control form-control-sm rounded"
+                              id="inputOnlySellTotalPrice" placeholder="0" [(ngModel)]="onlySellTotalPrice" (keyup)="handleAmountFromTotalPrice($event,'sell')">
+                            <div class="input-group-append">
+                              <div class="input-group-text bg-transparent border-0 text-white">{{selectedSellingAssetText |
+                                uppercase}}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="col-12 col-md-4 text-left">
+                          <label for="inputBuyBTC" class="col-form-label"></label>
+                        </div>
+                        <div class="col-12 col-md-8 removePadding">
+                          <div class="input-group">
+                            <input type="range" class="form-range "  value="0" min="0" max="4" step="1" id="customRange3" name="sliderValueSell" (change)="getSellSliderVal($event)">
+                             <div class="input-group-append">
+                              <div class="input-group-text bg-transparent border-0 text-white"> {{sliderValueSell}}% </div>
+                              
+                            </div>
+                          </div>
+                          <!-- <span class="text-danger" *ngIf="bam.dirty&&bam.invalid">Enter a valid amount</span> -->
+                        </div>
+                      </div>
+                      <div class="form-row mb-2">
+                        <div class="col-12 col-md-8 offset-md-4">
+                          <button numeric numericType="decimal" style="margin-top: -14px;" id="marketsell" class="btn-red onlySellBtn btn"
+                            (click)="marketSell()" [disabled]="sam.invalid || sam.pristine">SELL</button>
+                        </div>
+                      </div>
+                      <span class="onlyBuyError text-red" style="display:none;font-size: 16px">*Orderbook depth reached, price not found
+                      </span>
+                      <span class="marketsellerror text-red" style="display:none;font-size: 16px">*Amount should be greater than 0.0001 
+                      </span>
+                    </div>
+                  </ng-template>
+                </ngb-tab>
+      
+              </ngb-tabset>
+      
+            </ng-template>
+            </ngb-tab>
+            <ngb-tab id="limit">
+              <ng-template ngbTabTitle>
+                <span>
+                  <h6 (click)="reset();handleShowOrderTypeDropdown('LIMIT');makeClassToggle(true)" class="limit-reset">LIMIT</h6>
+                  <span style="cursor: pointer;margin-left:10px; position: relative; left:41px;top: -31px;font-size: 13px;">
+                    <i class="fa fa-info-circle" aria-hidden="true" (click)="data.handleInfoSection('limitFutureInfo')"></i>
+                  </span>
+                </span>
+              </ng-template>
+              <ng-template ngbTabContent>
+                <div class="info-section" id="limitFutureInfo" style="display: none;margin:auto; top: 100px;">
+                  <div class="info-header">
+                    <div class="info-title" style="font-size:20px;font-weight:100;">LIMIT</div>
+                    <div class="info-close">
+                      <i class="fa fa-times" aria-hidden="true" (click)="data.handleInfoSection('limitFutureInfo')"></i>
+                    </div>
+                  </div>
+                  <div class="info-body">
+                    <p style="font-weight:100;font-size:17px;">You can create Buy and Sell limit offers at the price of your choice and the offers will reflect in Order Book and Open Orders.
+                      Enter "Amount", and Price and click on the BUY button for the BUY offer.
+                      Enter "Amount", and Price and click on the SELL button for the SELL offer.</p>
+                  </div>
+                </div>
+                <ngb-tabset type="pills" class="{{(buySellPillsClassStatus==true)?'buy-pills':'sell-pills'}}">
+                  <ngb-tab>
+                    <ng-template ngbTabTitle>
+                      <span (click)="reset();makeClassToggle(true)" class="text-left">Buy</span>
+                    </ng-template>
+                    <ng-template ngbTabContent>
+                      <div class="tab-pan-wrap" id="market-buy" role="tabpanel" aria-labelledby="market-buy-tab">
+                        <span class="balance_assets flimit_span">
+                          <span class="font-sm ">{{selelectedSellingAssetBalance}}<small> {{selectedSellingAssetText |
+                                uppercase}}</small>
+                          </span>
+                          <span class="font-xs mr-1 deposit-withdraw-btn" *ngIf="valid">
+                            <span class="diposit-hover">DEPOSIT</span>
+                            <img src="./assets/img/send.png" style="width: 20px;" routerLink="/deposit-funds" />
+        
+                          </span>
+                          <span class="font-xs mr-1 deposit-withdraw-btn" *ngIf="!valid">
+                            <span class="diposit-hover">RECEIVE</span>
+                            <img src="./assets/img/pay.png" style="width: 20px;" routerLink="/my-wallet" />
+                          </span>
+        
+                        </span>
+                        <div class="row">
+                        <div [ngClass]="selectedOrderType != 'ICEBERG' && selectedOrderType != 'OCO' ? 'col-12' : 'col-6'">
+                        <div class="form-row">
+                          <div class="col-12 col-md-4 text-left">
+                            <label for="inputBuyBTC" class="col-form-label"> Amount</label>
+                          </div>
+                          <div class="col-12 col-md-8 leftMargin">
+                            <div class="input-group">
+                              <input autocomplete="off" numeric numericType="decimal" class="stoploss-from-control form-control form-control-sm rounded" placeholder="0"
+                                [(ngModel)]="limitAmount" (keyup)="validateLimit();resetSlider();calculateLimitTotalFromAmount()" #bam="ngModel"
+                                [class.is-invalid]="bam.dirty&&bam.invalid" required appBuystoplimitdierctive [limit]="tradem">
+                              <div class="input-group-append">
+                                <div class="input-group-text bg-transparent border-0 text-white">{{selectedBuyingAssetText |
+                                  uppercase}}
+                                </div>
+                              </div>
+                            </div>
+                           </div>
+                        </div>
+                        <div class="form-row">
+                          <div class="col-12 col-md-4 text-left">
+                            <label for="inputBuyUSD" class="col-form-label">Price</label>
+                          </div>
+                          <div class="col-12 col-md-8 leftMargin">
+                            <div class="input-group">
+                            
+                              <input autocomplete="off" numeric numericType="decimal" class="stoploss-from-control form-control form-control-sm rounded"
+                                [(ngModel)]="limitPrice" placeholder="0" name="lpr" #lpr="ngModel" (keyup)="validateLimit();calculateAmountFromLimitForLimit('buy');"
+                                [class.is-invalid]="lpr.dirty&&limitPrice<0.00000001" required appBuystoplimitdierctive [limit]="tradep">
+                              <div class="input-group-append">
+                                <div class="input-group-text bg-transparent border-0 text-white">{{selectedSellingAssetText |
+                                  uppercase}}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-row">
+                          <div class="col-12 col-md-4 text-left">
+                            <label for="inputBuyUSD" class="col-form-label">Total Price</label>
+                          </div>
+                          <div class="col-12 col-md-8 leftMargin">
+                            <div class="input-group mb-2">
+                            
+                              <input autocomplete="off" type="text" numericType="decimal" class="stoploss-from-control form-control form-control-sm rounded"
+                                [(ngModel)]="limitValue" placeholder="0" (keyup)="calculateAmountFromTotalForLimit('buy',$event);resetSlider()" name="lval">
+                              <div class="input-group-append">
+        
+                                <div class="input-group-text bg-transparent border-0 text-white">{{selectedSellingAssetText |
+                                  uppercase}}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-row">
+                          <div class="col-12 col-md-4 text-left">
+                            <label for="inputBuyBTC" class="col-form-label"></label>
+                          </div>
+                          <div class="col-12 col-md-8 removePadding">
+                            <div class="input-group mb-2">
+                              <input type="range" class="form-range" value="0" min="0" max="4" step="1" id="customRange3" name="sliderValueBuy" (change)="getBuySliderValLimit($event)">
+  
+                              <!-- <input numeric numericType="decimal" class="form-control form-control-sm rounded"
+                                id="inputOnlyBuyTotalPrice" placeholder="0" [(ngModel)]="onlyBuyTotalPrice" disabled> -->
+                              <div class="input-group-append">
+                                <div class="input-group-text bg-transparent border-0 text-white"> {{sliderValueBuyLimit}}%
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          
+                        </div>
+                        </div>
+                        <div class="col-6" *ngIf="selectedOrderType == 'ICEBERG' || selectedOrderType == 'OCO'">
+                          <div class="form-row" *ngIf="selectedOrderType == 'ICEBERG'">
+                            <div class="col-12 col-md-4 text-left">
+                              <label for="inputBuyBTC" class="col-form-label">Disclosed</label>
+                            </div>
+                            <div class="col-12 col-md-8">
+                              <div class="input-group">
+                                <input autocomplete="off" numeric numericType="decimal" class="stoploss-from-control form-control form-control-sm rounded" placeholder="0"
+                                  [(ngModel)]="disclosedQuantity" (keyup)="validateLimit()" #bam="ngModel"
+                                  [class.is-invalid]="bam.dirty&&bam.invalid" required appBuystoplimitdierctive [limit]="tradem">
+                                <div class="input-group-append">
+                                  <div class="input-group-text bg-transparent border-0 text-white">{{selectedBuyingAssetText | uppercase}}
+                                  </div>
+                                </div>
+                              </div>
+                             </div>
+                          </div>
+                          <div class="form-row" *ngIf=" selectedOrderType == 'OCO'">
+                            <div class="col-12 col-md-4 text-left">
+                              <label for="inputBuyBTC" class="col-form-label"> Amount</label>
+                            </div>
+                            <div class="col-12 col-md-8">
+                              <div class="input-group">
+                                <input autocomplete="off" numeric numericType="decimal" class="stoploss-from-control form-control form-control-sm rounded" placeholder="0"
+                                  [(ngModel)]="limitAmountForOco" (keyup)="validateLimitExtra()" #bam="ngModel"
+                                  [class.is-invalid]="bam.dirty&&bam.invalid" required appBuystoplimitdierctive [limit]="tradem">
+                                <div class="input-group-append">
+                                  <div class="input-group-text bg-transparent border-0 text-white">{{selectedBuyingAssetText | uppercase}}
+                                  </div>
+                                </div>
+                              </div>
+                             </div>
+                          </div>
+                         
+                          <div class="form-row" *ngIf=" selectedOrderType == 'OCO'">
+                            <div class="col-12 col-md-4 text-left">
+                              <label for="inputBuyUSD" class="col-form-label">Price</label>
+                            </div>
+                            <div class="col-12 col-md-8">
+                              <div class="input-group">
+                              
+                                <input autocomplete="off" numeric numericType="decimal" class="stoploss-from-control form-control form-control-sm rounded"
+                                  [(ngModel)]="limitPriceForOco" placeholder="0" name="lpr" #lpr="ngModel" (keyup)="validateLimitExtra()"
+                                  [class.is-invalid]="lpr.dirty&&limitPriceForOco<0.00000001" required appBuystoplimitdierctive [limit]="tradep">
+                                <div class="input-group-append">
+                                  <div class="input-group-text bg-transparent border-0 text-white">{{selectedSellingAssetText | uppercase}}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="form-row" *ngIf=" selectedOrderType == 'OCO'">
+                            <div class="col-12 col-md-4 text-left">
+                              <label for="inputBuyUSD" class="col-form-label">Total Price</label>
+                            </div>
+                            <div class="col-12 col-md-8">
+                              <div class="input-group mb-2">
+                              
+                               <!--  <input autocomplete="off" type="text" numericType="decimal" class="form-control form-control-sm rounded"
+                                  [(ngModel)]="limitValue" placeholder="0" readonly name="lval" [value]="(limitPrice*limitAmount).toFixed(tradep)"> -->  <input autocomplete="off" type="text" numericType="decimal" class="form-control form-control-sm rounded"
+                                  [(ngModel)]="limitTotalForOco" placeholder="0" readonly name="lval" [value]="handleLimitTotalPriceExtra()" >
+                                <div class="input-group-append">
+          
+                                  <div class="input-group-text bg-transparent border-0 text-white">{{selectedSellingAssetText | uppercase}}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        </div>
+                        <div class="form-row mb-2 ">
+                          <div class="col-12 col-md-8 offset-md-4">
+                            <button type="button" id="mbuy" style="margin-top: -14px;" class="btn-green onlyBuyBtn btn" (click)="limitBuy()"
+                              [disabled]="bam.pristine || bam.invalid">BUY</button>
+        
+                          </div>
+                        </div>
+                        <span class="onlyBuyError text-red" style="display:none;font-size: 10px">*Orderbook depth reached, price not found .
+                        </span>
+                        <span class="onlyBuyError2 text-red" style="display:none;font-size: 10px">*Amount should be greater than 0.0001 .
+                        </span>
+                      </div>
+                    </ng-template>
+                  </ngb-tab>
+        
+                  <ngb-tab>
+                    <ng-template ngbTabTitle>
+                      <span (click)="sellReset();makeClassToggle(false)" class="text-left">Sell</span>
+                    </ng-template>
+                       <ng-template ngbTabContent>
+                      <div class="tab-pan-wrap" id="market-buy" role="tabpanel" aria-labelledby="market-buy-tab">
+                        <span class="balance_assets flimit_span">
+                          <span class="font-sm">{{selectedContractBalance}}<small *ngIf="selectedCrossRange == '1X'">
+                            {{selectedBuyingAssetText | uppercase}}</small>
+                        <small *ngIf="selectedCrossRange != '1X'">
+                            {{selectedSellingAssetText | uppercase}}</small></span>
+                          <span class="font-xs mr-1 deposit-withdraw-btn">
+                            <span class="diposit-hover">RECEIVE</span>
+                            <img src="./assets/img/pay.png" style="width: 20px;" routerLink="/my-wallet" />
+                          </span>
+        
+                          </span>
+                          <div class="row">
+                            <div [ngClass]="selectedOrderType != 'ICEBERG' && selectedOrderType != 'OCO' ? 'col-12' : 'col-6'">
+                              <div class="form-row">
+                                <div class="col-12 col-md-4 text-left">
+                                  <label for="inputBuyBTC" class="col-form-label"> Amount</label>
+                                </div>
+                                <div class="col-12 col-md-8 leftMargin">
+                                  <div class="input-group">
+                                    <input autocomplete="off" numeric numericType="decimal" class="stoploss-from-control form-control form-control-sm rounded" placeholder="0"
+                                      [(ngModel)]="limitAmount" (keyup)="validateLimit();resetSlider();calculateLimitTotalFromAmount()" #bam="ngModel"
+                                      [class.is-invalid]="bam.dirty&&bam.invalid" required appBuystoplimitdierctive [limit]="tradem">
+                                    <div class="input-group-append">
+                                      <div class="input-group-text bg-transparent border-0 text-white">{{selectedBuyingAssetText |
+                                        uppercase}}
+                                      </div>
+                                    </div>
+                                  </div>
+                                 </div>
+                              </div>
+                              <div class="form-row">
+                                <div class="col-12 col-md-4 text-left">
+                                  <label for="inputBuyUSD" class="col-form-label">Price</label>
+                                </div>
+                                <div class="col-12 col-md-8 leftMargin">
+                                  <div class="input-group">
+                                  
+                                    <input autocomplete="off" numeric numericType="decimal" class="stoploss-from-control form-control form-control-sm rounded"
+                                      [(ngModel)]="limitPrice" placeholder="0" name="lpr" #lpr="ngModel" (keyup)="validateLimit();calculateAmountFromLimitForLimit('sell');"
+                                      [class.is-invalid]="lpr.dirty&&limitPrice<0.00000001" required appBuystoplimitdierctive [limit]="tradep">
+                                    <div class="input-group-append">
+                                      <div class="input-group-text bg-transparent border-0 text-white">{{selectedSellingAssetText |
+                                        uppercase}}
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="form-row">
+                                <div class="col-12 col-md-4 text-left">
+                                  <label for="inputBuyUSD" class="col-form-label">Total Price</label>
+                                </div>
+                                <div class="col-12 col-md-8 leftMargin">
+                                  <div class="input-group mb-2">
+                                  
+                                    <input autocomplete="off" numeric numericType="decimal" class="stoploss-from-control form-control form-control-sm rounded"
+                                      [(ngModel)]="limitValue" placeholder="0" (keyup)="calculateAmountFromTotalForLimit('sell',$event);resetSlider()" name="lval" >
+                                    <div class="input-group-append">
+              
+                                      <div class="input-group-text bg-transparent border-0 text-white">{{selectedSellingAssetText |
+                                        uppercase}}
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="form-row">
+                                <div class="col-12 col-md-4 text-left">
+                                  <label for="inputBuyBTC" class="col-form-label"></label>
+                                </div>
+                                <div class="col-12 col-md-8 removePadding">
+                                  <div class="input-group mb-2">
+                                    <input type="range" class="form-range" value="0" min="0" max="4" step="1" id="customRange3" name="sliderValueBuy" (change)="getSellSliderValLimit($event)">
+        
+                                    <!-- <input numeric numericType="decimal" class="form-control form-control-sm rounded"
+                                      id="inputOnlyBuyTotalPrice" placeholder="0" [(ngModel)]="onlyBuyTotalPrice" disabled> -->
+                                    <div class="input-group-append">
+                                      <div class="input-group-text bg-transparent border-0 text-white"> {{sliderValueSellLimit}}%
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                
+                              </div>
+                            </div>
+                            <div class="col-6" *ngIf="selectedOrderType == 'ICEBERG' || selectedOrderType == 'OCO'">
+                              <div class="form-row" *ngIf="selectedOrderType == 'ICEBERG'">
+                                <div class="col-12 col-md-4 text-left">
+                                  <label for="inputBuyBTC" class="col-form-label">Disclosed</label>
+                                </div>
+                                <div class="col-12 col-md-8">
+                                  <div class="input-group">
+                                    <input autocomplete="off" numeric numericType="decimal" class="stoploss-from-control form-control form-control-sm rounded" placeholder="0"
+                                      [(ngModel)]="disclosedQuantity" (keyup)="validateLimit()" #bam="ngModel"
+                                      [class.is-invalid]="bam.dirty&&bam.invalid" required appBuystoplimitdierctive [limit]="tradem">
+                                    <div class="input-group-append">
+                                      <div class="input-group-text bg-transparent border-0 text-white">{{selectedBuyingAssetText | uppercase}}
+                                      </div>
+                                    </div>
+                                  </div>
+                                 </div>
+                              </div>
+                              <div class="form-row" *ngIf=" selectedOrderType == 'OCO'">
+                                <div class="col-12 col-md-4 text-left">
+                                  <label for="inputBuyBTC" class="col-form-label"> Amount</label>
+                                </div>
+                                <div class="col-12 col-md-8">
+                                  <div class="input-group">
+                                    <input autocomplete="off" numeric numericType="decimal" class="stoploss-from-control form-control form-control-sm rounded" placeholder="0"
+                                      [(ngModel)]="limitAmountForOco" (keyup)="validateLimitExtra()" #bam="ngModel"
+                                      [class.is-invalid]="bam.dirty&&bam.invalid" required appBuystoplimitdierctive [limit]="tradem">
+                                    <div class="input-group-append">
+                                      <div class="input-group-text bg-transparent border-0 text-white">{{selectedBuyingAssetText | uppercase}}
+                                      </div>
+                                    </div>
+                                  </div>
+                                 </div>
+                              </div>
+                             
+                              <div class="form-row" *ngIf=" selectedOrderType == 'OCO'">
+                                <div class="col-12 col-md-4 text-left">
+                                  <label for="inputBuyUSD" class="col-form-label">Price</label>
+                                </div>
+                                <div class="col-12 col-md-8">
+                                  <div class="input-group">
+                                  
+                                    <input autocomplete="off" numeric numericType="decimal" class="stoploss-from-control form-control form-control-sm rounded"
+                                      [(ngModel)]="limitPriceForOco" placeholder="0" name="lpr" #lpr="ngModel" (keyup)="validateLimitExtra()"
+                                      [class.is-invalid]="lpr.dirty&&limitPriceForOco<0.00000001" required appBuystoplimitdierctive [limit]="tradep">
+                                    <div class="input-group-append">
+                                      <div class="input-group-text bg-transparent border-0 text-white">{{selectedSellingAssetText | uppercase}}
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="form-row" *ngIf=" selectedOrderType == 'OCO'">
+                                <div class="col-12 col-md-4 text-left">
+                                  <label for="inputBuyUSD" class="col-form-label">Total Price</label>
+                                </div>
+                                <div class="col-12 col-md-8">
+                                  <div class="input-group mb-2">
+                                  
+                                   <!--  <input autocomplete="off" type="text" numericType="decimal" class="form-control form-control-sm rounded"
+                                      [(ngModel)]="limitValue" placeholder="0" readonly name="lval" [value]="(limitPrice*limitAmount).toFixed(tradep)"> -->  <input autocomplete="off" type="text" numericType="decimal" class="form-control form-control-sm rounded"
+                                      [(ngModel)]="limitTotalForOco" placeholder="0" readonly name="lval" [value]="handleLimitTotalPriceExtra()" >
+                                    <div class="input-group-append">
+              
+                                      <div class="input-group-text bg-transparent border-0 text-white">{{selectedSellingAssetText | uppercase}}
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        
+                        <div class="form-row mb-2 ">
+                          <div class="col-12 col-md-8 offset-md-4">
+                            <button type="button" id="msell" style="margin-top: -14px;" class="btn-red onlyBuyBtn btn" (click)="limitSell()" 
+                              [disabled]="bam.pristine || bam.invalid">SELL</button>
+        
+                          </div>
+                        </div>
+                        <span class="onlyBuyError text-red" style="display:none;font-size: 16px">*Orderbook depth reached, price not found
+                        </span>
+                          <span class="onlyBuyError2 text-red" style="display:none;font-size: 16px">*Amount should be greater than 0.0001 .
+                        </span>
+                      </div>
+                    </ng-template>
+                  </ngb-tab>
+                </ngb-tabset>
+              </ng-template>
+            </ngb-tab>
+            <ngb-tab>
+             <!--  <ng-template ngbTabTitle>
+                <h6 (click)="reset()">STOP-LIMIT</h6>
+              </ng-template> -->
+              <!-- <ng-template ngbTabContent>
+                <ngb-tabset type="pills">
+                  <ngb-tab>
+                    <ng-template ngbTabTitle>
+                      <span (click)="reset()" class="text-left">Buy</span>
+                    </ng-template>
+                    <ng-template ngbTabContent>
+                      <div class="tab-pan-wrap" id="market-buy" role="tabpanel" aria-labelledby="market-buy-tab">
+                        <span class="balance_assets">
+                          <span class="font-sm ">{{selelectedSellingAssetBalance}}<small> {{selectedSellingAssetText |
+                                uppercase}}</small>
+                          </span>
+                          <span class="font-xs mr-1 deposit-withdraw-btn" *ngIf="valid">
+                            <span class="diposit-hover">DEPOSIT</span>
+                            <img src="./assets/img/send.png" style="width: 20px;" routerLink="/deposit-funds" />
+        
+                          </span>
+                          <span class="font-xs mr-1 deposit-withdraw-btn" *ngIf="!valid">
+                            <span class="diposit-hover">RECEIVE</span>
+                            <img src="./assets/img/pay.png" style="width: 20px;" routerLink="/my-wallet" />
+                          </span>
+        
+                        </span>
+                        <div class="form-row">
+                          <div class="col-12 col-md-4 text-left">
+                            <label for="inputBuyBTC" class="col-form-label"> Amount</label>
+                          </div>
+                          <div class="col-12 col-md-8">
+                            <div class="input-group">
+                              <input autocomplete="off" numeric numericType="decimal" class="stoploss-from-control form-control form-control-sm rounded" placeholder="0"
+                                [(ngModel)]="stopLossQuantity" #bam="ngModel" pattern="\d+(\.\d{1,6})?" (keyup)="validateStoplossAmount()"
+                                [class.is-invalid]="bam.dirty&&bam.invalid" appBuystoplimitdierctive [limit]="tradem">
+        
+                              <div class="input-group-append">
+                                <div class="input-group-text bg-transparent border-0 text-white">{{selectedBuyingAssetText |
+                                  uppercase}}
+                                </div>
+                              </div>
+                            </div>
+                            <span class="text-danger" *ngIf="bam.dirty&&bam.invalid">Enter a valid amount</span>
+                          </div>
+                        </div>
+                        <div class="form-row">
+                          <div class="col-12 col-md-4 text-left">
+                            <label for="inputBuyUSD" class="col-form-label">Stop-limit Price</label>
+                          </div>
+                          <div class="col-12 col-md-8">
+                            <div class="input-group">
+                              <input autocomplete="off" numeric numericType="decimal" class="stoploss-from-control form-control form-control-sm rounded"
+                                id="stopLossPrice" placeholder="0" [(ngModel)]="stopLossPrice" (keyup)="nonNg($event);validateStoplossPrice();" name="b" appBuystoplimitdierctive [limit]="tradep"
+                                #b="ngModel" [class.is-invalid]="b.dirty&&b.invalid||stopLossPrice<0" required
+                                pattern="\d+(\.\d{1,8})?">
+        
+                              <div class="input-group-append">
+                                <div class="input-group-text bg-transparent border-0 text-white">{{selectedSellingAssetText |
+                                  uppercase}}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-row">
+                          <div class="col-12 col-md-4 text-left">
+                            <label for="inputBuyUSD" class="col-form-label">Trigger Price</label>
+                          </div>
+                          <div class="col-12 col-md-8">
+                            <div class="input-group mb-2">
+                              <input autocomplete="off" numeric numericType="decimal" class="stoploss-from-control form-control form-control-sm rounded"
+                                id="stopLossTriggerPrice" placeholder="0" [(ngModel)]="stopLossTriggerPrice"
+                                (keyup)="nonNg($event);validateStoplossTriggerPrice();" name="c" #c="ngModel" appBuystoplimitdierctive [limit]="tradep"
+                                [class.is-invalid]="c.dirty&&c.invalid||stopLossTriggerPrice<0" required
+                                pattern="\d+(\.\d{1,8})?">
+                              <div class="input-group-append">
+                                <div class="input-group-text bg-transparent border-0 text-white">{{selectedSellingAssetText |
+                                  uppercase}}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-row mb-2 ">
+                          <div class="col-12 col-md-8 offset-md-4">
+                            <button type="button" id="mbuy" style="margin-top: -14px;" class="btn-green onlyBuyBtn btn" (click)="buyStopLoss()"
+                              [disabled]="bam.pristine || bam.invalid">BUY</button>
+                          </div>
+                        </div>
+                        <span class=" text-red stopLossError" style="display:none;"> </span>
+                       
+                          <span class="onlyBuyError2 text-red" style="display:none;font-size: 16px">*Amount should be greater than 0.0001 .
+                        </span>
+                      </div>
+                    </ng-template>
+                  </ngb-tab>
+        
+                  <ngb-tab>
+                    <ng-template ngbTabTitle>
+                      <span (click)="reset()" class="text-left">Sell</span>
+                    </ng-template>
+                    <ng-template ngbTabContent>
+                      <div class="tab-pan-wrap" id="market-sell" role="tabpanel" aria-labelledby="market-sell-tab">
+                        <span class="balance_assets">
+                          <span class="font-sm">{{selectedContractBalance}}<small *ngIf="selectedCrossRange == '1X'">
+                            {{selectedBuyingAssetText | uppercase}}</small>
+                        <small *ngIf="selectedCrossRange != '1X'">
+                            {{selectedSellingAssetText | uppercase}}</small></span>
+                          <span class="font-xs mr-1 deposit-withdraw-btn">
+                            <span class="diposit-hover">RECEIVE</span>
+                            <img src="./assets/img/pay.png" style="width: 20px;" routerLink="/my-wallet" />
+                          </span>
+                        </span>
+        
+        
+                        <div class="form-row">
+                          <div class="col-12 col-md-4 text-left">
+                            <label for="inputSellBTC" class="col-form-label">Amount</label>
+                          </div>
+                          <div class="col-12 col-md-8">
+                            <div class="input-group">
+                              <input autocomplete="off" numeric numericType="decimal" class="stoploss-from-control form-control form-control-sm rounded" placeholder="0"
+                                [(ngModel)]="stopLossQuantity" #sam="ngModel" appBuystoplimitdierctive [limit]="tradem" (keyup)="validateStoplossAmount()"
+                                [class.is-invalid]="sam.dirty&&sam.invalid||stopLossQuantity<0">
+                              <div class="input-group-append">
+                                <div class="input-group-text bg-transparent border-0 text-white">{{selectedBuyingAssetText |
+                                  uppercase}}
+                                </div>
+                              </div>
+                            </div>
+                            <span class="text-danger" *ngIf="sam.dirty&&sam.invalid">Enter a valid amount</span>
+                          </div>
+                        </div>
+                        <div class="form-row">
+                          <div class="col-12 col-md-4 text-left">
+                            <label for="inputSellUSD" class="col-form-label">Stop-limit Price</label>
+                          </div>
+                          <div class="col-12 col-md-8">
+                            <div class="input-group">
+                              <input autocomplete="off" numeric numericType="decimal" class="stoploss-from-control form-control form-control-sm rounded"
+                                id="stopLossPrice" placeholder="0" [(ngModel)]="stopLossPrice" (keyup)="nonNg($event);validateStoplossPrice();" required
+                                pattern="\d+(\.\d{1,8})?" name="b" #b="ngModel" appBuystoplimitdierctive [limit]="tradep"
+                                [class.is-invalid]="b.dirty&&b.invalid||stopLossPrice<0">
+                              <div class="input-group-append">
+                                <div class="input-group-text bg-transparent border-0 text-white">{{selectedSellingAssetText |
+                                  uppercase}}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-row">
+                          <div class="col-12 col-md-4 text-left">
+                            <label for="inputSellUSD" class="col-form-label">Trigger Price</label>
+                          </div>
+                          <div class="col-12 col-md-8">
+                            <div class="input-group mb-2">
+                              <input autocomplete="off" numeric numericType="decimal" class="stoploss-from-control form-control form-control-sm rounded"
+                                id="stopLossTriggerPrice" placeholder="0" [(ngModel)]="stopLossTriggerPrice"
+                                (keyup)="nonNg($event);validateStoplossTriggerPrice();" name="c" #c="ngModel" appBuystoplimitdierctive [limit]="tradep"
+                                [class.is-invalid]="c.dirty&&c.invalid||stopLossTriggerPrice<0" required
+                                pattern="\d+(\.\d{1,8})?">
+                              <div class="input-group-append">
+                                <div class="input-group-text bg-transparent border-0 text-white">{{selectedSellingAssetText |
+                                  uppercase}}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-row mb-2">
+                          <div class="col-12 col-md-8 offset-md-4">
+                            <button numeric numericType="decimal" style="margin-top: -14px;" id="msell" class="btn-red onlySellBtn btn"
+                              (click)="sellStoploss()" [disabled]="sam.invalid || sam.pristine">SELL</button>
+                          </div>
+                        </div>
+                        <span class="text-red stopLossError" style="display:none;font-size: 6px;"> </span>
+                        <span class="onlyBuyError2 text-red" style="display:none;font-size: 16px">*Amount should be greater than 0.0001 .
+                        </span>
+                      </div>
+                    </ng-template>
+                  </ngb-tab>
+                </ngb-tabset>
+              </ng-template> -->
+             </ngb-tab>
+          </ngb-tabset>
+      </ng-template>
+    </div>
+    </ngb-tab>
+ 
+    <!--<ngb-tab id="margin">
+    
+      <ng-template ngbTabContent>
+        
+        <ngb-tabset type="pills">
+          <ngb-tab id="market">
+            <ng-template ngbTabTitle>
+              <h6 class="market-reset"> MARKET</h6>
+            </ng-template>
+            <ng-template ngbTabContent>
+              <ngb-tabset type="pills">
+                <ngb-tab>
+                  <ng-template ngbTabTitle>
+                    <span (click)="reset()" class="text-left">Buy</span>
+                  </ng-template>
+                  <ng-template ngbTabContent>
+                    <div class="tab-pan-wrap" id="market-buy" role="tabpanel" aria-labelledby="market-buy-tab">
+                      <span class="balance_assets">
+                        <span class="font-sm ">{{selelectedSellingAssetBalance}}<small> {{selectedSellingAssetText |
+                              uppercase}}</small>
+                        </span>
+                        <span class="font-xs mr-1 deposit-withdraw-btn" *ngIf="valid">
+                          <span class="diposit-hover">DEPOSIT</span>
+                          <img src="./assets/img/send.png" style="width: 20px;" routerLink="/deposit-funds" />
+      
+                        </span>
+                        <span class="font-xs mr-1 deposit-withdraw-btn" *ngIf="!valid">
+                          <span class="diposit-hover">RECEIVE</span>
+                          <img src="./assets/img/pay.png" style="width: 20px;" routerLink="/my-wallet" />
+                        </span>
+      
+                      </span>
+                      <div class="form-row">
+                        <div class="col-12 col-md-4 text-left">
+                          <label for="inputBuyBTC" class="col-form-label">Buying Amount</label>
+                        </div>
+                        <div class="col-12 col-md-8">
+                          <div class="input-group">
+                            
+                             
+                            <input autocomplete="off" numeric numericType="decimal" class="stoploss-from-control form-control form-control-sm rounded"
+                              id="inputOnlyBuyAmount" placeholder="0" [(ngModel)]="onlyBuyAmount" (keyup)="marginBuyVal($event);validatemarketbuy()"
+                              #bam="ngModel" [class.is-invalid]="bam.dirty&&bam.invalid" appBuystoplimitdierctive [limit]="tradem">
+                           
+                            <div class="input-group-append">
+                              <div class="input-group-text bg-transparent border-0 text-white">{{selectedBuyingAssetText}}
+                              </div>
+                            </div>
+                          </div>
+                          <span class="text-danger" *ngIf="bam.dirty&&bam.invalid">Enter a valid amount</span>
+                        </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="col-12 col-md-4 text-left">
+                          <label for="inputBuyUSD" class="col-form-label">Price</label>
+                        </div>
+                        <div class="col-12 col-md-8">
+                          <div class="input-group">
+                            <input autocomplete="off" numeric numericType="decimal" class="form-control form-control-sm rounded"
+                              id="inputOnlyBuyPrice" placeholder="0" [(ngModel)]="onlyBuyPrice" readonly>
+                            <div class="input-group-append">
+                              <div class="input-group-text bg-transparent border-0 text-white">{{selectedSellingAssetText}}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="col-12 col-md-4 text-left">
+                          <label for="inputBuyUSD" class="col-form-label">Total Price</label>
+                        </div>
+                        <div class="col-12 col-md-8">
+                          <div class="input-group mb-2">
+                            <input autocomplete="off" numeric numericType="decimal" class="form-control form-control-sm rounded"
+                              id="inputOnlyBuyTotalPrice" placeholder="0" [(ngModel)]="onlyBuyTotalPrice" disabled>
+                            <div class="input-group-append">
+                              <div class="input-group-text bg-transparent border-0 text-white">{{selectedSellingAssetText}}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-row mb-2 ">
+                        <div class="col-12 col-md-8 offset-md-4">
+                          <button type="button" id="marketbuy" style="margin-top: -14px;" class="btn-green onlyBuyBtn btn" (click)="marginMarketBuy()"
+                            [disabled]="bam.pristine || bam.invalid">BUY</button>
+                        </div>
+                      </div>
+                      <span class="onlyBuyError text-red" style="display:none;font-size: 16px">*Orderbook depth reached, price not found
+                      </span>
+                      <span class="marketbuyerror text-red" style="display:none;font-size: 16px">*Amount should be greater than 0.0001 
+                      </span>
+                    </div>
+                  </ng-template>
+      
+                </ngb-tab>
+      
+                <ngb-tab>
+                  <ng-template ngbTabTitle>
+                    <span (click)="reset()" class="text-left">Sell</span>
+                  </ng-template>
+                  <ng-template ngbTabContent>
+                    <div class="tab-pan-wrap" id="market-sell" role="tabpanel" aria-labelledby="market-sell-tab">
+                      <span class="balance_assets">
+                      <span class="font-sm">{{selelectedBuyingAssetBalance}}<small>
+                          {{selectedBuyingAssetText | uppercase}}</small></span>
+                      <span class="font-xs mr-1 deposit-withdraw-btn">
+                        <span class="diposit-hover">RECEIVE</span>
+                        <img src="./assets/img/pay.png" style="width: 20px;" routerLink="/my-wallet" />
+                      </span>
+                      </span>
+                      <div class="form-row">
+                        <div class="col-12 col-md-4 text-left">
+                          <label for="inputSellBTC" class="col-form-label">Selling Amount</label>
+                        </div>
+                        <div class="col-12 col-md-8">
+                          <div class="input-group">
+                            <input autocomplete="off" numeric numericType="decimal" class="stoploss-from-control form-control form-control-sm rounded"
+                              id="inputOnlySellAmount" placeholder="0" [(ngModel)]="onlySellAmount"
+                              (keyup)="marginSellVal($event);validatemarketsell()" #sam="ngModel" [class.is-invalid]="sam.dirty&&sam.invalid" appBuystoplimitdierctive [limit]="tradem">
+                            <div class="input-group-append">
+                              <div class="input-group-text bg-transparent border-0 text-white">{{selectedBuyingAssetText}}
+                              </div>
+                            </div>
+                          </div>
+                          <span class="text-danger" *ngIf="sam.dirty&&sam.invalid">Enter a valid amount</span>
+                        </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="col-12 col-md-4 text-left">
+                          <label for="inputSellUSD" class="col-form-label">Price</label>
+                        </div>
+                        <div class="col-12 col-md-8">
+                          <div class="input-group">
+                            <input autocomplete="off" numeric numericType="decimal" class="form-control form-control-sm rounded"
+                              id="inputOnlySellPrice" placeholder="0" [(ngModel)]="onlySellPrice" disabled>
+                            <div class="input-group-append">
+                              <div class="input-group-text bg-transparent border-0 text-white">{{selectedSellingAssetText}}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="col-12 col-md-4 text-left">
+                          <label for="inputSellUSD" class="col-form-label">Total Price</label>
+                        </div>
+                        <div class="col-12 col-md-8">
+                          <div class="input-group mb-2">
+                            <input autocomplete="off" numeric numericType="decimal" class="form-control form-control-sm rounded"
+                              id="inputOnlySellTotalPrice" placeholder="0" [(ngModel)]="onlySellTotalPrice" disabled>
+                            <div class="input-group-append">
+                              <div class="input-group-text bg-transparent border-0 text-white">{{selectedSellingAssetText}}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-row mb-2">
+                        <div class="col-12 col-md-8 offset-md-4">
+                          <button numeric numericType="decimal" style="margin-top: -14px;" id="marketsell" class="btn-red onlySellBtn btn"
+                            (click)="marginMarketSell()" [disabled]="sam.invalid || sam.pristine">SELL</button>
+                        </div>
+                      </div>
+                      <span class="onlyBuyError text-red" style="display:none;font-size: 16px">*Orderbook depth reached, price not found
+                      </span>
+                      <span class="marketsellerror text-red" style="display:none;font-size: 16px">*Amount should be greater than 0.0001 
+                      </span>
+                    </div>
+                  </ng-template>
+                </ngb-tab>
+      
+              </ngb-tabset>
+      
+            </ng-template>
+            </ngb-tab>
+            <ngb-tab id="limit">
+              <ng-template ngbTabTitle>
+                <h6 (click)="reset()" class="limit-reset">LIMIT</h6>
+              </ng-template>
+              <ng-template ngbTabContent>
+                <ngb-tabset type="pills">
+                  <ngb-tab>
+                    <ng-template ngbTabTitle>
+                      <span (click)="reset()" class="text-left">Buy</span>
+                    </ng-template>
+                    <ng-template ngbTabContent>
+                      <div class="tab-pan-wrap" id="market-buy" role="tabpanel" aria-labelledby="market-buy-tab">
+                        <span class="balance_assets">
+                          <span class="font-sm ">{{selelectedSellingAssetBalance}}<small> {{selectedSellingAssetText |
+                                uppercase}}</small>
+                          </span>
+                          <span class="font-xs mr-1 deposit-withdraw-btn" *ngIf="valid">
+                            <span class="diposit-hover">DEPOSIT</span>
+                            <img src="./assets/img/send.png" style="width: 20px;" routerLink="/deposit-funds" />
+        
+                          </span>
+                          <span class="font-xs mr-1 deposit-withdraw-btn" *ngIf="!valid">
+                            <span class="diposit-hover">RECEIVE</span>
+                            <img src="./assets/img/pay.png" style="width: 20px;" routerLink="/my-wallet" />
+                          </span>
+        
+                        </span>
+                        <div class="form-row">
+                          <div class="col-12 col-md-4 text-left">
+                            <label for="inputBuyBTC" class="col-form-label">Buying Amount</label>
+                          </div>
+                          <div class="col-12 col-md-8">
+                            <div class="input-group">
+                              <input autocomplete="off" numeric numericType="decimal" class="stoploss-from-control form-control form-control-sm rounded" placeholder="0"
+                                [(ngModel)]="limitAmount" (keyup)="validateLimit()" #bam="ngModel"
+                                [class.is-invalid]="bam.dirty&&bam.invalid" required appBuystoplimitdierctive [limit]="tradem">
+                              <div class="input-group-append">
+                                <div class="input-group-text bg-transparent border-0 text-white">{{selectedBuyingAssetText}}
+                                </div>
+                              </div>
+                            </div>
+                           </div>
+                        </div>
+                        <div class="form-row">
+                          <div class="col-12 col-md-4 text-left">
+                            <label for="inputBuyUSD" class="col-form-label">Price</label>
+                          </div>
+                          <div class="col-12 col-md-8">
+                            <div class="input-group">
+                            
+                              <input autocomplete="off" numeric numericType="decimal" class="stoploss-from-control form-control form-control-sm rounded"
+                                [(ngModel)]="limitPrice" placeholder="0" name="lpr" #lpr="ngModel" (keyup)="validateLimit()"
+                                [class.is-invalid]="lpr.dirty&&limitPrice<0.00000001" required appBuystoplimitdierctive [limit]="tradep">
+                              <div class="input-group-append">
+                                <div class="input-group-text bg-transparent border-0 text-white">{{selectedSellingAssetText}}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-row">
+                          <div class="col-12 col-md-4 text-left">
+                            <label for="inputBuyUSD" class="col-form-label">Total Price</label>
+                          </div>
+                          <div class="col-12 col-md-8">
+                            <div class="input-group mb-2">
+                            
+                              <input autocomplete="off" type="text" numericType="decimal" class="form-control form-control-sm rounded"
+                                [(ngModel)]="limitValue" placeholder="0" readonly name="lval" [value]="(limitPrice*limitAmount).toFixed(tradep)">
+                              <div class="input-group-append">
+        
+                                <div class="input-group-text bg-transparent border-0 text-white">{{selectedSellingAssetText}}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-row mb-2 ">
+                          <div class="col-12 col-md-8 offset-md-4">
+                            <button type="button" id="mbuy" style="margin-top: -14px;" class="btn-green onlyBuyBtn btn" (click)="marginLimitBuy()"
+                              [disabled]="bam.pristine || bam.invalid">BUY</button>
+        
+                          </div>
+                        </div>
+                        <span class="onlyBuyError text-red" style="display:none;font-size: 10px">*Orderbook depth reached, price not found .
+                        </span>
+                        <span class="onlyBuyError2 text-red" style="display:none;font-size: 10px">*Amount should be greater than 0.0001 .
+                        </span>
+                      </div>
+                    </ng-template>
+                  </ngb-tab>
+        
+                  <ngb-tab>
+                    <ng-template ngbTabTitle>
+                      <span (click)="reset()" class="text-left">Sell</span>
+                    </ng-template>
+                       <ng-template ngbTabContent>
+                      <div class="tab-pan-wrap" id="market-buy" role="tabpanel" aria-labelledby="market-buy-tab">
+                        <span class="balance_assets">
+                          <span class="font-sm">{{selelectedBuyingAssetBalance}}<small>
+                              {{selectedBuyingAssetText | uppercase}}</small></span>
+                          <span class="font-xs mr-1 deposit-withdraw-btn">
+                            <span class="diposit-hover">RECEIVE</span>
+                            <img src="./assets/img/pay.png" style="width: 20px;" routerLink="/my-wallet" />
+                          </span>
+        
+                          </span>
+                        <div class="form-row">
+                          <div class="col-12 col-md-4 text-left">
+                            <label for="inputBuyBTC" class="col-form-label">Selling Amount</label>
+                          </div>
+                          <div class="col-12 col-md-8">
+                            <div class="input-group">
+                              <input autocomplete="off" numeric numericType="decimal" class="stoploss-from-control form-control form-control-sm rounded" placeholder="0"
+                                [(ngModel)]="limitAmount" (keyup)="validateLimit()" #bam="ngModel"
+                                [class.is-invalid]="bam.dirty&&bam.invalid" required appBuystoplimitdierctive [limit]="tradem">
+                              <div class="input-group-append">
+                                <div class="input-group-text bg-transparent border-0 text-white">{{selectedBuyingAssetText}}
+                                </div>
+                              </div>
+                            </div>
+                           </div>
+                        </div>
+                        <div class="form-row">
+                          <div class="col-12 col-md-4 text-left">
+                            <label for="inputBuyUSD" class="col-form-label">Price</label>
+                          </div>
+                          <div class="col-12 col-md-8">
+                            <div class="input-group">
+                            
+                              <input autocomplete="off" numeric numericType="decimal" class="stoploss-from-control form-control form-control-sm rounded"
+                                [(ngModel)]="limitPrice" placeholder="0" name="lpr" #lpr="ngModel" (keyup)="validateLimit()"
+                                [class.is-invalid]="lpr.dirty&&limitPrice<0.00000001" required appBuystoplimitdierctive [limit]="tradep">
+                              <div class="input-group-append">
+                                <div class="input-group-text bg-transparent border-0 text-white">{{selectedSellingAssetText}}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-row">
+                          <div class="col-12 col-md-4 text-left">
+                            <label for="inputBuyUSD" class="col-form-label">Total Price</label>
+                          </div>
+                          <div class="col-12 col-md-8">
+                            <div class="input-group mb-2">
+                            
+                              <input autocomplete="off" numeric numericType="decimal" class="form-control form-control-sm rounded"
+                                [(ngModel)]="limitValue" placeholder="0" readonly name="lval" [value]="(limitPrice*limitAmount).toFixed(tradep)">
+                              <div class="input-group-append">
+        
+                                <div class="input-group-text bg-transparent border-0 text-white">{{selectedSellingAssetText}}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-row mb-2 ">
+                          <div class="col-12 col-md-8 offset-md-4">
+                            <button type="button" id="msell" style="margin-top: -14px;" class="btn-red onlyBuyBtn btn" (click)="marginLimitSell()" 
+                              [disabled]="bam.pristine || bam.invalid">SELL</button>
+        
+                          </div>
+                        </div>
+                        <span class="onlyBuyError text-red" style="display:none;font-size: 16px">*Orderbook depth reached, price not found
+                        </span>
+                          <span class="onlyBuyError2 text-red" style="display:none;font-size: 16px">*Amount should be greater than 0.0001 .
+                        </span>
+                      </div>
+                    </ng-template>
+                  </ngb-tab>
+                </ngb-tabset>
+              </ng-template>
+            </ngb-tab>
+            <ngb-tab>
+              <ng-template ngbTabTitle>
+                <h6 (click)="reset()">STOP-LIMIT</h6>
+              </ng-template>
+              <ng-template ngbTabContent>
+                <ngb-tabset type="pills">
+                  <ngb-tab>
+                    <ng-template ngbTabTitle>
+                      <span (click)="reset()" class="text-left">Buy</span>
+                    </ng-template>
+                    <ng-template ngbTabContent>
+                      <div class="tab-pan-wrap" id="market-buy" role="tabpanel" aria-labelledby="market-buy-tab">
+                        <span class="balance_assets">
+                          <span class="font-sm ">{{selelectedSellingAssetBalance}}<small> {{selectedSellingAssetText |
+                                uppercase}}</small>
+                          </span>
+                          <span class="font-xs mr-1 deposit-withdraw-btn" *ngIf="valid">
+                            <span class="diposit-hover">DEPOSIT</span>
+                            <img src="./assets/img/send.png" style="width: 20px;" routerLink="/deposit-funds" />
+        
+                          </span>
+                          <span class="font-xs mr-1 deposit-withdraw-btn" *ngIf="!valid">
+                            <span class="diposit-hover">RECEIVE</span>
+                            <img src="./assets/img/pay.png" style="width: 20px;" routerLink="/my-wallet" />
+                          </span>
+        
+                        </span>
+                        <div class="form-row">
+                          <div class="col-12 col-md-4 text-left">
+                            <label for="inputBuyBTC" class="col-form-label"> Amount</label>
+                          </div>
+                          <div class="col-12 col-md-8">
+                            <div class="input-group">
+                              <input autocomplete="off" numeric numericType="decimal" class="stoploss-from-control form-control form-control-sm rounded" placeholder="0"
+                                [(ngModel)]="stopLossQuantity" #bam="ngModel" pattern="\d+(\.\d{1,6})?" (keyup)="validateStoplossAmount()"
+                                [class.is-invalid]="bam.dirty&&bam.invalid" appBuystoplimitdierctive [limit]="tradem">
+        
+                              <div class="input-group-append">
+                                <div class="input-group-text bg-transparent border-0 text-white">{{selectedBuyingAssetText}}
+                                </div>
+                              </div>
+                            </div>
+                            <span class="text-danger" *ngIf="bam.dirty&&bam.invalid">Enter a valid amount</span>
+                          </div>
+                        </div>
+                        <div class="form-row">
+                          <div class="col-12 col-md-4 text-left">
+                            <label for="inputBuyUSD" class="col-form-label">Stop-limit Price</label>
+                          </div>
+                          <div class="col-12 col-md-8">
+                            <div class="input-group">
+                              <input autocomplete="off" numeric numericType="decimal" class="stoploss-from-control form-control form-control-sm rounded"
+                                id="stopLossPrice" placeholder="0" [(ngModel)]="stopLossPrice" (keyup)="nonNg($event);validateStoplossPrice();" name="b" appBuystoplimitdierctive [limit]="tradep"
+                                #b="ngModel" [class.is-invalid]="b.dirty&&b.invalid||stopLossPrice<0" required
+                                pattern="\d+(\.\d{1,8})?">
+        
+                              <div class="input-group-append">
+                                <div class="input-group-text bg-transparent border-0 text-white">{{selectedSellingAssetText}}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-row">
+                          <div class="col-12 col-md-4 text-left">
+                            <label for="inputBuyUSD" class="col-form-label">Trigger Price</label>
+                          </div>
+                          <div class="col-12 col-md-8">
+                            <div class="input-group mb-2">
+                              <input autocomplete="off" numeric numericType="decimal" class="stoploss-from-control form-control form-control-sm rounded"
+                                id="stopLossTriggerPrice" placeholder="0" [(ngModel)]="stopLossTriggerPrice"
+                                (keyup)="nonNg($event);validateStoplossTriggerPrice();" name="c" #c="ngModel" appBuystoplimitdierctive [limit]="tradep"
+                                [class.is-invalid]="c.dirty&&c.invalid||stopLossTriggerPrice<0" required
+                                pattern="\d+(\.\d{1,8})?">
+                              <div class="input-group-append">
+                                <div class="input-group-text bg-transparent border-0 text-white">{{selectedSellingAssetText}}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-row mb-2 ">
+                          <div class="col-12 col-md-8 offset-md-4">
+                            <button type="button" id="mbuy" style="margin-top: -14px;" class="btn-green onlyBuyBtn btn" (click)="buyStopLoss()"
+                              [disabled]="bam.pristine || bam.invalid">BUY</button>
+                          </div>
+                        </div>
+                        <span class=" text-red stopLossError" style="display:none;"> </span>
+                        
+                          <span class="onlyBuyError2 text-red" style="display:none;font-size: 16px">*Amount should be greater than 0.0001 .
+                        </span>
+                      </div>
+                    </ng-template>
+                  </ngb-tab>
+        
+                  <ngb-tab>
+                    <ng-template ngbTabTitle>
+                      <span (click)="reset()" class="text-left">Sell</span>
+                    </ng-template>
+                    <ng-template ngbTabContent>
+                      <div class="tab-pan-wrap" id="market-sell" role="tabpanel" aria-labelledby="market-sell-tab">
+                        <span class="balance_assets">
+                          <span class="font-sm">{{selelectedBuyingAssetBalance}}<small>
+                              {{selectedBuyingAssetText | uppercase}}</small></span>
+                          <span class="font-xs mr-1 deposit-withdraw-btn">
+                            <span class="diposit-hover">RECEIVE</span>
+                            <img src="./assets/img/pay.png" style="width: 20px;" routerLink="/my-wallet" />
+                          </span>
+                        </span>
+        
+        
+                        <div class="form-row">
+                          <div class="col-12 col-md-4 text-left">
+                            <label for="inputSellBTC" class="col-form-label">Amount</label>
+                          </div>
+                          <div class="col-12 col-md-8">
+                            <div class="input-group">
+                              <input autocomplete="off" numeric numericType="decimal" class="stoploss-from-control form-control form-control-sm rounded" placeholder="0"
+                                [(ngModel)]="stopLossQuantity" #sam="ngModel" appBuystoplimitdierctive [limit]="tradem" (keyup)="validateStoplossAmount()"
+                                [class.is-invalid]="sam.dirty&&sam.invalid||stopLossQuantity<0">
+                              <div class="input-group-append">
+                                <div class="input-group-text bg-transparent border-0 text-white">{{selectedBuyingAssetText}}
+                                </div>
+                              </div>
+                            </div>
+                            <span class="text-danger" *ngIf="sam.dirty&&sam.invalid">Enter a valid amount</span>
+                          </div>
+                        </div>
+                        <div class="form-row">
+                          <div class="col-12 col-md-4 text-left">
+                            <label for="inputSellUSD" class="col-form-label">Stop-limit Price</label>
+                          </div>
+                          <div class="col-12 col-md-8">
+                            <div class="input-group">
+                              <input autocomplete="off" numeric numericType="decimal" class="stoploss-from-control form-control form-control-sm rounded"
+                                id="stopLossPrice" placeholder="0" [(ngModel)]="stopLossPrice" (keyup)="nonNg($event);validateStoplossPrice();" required
+                                pattern="\d+(\.\d{1,8})?" name="b" #b="ngModel" appBuystoplimitdierctive [limit]="tradep"
+                                [class.is-invalid]="b.dirty&&b.invalid||stopLossPrice<0">
+                              <div class="input-group-append">
+                                <div class="input-group-text bg-transparent border-0 text-white">{{selectedSellingAssetText}}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-row">
+                          <div class="col-12 col-md-4 text-left">
+                            <label for="inputSellUSD" class="col-form-label">Trigger Price</label>
+                          </div>
+                          <div class="col-12 col-md-8">
+                            <div class="input-group mb-2">
+                              <input autocomplete="off" numeric numericType="decimal" class="stoploss-from-control form-control form-control-sm rounded"
+                                id="stopLossTriggerPrice" placeholder="0" [(ngModel)]="stopLossTriggerPrice"
+                                (keyup)="nonNg($event);validateStoplossTriggerPrice();" name="c" #c="ngModel" appBuystoplimitdierctive [limit]="tradep"
+                                [class.is-invalid]="c.dirty&&c.invalid||stopLossTriggerPrice<0" required
+                                pattern="\d+(\.\d{1,8})?">
+                              <div class="input-group-append">
+                                <div class="input-group-text bg-transparent border-0 text-white">{{selectedSellingAssetText}}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-row mb-2">
+                          <div class="col-12 col-md-8 offset-md-4">
+                            <button numeric numericType="decimal" style="margin-top: -14px;" id="msell" class="btn-red onlySellBtn btn"
+                              (click)="sellStoploss()" [disabled]="sam.invalid || sam.pristine">SELL</button>
+                          </div>
+                        </div>
+                        <span class="text-red stopLossError" style="display:none;font-size: 6px;"> </span>
+                        <span class="onlyBuyError2 text-red" style="display:none;font-size: 16px">*Amount should be greater than 0.0001 .
+                        </span>
+                      </div>
+                    </ng-template>
+                  </ngb-tab>
+                </ngb-tabset>
+              </ng-template>
+             </ngb-tab>
+          </ngb-tabset>
+      </ng-template>
+    </ngb-tab>-->
+ 
+ </ngb-tabset>
+  
+
+     </div>
+
+
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Warning</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p class="text-danger">Please note - you will not be able to place offers without valid KYC.
+      Please upload relevant documents. If you think you are seeing as an error, please send an email to
+      contactus@paybito.com with subject line - "KYC Request".</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modal.close()">Ok</button>
+  </div>
+</ng-template>
+<ng-template #leverageCrossModal let-modal>
+  <div [ngClass]="Themecolor == 'Dark' ? 'dark-modal' : 'lightTheme'" class="modal-header" style="">
+    <h6 class="modal-title" id="modal-basic-title">{{selectedAssetForLeverage}} Margin Mode</h6>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div [ngClass]="Themecolor == 'Dark' ? 'dark-modal' : 'lightTheme'" class="modal-body " style="">
+    <div class="row text-center">
+      <div class="col-md-1"></div>
+      <button type="button" class=" margin-btn  col-md-5 ml-2" (click)="handleSelectLeverageMarginType(2)">
+        <i class="fa fa-check-circle" aria-hidden="true" *ngIf="selectedLeverageMarginType == 2"></i> Cross</button>
+      <button type="button" class=" margin-btn  col-md-5 ml-2" (click)="handleSelectLeverageMarginType(1)">
+        <i class="fa fa-check-circle" aria-hidden="true" *ngIf="selectedLeverageMarginType == 1"></i> Isolated</button>
+      <div class="col-md-1"></div>
+    </div>
+    <div class="row mt-3 text-center">
+      <p class="col-md-12" [ngClass]="Themecolor == 'Dark' ? 'white-texts' : 'text-black'">Switching the margin mode only apply it to the selected contract</p>
+    </div>
+    <div class="row">
+      <div class="col-md-2"></div>
+      <button class="confirm-btn col-md-8" (click)="modal.dismiss()"> Confirm</button>
+      <div class="col-md-2"></div>
+    </div>
+    <div class="row mt-3 text-left">
+      <p class="col-md-12" [ngClass]="Themecolor == 'Dark' ? 'white-texts' : 'text-black'" style="font-size: 19px;">What are Cross and Isolated modes?</p>
+      <p class="col-md-12" [ngClass]="Themecolor == 'Dark' ? 'grey-texts' : 'text-black'"><span [ngClass]="Themecolor == 'Dark' ? 'white-texts' : 'text-black'" style="font-size: 19px;">Cross Margin Mode : </span> All cross positions
+        under the same margin asset share the same asset cross margin balance. In the event of liquidation, your assets
+        full margin balance along with any remaining open positions under the asset may be forfeited.</p>
+      <p class="col-md-12" [ngClass]="Themecolor == 'Dark' ? 'grey-texts' : 'text-black'"><span [ngClass]="Themecolor == 'Dark' ? 'white-texts' : 'text-black'" style="font-size: 19px;">Isolated Margin Mode : </span> Manage your risk
+        on individual positions by restricting the amount of margin allocated to each. If the margin ratio of a position
+        reached 100% the position will be liquidated. Margin can be added or removed to positions using this mode.</p>
+    </div>
+
+  </div>
+
+</ng-template>
+<ng-template #leverageXModal let-modal>
+  <div [ngClass]="Themecolor == 'Dark' ? 'dark-modal' : 'lightTheme'" class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Adjust Leverage</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div [ngClass]="Themecolor == 'Dark' ? 'dark-modal' : 'lightTheme'" class="modal-body" >
+    <form class="needs-validation" novalidate>
+      <div class="form-row">
+        <div class="col-md-12 mb-3">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text text-center mr-2" id="validationTooltipUsernamePrepend"
+                (click)="toggleCrossRange(-1)" style="background: #717782;border: #717782;color: #fff;"><i class="fa fa-minus" aria-hidden="true" style="margin-left: 9px;"></i></span>
+            </div>
+            <input autocomplete="off" type="text" class="form-control" id="validationTooltipUsername"
+              aria-describedby="validationTooltipUsernamePrepend" disabled [ngModel]="baseLeverage"
+              name="baseLeverage" style="text-align: center;font-size: 25px;background: #717782;border: #717782;">
+            <div class="input-group-append">
+              <span class="input-group-text text-center ml-2" id="validationTooltipUsernamePrepend"
+                (click)="toggleCrossRange(0)" style="background: #717782;border: #717782;color: #fff;"> <i class="fa fa-plus" aria-hidden="true" style="margin-left: 9px;"></i> </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+    <div class="row mt-3">
+      <div class="col-md-12">
+       
+        <form class="row">
+          <div class="col-md-2" style="text-align: right;margin: 10px 0 0 0;color: #fff;font-size: larger;">{{crossRange[0]}}</div>
+          <div class="slider col-md-8">
+            <input autocomplete="off" id="range" name="range" type="range" [min]="crossRange[0].slice(0, -1)" [max]="crossRange[crossRange.length-1].slice(0, -1)" steps="1"
+            [ngModel]="baseRangeLeverage" name="baseRangeLeverage"
+            (change)="handleRangeSliderValue($event.target.value)" />
+          </div>
+          <div class="col-md-2" style="margin: 10px 0 0 0;color: #fff;font-size: larger;">{{crossRange[crossRange.length-1]}}</div>
+        </form>
+        <div class="row">
+          <div class="col-md-4"></div>
+          <div class="input-group mb-3 ml-3 col-md-4">
+            <input autocomplete="off" type="number"[min]="crossRange[0].slice(0, -1)" [max]="crossRange[crossRange.length-1].slice(0, -1)" class="form-control" name="inputval" [(ngModel)]="baseInputLeverage" (keyup)="handleRangeSliderByInput($event)" [ngClass]="Themecolor == 'Dark' ? 'leverageBox-dark' : 'leverageBox-light'" style="text-align: center;font-size: 21px;margin-right: -18px;border-radius: 5px;"><span style="margin: 4px 40px 0px 22px;font-size: 21px;">X</span>
+          </div>
+          <div class="col-md-4"></div>
+        </div>
+        <div class="row mt-3">
+          <div class="col-md-4"></div>
+          <button class="col-md-4 confirm-btn" (click)="handleConfirmBtn();modal.dismiss()" > Confirm</button>
+          <div class="col-md-4"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</ng-template>

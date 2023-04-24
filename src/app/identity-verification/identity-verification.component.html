@@ -1,0 +1,745 @@
+<app-navbar (themeChanged)="themeChangedHandler($event)"></app-navbar>
+<!-- <app-loader></app-loader> -->
+<div class="content-wrapper pt-0 pl-3" [ngClass]="Themecolor == 'Dark' ? '' : 'content-wrapper-light'">
+  <div>
+    <div class="row d-flex section-position" data-ng-init="loginDuration();" data-ng-controller="identityCtrl" *ngIf="main.userDocStatus != null && main.userDocStatus != '' && main.userDocStatus != '2'">
+      <div class="col-md-12 col-12 mt-3 align-self-stretch">
+        <div class="p-2 rounded h-100" [ngClass]="Themecolor == 'Dark' ? 'bg-dark' : 'bg-light'">
+          <span class="font-md mr-2 pl-3" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Identity Verification (Tier 2)</span>
+          <div style="top: 11px; left: 284px; position: absolute">
+            <div class="icon-section pull-left">
+              <i class="fa fa-info-circle" aria-hidden="true" (click)="data.handleInfoSection('tier2Info')"></i>
+            </div>
+            <div class="info-section" id="tier2Info" style="display: none; left: 94px; top: 155px">
+              <div class="info-header">
+                <div class="info-title">Identity Verification Tier 2</div>
+                <div class="info-close">
+                  <i class="fa fa-times" aria-hidden="true" (click)="data.handleInfoSection('tier2Info')"></i>
+                </div>
+              </div>
+              <div class="info-body">Submit ID proof Address proof and Profile photo for tier 2 verification. After submitting tier 2 document there will be open another section for Tier 3</div>
+            </div>
+          </div>
+          <span class="font-bold mr-2 pl-3" style="color: #d6a32d">{{ main.indentificationStatus }}</span>
+          <form id="id_form">
+            <div class="row mt-3">
+              <div class="col-md-6 d-flex identitity-alighnment">
+                <div class="form-row identity-verify" [ngClass]="Themecolor == 'Dark' ? '' : 'bg-light-identity-verify'">
+                  <label for="profile_photo" class="image-modification" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Profile Photo</label>
+                  <!-- <div class="w-100"></div> -->
+                  
+                  <input type="file" id="file1" (change)="getSizePp('file1')" class="form-control w-75 id_file profile_pic" [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'" name="profile_pic" />
+                  <!-- <img id="profile_photo" src="./assets/img/default.png" [lazyLoad]="main.profilePic"
+                  alt="Cancelled Cheque Copy" class="ml-2 profile-picture p-2 bg-black rounded" width="96" height="96" /> -->
+                  
+                   <small id="ppname" class="pp-ht" style="color:rgb(119 176 228);   border: 1px solid;
+                   padding: 8px;" *ngIf="ppname"><span>&#9989;</span> Uploaded file is {{profiilepic}}.</small>
+                   
+                  
+               
+                  <small style=" margin-top: 33px !important; font-size: 12px !important; font-family: Verdana !important;" [ngClass]="Themecolor == 'Dark' ? 'spanText-dark' : 'spanText-light'">Please  upload a photo without wearing any hats, masks or glasses and holding your ID Proof, Address Proof Document and a sheet of Paper with the Text - 'Only for trading cryptocurrencies on {{data.exchange}}.' Ensure all documents are clearly visible in photo.</small>
+      
+                </div>
+              </div>
+
+              <div class="col-md-6 d-flex" >
+                <div class="form-row identity-verify" *ngIf="main.userDocStatus != '0'" [ngClass]="Themecolor == 'Dark' ? '' : 'bg-light-identity-verify'">
+                  <label for="aadhar_card_back_side" class="image-modification" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Address Proof</label>
+                  <!-- <div class="w-100"></div> -->
+                  <input type="file" id="file2" (change)="getSize('file2')" class="form-control w-75 id_file aadhar_card_back_side back-side-addressproof" [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'" name="aadhar_card_back_side" />
+                  <!--  <img id="aadhar_card_back_side" src="./assets/img/default.png" [lazyLoad]="aadharCardBack"
+                  alt="Cancelled Cheque Copy" class="ml-2 profile-picture profile-picture-addressproof p-2 bg-black rounded" width="96" height="96" /> -->
+                   <small id="adddoc" class="pp-ht1" style="color:rgb(119 176 228);  border: 1px solid;padding: 8px;" *ngIf="adddoc"><span>&#9989;</span> Uploaded file is {{addressproof}}.</small>
+                   <br>
+                  <small style="margin-top: 32px !important; font-size: 12px !important; font-family: Verdana !important;" [ngClass]="Themecolor == 'Dark' ? 'spanText-dark' : 'spanText-light'">Please provide a recent Utility Bill or Bank Account Statement from within the last three months. Please do not submit Credit card bill.</small>
+                </div>
+              </div>
+
+              <div class="col-md-6 d-flex identitity-alighnment" *ngIf="main.userDocStatus != '0'">
+                <div class="form-row identity-verify" [ngClass]="Themecolor == 'Dark' ? '' : 'bg-light-identity-verify'">
+                  <label for="pan_card_photo" class="image-alighnment" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">ID Proof Front</label>
+                  <!-- <div class="w-100"></div> -->
+                  <input type="file" id="file3" (change)="getSize('file3')" class="form-control id_file w-75 pan_card_pic" [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'" name="pan_card_pic" autofocus />
+                  <!--  <img id="pan_card_photo" src="./assets/img/default.png" [lazyLoad]="panCardPic"
+                  alt="Cancelled Cheque Copy" class="ml-2 p-2 bg-black profile-picture rounded" width="96" height="96" /> -->
+                   <small id="iddocf" class="pp-ht2" style="color:rgb(119 176 228);  border: 1px solid;
+                   padding: 4px;
+                   " *ngIf="iddocf"><span>&#9989;</span> Uploaded file is {{idf}}.</small>
+                  <small style="margin-top: 30px !important; font-size: 12px !important; font-family:Verdana !important;" [ngClass]="Themecolor == 'Dark' ? 'spanText-dark' : 'spanText-light'">Only government issued documents such as Driver's license, Identity Cards, etc, are applicable.</small>
+                </div>
+              </div>
+
+              <div class="col-md-6 d-flex" *ngIf="main.userDocStatus != '0'">
+                <div class="form-row identity-verify" [ngClass]="Themecolor == 'Dark' ? '' : 'bg-light-identity-verify'">
+                  <label for="aadhar_card_front_side" class="image-alighnment" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">ID Proof Back</label>
+                  <!-- <div class="w-100"></div> -->
+                  <input type="file" id="file4" (change)="getSize('file4')" class="form-control w-75 id_file aadhar_card_front_side" [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'" name="aadhar_card_front_side" />
+                  <!--  <img id="aadhar_card_front_side" src="./assets/img/default.png" [lazyLoad]="aadharCardFront"
+                  alt="Cancelled Cheque Copy" class="ml-2 p-2 profile-picture bg-black rounded" width="96" height="96" /> -->
+                   <small id="iddocb" class="pp-ht3" style="color:rgb(119 176 228);  border: 1px solid;padding: 4px;" *ngIf="iddocb"><span>&#9989;</span> Uploaded file is {{idb}}.</small>
+                  <small style="margin-top: 30px !important; font-size: 12px !important; font-family: Verdana !important;" [ngClass]="Themecolor == 'Dark' ? 'spanText-dark' : 'spanText-light'">Only government issued documents such as Driver's license, Identity Cards, etc, are applicable.</small>
+                </div>
+              </div>
+
+                 <!-- tire 2 DOB -->
+
+            <div class="col-md-6 d-flex" style="padding-right: 5px" *ngIf="main.userDocStatus != '0'">
+              <div class="form-row identity-verify" [ngClass]="Themecolor == 'Dark' ? '' : 'bg-light-identity-verify'">
+                <label for="aadhar_card_front_side" class=" ddmmyy" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Date of Birth(MM/DD/YYYY)</label>
+                <!-- <div class="w-100"></div> -->
+                <div class="w-100"></div>
+                <div class="row dateofbirth">
+                <input
+                  type="text"
+                  id="month"
+                  maxlength="2"
+                  placeholder="MM"
+                  name="month"
+                  [(ngModel)]="month"
+                  (change)="monthvalidation()"
+                  
+                  class="form-control id_file form-group col-md-1 monthField"
+                  [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'"
+                  value="{{ month }}"
+                  oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+                />
+                &nbsp; &nbsp; 
+
+                <input
+                  type="text"
+                  id="date"
+                  maxlength="2"
+                  placeholder="DD"
+                  name="date"
+                  [(ngModel)]="date"
+                  (change)="datevalidation()"
+                  class="form-control id_file form-group col-md-1"
+                  [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'"
+                  oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+                />
+                &nbsp; &nbsp; 
+
+                <input
+                  type="text"
+                  id="year"
+                  maxlength="4"
+                  placeholder="YYYY"
+                  name="year"
+                  [(ngModel)]="year"
+                  (change)="yearvalidation()"
+                  class="form-control id_file form-group col-md-2"
+                  [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'"
+                  oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+                />
+              </div>
+              <!-- <div class="row smalldate"> -->
+                <!-- <p> -->
+                <small class="smalldate" style="font-size: 12px !important; font-family: Verdana !important;" [ngClass]="Themecolor == 'Dark' ? 'spanText-dark' : 'spanText-light'">Only government issued document's date of birth are applicable.</small>
+              <!-- </p> -->
+            <!-- </div> -->
+              </div>
+            </div>
+
+            <!-- tire 2 social Security no -->
+
+            <!-- <div class="col-md-6 d-flex" style="background-color:#31313a">
+              <div class="form-row identity-verify">
+                <label for="aadhar_card_front_side" class="text-white image-alighnment">Social Security Number </label>
+                <div class="w-100"></div>
+
+                <input
+                  type="text"
+                  id="ssn"
+                  maxlength="4"
+                  class="form-control w-75 id_file ssn"
+                  placeholder="Enter Social Security Number"
+                  oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+                />
+
+                <small style="color: #007bff">* Enter the last 4 digits of Social Security Number</small>
+              </div>
+            </div> -->
+            
+            <div class="col-md-6 d-flex" *ngIf="main.userDocStatus != '0'">
+              <div class="form-row identity-verify" [ngClass]="Themecolor == 'Dark' ? '' : 'bg-light-identity-verify'">
+                <label for="aadhar_card_front_side" class=" image-alighnment" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Social Security Number or Passport Number </label>
+                <div class="w-100"></div>
+                <input
+                type="text"
+                style="font-style:italic"
+                id="ssn"
+                oninput="this.value = this.value.replace(/[^A-Za-z0-9]/gi,'');"
+                [(ngModel)]="social_no"
+                name="social_no"
+                (keyup)="addDashes(social_no)"
+                maxlength="11"
+                class="form-control w-75 id_file ssn"
+                [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'"
+                placeholder="Enter the last four digits of your SSN or your complete passport number"
+                 
+              />
+              <small style="font-size: 12px !important; font-family: Verdana !important;" [ngClass]="Themecolor == 'Dark' ? 'spanText-dark' : 'spanText-light'">Please enter the last four (4) digits of your Social Security Number or your complete passport number.</small>
+
+                <!-- <small style="color: #007bff">* Enter last 4 digit of Social Security Number</small> -->
+              </div>
+            </div>
+              <div class="col-md-6 bg-transparent">
+                <div class="form-row mt-2 mb-2 float-left">
+                  
+                  <button type="button" class="btn btn-green-savechanges" [ngClass]="{'disableButtonClass':kycSubmitButtonOne == true,'disableButtonClass':profilePhotoStatus == false}"  id="id_form_btn" (click)="upload(confirm)">SAVE CHANGES</button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    
+   
+    <div id="tiertwo" style="display: none">
+      <div class="row d-flex section-position-identify" data-ng-controller="identityCtrl">
+        <div class="col-md-12 col-12 mt-3 align-self-stretch">
+          <div class=" p-2 rounded h-100" [ngClass]="Themecolor == 'Dark' ? 'bg-dark' : 'bg-light'">
+            <span class="font-md mr-2 pl-3" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Identity Verification (Tier 3)</span>
+            <div style="top: 11px; left: 313px; position: absolute">
+              <div class="icon-section pull-left">
+                <i class="fa fa-info-circle" aria-hidden="true" (click)="data.handleInfoSection('tier3Info')"></i>
+              </div>
+              <div class="info-section" id="tier3Info" style="display: none; left: 94px; top: 59px">
+                <div class="info-header">
+                  <div class="info-title">Identity Verification Tier 3</div>
+                  <div class="info-close">
+                    <i class="fa fa-times" aria-hidden="true" (click)="data.handleInfoSection('tier3Info')"></i>
+                  </div>
+                </div>
+                <div class="info-body">Submit Tax Identity number, Bank Statement and Tax Statement for Tier 3 verification</div>
+              </div>
+            </div>
+            <div class="w-100"></div>
+            <span class="font-bold mr-2 pl-3" style="color: #d6a32d">{{ main.indentificationStatustwo }}</span>
+            <form id="id_form">
+              <div class="row mt-3">
+                <div class="col-md-6 bg-transparent">
+                  <div class="form-row">
+                    <input type="radio" id="Itype" class="Itype" value="1" (click)="radioOn()" />
+                    <label for="Btype" class=" pl-3" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Individual</label>
+                    <input type="radio" id="Btyp" class="Btype" value="2" (click)="radioOff()" />
+                    <label for="profile_photo" class=" pl-3" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Enterprise</label>
+                  </div>
+                </div>
+                <div class="col-md-6 bg-transparent">
+                  <div class="form-row">
+                    <label for="tinno" class=" pl-3" id="" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Tax Identification Number</label>
+                    <div class="w-100"></div>
+                    <input
+                      type="text"
+                      id="tinno"
+                      maxlength="15"
+                      class="form-control w-75 id_file tinno"
+                      [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'"
+                      name="tinno"
+                      placeholder="Enter Tax Identification Number"
+                      oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+                    />
+                  </div>
+                </div>
+
+                <div class="col-md-6 bg-transparent">
+                  <div class="form-row">
+                    <label for="pan_card_photo" class=" pl-3" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Bank Statement</label>
+                    <div class="w-100"></div>
+                    <input type="file" id="file5" (change)="getSizeforT2('file5');getSizeforT2StatusChangeBank('file5')" class="form-control w-75 id_file bank_statement_doc"
+                    [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'"
+                     name="bank_statement_doc" />
+                    <small id="docname1" class="dconame1" style="display:none ; color:rgb(119 176 228) ;
+                    margin-top: 10px;
+                    /* position: absolute; */
+                    border: 1px solid !important;
+                    padding: 8px !important; ;" *ngIf="docname1"><span>&#9989;</span> Uploaded file is {{bankStatement}}.</small>
+                  </div>
+                </div>
+                <div class="col-md-6 bg-transparent">
+                  <div class="form-row">
+                    <label for="aadhar_card_front_side" class=" pl-3" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Tax Statement</label>
+                    <div class="w-100"></div>
+                    <input type="file" id="file6" (change)="getSizeforT2('file6');getSizeforT2StatusChangeTax('file5')" class="form-control w-75 id_file tax_statement_pic"
+                    [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'"
+                     name="tax_statement_pic" />
+                    <small id="docname2" style="display:none; color:rgb(119 176 228) ;position: relative;
+                    margin-top: 12px;
+                    margin-right: 32px;  border: 1px solid;padding: 8px;" *ngIf="docname2"><span>&#9989;</span> Uploaded file is {{taxStatement}}.</small>
+                  </div>
+                </div>
+                <div class="col-md-6 bg-transparent">
+                  <div class="form-row mt-2 mb-2 float-left">
+                    <button type="button" class="btn btn-green-savechanges disableButtonClass" *ngIf="!TaxFileStatusT2 || !bankFileStatusT2 || kycSubmitButtonTwo"  id="id_form_btn" (click)="tiretwoSubmit()">SAVE CHANGES</button>
+                    <button type="button" class="btn btn-green-savechanges" *ngIf="TaxFileStatusT2 && bankFileStatusT2 && kycSubmitButtonTwo == false" id="id_form_btn" (click)="tiretwoSubmit()">SAVE CHANGES</button>
+                  
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- new kyc verification for new User -->
+  <div *ngIf="(main.userDocStatus == null || main.userDocStatus == '' || main.userDocStatus == '2') && !showIframe">
+  
+  <div class="row d-flex section-position text-center mb-5" data-ng-init="loginDuration();"
+  data-ng-controller="identityCtrl" >
+  <div class="col-md-4 mt-3 align-self-stretch"></div>
+  <div class="col-md-4 mt-3 align-self-stretch">
+    <h4>Make sure you have these in hand </h4>
+  </div>
+  <div class="col-md-4 mt-3 align-self-stretch"></div>
+</div>
+<div class="row d-flex section-position text-center mt-5 mb-5 " data-ng-init="loginDuration();"
+  data-ng-controller="identityCtrl">
+  <div class="straight-border col-12 mx-auto"></div>
+  <div class="col-md-4 mt-3">
+    <img class="mb-2 minHeightImage" alt="icon1" src="./assets/img/identity-icon/icon-1.svg" />
+    <div class="border-circle"><span class="point-circle"></span></div>
+    <p class="valid-desc">Valid ID document</p>
+  </div>
+  <div class="col-md-4 mt-3">
+    <img class="mb-2 minHeightImage" alt="icon3" src="./assets/img/identity-icon/icon-3.svg" />
+    <div class="border-circle"><span class="point-circle"></span></div>
+    <p class="valid-desc">Proof of Address</p>
+  </div>
+  <div class="col-md-4 mt-3">
+    <img class="mb-2 minHeightImage" alt="icon2" src="./assets/img/identity-icon/icon-2.svg" />
+    <div class="border-circle"><span class="point-circle"></span></div>
+    <p class="valid-desc">Submit</p>
+  </div>
+</div>
+<div class="row d-flex section-position text-center mt-5" data-ng-init="loginDuration();"
+  data-ng-controller="identityCtrl">
+  <div class="col-md-4 mt-3 align-self-stretch"></div>
+  <div class="col-md-4 mt-3 align-self-stretch">
+    <button type="button" class="btn btn-primary"(click)="handleClickForDetails()">Click here to begin</button>
+    <span style="cursor: pointer;margin-left:10px;">
+      <i class="fa fa-info-circle" aria-hidden="true" (click)="data.handleInfoSection('clickheretobegininfo')"></i>
+    </span>
+    <div class="info-section" id="clickheretobegininfo" style="display:none;margin:auto;position:absolute;top:-58px;">
+      <div class="info-header">
+        <div class="info-title">Click here to begin</div>
+        <div class="info-close">
+          <i class="fa fa-times" aria-hidden="true" (click)="data.handleInfoSection('clickheretobegininfo')"></i>
+        </div>
+      </div>
+      <div class="info-body">Before clicking on this button make sure that you have a valid id document and address proof document.</div>
+    </div>
+  </div>
+  <div class="col-md-4 mt-3 align-self-stretch"></div>
+</div>
+</div>
+
+  <div *ngIf="showIframe" class="mt-3 mb-3  identity-verify">
+
+  <div *ngIf="preliminaryInfoProcessStep == '1'">
+    <div class="row mb-2">
+      <h3 class="text-white col-12">Basic Information</h3>
+    </div>
+    <div class="row ml-5">
+      <div class="col-md-4 d-flex ">
+        <div class="form-row">
+          <label for="profile_photo" class="text-white image-modification">First Name *</label>
+          <div class="input-group">
+            <input appAlphaNumericOnly type="text" id="firstName" class="form-control w-75 text-field disablecopypaste" name="firstName"
+              placeholder="Enter First Name" />
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 d-flex ">
+        <div class="form-row">
+          <label for="profile_photo" class="text-white image-modification">Middle Name </label>
+          <div class="input-group">
+            <input appAlphaNumericOnly type="text" id="middleName" class="form-control w-75 text-field disablecopypaste" name="middleName"
+              placeholder="Enter Middle Name" />
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 d-flex ">
+        <div class="form-row">
+          <label for="profile_photo" class="text-white image-modification">Last Name *</label>
+          <div class="input-group">
+            <input appAlphaNumericOnly type="text" id="lastName" class="form-control w-75 text-field disablecopypaste" name="lastName"
+              placeholder="Enter Last Name" />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-4">
+      <!-- <div class="col-10"></div> -->
+      <div class="col-2">
+        <button type="button" class="btn btn-green-savechanges" (click)="handleNextStepButton('1')">Next</button>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="preliminaryInfoProcessStep == '2'">
+    <div class="row mb-2">
+      <h3 class="text-white col-12">Address (This address should match with address proof document)</h3>
+    </div>
+    <div class="row ml-5">
+      <div class="col-md-4 d-flex ">
+        <div class="form-row">
+          <label for="profile_photo" class="text-white image-modification col-12">House no./Apt no./Street no. *</label>
+          <div class="input-group">
+            <input appAlphaNumericOnly type="text" id="address" class="form-control w-75 text-field disablecopypaste" name="address"
+              placeholder="Enter House no./Apt no./Street no." maxlength="50"/>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 d-flex ">
+        <div class="form-row">
+          <label for="profile_photo" class="text-white image-modification col-12" style="padding-right: 118px;">City *</label>
+          <div class="input-group">
+            <input appOnlyAlphabet type="text" id="city" class="form-control w-75 text-field disablecopypaste" name="city"
+              placeholder="Enter City" maxlength="30"/>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 d-flex ">
+        <div class="form-row">
+          <label for="profile_photo" class="text-white image-modification col-12" style="padding-right: 118px;">State *</label>
+          <div class="input-group">
+            <input appOnlyAlphabet type="text" id="state" class="form-control w-75 text-field disablecopypaste" name="state"
+              placeholder="Enter State" maxlength="30"/>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row ml-5 mt-2">
+      <div class="col-md-4 d-flex ">
+        <div class="form-row">
+          <label for="profile_photo" class="text-white image-modification col-12" style="padding-right: 118px;">Country *</label>
+          <div class="input-group">
+            <select class="form-control validate  text-field" id="country" name="country">
+                <option value="" selected>Select Country</option>
+                <option value="{{c.code}}" *ngFor="let c of contries">{{c.name}}</option>
+              </select>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 d-flex ">
+        <div class="form-row">
+          <label for="profile_photo" class="text-white image-modification col-12">Zip Code/Pin Code *</label>
+          <div class="input-group">
+            <input appAlphanumericPattern2 type="text" id="zip" class="form-control w-75 text-field" name="zip" maxlength="15"
+              placeholder="Enter Zip Code/Pin Code" />
+              <!-- (keyup)="handleValidateZipCode($event)" -->
+          </div>
+        </div>
+      </div>
+      
+    </div>
+    <div class="row mt-4">
+      <!-- <div class="col-10"></div> -->
+      <div class="col-2">
+        <button type="button" class="btn btn-green-savechanges" (click)="handleNextStepButton('2')">Next</button>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="preliminaryInfoProcessStep == '5'">
+    <div class="row mb-2">
+      <h3 class="text-white col-12">Date of Birth and SSN or Passport No.</h3>
+    </div>
+    <div class="row ml-5">
+      <div class="col-md-6 d-flex identitity-alighnment">
+        <div class="form-row identity-verify" [ngClass]="Themecolor == 'Dark' ? '' : 'bg-light-identity-verify'">
+        <label for="profile_photo" class="text-white image-modification">Date Of Birth *</label>
+        <div class="row dateofbirth">
+          <input
+            type="text"
+            id="monthPre"
+            maxlength="2"
+            placeholder="MM"
+            name="month"
+            [(ngModel)]="month"
+            (change)="monthvalidation()"
+            
+            class="form-control id_file form-group col-md-1 monthField"
+            [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'"
+            value="{{ month }}"
+            oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+          />
+          &nbsp; &nbsp; 
+
+          <input
+            type="text"
+            id="datePre"
+            maxlength="2"
+            placeholder="DD"
+            name="date"
+            [(ngModel)]="date"
+            (change)="datevalidation()"
+            class="form-control id_file form-group col-md-1"
+            [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'"
+            oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+          />
+          &nbsp; &nbsp; 
+
+          <input
+            type="text"
+            id="yearPre"
+            maxlength="4"
+            placeholder="YYYY"
+            name="year"
+            [(ngModel)]="year"
+            (change)="yearvalidation()"
+            class="form-control id_file form-group col-md-2"
+            [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'"
+            oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+          />
+        </div>
+        </div>
+      </div>
+      <div class="col-md-6 d-flex identitity-alighnment">
+        <div class="form-row identity-verify" [ngClass]="Themecolor == 'Dark' ? '' : 'bg-light-identity-verify'">
+          <label for="aadhar_card_front_side" class=" image-alighnment" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Social Security Number or Passport Number * </label>
+          <div class="w-100"></div>
+          <input
+          type="text"
+          style="font-style:italic"
+          id="ssnPre"
+          oninput="this.value = this.value.replace(/[^A-Za-z0-9]/gi,'');"
+          [(ngModel)]="social_no"
+          name="social_no"
+          (keyup)="addDashes(social_no)"
+          maxlength="11"
+          class="form-control w-75 id_file ssn"
+          [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'"
+          placeholder="Enter the last four digits of your SSN or your complete passport number"
+           
+        />
+        <small style="font-size: 12px !important; font-family: Verdana !important;" [ngClass]="Themecolor == 'Dark' ? 'spanText-dark' : 'spanText-light'">Please enter the last four (4) digits of your Social Security Number or your complete passport number.</small>
+
+          <!-- <small style="color: #007bff">* Enter last 4 digit of Social Security Number</small> -->
+        </div>
+      </div>
+    </div>
+    <div class="row mt-4">
+      <!-- <div class="col-10"></div> -->
+      <div class="col-2">
+        <button type="button" class="btn btn-green-savechanges" (click)="handleNextStepButton('5')">Next</button>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="preliminaryInfoProcessStep == '3'">
+    <div class="row mb-2">
+      <h3 class="text-white col-12">Document Upload</h3>
+    </div>
+    <div class="row ml-5">
+      <div class="col-md-6 d-flex identitity-alighnment">
+        <div class="form-row identity-verify">
+          <label for="profile_photo" class="text-white image-modification">Address Proof</label>
+          <input type="file" id="addressProof" (change)="getSize('addressProof')"
+            class="form-control w-75 " name="addressProof" />
+            <small style="color:#fff ; ">* Utility Bill or Bank Account Statement from the last 3 months. Please do not submit Credit card bill.</small><br>
+         
+          <div style="width: 500px;"></div>
+        </div>
+      </div>
+    </div>
+  
+    <div class="row mt-4">
+      <div class="col-10"></div>
+      <div class="col-2">
+        <button type="button" class="btn btn-green-savechanges" (click)="handleNextStepButton('3')">Next</button>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="preliminaryInfoProcessStep == '4'">
+    <div class="row mb-2">
+      <h3 class="text-white col-12">Document Upload</h3>
+    </div>
+    <div class="row ml-5">
+      <div class="col-md-6 d-flex identitity-alighnment">
+        <div class="form-row identity-verify">
+          <label for="profile_photo" class="text-white image-modification">ID Proof Front</label>
+          <input type="file" id="idProofFront" (change)="getSize('idProofFront')"
+            class="form-control w-75 " name="idProofFront" />
+         
+            <small style="color:#fff ; ">*  Only government issued documents such as Driver's license,Identity Cards,etc,are applicable.</small><br>
+            <div style="width: 500px;"></div>
+        </div>
+      </div>
+      <div class="col-md-6 d-flex identitity-alighnment">
+        <div class="form-row identity-verify">
+          <label for="profile_photo" class="text-white image-modification">ID Proof Back</label>
+          <input type="file" id="idProofBack" (change)="getSize('idProofBack')"
+            class="form-control w-75 " name="idProofBack" />
+
+          <small style="color:#fff ; ">*  Only government issued documents such as Driver's license,Identity Cards,etc,are applicable.</small><br>
+         
+          <div style="width: 500px;"></div>
+        </div>
+      </div>
+    </div>
+  
+    <div class="row mt-4">
+      <div class="col-10"></div>
+      <div class="col-2">
+        <button type="button" class="btn btn-green-savechanges " [ngClass]="lastButtonSubmitStatus == true ? 'disableButtonClass' : ''" (click)="handleNextStepButton('4')">Submit</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- TIer 3 step markup -->
+<div class="mt-3 mb-3 p-2 rounded h-100" *ngIf="isTier3PreStageEnable" [ngClass]="Themecolor == 'Dark' ? 'bg-dark' : 'bg-light'">
+  <div class="row" *ngIf="preliminaryInfoProcessStepForTier3 == '1'">
+    <div class="col-md-2 mt-3 align-self-stretch"></div>
+    <div class="col-md-8 mt-3 align-self-stretch">
+      <div class="row mb-3">
+        <div class="col-4"></div>
+        
+          <button type="button" class=" col-4 btn btn-primary" (click)="handleTier3Steps('1')"
+            >Begin Tier 3 Verification</button> 
+            <span style="cursor: pointer;margin-left:10px;">
+              <i class="fa fa-info-circle" aria-hidden="true" (click)="data.handleInfoSection('tierInfo')"></i>
+            </span>
+            <div class="info-section" id="tierInfo" style="display:none;margin:auto;position:absolute;top:-278px;">
+              <div class="info-header">
+                <div class="info-title">Begin Tier 3 Verification</div>
+                <div class="info-close">
+                  <i class="fa fa-times" aria-hidden="true" (click)="data.handleInfoSection('tierInfo')"></i>
+                </div>
+              </div>
+              <div class="info-body">Before clicking on this button make sure that you have Bank Statement, Tax Identification Number, and Tax Statement.</div>
+            </div>
+          <div class="col-4"></div>
+      </div>
+     
+      <div class="row">
+        <div class="col-12 text-center" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">
+          <p class="mb-2" style="font-size:20px;">Tier 3 verification allows you to increase your Trading and Withdrawal limits.<p>
+            <!-- <p style="font-size:17px;"><a href="https://www.paybito.com/exchange-fees/">Know Tier 3 limits</a> </p> -->
+        </div>
+      </div>
+      </div>
+    <div class="col-md-2 mt-3 align-self-stretch"></div>
+  </div>
+  <div class="row" *ngIf="preliminaryInfoProcessStepForTier3 == '2'">
+    <div class="col-md-6">
+      <div class="form-group">
+        <label [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-dark'">Select Type</label>
+        <div class="form-row">
+          <input type="radio" id="Itype" name="type" class="Itype" value="1"  />
+          <label for="Btype" class=" pl-3" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Individual</label>
+          <input type="radio" id="Btyp" name="type" class="Btype" value="2" />
+          <label for="profile_photo" class=" pl-3" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Enterprise</label>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-4">
+      <div class="col-10"></div>
+      <div class="col-2">
+        <button type="button" class="btn btn-green-savechanges" (click)="handleTier3Steps('2')">Next</button>
+      </div>
+    </div>
+
+  </div>
+  <div class="row" *ngIf="preliminaryInfoProcessStepForTier3 == '3'">
+    <div class="col-md-6">
+      <div class="form-group">
+        <label [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-dark'">Bank Statement</label>
+        <input type="file" id="bankStatementPre" (change)="getSizeforT2('bankStatementPre')" class="form-control w-75 id_file"  [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'"/>
+      </div>
+    </div>
+    <div class="row mt-4">
+      <div class="col-10"></div>
+      <div class="col-2">
+        <button type="button" class="btn btn-green-savechanges" (click)="handleTier3Steps('3')">Next</button>
+      </div>
+    </div>
+  </div>
+  <div class="row" *ngIf="preliminaryInfoProcessStepForTier3 == '4'">
+    
+    <div class="col-md-6">
+      <div class="form-group">
+        <label [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-dark'">Tax Identification Number</label>
+        <input
+        type="text"
+        id="taxIdentificationPre"
+        maxlength="15"
+        class="form-control w-75 id_file tinno"
+        [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'"
+         placeholder="Enter Tax Identification Number"
+        oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" />    
+       </div>
+    </div>
+    <div class="col-md-6">
+      <div class="form-group">
+        <label [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-dark'">Tax Statement</label>
+        <input type="file" id="taxStatementPre" (change)="getSizeforT2('taxStatementPre')" class="form-control w-75 id_file"  [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'"/>
+      </div>
+    </div>
+    <div class="row mt-4">
+      <!-- <div class="col-10"></div> -->
+      <div class="col-2" style="margin-left: 15px;">
+        <button type="button" class="btn btn-green-savechanges" (click)="handleTier3Steps('4')" [disabled]="tier3Step4Status">Next</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+  <!-- /.container-fluid-->
+  <footer class="sticky-footer">
+    <div class="container">
+      <div class="text-center"><small>Copyright © {{data.exchange}} 2018</small></div>
+    </div>
+  </footer>
+  <!-- Scroll to Top Button-->
+  <a class="scroll-to-top rounded" href="#page-top"> <i class="fa fa-angle-up"></i> </a>
+  <!-- Logout Modal-->
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+        </div>
+        <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+          <a class="btn btn-primary" data-ng-click="logout()">Logout</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- confirm modal -->
+  <ng-template #confirm let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Confirm</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body" style="margin-left: 28px;">Editing these details will restrict some features until verification.</div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-warning" (click)="uploadDocs(); modal.close()" style="position: relative;right: 150px;">Proceed</button>
+      <button type="button" class="btn btn-secondary" (click)="modal.close()" style="position: relative;right: 150px;">Cancel</button>
+      
+    </div>
+  </ng-template>
+  <!-- request for upload doc -->
+</div>
+
+<ng-template #myModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Subscription Ended</h4>
+  </div>
+  <div class="modal-body">
+    <span class="text-center">Your product usage subscription has expired. Please contact your system administrator for more info.</span>
+  </div>
+  <div class="modal-footer">
+    <!-- <button type="button" class="btn btn-success" (click)="redirectToPayment()">Renew</button> -->
+  </div>
+</ng-template>

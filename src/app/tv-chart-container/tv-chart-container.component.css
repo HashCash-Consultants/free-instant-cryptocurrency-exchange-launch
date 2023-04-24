@@ -1,0 +1,133 @@
+/* .app-tv-chart-container {
+	height: calc(100vh - 150px);
+} */
+.app-tv-chart-container{
+    height: calc(100vh - 185px);
+}
+.app-tv-chart-container{height:520px;}
+
+.loading-paybito {
+    height: 100px;
+    position: absolute;
+    width: 100px;
+    left: 0;
+    right: 0;
+    margin: auto;
+    top: 37%;
+  }
+  
+  .loading-paybito img {
+    border-radius: 9999px;
+    height: auto;
+    position: relative;
+    width: 38px;
+    z-index: 2;
+    top: 20px;
+  }
+  
+  @keyframes cycle-colors {
+    0% { border-color: hsl(0, 100%, 50%); }
+    25% { border-color: hsl(90, 100%, 50%); }
+    50% { border-color: hsl(180, 100%, 50%); }
+    75% { border-color: hsl(270, 100%, 50%); }
+    100% { border-color: hsl(360, 100%, 50%); }
+  }
+  
+  @keyframes pulse {
+    to {
+      opacity: 0;
+      transform: scale(1);
+    }
+  }
+  
+  .loading-paybito::before,
+  .loading-paybito::after {
+    animation: pulse 2s linear infinite;
+    border: #fff solid 8px;
+    border-radius: 9999px;
+    box-sizing: border-box;
+    content: ' ';
+    height: 140%;
+    left: -20%;
+    opacity: .6;
+    position: absolute;
+    top: -20%;
+    transform: scale(0.714);
+    width: 140%;
+    z-index: 1;
+  }
+  
+  .loading-paybito::after {
+    animation-delay: 1s;
+  }
+  
+  .loading-paybito:hover img {
+    content: url('http://s.blixt.org/hypnotoad.jpg');
+  }
+  
+  .loading-paybito:hover::before,
+  .loading-paybito:hover::after {
+    animation: pulse 1s linear infinite, cycle-colors 6s linear infinite;
+  }
+  
+  .loading-paybito:hover::after {
+    animation-delay: .5s;
+  }
+  .infoChart{
+    top: 15px;
+    position: absolute;
+    left: 310px;
+  }
+  @media only screen and (max-width: 600px) {
+    .info-section {
+      position: absolute;
+      top: 66px;
+      text-align: justify;
+      background: #273338;
+      color: #fff;
+      z-index: 1050;
+      width: 487px;
+      /* right: 91px; */
+      left: -309px;
+      box-shadow: 0 0 60px 30px #fff, 0 0 100px 60px #f0f, 0 0 140px 90px #0ff;
+    }
+    
+  }
+
+  @media (min-width: 1500px) {
+    .infoChart{
+      top: 15px;
+      position: absolute;
+      left: 310px;
+    }
+  }
+
+  @media (min-width: 1900px) {
+    .infoChart{
+      top: 9px;
+      position: absolute;
+      left: 263px;
+    }
+  }
+
+  @media (min-width: 2100px) {
+    .infoChart{
+      top: 9px;
+      position: absolute;
+      left: 250px;
+    }
+  }
+
+  .tvChartBorder{
+    background: #2f3241; 
+    padding: 4px 0 0 0px;
+    border-radius: 5px;
+  }
+  .tvChartBorder-light{
+    background: #e7ebee; 
+    padding: 4px 0 0 0px;
+    border-radius: 5px;
+  }
+
+  
+ 

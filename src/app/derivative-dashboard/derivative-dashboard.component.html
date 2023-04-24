@@ -1,0 +1,96 @@
+<app-navbar (themeChanged)="themeChangedHandler($event)"></app-navbar>
+
+<!-- <app-loader></app-loader> -->
+
+<div class="content-wrapper extrapaddingDashboard pt-0 dashboardContent" id="dashboardContent">
+  <div class="container-fluid left-container_fluid">
+    <div class="row">
+      <!-- <div class="col btnwrapper">
+        <button type="button" class="btn btn-info btn-info-dashboard btn-sm {{chart?'active':''}}" (click)="chart=!chart">
+          <i class="fa fa-bar-chart" aria-hidden="true"></i>
+          <span class="btntitle">Chart</span>
+        </button>
+        <button type="button" class="btn btn-info  btn-info-dashboard btn-sm {{orderbook?'active':''}}" (click)="orderbook=!orderbook">
+          <i class="fa fa-list" aria-hidden="true"></i>
+          <span class="btntitle">Order Book</span>
+        </button>
+        <button type="button" class="btn btn-info btn-info-dashboard btn-sm {{trade?'active':''}}" (click)="trade=!trade">
+          <i class="fa fa-history" aria-hidden="true"></i>
+          <span class="btntitle">Orders</span>
+        </button>
+        <button type="button" class="btn btn-info btn-info-dashboard btn-sm {{stoploss?'active':''}}" (click)="stoploss=!stoploss">
+          <i class="fa fa-usd" aria-hidden="true"></i>
+          <span class="btntitle">Trade</span>
+        </button>
+      </div> -->
+      <div class="col-md-6">
+
+      </div>
+      <div class="col-md-4">
+        <app-derivative-chart class="dpr"></app-derivative-chart>
+
+      </div>
+      <div class="col-md-2">
+        <div class="col text-right btnwrapper">
+          <span class="btngrpinr" style="display: none;">
+          <button class="btn btn-primary btn-sm day-light-btn widget screen-col" id="night" style="display:none;z-index: 99;"
+           (click)="changebg(false)"><img src="../../assets/Moon_emoji_icon_png_grande.png" width="20"
+             alt="Snow"></button>
+         <button class="btn btn-primary btn-sm day-light-btn widget screen-col" id="light" style="display:block;z-index: 99;"
+           (click)="changebg(true)"><img src="../../assets/sun_PNG13426.png" width="20" alt="Snow"></button>
+ 
+         <!-- <button type="button" class="drag-btn-alighnment btn btn-primary btn-sm widget" [class.active]="drag" (click)="drag=!drag"
+           placement="bottom" ngbTooltip="Enable draggable feature">
+           <i class="fa fa-arrows-alt" aria-hidden="true"></i>
+           <span class="btntitle">Drag</span>
+         </button>
+         <button type="button" class="drag-btn-alighnment btn btn-primary btn-sm widget" [class.active]="data.resize"
+           (click)="data.resize=!data.resize" placement="bottom" ngbTooltip="Enable resizable feature">
+           <i class="fa fa-expand" aria-hidden="true"></i>
+           <span class="btntitle">Resize</span>
+         </button> -->
+       </span>
+       </div>
+      </div>
+      <div class=""></div>
+      
+    </div>
+
+    <div class="row d-flex order_row_ml">
+      <div class="col-md-7 col_md_7_new chart-align">
+        <div class="row">
+          <div class="col-xl-12 col-lg-12 col-12 pr-xl-0 mt-1 align-self-stretch dchart" [class.drg]="drag"
+          [ngDraggable]="drag" *ngIf="chart">
+            <app-derivative-tvchartcontainer [Themecolor]="Themecolor"></app-derivative-tvchartcontainer>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-5 ordercol-md-5 order-align">
+        <div class="row">
+          <div class="col-xl-12 col-lg-12 col-12 mt-1" [class.drg]="drag" [ngDraggable]="drag" *ngIf="orderbook">
+            <app-derivative-orderbook [Themecolor]="Themecolor"></app-derivative-orderbook>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row d-flex order_row_ml">
+      <div class="col-md-7 col_md_7_new chart-align" style="margin-top: -5px;">
+        <div class="row">
+          <div class="col-xl-12 col-lg-12 col-12 pr-xl-0" [class.drg]="drag" [ngDraggable]="drag" *ngIf="trade">
+            <app-derivative-trade [Themecolor]="Themecolor"></app-derivative-trade>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-5 ordercol-md-5 stoploss-col order-align" style="margin-top: -5px;">
+        <div class="row">
+
+          <div class="col-xl-12 col-lg-12 col-12" [class.drg]="drag" id="stp" [ngDraggable]="drag"
+            *ngIf="stoploss" style="margin-top: -28px;">
+            <app-derivative-stoploss [Themecolor]="Themecolor"></app-derivative-stoploss>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

@@ -1,0 +1,87 @@
+<app-navbar (themeChanged)="themeChangedHandler($event)"></app-navbar>
+<div class="content-wrapper pt-0 pl-3" [ngClass]="Themecolor == 'Dark' ? '' : 'content-wrapper-light extMrgn'">
+
+  <div class="container-fluid" data-ng-init="loginDuration();">
+    <div class="row d-flex">
+      <div class="col-md-6 mt-3 align-self-stretch">
+        <div class="rounded" [ngClass]="Themecolor == 'Dark' ? 'bg-dark' : 'bg-light'"
+          style="padding: 14px 1px 1px 13px;">
+          <p class="" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Refer a Friend And Earn</p>
+        </div>
+      </div>
+    </div>
+    <div class="row d-flex">
+      <div class="col-md-4 mt-3 align-self-stretch">
+        <label for="signupInputEmail" class="" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Your
+          referral code is : <span>{{main.referralCode}}</span></label>
+      </div>
+    </div>
+    <div class="row d-flex">
+      <div class="col-md-4 mt-3 align-self-stretch">
+        <p [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Send your friends a referral via email and
+          earn free HCX into your wallet! Use your HCX to buy other cryptos or pay discounted transaction fees with it.
+        </p>
+        <label for="signupInputEmail" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Email</label>
+        <!-- <span class="required">*</span> -->
+        <input class="form-control sign-up-from validate" [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'"
+          [class.is-invalid]="email.dirty && email.invalid" name="email" id="signupInputEmail" placeholder="Type your friend's email here"
+          [(ngModel)]="signupObj.email" placeholder="{{signupObj.email}}" appForbiddenName="bob" required
+          #email="ngModel" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
+        <span class="text-danger" *ngIf="email.dirty && email.invalid">Enter a valid email</span>
+      </div>
+    </div>
+    <button class="btn btn-primary" id="submit_btn" (click)="referralEmail()">Submit</button>
+  </div>
+  <div class="row">
+    <div class="p-3">
+      <p [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'" style="padding-left: 13px;">Share your Referral
+        Code with your friends on Facebook, whatsapp, linkedin and twitter</p>
+      
+      <button type="button" id="facebookShare" class="btn btn-primary" style="margin-left:15px;" shareButton="facebook" [url]="main.shareUrlForFacebook" (click)="openInBrowser()"><i class="fa fa-facebook" aria-hidden="true"></i> Share</button>
+      <a class="btn btn-success" (click)="openInBrowser()" href="https://api.whatsapp.com/send?text={{main.shareUrlForWhatsapp}}"  target="_blank" style="margin-left:15px;"><i class="fa fa-whatsapp" aria-hidden="true"></i> Share</a>
+      <button type="button" (click)="openInBrowser()" class="btn btn-info" style="margin-left:15px;" shareButton="twitter" [url]="main.shareUrlForTwitter"><i class="fa fa-twitter" aria-hidden="true"></i> Share</button>
+      <!-- <button type="button" class="btn btn-linked-in" style="margin-left:15px;" shareButton="linkedin" [url]="main.shareUrlForLinkedIn"><i class="fa fa-linkedin" aria-hidden="true"></i> Share</button> -->
+      <a href="{{main.shareUrlForLinkedIn}}" (click)="openInBrowser()" target="_blank" class="btn btn-linked-in" style="margin-left:15px;" ><i class="fa fa-linkedin" aria-hidden="true"></i> Share</a>
+      
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="p-3">
+      <p class="" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'" style="padding-left: 13px;">The
+        referral bonus hits your HCX wallet once the referred person completes KYC and does the first transaction</p>
+    </div>
+  </div>
+  <div class="row" *ngIf="showReferredUsers">
+    <div class="col-6">
+      <label class="" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Referred Users</label>
+      <div class="table-responsive-sm">
+        <div class="table-responsive">
+          <table class="table table-sm">
+            <thead>
+              <!-- <tr class="" style="border-bottom: 1px solid #aaa;"> -->
+              <tr class="">
+
+                <th scope="col " [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Name</th>
+                <th scope="col " [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Email</th>
+
+              </tr>
+
+            </thead>
+            <tbody>
+
+              <tr *ngFor="let m of refferedList">
+                <td class="" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">{{m.firstName}}</td>
+                <td class="" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">{{m.email}}</td>
+              </tr>
+              <!-- <tr *ngIf="refferedList.length == 0">
+              <td colspan="2" class="text-center text-danger">No Data</td>
+            </tr> -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

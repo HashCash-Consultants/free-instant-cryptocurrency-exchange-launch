@@ -1,0 +1,48 @@
+<span  class="drawer-handle" (click)="handleOpenChatPopUp()"><i class="drawer-logo"><img src="./assets/img/ChatGPT-Icon-Logo.png" style="width: 20px; height: 20px;"></i></span>
+
+<!-- chat window -->
+<div class="chat-popup" [ngClass]="Themecolor == 'Dark' ? '' : 'sideLite'" id="myForm" *ngIf="isChatPopUpOpen">
+  <form  class="form-container" (submit)="handleSendMessage()">
+    <div class="row">
+      <div class="col-md-10">
+        <div class="row">
+          <h3 class="col-md-3" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Chat</h3>
+          <small class="col-md-9 mt-2" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">powered by ChatGPT</small>
+        </div>
+      </div>
+      <div class="col-md-2">
+        <span (click)="handleOpenChatPopUp()" style="cursor: pointer;">
+          <i class="fa fa-times" aria-hidden="true" ></i>
+        </span>
+      </div>
+    </div>
+    
+    <div class="chat-container">
+      <ul class="no-bullets">
+        <li *ngFor="let chat of chatList">
+          <div [ngClass]="!chat.messageSendByUser ? 'message-bot' : 'message-user' ">
+            <div class="row message-bot-row" [ngClass]="!chat.messageSendByUser ? 'row message-bot-row' : 'row message-user-row' "  >
+               <div class="col-md-2">
+                <img src="./assets/img/ChatGPT-Icon-Logo.png" *ngIf="!chat.messageSendByUser" class="rounded-circle mr-2" style="width: 20px; height: 20px;">
+                <img [src]="imageLink"  class="rounded-circle mr-2" *ngIf="chat.messageSendByUser" style="width: 20px; height: 20px;" alt=""/>
+               </div>
+               <div class="col-md-8">
+                <p [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-white'" style="margin-right: -40px;word-wrap: break-word;">{{chat.message}}</p>
+               </div>
+            </div>
+          </div>
+          
+        </li>
+        
+
+      </ul>
+    </div>
+
+    <label for="msg"><b>Message</b> <img src="./assets/img/chat-loader.gif" *ngIf="isMessageSending" style="width: 200px; position: absolute; top: 150px;" /></label>
+    <input type="text" class="form-control" [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'" name="chatText" [(ngModel)]="chatText" placeholder="Enter text here..."/>
+
+    <button type="submit" class="btn btn-success" [disabled]="isMessageSending">Send</button>
+    <button type="button" class="btn btn-red" (click)="handleOpenChatPopUp()">Close</button>
+  </form>
+</div>
+

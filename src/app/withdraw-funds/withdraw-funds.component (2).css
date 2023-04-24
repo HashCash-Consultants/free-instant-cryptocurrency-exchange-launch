@@ -1,0 +1,10 @@
+.depo-text{
+    text-align: right !important;
+  }
+  .modal-header{
+        border-bottom: 2px solid #e9ecef;
+  }
+  .table tbody + tbody {
+    border-top: 1px solid #606366;
+}
+

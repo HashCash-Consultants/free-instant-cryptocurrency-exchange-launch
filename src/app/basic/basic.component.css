@@ -1,0 +1,254 @@
+.balance_assets .font-sm{
+    margin-right: 10px;
+    margin-bottom: 10px;
+    
+}
+.balance_assets{
+   position: absolute;
+    right: 12px;
+    top: 38px;
+}
+.balance_assets .deposit-withdraw-btn {
+    width: 57px !important;
+}
+.deposit-withdraw-btn .diposit-hover{
+    position: absolute;
+    opacity: 0;
+    visibility: hidden;
+    top:0px;
+    left:-12px;
+    -moz-transition:all 600ms linear;-webkit-transition:all 600ms linear;-ms-transition:all 600ms linear;-o-transition:all 600ms linear;transition:all 600ms linear;
+  
+}
+.deposit-withdraw-btn{
+    position: relative;
+}
+.deposit-withdraw-btn:hover .diposit-hover{
+    opacity: 1;
+    visibility: visible;
+    top:-18px;
+    left:-12px;
+}
+.buywith{
+   /*  background-color: #38393a; */
+    background-color: #A0A5B1;
+    color: #01092d;
+    border: none !important;
+    padding: 1;
+    padding: 3px;
+    border-radius: 2px;
+    font-size: 20px;
+    z-index: 9999;
+
+}
+.otc-banner{
+   
+    padding: 50px 0;
+    text-align: center;
+}
+.otc-banner h6 {
+   
+    font-size: 30px;
+    border-radius: .25rem;
+}
+
+.sellspan {
+    width: 100%;
+    height: 25px;
+    display: table;
+    border: 1px solid #f5475d !important;
+    color: #f5475d !important;
+    border-radius: 5px;
+    padding: 6px 13px 3px 14px;
+    margin-top: -4px;
+
+}
+.sellspanactive {
+    width: 100%;
+    height: 25px;
+    display: table;
+    color: #fff;
+    border-radius: 5px;
+    background-color: #f5475d;
+}
+
+.buytab li.nav-item {
+    margin: 0 10px 0 0;
+}
+
+.buytab .buyspan {
+    width: 100%;
+    height: 40px;
+    display: inline-block;
+    line-height: 30px;
+    padding: 2px 15px;
+    border: 1px solid #21CB80 !important;
+    color: #21CB80 !important;
+    border-radius: 5px;
+}
+
+.buyspan {
+    width: 100%;
+    height: 40px;
+    display: inline-block;
+    line-height: 30px;
+    padding: 3px 13px 3px 14px;
+    border: 1px solid #21CB80 !important;
+    color: #21CB80 !important;
+    border-radius: 5px;
+    margin-top: -6px
+}
+
+.buyspanactive {
+    width: 100%;
+    height: 25px;
+    display: table;
+    color: #fff;
+    border-radius: 5px;
+    background-color: #21CB80;
+}
+
+.buytab .nav-link {
+    padding: 0;
+}
+.input-group-append {
+    position: absolute;
+    right: 2px;
+}
+.form-row .btn.disabled, .btn:disabled {
+    opacity: 0.65;
+    height: 48px;
+    width: 120px;
+    font-size: 19px;
+}
+.form-row .btn:not(:disabled):not(.disabled) {
+    cursor: pointer;
+    height: 48px;
+    width: 120px;
+    font-size: 19px;
+}
+/* .sellspan {
+    width: 100%;
+    height: 30px;
+    display: table;
+    line-height: 30px;
+} */
+
+.buytab li.nav-item {
+    margin: 0 10px 0 0;
+}
+
+.buytab .buyspan {
+    width: 100%;
+    height: 40px;
+    display: inline-block;
+    line-height: 30px;
+    padding: 2px 15px;
+}
+
+.buytab .nav-link {
+    padding: 0;
+}
+.line {
+    /* width: 481px;
+    height: 0;
+    border-bottom: 1px solid #dee2e6;
+    margin: -1px;
+    display:inline-block;
+    padding-top: 37px; */
+  }
+  div.vertical-line{
+    /* width: 0px;
+    background-color: #848e9c;
+    height: 76%;
+    float: left;
+    border: 1px solid #848e9c;
+    border-radius: 2px;
+    margin-top: 50px;
+    margin-left: -16px; */
+  }
+
+  
+  .list-of-norms{
+    list-style-type: decimal;
+    color:rgb(153, 152, 152);
+    margin-top: 20px;
+    font-size: 11px;
+  }
+  .list-of-norms-light{
+    list-style-type: decimal;
+    color:#474d57;
+    margin-top: 20px;
+    font-size: 11px;
+  }
+  .list-of-norms li {
+      margin-bottom: 10px;
+      font-size: 15px;
+  }
+  .list-of-norms-light li {
+      margin-bottom: 10px;
+      font-size: 15px;
+  }
+  .form-control-light{
+    color: #131722;
+    background-color: #d3dddd;
+    border: 1px solid #d3dddd;
+  }
+  .input-group > .form-control-light, .input-group > .custom-select, .input-group > .custom-file {
+    position: relative;
+    flex: 1 1 auto;
+    width: 1%;
+    margin-bottom: 0;
+}
+.form-control-light:disabled, .form-control-light[readonly] {
+    background-color: #d3dddd;
+    opacity: 1;
+}
+.form-control-light:focus {
+
+    background-color: #d3dddd;
+    border-color: #d3dddd;
+    box-shadow: 0 0 2px 0.1rem rgb(48 56 65 / 25%);
+}
+
+
+  #myDiv{
+    background-color: #848e9c;
+    border:0px;
+    }
+
+    
+
+    .text-theme-dark-blue{
+        font-size: 18px;
+    }
+    .newlabel{
+        font-size: 18px;
+      }
+
+    @media (min-width: 1500px) {
+        .content-wrapper.pt-0.pl-3 {
+            zoom: 80% !important;
+        }
+    
+    }
+    
+    @media (min-width: 1900px) {
+        .content-wrapper.pt-0.pl-3 {
+            zoom: 95% !important;
+        }
+    
+    }
+    @media (min-width: 2100px) {
+        .content-wrapper.pt-0.pl-3 {
+            zoom: 100% !important;
+        }
+    
+    }
+
+
+    .content-wrapper-light{
+        height: 100% !important;
+    }
+
+    

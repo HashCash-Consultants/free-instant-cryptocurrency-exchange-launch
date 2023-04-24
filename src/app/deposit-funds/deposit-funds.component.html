@@ -1,0 +1,777 @@
+<app-navbar (themeChanged)="themeChangedHandler($event)"></app-navbar>
+
+<!-- <app-loader></app-loader> -->
+<div class="content-wrapper pt-0 pl-3" [ngClass]="Themecolor == 'Dark' ? '' : 'content-wrapper-light'">
+  <div class="row header-alignment d-flex section-position" data-ng-init="loginDuration();" data-ng-controller="depositCtrl">
+    <div class="col-xl-7 col-lg-6 col-12 pr-lg-0 mt-3 align-self-stretch">
+      <div class=" p-2 pl-3 pr-3 rounded h-100" [ngClass]="Themecolor == 'Dark' ? 'bg-dark' : 'bg-light'">
+        <span class="font-lg text-green">
+        </span>
+        
+        <div class="table-responsive-sm">
+          <table class="table table-sm table-hover tab-fiat">
+            <thead>
+              <tr [ngClass]="Themecolor == 'Dark' ? 'bg-black text-white' : 'tableHeader-bg-light text-black'">
+                <th scope="col">Fiat</th>
+                <th scope="col">Balance</th>
+                <th scope="col">Action
+                  <div class="newPosition" >
+                    <div class="icon-section pull-left">
+                      <i class="fa fa-info-circle" aria-hidden="true" (click)="data.handleInfoSection('depositSectionInfo')"></i>
+                    </div>
+                    <div class="info-section" id="depositSectionInfo" style="display: none; left: 126px !important;">
+                      <div class="info-header">
+                        <div class="info-title"> Deposit</div>
+                        <div class="info-close">
+                          <i class="fa fa-times" aria-hidden="true" (click)="data.handleInfoSection('depositSectionInfo')"></i>
+                        </div>
+                      </div>
+                      <div class="info-body">
+                        Generate a payment order by clicking on the DEPOSIT link.
+                      </div>
+                    </div>
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody [ngClass]="Themecolor == 'Dark' ? 'depositSectionHeaderDark' : 'depositSectionHeaderLight'" >
+              <tr *ngFor="let b of main.fiatCurrencyList; let i=index" [ngClass]="Themecolor == 'Dark' ? 'depositSectionRowDark' : 'depositSectionRowLight'">
+                
+               <td *ngIf="b.isDeposit == 1"  [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'" style="font-weight: bold;">{{b.currencyCode|uppercase}}</td>
+                <td *ngIf="b.isDeposit == 1"  [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">{{b.closingBalance | number : '1.2-2'}}</td>
+                <td *ngIf="b.isDeposit == 1">
+                  <a  [ngClass]="Themecolor == 'Dark' ? 'text-white deposit-btn ' : 'text-black deposit-btn'" (click)="getDepositModal(deposit,b.currencyCode,b.closingBalance,b.currencyId)"
+                    href="javascript:void(0);">DEPOSIT</a>
+                </td>
+                <!-- <td *ngIf="bnkcurrency==''">
+                  
+                </td> -->
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      </div>
+    <ng-template #deposit let-modal>
+      <div id="myDiv" [ngClass]="Themecolor == 'Dark' ? '' : 'lightTheme'">
+      <div [ngClass]="Themecolor == 'Dark' ? '' : 'lightTheme'" class="modal-header sendreceive-wallet">
+        <h4 class="modal-title" id="modal-basic-title receiveModalLabel">Deposit</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      
+      <div [ngClass]="Themecolor == 'Dark' ? '' : 'lightThemeModalBody'" class="modal-body text-center send-wallet">
+        <form autocomplete="off" (ngSubmit)="f.form.valid && depositAmount(orderID)" #f="ngForm">
+          <div class="row deposit-funds-sec">
+          <div class="form-group row deposit-funds-sec">
+            <div *ngIf ="CurrencyCode =='USD'" class="col-12 col-5 depo-text">
+              <label for="staticPrice" class="col-form-label " [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Current {{CurrencyCode}} Balance</label>
+            </div>
+            <div *ngIf ="CurrencyCode =='AED'" class="col-12 col-5 depo-text">
+              <label for="staticPrice" class="col-form-label " [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Current {{CurrencyCode}} Balance</label>
+            </div>
+            <div *ngIf ="CurrencyCode =='INR'" class="col-12 col-5 depo-text">
+              <label for="staticPrice" class="col-form-label " [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Current {{CurrencyCode}} Balance</label>
+            </div>
+            <div *ngIf ="CurrencyCode =='EUR'" class="col-12 col-5 depo-text">
+              <label for="staticPrice" class="col-form-label " [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Current {{CurrencyCode}} Balance</label>
+            </div>
+            <div *ngIf ="CurrencyCode =='SGD'" class="col-12 col-5 depo-text">
+              <label for="staticPrice" class="col-form-label " [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Current {{CurrencyCode}} Balance</label>
+            </div>
+          </div>
+          <div class="form-group row deposit-funds-sec">
+            <div *ngIf ="CurrencyCode =='USD'" class="col-12 col-7">
+              <span class="font-lg text-green">
+                $ <ng2-odometer [number]="currencyValue" [config]="{ format: '(,ddd).dd' }"></ng2-odometer>
+              </span>
+            </div>
+            <div *ngIf ="CurrencyCode =='AED'" class="col-12 col-7">
+              <span class="font-lg text-green">
+                د.إ <ng2-odometer [number]="currencyValue" [config]="{ format: '(,ddd).dd' }"></ng2-odometer>
+              </span>
+            </div>
+            <div *ngIf ="CurrencyCode =='INR'" class="col-12 col-7">
+              <span class="font-lg text-green">
+                ₹<ng2-odometer [number]="currencyValue" [config]="{ format: '(,ddd).dd' }"></ng2-odometer>
+              </span>
+            </div>
+            <div *ngIf ="CurrencyCode =='EUR'" class="col-12 col-7">
+              <span class="font-lg text-green">
+                €<ng2-odometer [number]="currencyValue" [config]="{ format: '(,ddd).dd' }"></ng2-odometer>
+              </span>
+            </div>
+            <div *ngIf ="CurrencyCode =='SGD'" class="col-12 col-7">
+              <span class="font-lg text-green">
+                S$<ng2-odometer [number]="currencyValue" [config]="{ format: '(,ddd).dd' }"></ng2-odometer>
+              </span>
+            </div>
+          </div>
+        </div>
+          <div class="row deposit-funds-sec">
+          <div class="form-group row deposit-funds-sec">
+            <div class="col-12 col-5 depo-text">
+              <label for="inputDepositAmount" class="col-form-label " [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Enter Deposit Amount</label>
+            </div>
+          </div>
+          <div class="form-group row deposit-funds-sec">
+            <div class="col-12 col-7">
+              <div class="input-group mb-2">
+                <input type="text" step="0.01" class=" rounded only_amount" [ngClass]="Themecolor == 'Dark' ? 'form-control' : 'form-control-light'" name="deposit_amount"
+                  [(ngModel)]="deposit_amount" id="deposit_amount" placeholder="0.00"
+                  #am="ngModel" appTwodecimalpoint>
+                    <div *ngIf ="CurrencyCode =='USD'" class="input-group-append">
+                      <div class="input-group-text bg-transparent border-0 " [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">USD</div>
+                    </div>
+                    <div *ngIf ="CurrencyCode =='AED'" class="input-group-append">
+                      <div class="input-group-text bg-transparent border-0 " [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">AED</div>
+                    </div>
+                    <div *ngIf ="CurrencyCode =='INR'" class="input-group-append">
+                      <div class="input-group-text bg-transparent border-0 " [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">INR</div>
+                    </div>
+                    <div *ngIf ="CurrencyCode =='SGD'" class="input-group-append">
+                      <div class="input-group-text bg-transparent border-0 " [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">S$</div>
+                    </div>
+                    <div *ngIf ="CurrencyCode =='EUR'" class="input-group-append">
+                      <div class="input-group-text bg-transparent border-0 " [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">EUR</div>
+                    </div>
+              </div>
+              <small *ngIf="CurrencyCode =='USD'">
+                <small class="" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Minimum of $ {{minvalue}} and Maximum $ {{maxvalue}} can be deposited</small>
+              </small>
+              <small *ngIf="CurrencyCode =='AED'">
+                <small class="" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Minimum of {{minvalueAed}}د.إ and Maximum {{maxvalueAed}}د.إ can be deposited</small>
+              </small>
+              <small *ngIf="CurrencyCode =='INR'">
+                <small class="" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Minimum of ₹{{minvalueInr}} and Maximum ₹{{maxvalueInr}} can be deposited</small>
+              </small>
+              <small *ngIf="CurrencyCode =='SGD'">
+                <small class="" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Minimum of S${{minvalueSgd}} and Maximum S${{maxvalueSgd}} can be deposited</small>
+              </small>
+              <small *ngIf="CurrencyCode =='EUR'">
+                <small class="" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Minimum of €{{minvalueEur}} and Maximum €{{maxvalueEur}} can be deposited</small>
+              </small>
+            </div>
+          </div>
+        </div>
+        
+          <div class="form-group row mb-2">
+            <div class="col-4"></div>
+            <div class="col-8 offset-md-2" *ngIf="CurrencyCode =='USD'">
+                <button type="submit" class="btn btn-green generatePaymentOrderBtn" id="payn" [disabled]="f.form.invalid||deposit_amount<minvalue||deposit_amount>maxvalue">GENERATE PAYMENT ORDER</button>
+            </div>
+            <div class="col-4"></div>
+            <div class="col-8 offset-md-2" *ngIf="CurrencyCode =='AED'">
+              <button type="submit" class="btn btn-green generatePaymentOrderBtn" id="payn" [disabled]="f.form.invalid||deposit_amount<minvalueAed||deposit_amount>maxvalueAed">GENERATE PAYMENT ORDER</button>
+          </div>
+          <div class="col-4"></div>
+          <div class="col-8 offset-md-2" *ngIf="CurrencyCode =='INR'">
+            <button type="submit" class="btn btn-green generatePaymentOrderBtn" id="payn" [disabled]="f.form.invalid||deposit_amount<minvalueInr||deposit_amount>maxvalueInr">GENERATE PAYMENT ORDER</button>
+        </div>
+          <div class="col-8 offset-md-2" *ngIf="CurrencyCode =='EUR'">
+            <button type="submit" class="btn btn-green generatePaymentOrderBtn" id="payn" [disabled]="f.form.invalid||deposit_amount<minvalueEur||deposit_amount>maxvalueEur">GENERATE PAYMENT ORDER</button>
+        </div>
+          <div class="col-8 offset-md-2" *ngIf="CurrencyCode =='SGD'">
+            <button type="submit" class="btn btn-green generatePaymentOrderBtn" id="payn" [disabled]="f.form.invalid||deposit_amount<minvalueSgd||deposit_amount>maxvalueSgd">GENERATE PAYMENT ORDER</button>
+        </div>
+          </div>
+        </form>
+        </div>
+      </div>
+    </ng-template>
+    <div class="col-xl-5 col-lg-6 col-12 mt-3 align-self-stretch">
+      <div class=" p-2 pl-3 pr-3 rounded h-100 " [ngClass]="Themecolor == 'Dark' ? 'bg-dark' : 'bg-light'"> <span  [ngClass]="Themecolor == 'Dark' ? 'font-md text-white mr-2' : 'font-md text-black mr-2'">Bank Details</span>
+        <div style="top: 10px;left: 167px;position: absolute;">
+          <div class="icon-section pull-left">
+            <i class="fa fa-info-circle" aria-hidden="true" (click)="data.handleInfoSection('depositBankInfo')"></i>
+          </div>
+          <div class="info-section" id="depositBankInfo" style="display: none;top: 59px;">
+            <div class="info-header">
+              <div class="info-title" > Bank Details</div>
+              <div class="info-close">
+                <i class="fa fa-times" aria-hidden="true" (click)="data.handleInfoSection('depositBankInfo')"></i>
+              </div>
+            </div>
+            <div class="info-body">
+              This is the Exchange bank information for depositing funds. Once you have transferred the fund into this bank account and the funds are received by us, the funds will reflect in your wallet within 1 business day. 
+            </div>
+          </div>
+        </div>
+        <div class="w-100"></div>
+        <ul class="list-group mb-2">
+          <li  [ngClass]="Themecolor == 'Dark' ? 'list-group-item user-deposit-data' : 'list-group-item-light user-deposit-data'">
+            <div class="d-flex">
+              <div  [ngClass]="Themecolor == 'Dark' ? 'mr-auto text-white' : 'mr-auto text-black'">Beneficiary Name:</div>
+              <div><span class=" font-weight-bold font-sm">{{beneficiaryName}}</span></div>
+            </div>
+          </li>
+          <li [ngClass]="Themecolor == 'Dark' ? 'list-group-item user-deposit-data' : 'list-group-item-light user-deposit-data'">
+            <div class="d-flex">
+              <div [ngClass]="Themecolor == 'Dark' ? 'mr-auto text-white' : 'mr-auto text-black'">Beneficiary Address:</div>
+              <div  class="ml-5"><span class=" font-weight-bold font-sm">{{beneficiaryAddress}}</span></div>
+            </div>
+          </li>
+          <li [ngClass]="Themecolor == 'Dark' ? 'list-group-item user-deposit-data' : 'list-group-item-light user-deposit-data'">
+            <div class="d-flex">
+              <div [ngClass]="Themecolor == 'Dark' ? 'mr-auto text-white' : 'mr-auto text-black'">Bank Account No:</div>
+              <div><span class=" font-weight-bold font-sm">{{accountNo}}</span></div>
+            </div>
+          </li>
+          <li [ngClass]="Themecolor == 'Dark' ? 'list-group-item user-deposit-data' : 'list-group-item-light user-deposit-data'">
+            <div class="d-flex">
+              <div [ngClass]="Themecolor == 'Dark' ? 'mr-auto text-white' : 'mr-auto text-black'">Account Type:</div>
+              <div><span class=" font-weight-bold font-sm">{{accountType}}</span></div>
+            </div>
+          </li>
+          <li [ngClass]="Themecolor == 'Dark' ? 'list-group-item user-deposit-data' : 'list-group-item-light user-deposit-data'">
+            <div class="d-flex">
+              <div *ngIf="ibanNo ==null && ifscCode==null || routingNo==''" [ngClass]="Themecolor == 'Dark' ? 'mr-auto text-white' : 'mr-auto text-black'">Routing No:</div>
+              <div *ngIf="ibanNo !=null && routingNo!=''" [ngClass]="Themecolor == 'Dark' ? 'mr-auto text-white' : 'mr-auto text-black'">IBAN:</div>
+              <div *ngIf="ifscCode !=null && routingNo!=''" [ngClass]="Themecolor == 'Dark' ? 'mr-auto text-white' : 'mr-auto text-black'">IFSC:</div>
+              <div *ngIf="ibanNo !=null">
+                <span class=" font-weight-bold font-sm">{{ibanNo}}</span>
+              </div>
+              <div *ngIf="routingNo !=null">
+                <span class=" font-weight-bold font-sm">{{routingNo}}</span>
+              </div>
+              <div *ngIf="ifscCode !=null">
+                <span class=" font-weight-bold font-sm">{{ifscCode}}</span>
+              </div>
+            </div>
+          </li>
+          
+          <li [ngClass]="Themecolor == 'Dark' ? 'list-group-item user-deposit-data' : 'list-group-item-light user-deposit-data'" id="swft-no" style="display:none">
+            <div class="d-flex">
+              <div [ngClass]="Themecolor == 'Dark' ? 'mr-auto text-white' : 'mr-auto text-black'">Swift Code:</div>
+              <div><span class=" font-weight-bold font-sm">{{swiftCode}}</span></div>
+            </div>
+          </li>
+          <li [ngClass]="Themecolor == 'Dark' ? 'list-group-item user-deposit-data' : 'list-group-item-light user-deposit-data'">
+            <div class="d-flex">
+              <div [ngClass]="Themecolor == 'Dark' ? 'mr-auto text-white' : 'mr-auto text-black'">Bank Name:</div>
+              <select id="bankNameSelectField" (change)="gebankdtl($event.target.value)" disabled style="background: white; display:none;">
+                <option [value]=""></option>
+                <option *ngFor="let item of banks" [value]="item.bankId">{{item.bankname}}</option>
+              </select>
+              <div><span class=" font-weight-bold font-sm">{{bankname}}</span></div>
+            </div>
+          </li>
+          <li [ngClass]="Themecolor == 'Dark' ? 'list-group-item user-deposit-data' : 'list-group-item-light user-deposit-data'">
+            <div class="d-flex">
+              <div [ngClass]="Themecolor == 'Dark' ? 'mr-auto text-white' : 'mr-auto text-black'">Bank Address:</div>
+              <div class="ml-5"><span class=" font-weight-bold">{{Baddress}}</span></div>
+            </div>
+          </li>
+          
+
+         
+          
+
+        </ul>
+      </div>
+    </div>
+  </div>
+    <div class="col-12 mt-3 align-self-stretch">
+      <div class="p-2 pl-3 pr-3 rounded h-100 customer-report-widget" [ngClass]="Themecolor == 'Dark' ? 'bg-dark' : 'bg-light'">
+        <div class="d-flex">
+          <div class="p-2 mr-auto"><span class="font-md  mr-2" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Deposit History</span>
+            <div style="top: 19px;left: 180px;position: absolute;">
+              <div class="icon-section pull-left">
+                <i class="fa fa-info-circle" aria-hidden="true" (click)="data.handleInfoSection('depositHistoryInfo')"></i>
+              </div>
+              <div class="info-section" id="depositHistoryInfo" style="display: none;left: 94px;top: -28px;">
+                <div class="info-header">
+                  <div class="info-title">Deposit History</div>
+                  <div class="info-close">
+                    <i class="fa fa-times" aria-hidden="true" (click)="data.handleInfoSection('depositHistoryInfo')"></i>
+                  </div>
+                </div>
+                <div class="info-body">
+                  Check out your Pay order date, Pay order number, Amount, Status and Action of the Payment order
+                </div>
+              </div>
+            </div></div>
+        </div>
+        <div class="w-100 mt-2"></div>
+        <div class="table-responsive-sm">
+          <table class="table table-sm table-hover">
+            <thead>
+              <tr class="" [ngClass]="Themecolor == 'Dark' ? 'bg-black text-white' : 'tableHeader-bg-light text-black'">
+                <th style="width: 20%;" [ngClass]="Themecolor == 'Dark' ? '' : 'text-black'" scope="col">Payorder Date</th>
+                <th style="width: 20%;" [ngClass]="Themecolor == 'Dark' ? '' : 'text-black'" scope="col">Payorder no</th>
+                <th style="width: 20%;" [ngClass]="Themecolor == 'Dark' ? '' : 'text-black'" scope="col">Amount</th>
+                <th style="width: 20%;" [ngClass]="Themecolor == 'Dark' ? '' : 'text-black'" scope="col">Status</th>
+                <th style="width: 20%;" [ngClass]="Themecolor == 'Dark' ? '' : 'text-black'" scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr  [ngClass]="Themecolor == 'Dark' ? 'text-white txnSectionRowDark' : 'text-black depositSectionRowLight'" *ngFor="let i of invoiceList" >
+                <td style="width: 20%;">{{i.created|date:'medium'}}</td>
+                <td style="width: 20%;text-decoration: underline;  color: #8585f5;cursor:pointer" (click)="handleShowPaymentOrder(paymentOrderDisplay,i.order_no,i.fiat_amount,i.bankName,i.accountNo,i.routingNo,i.beneficiaryName,i.swiftCode,i.currency,i.ibanNo,i.ifscCode,i.accountType,i.bankAddress,i.beneficiaryAddress)" >{{i.order_no}}</td>
+                <td style="width: 20%;" *ngIf="i.currency =='USD'">${{i.amount}}</td>
+                <td style="width: 20%;" *ngIf="i.currency =='AED'"> د.إ{{i.amount}}</td>
+                <td style="width: 20%;" *ngIf="i.currency =='EUR'"> €{{i.amount}}</td>
+                <td style="width: 20%;" *ngIf="i.currency =='SGD'"> S${{i.amount}}</td>
+                <td style="width: 20%;" *ngIf="i.currency =='INR'"> ₹{{i.amount}}</td>
+
+                <td style="width: 20%;" class="text-green" *ngIf="i.status=='17'; else pending">Confirmed</td>
+                <ng-template #pending>
+                  <td style="width: 20%;" class="text-orange" *ngIf="i.status =='15'; else decline">Pending</td>
+                  </ng-template>
+                  <ng-template  #decline>
+                    <td style="width: 20%;" class="text-red">Declined</td>
+                  </ng-template>
+
+                <td style="width: 20%;" *ngIf="i.status=='17' ;else actioninvoice">
+                  <a class="text-white" (click)="invoice(content,i.order_no,i.amount,i.bankName,i.accountNo,i.routingNo,i.beneficiaryName,i.swiftCode,i.currency,i.ibanNo,i.ifscCode,i.accountType)" class="text-skyblue"
+                     href="javascript:void(0);"> 
+                       <span  style="text-decoration: underline;  color: #8585f5;"> Invoice</span>
+                   </a>
+                </td>
+                <ng-template #actioninvoice>
+                  <td style="width: 20%;" *ngIf="i.status=='15' ;else actioninvoicedecline">Please complete payment</td>
+                  </ng-template>
+                  <ng-template #actioninvoicedecline>
+                    <td style="width: 20%;">Payment not received</td>
+                  </ng-template>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <div class="float-sm-right btn-group btn-group-sm pagination_div" role="group"
+              aria-label="transaction-history">
+              <!-- <ngb-pagination [collectionSize]="collection" [(page)]="page" [directionLinks]="false" (click)="pager(page);" ></ngb-pagination> -->
+              <div class="btn-group">
+                <button class="btn btn-info" (click)="pager(1)" [disabled]="page==1">
+                  <i class="fa fa-angle-double-left" aria-hidden="true"></i>
+                </button>
+                <button class="btn btn-info" (click)="pagerPre(page)" [disabled]="page==1">
+                  <i class="fa fa-angle-left" aria-hidden="true"></i>
+                </button>
+                <button class="btn btn-info {{page==p?'active':''}} {{((p<page+5)&&(p>page-5))?'':'d-none'}}"
+                  (click)="pager(p);" *ngFor="let p of pgn">{{p}}</button>
+                <button class="btn btn-info" (click)="pagerNext(page)" [disabled]="page==pgn.length">
+                  <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </button>
+                <button class="btn btn-info" (click)="pager(pgn.length)" [disabled]="page==pgn.length">
+                  <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <ng-template #orderID let-modal>
+      <div id="myDiv">
+        <div class="modal-header sendreceive-wallet">
+          <h5 class="modal-title " id="receiveModalLabel">Payment Order Generated</h5>
+          <button class="close" type="button" (click)="modal.close()"> <span aria-hidden="true">×</span> </button>
+        </div>
+        <div class="modal-body send-wallet">
+          <div clas="row">
+            <div class="col-md-12">
+              <h5>Order No: <span class=" order_no">{{orderNoToShow}}</span></h5>
+              <span>Please do a transfer within 72 hours to the below account </span>
+              <ul class="list-group mb-2">
+                <li class="list-group-item">
+                  <div class="d-flex">
+                    <div class="mr-auto ">Beneficiary Name:</div>
+                    <div><span class=" font-weight-bold font-sm">{{beneficiaryName}}</span></div>
+                  </div>
+                </li>
+                <li class="list-group-item">
+                  <div class="d-flex">
+                    <div class="mr-auto ">Beneficiary Address:</div>
+                    <div><span class=" font-weight-bold font-sm">{{beneficiaryAddress}}</span></div>
+                  </div>
+                </li>
+                <li class="list-group-item">
+                  <div class="d-flex">
+                    <div class="mr-auto ">Bank account No:</div>
+                    <div><span class=" font-weight-bold font-sm">{{accountNo}}</span></div>
+                  </div>
+                </li>
+                <li class="list-group-item">
+                  <div class="d-flex">
+                    <div class="mr-auto ">Account Type:</div>
+                    <div><span class=" font-weight-bold font-sm">{{accountType}}</span></div>
+                  </div>
+                </li>
+                <li class="list-group-item">
+                  <div class="d-flex">
+                  <div *ngIf="ibanNo ==null && ifscCode==null || routingNo==''" class="mr-auto ">Routing No:</div>
+                <div *ngIf="ibanNo !=null && ibanNo!=null" class="mr-auto ">IBAN:</div>
+                <div *ngIf="ifscCode !=null && routingNo!=''" class="mr-auto ">IFSC:</div>
+                <div *ngIf="ibanNo !=null">
+                  <span class=" font-weight-bold font-sm">{{ibanNo}}</span>
+                </div>
+                <div *ngIf="routingNo !=null">
+                  <span class=" font-weight-bold font-sm">{{routingNo}}</span>
+                </div>
+                <div *ngIf="ifscCode !=null">
+                  <span class=" font-weight-bold font-sm">{{ifscCode}}</span>
+                </div>
+                    <!-- <div class="mr-auto ">Routing No:</div>
+                    <div *ngIf="!routingNo">
+                      <span class=" font-weight-bold font-sm">{{ibanNo}}</span>
+                    </div>
+                    <div *ngIf="routingNo!=''">
+                      <span class=" font-weight-bold font-sm">{{routingNo}}</span>
+                    </div> -->
+                  </div>
+                </li>
+                <li class="list-group-item" id="sft-viz">
+                  <div class="d-flex" >
+                    <div class="mr-auto ">Swift Code:</div>
+                    <div><span class=" font-weight-bold font-sm">{{swiftCode}}</span></div>
+                  </div>
+                </li>
+                <li class="list-group-item">
+                  <div class="d-flex">
+                    <div class="mr-auto ">Bank Name:</div>
+                    <div><span class=" font-weight-bold font-sm">{{bankname}}</span></div>
+                  </div>
+                </li>
+                <li class="list-group-item">
+                  <div class="d-flex">
+                    <div class="mr-auto ">Bank Address:</div>
+                    <div><span class=" font-weight-bold font-sm">{{Baddress}}</span></div>
+                  </div>
+                </li>
+               
+              </ul>
+              <!-- <p><span>*</span>Please include the <strong>order number</strong> in the deposit</p> -->
+              <p class="text-white"><span>*</span>Please include <strong>only</strong>  the <strong>order number</strong> in the payment reference field for your deposit to be credited to your wallet promptly.</p>
+              <p><span>*</span>The request will expire in <strong>72 hours</strong></p>
+              <p><span>*</span>Kindly note that the <strong>name</strong> and <strong>account number</strong> for the
+              transfer should match details given in the website</p>
+              <p *ngIf="CurrencyCode=='INR';else diftcurrency"><span>*</span>All transactions with incorrect details or towards expired request will be refunded in 15
+                business days after deducting processing fees</p>
+                <ng-template #diftcurrency>
+                  <p><span>*</span>All transactions with incorrect details or towards expired request will be refunded in 15
+                    business days after deducting {{CurrencyCode}} 15 towards processing fees</p>
+                </ng-template>
+              <div class="col-12 d-flex">
+                <button class="btn btn-success btn-sm mx-auto"
+                  (click)="data.alert('Thank you!! Once your transfer reaches us your wallet balance will be updated.','success',10000);modal.close();claearbankdetails()">OK</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+    <ng-template #paymentOrderDisplay let-modal>
+      <div id="myDiv">
+      <div class="modal-header sendreceive-wallet">
+        <h5 class="modal-title " id="receiveModalLabel">Payment Order Generated</h5>
+        <button class="close" type="button" (click)="modal.close()"> <span aria-hidden="true">×</span> </button>
+      </div>
+      <div class="modal-body send-wallet">
+        <div clas="row">
+          <div class="col-md-12">
+            <h5>Order No: <span class=" order_no">{{displableOrderNo}}</span></h5>
+            <span>Please do a transfer within 72 hours to the below account </span>
+            <ul class="list-group mb-2">
+              <li class="list-group-item">
+                <div class="d-flex">
+                  <div class="mr-auto ">Beneficiary Name:</div>
+                  <div><span class=" font-weight-bold font-sm">{{displableBeneficiaryName}}</span></div>
+                </div>
+              </li>
+              <li class="list-group-item">
+                <div class="d-flex">
+                  <div class="mr-auto ">Beneficiary Address:</div>
+                  <div><span class=" font-weight-bold font-sm">{{displableBeneficiaryAddress}}</span></div>
+                </div>
+              </li>
+              <li class="list-group-item">
+                <div class="d-flex">
+                  <div class="mr-auto ">Bank account No:</div>
+                  <div><span class=" font-weight-bold font-sm">{{displableAccNo}}</span></div>
+                </div>
+              </li>
+              <li class="list-group-item">
+                <div class="d-flex">
+                  <div class="mr-auto ">Account Type:</div>
+                  <div><span class=" font-weight-bold font-sm">{{displableAccountType}}</span></div>
+                </div>
+              </li>
+              <li class="list-group-item">
+                <div class="d-flex">
+                <div *ngIf="displableRoutingNo!==null" class="mr-auto ">Routing No:</div>
+              <div *ngIf="displableIbanNo!==null" class="mr-auto ">IBAN:</div>
+              <div *ngIf="displableIfscCode!==null" class="mr-auto ">IFSC:</div>
+              <div *ngIf="displableIbanNo !=null">
+                <span class=" font-weight-bold font-sm">{{displableIbanNo}}</span>
+              </div>
+              <div *ngIf="displableRoutingNo !=null">
+                <span class=" font-weight-bold font-sm">{{displableRoutingNo}}</span>
+              </div>
+              <div *ngIf="displableIfscCode !=null">
+                <span class=" font-weight-bold font-sm">{{displableIfscCode}}</span>
+              </div>
+                  <!-- <div class="mr-auto ">Routing No:</div>
+                  <div *ngIf="!routingNo">
+                    <span class=" font-weight-bold font-sm">{{ibanNo}}</span>
+                  </div>
+                  <div *ngIf="routingNo!=''">
+                    <span class=" font-weight-bold font-sm">{{routingNo}}</span>
+                  </div> -->
+                </div>
+              </li>
+              <!-- <li class="list-group-item" id="sft-viz" *ngIf="displableSwiftCode !== ''">
+                <div class="d-flex" >
+                  <div class="mr-auto ">Swift Code:</div>
+                  <div><span class=" font-weight-bold font-sm">{{displableSwiftCode}}</span></div>
+                </div>
+              </li> -->
+              <li class="list-group-item">
+                <div class="d-flex">
+                  <div class="mr-auto">Bank Name:</div>
+                  <div><span class=" font-weight-bold font-sm">{{displableBankName}}</span></div>
+                </div>
+              </li>
+              <li class="list-group-item">
+                <div class="d-flex">
+                  <div class="mr-auto">Bank Address:</div>
+                  <div><span class=" font-weight-bold font-sm">{{displableBankAddress}}</span></div>
+                </div>
+              </li>
+              
+            </ul>
+           <!--  <p><span>*</span>Please include the <strong>order number</strong> in the deposit</p> -->
+            <p class="text-white"><span>*</span>Please include <strong>only</strong>  the <strong>order number</strong> in the payment reference field for your deposit to be credited to your wallet promptly.</p>
+            <p><span>*</span>The request will expire in <strong>72 hours</strong></p>
+            <p><span>*</span>Kindly note that the <strong>name</strong> and <strong>account number</strong> for the
+            transfer should match details given in the website</p>
+            <p *ngIf="CurrencyCode=='INR';else diftcurrency"><span>*</span>All transactions with incorrect details or towards expired request will be refunded in 15
+              business days after deducting processing fees</p>
+              <ng-template #diftcurrency>
+                <p><span>*</span>All transactions with incorrect details or towards expired request will be refunded in 15
+                  business days after deducting {{displayableCurrencyCode}} 15 towards processing fees</p>
+              </ng-template>
+            <div class="col-12 d-flex">
+              <button class="btn btn-success btn-sm mx-auto"
+              (click)="modal.close()">OK</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      </div>
+    </ng-template>
+
+    <div class="modal fade" id="invoice_modal" tabindex="-1" role="dialog" aria-labelledby="receiveModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content" style="border: 0px !important;">
+          <div class="modal-header">
+            <h5 class="modal-title " id="receiveModalLabel">Invoice </h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close"> <span
+                aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<ng-template #content let-modal>
+  <div id="myDiv">
+    <div class="modal-content" style="border: 0px !important;">
+
+    <div class="modal-header sendreceive-wallet">
+      <h4 class="modal-title">Invoice</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body send-wallet">
+      <div clas="row">
+        <div class="col-md-12">
+          <ul class="list-group mb-2">
+            <li class="list-group-item bg-pbgreen">
+              <div class="d-flex">
+                <div class="mr-auto text-white">Order No:</div>
+                <div><span class="text-white font-weight-bold font-sm">{{invoiceOrderNoI}}</span></div>
+              </div>
+              <div class="d-flex">
+                <div class="mr-auto text-white">Payment Method:</div>
+                <div><span class="text-white font-weight-bold font-sm">Bank Transfer</span></div>
+              </div>
+              <div class="d-flex">
+                <div class="mx-auto text-white font-weight-bold">CONFIRMED</div>
+              </div>
+            </li>
+            <li class="list-group-item">
+              <div class="d-flex">
+                <div class="mr-auto ">Beneficiary Name:</div>
+                <div><span class=" font-weight-bold font-sm">{{beneficiaryNameI}}</span></div>
+              </div>
+            </li>
+            <li class="list-group-item">
+              <div class="d-flex">
+                <div class="mr-auto ">Bank account No:</div>
+                <div><span class=" font-weight-bold font-sm">{{accountNoI}}</span></div>
+              </div>
+            </li>
+            <li class="list-group-item">
+              <div class="d-flex">
+                <div class="mr-auto ">Account Type:</div>
+                <div><span class=" font-weight-bold font-sm">{{accountTypeI}}</span></div>
+              </div>
+            </li>
+            <li class="list-group-item">
+              <div class="d-flex">
+                <div *ngIf="routingNoI !=''" class="mr-auto ">Routing No:</div>
+                <div *ngIf="ibanNoI !='' && routingNoI==''" class="mr-auto ">IBAN:</div>
+                <div *ngIf="ifscCodeI !='' && routingNoI==''" class="mr-auto ">IFSC:</div>
+  
+                <div *ngIf="ibanNoI !=''">
+                  <span class=" font-weight-bold font-sm">{{ibanNoI}}</span>
+                </div>
+                <div *ngIf="routingNoI !=''">
+                  <span class=" font-weight-bold font-sm">{{routingNoI}}</span>
+                </div>
+                <div *ngIf="ifscCodeI !=''">
+                  <span class=" font-weight-bold font-sm">{{ifscCodeI}}</span>
+                </div>
+                
+              </div>
+            </li>
+            <li class="list-group-item" id="swft-noI">
+              <div class="d-flex">
+                <div class="mr-auto " >Swift Code:</div>
+                <div><span class=" font-weight-bold font-sm">{{swiftCodeI}}</span></div>
+              </div>
+            </li>
+            <li class="list-group-item">
+              <div class="d-flex">
+                <div class="mr-auto ">Bank Name:</div>
+                <div><span class=" font-weight-bold font-sm">{{bankNameI}}</span></div>
+              </div>
+            </li>
+            
+           
+           
+            <li class="list-group-item bg-pbgreen">
+              <div class="d-flex">
+                <div class="mr-auto text-white">Amount:</div>
+                <div *ngIf="currencynameI ==='USD'">
+                  <span class="text-white font-weight-bold font-sm">$ {{invoiceAmountI}}</span>
+                </div>
+                <div *ngIf="currencynameI =='AED'">
+                  <span class="text-white font-weight-bold font-sm"> {{invoiceAmountI}} د.إ</span>
+                </div>
+                <div *ngIf="currencynameI =='INR'">
+                  <span class="text-white font-weight-bold font-sm"> ₹ {{invoiceAmountI}}</span>
+                </div>
+                <div *ngIf="currencynameI =='EUR'">
+                  <span class="text-white font-weight-bold font-sm"> € {{invoiceAmountI}}</span>
+                </div>
+                <div *ngIf="currencynameI =='SGD'">
+                  <span class="text-white font-weight-bold font-sm"> S$ {{invoiceAmountI}}</span>
+                </div>
+              </div>
+              <div class="d-flex">
+                <div class="mr-auto text-white">Total Amount:</div>
+                <div *ngIf="currencynameI =='USD'">
+                  <span class="text-white font-weight-bold font-sm">$ {{invoiceAmountI}}</span>
+                </div>
+                <div *ngIf="currencynameI =='AED'">
+                  <span class="text-white font-weight-bold font-sm">{{invoiceAmountI}} د.إ </span>
+                </div>
+                <div *ngIf="currencynameI =='INR'">
+                  <span class="text-white font-weight-bold font-sm"> ₹ {{invoiceAmountI}}</span>
+                </div>
+                <div *ngIf="currencynameI =='EUR'">
+                  <span class="text-white font-weight-bold font-sm"> € {{invoiceAmountI}}</span>
+                </div>
+                <div *ngIf="currencynameI =='SGD'">
+                  <span class="text-white font-weight-bold font-sm"> S$ {{invoiceAmountI}}</span>
+                </div>
+              </div>
+            </li>
+          </ul>
+          <div class="col-12 d-flex">
+            <button class="btn btn-success btn-sm mx-auto" (click)="modal.close();claearbankdetails()">OK</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+  </div>
+</ng-template>
+<ng-template #depodisc let-modal>
+  <div id="myDiv">
+    <div class="modal-header sendreceive-wallet">
+      <h5 class="modal-title " id="receiveModalLabel"> Disclaimer</h5>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <form id="uc-cart-checkout-form">
+        <ul class="list-group mb-2">
+          <li class="list-group-item bg-pbgreen">
+            <div class="d-flex">
+              <div class="mr-auto text-white">Currency Name:</div>
+              <div><span class="text-white font-weight-bold font-sm">{{currencyname}}</span></div>
+            </div>
+            <div class="d-flex">
+              <div class="mr-auto text-white">Current EUR Balance:</div>
+              <div><span class="text-white font-weight-bold font-sm">{{currentbalence}}</span></div>
+            </div>
+            <div class="d-flex">
+              <div class="mr-auto text-white">Deposit Amount:</div>
+              <div><span class="text-white font-weight-bold font-sm">{{dep_amount}}</span></div>
+            </div>
+          </li>
+          <li class="list-group-item">
+            <div class="d-flex">
+              <div class="main" id="section1">
+                <strong>ADVISORY / DISCLAIMER - For Skrill Users Only!</strong>
+  
+                <a href="#section2"></a>
+                  <p>You will now leave Lira Exchange and be taken to Skrill. Services relating
+                      to credit card payments are provided by Skrill, which is a separate platform owned by a third party.
+                      Please read and agree to the Terms of Use of Simplex before using the service. For any questions
+                      relating to credit card payments, please contact merchantservices@skrill.com. Lira Exchange
+                      does not assume any responsibility for any loss or damage caused by the use of the credit card payment
+                      service.</p>
+              </div>
+  
+            </div>
+            <div class="mr-auto text-dark">Agree:</div>
+            <div> <span class="text-white font-weight-bold font-sm"><input type="checkbox" id="disclaim"
+                  (click)="myFunction()"></span> </div>
+          </li>
+        </ul>
+      </form>
+    </div>
+    <form #skrillForm action="https://pay.skrill.com" method="post">
+      <input type="hidden" name="pay_to_email" value="alex.p@digitalterminal.net">
+      <input type="hidden" name="status_url" value="https://example.com/
+      process_payment.cgi">
+      <input type="hidden" name="language" value="EN">
+      <input type="hidden" name="return_url" value="http://localhost:4200/deposit-funds">
+      <input type="hidden" name="return_url_text" value="Back to Lira">
+      <input type="hidden" name="cancel_url" value="http://localhost:4200/deposit-funds">
+      <input type="hidden" name="transaction_id" value={{TransactionId}}>
+      <input type="hidden" name="amount" value={{dep_amount}}>
+      <input type="hidden" name="currency" value={{currencyname}}>
+      <input type="hidden" name="payment_methods" value="ACC">
+      <input type="hidden" name="pay_from_email" value="dhriti.d@hashcashconsultants.com">
+      <input type="hidden" name="firstname" value="{{fname}}">
+      <input type="hidden" name="lastname" value="{{lname}}">
+      <input type="hidden" name="detail1_description" value="Description:">
+      <input type="hidden" name="detail1_text" value="Payment Received from">
+      <input type="button" *ngIf="disclaim" (click)="skrillForm.submit()" class="skrill">
+    </form>
+  </div>
+</ng-template>

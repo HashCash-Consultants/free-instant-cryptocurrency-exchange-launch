@@ -1,0 +1,156 @@
+<!-- <app-navbar></app-navbar> -->
+<app-navbar (themeChanged)="themeChangedHandler($event)"></app-navbar>
+
+<div class="content-wrapper pt-0 pl-3" [ngClass]="Themecolor == 'Dark' ? '' : 'content-wrapper-light'">
+
+  <div class="container-fluid" data-ng-controller="profileCtrl" data-ng-init="loginDuration();">
+    <div class="row d-flex">
+      <div class="col-12 col-md-12 mt-3">
+        <div class="p-2 pr-3 rounded" [ngClass]="Themecolor == 'Dark' ? 'bg-dark' : 'bg-light'">
+          <div class="row">
+            <div class="col-12 col-md-2 text-center">
+
+              <img src="./assets/img/default.png" [lazyLoad]="main.profilePic" offset="100" width="100" height="100"
+                alt="{{main.fullName}}" class="mx-auto img-fluid rounded-circle d-block m-3"> <span class="mb-3">
+                <h5 class="text-uppercase" style="font-family:Lucida Console">{{main.fullName}}</h5>
+              </span>
+
+            </div>
+            <div class="col-12 col-md-5 mx-auto up-space">
+              <h6 [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'" class="">Email ID : <span [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"
+                  >{{main.email}}</span></h6>
+              <h6 [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Address : <span [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"
+                 >{{main.address}}</span></h6>
+              <h6 [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'" >Joining Date : <span [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"
+                  >{{main.joinDate}}</span></h6>
+
+            </div>
+            <div class="col-12 col-md-5 mx-auto up-space">
+
+              <h6 [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'" >Country : <span [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"
+                  >{{main.country}}</span></h6>
+              <h6 [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Phone Number : <span [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"
+                  >{{main.phone}}</span></h6>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-md-12 mt-3">
+        <div class=" p-2 pr-3 rounded align-self-stretch h-100" [ngClass]="Themecolor == 'Dark' ? 'bg-dark' : 'bg-light'">
+          <div class="w-100 mt-2"></div>
+          <span class="font-md mr-2 " [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"   style="font-size:20px">Login History 
+            <span style="cursor: pointer;margin-left:10px;font-size:14px;">
+              <i class="fa fa-info-circle" aria-hidden="true" (click)="data.handleInfoSection('loginInfo')"></i>
+            </span>
+          </span>
+          <div class="info-section" id="loginInfo" style="display: none; top: 59px;margin:auto;">
+            <div class="info-header">
+              <div class="info-title">Login History</div>
+              <div class="info-close">
+                <i class="fa fa-times" aria-hidden="true" (click)="data.handleInfoSection('loginInfo')"></i>
+              </div>
+            </div>
+            <div class="info-body">Login History displays the IP Address, Latitude, Longitude, Location, Browser, Device Type, Status, and Date-Time. </div>
+          </div>
+
+          <div class="w-100 mt-2"></div>
+          <div class="table-responsive-sm">
+            <table class="table table-sm table-hover">
+              <thead>
+                <tr  [ngClass]="Themecolor == 'Dark' ? 'bg-black text-white' : 'tableHeader-bg-light'">
+                  <th scope="col" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class=" tablefirstRow" style="font-size:16px">IP Address</th>
+                  <th scope="col" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="" style="font-size:16px">Latitude</th>
+                  <th scope="col" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="" style="font-size:16px">Longitude</th>
+                  <th scope="col" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="" style="font-size:16px">Location</th>
+                  <th scope="col" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="" style="font-size:16px">Browser</th>
+                  <th scope="col" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="" style="font-size:16px">Device Type</th>
+                  <th scope="col" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="" style="font-size:16px">Status</th>
+                  <th scope="col" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="" style="font-size:16px">Date-Time</th>
+                </tr>
+              </thead>
+              <tbody *ngIf="loghistory !=''">
+                <tr *ngFor="let b of loghistory" [ngClass]="Themecolor == 'Dark' ? 'newRowShade' : 'newRowShade-light'">
+                  <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class=" tablefirstRow">{{b.ipAddress}}</td>
+                  <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="">{{b.latitude|uppercase}}</td>
+                  <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="">{{b.longitude}}</td>
+                  <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="">{{b.location}}</td>
+                  <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="">{{b.browser}}</td>
+                  <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="">{{b.deviceType}}</td>
+                  <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="">{{b.status}}</td>
+                  <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="">{{b.timestamp}}</td>
+                </tr>
+                <tr *ngIf="loghistory==null">
+                  <td colspan="5" class="text-center py-3">
+                    <img src="./assets/svg-loaders/puff.svg" width="50" alt="">
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <div class="float-sm-right btn-group btn-group-sm pagination_div" role="group"
+                aria-label="transaction-history">
+                <div class="btn-group">
+                  <button class="btn btn-info" (click)="pager(1)" [disabled]="page==1">
+                    <i class="fa fa-angle-double-left" aria-hidden="true"></i>
+                  </button>
+                  <button class="btn btn-info" (click)="pagerPre(page)" [disabled]="page==1">
+                    <i class="fa fa-angle-left" aria-hidden="true"></i>
+                  </button>
+                  <button class="btn btn-info {{page==p?'active':''}} {{((p<page+5)&&(p>page-5))?'':'d-none'}}"
+                    (click)="pager(p);" *ngFor="let p of pgn">{{p}}</button>
+                  <button class="btn btn-info" (click)="pagerNext(page)" [disabled]="page==pgn.length">
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                  </button>
+                  <button class="btn btn-info" (click)="pager(pgn.length)" [disabled]="page==pgn.length">
+                    <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer class="sticky-footer">
+    <div class="container">
+      <div class="text-center"> <small>Copyright © Paybito 2019</small> </div>
+    </div>
+  </footer>
+  <a class="scroll-to-top rounded" href="#page-top"> <i class="fa fa-angle-up"></i> </a>
+</div>
+
+<ng-template #editPro let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Edit Profile</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="form-group row">
+      <div class="col-md-4">Name</div>
+      <div class="col-md-8"><input type="text" class="form-control" placeholder="Name" [(ngModel)]="editName"></div>
+    </div>
+    <div class="form-group row">
+      <div class="col-md-4">Email</div>
+      <div class="col-md-8"><input type="email" class="form-control" placeholder="Email" [(ngModel)]="editEmail"
+          readonly></div>
+    </div>
+    <div class="form-group row">
+      <div class="col-md-4">OTP</div>
+      <div class="col-md-8"><input type="password" class="form-control" placeholder="OTP" [(ngModel)]="editOtp"></div>
+    </div>
+    <div class="form-group row">
+      <div class="col-md-4"></div>
+      <div class="col-md-8"><button class="btn btn-success"
+          (click)="updateUserProfileInfo(); modal.close();">Submit</button></div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modal.close()">Close</button>
+  </div>
+</ng-template>

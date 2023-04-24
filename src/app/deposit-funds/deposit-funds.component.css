@@ -1,0 +1,190 @@
+.btn-green {
+
+  margin-left: 9px;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+#section2 {
+  height: 600px;
+  background-color: pink;
+}
+
+.depo-text {
+  text-align: right !important;
+}
+
+.modal-header {
+  border-bottom: 2px solid #e9ecef;
+}
+
+.table tbody+tbody {
+  border-top: 1px solid #24262d !important
+}
+
+.table-sm td,
+.table-sm th {
+  padding-right: 23px !important;
+  border: 0;
+}
+
+.disabled-link {
+  pointer-events: none;
+}
+
+.customer-report-widget {
+  margin-left: -15px;
+}
+
+.send-wallet {
+  position: relative;
+  flex: 1 1 auto;
+  padding: 5px;
+  background-color: #31313a;
+  margin: 9px 8px;
+}
+
+.sendreceive-wallet {
+  border-bottom: 0 !important;
+}
+
+#myDiv {
+  background-color: #24262d;
+  border: 0px;
+}
+
+.modal-header .close {
+  margin-top: -4.8rem;
+  margin-right: -37px;
+  border-radius: 50%;
+  background-color: #696975;
+  padding: 0.7rem 1rem;
+}
+
+.list-group-item {
+  background-color: #31313a
+}
+
+.list-group-item-light {
+  background-color: #e6e6e7;
+  border-color: #e6e6e7 !important;
+  position: relative;
+  display: block;
+  padding: 0.75rem 1.25rem;
+  margin-bottom: -1px;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+.modal-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  pointer-events: auto;
+  background-color: #24262d;
+  border: 0px !important;
+  background-clip: padding-box;
+  outline: 0;
+}
+
+.topInfo {
+  top: 8px;
+  left: 573px;
+  position: absolute;
+}
+
+.newPosition{
+  display: inline-grid;
+  padding-left: 6px;
+}
+
+.depositSectionHeaderDark {
+  border-top: 6px solid #24262d;
+}
+
+.depositSectionHeaderLight {
+  border-top: 6px solid #f8f9fa;
+}
+
+.depositSectionRowDark {
+  background-color: #31313a;
+  border-top: 1px solid #24262d;
+}
+
+.depositSectionRowLight {
+  background-color: #e6e6e7;
+  border-top: 1px solid #f8f9fa;
+}
+.txnSectionRowDark {
+  background-color: #31313a ;
+  border-top: 6px solid #24262d;
+}
+
+.txnSectionRowLight {
+  background-color: #e6e6e7 ;
+  border-top: 6px solid #e6e6e7;
+}
+
+@media (min-width: 1500px) {
+  .topInfo {
+    top: 7px;
+    left: 533px;
+    position: absolute;
+  }
+
+
+}
+
+@media (min-width: 1700px) {
+  .topInfo {
+    top: 7px;
+    left: 585px;
+    position: absolute;
+  }
+
+
+}
+
+@media (min-width: 1800px) {
+  .topInfo {
+    top: 7px;
+    left: 630px;
+    position: absolute;
+  }
+
+
+}
+
+@media (min-width: 1900px) {
+  .topInfo {
+    top: 7px;
+    left: 667px;
+    position: absolute;
+  }
+
+
+}
+
+@media (min-width: 2100px) {
+  .topInfo {
+    top: 7px;
+    left: 838px;
+    position: absolute;
+  }
+
+
+
+}
+
+@media (min-width: 2500px) {
+  .topInfo {
+    top: 7px;
+    left: 965px;
+    position: absolute;
+  }
+
+
+
+}

@@ -1,0 +1,491 @@
+<!-- <app-loader></app-loader> -->
+<div class="bitrump-body" *ngIf="data.BROKERID == 'PAYB18022021121103'">
+    
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <div class="container-fluid">
+      <a class="navbar-brand1" href="#">
+        <img src="./assets/img/logo-white-paybito.png" alt="..." style="width:70%">
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        
+      </div>
+    </div>
+  </nav>
+  <section class="testimonial" id="testimonial" style="padding-top: 16px;">
+    <div class="container">
+        <div class="row ">
+            <div class="col-md-6 py-5 text-white text-center leftPanel">
+                <div class=" ">
+                    <div class="card-body">
+                        <!-- <img src="../../assets/img/logo-paybito.png" style="width:50%"> -->
+                        <!-- <h2 class="py-3">SIGNUP</h2> -->
+                <h2 class="py-3" style="text-align: start;padding-left: 37px;font-size: 45px;">Create a Crypto Trading Account</h2>
+
+  
+                        <br/>
+                        
+                        <div class="row">
+                          <div class="media">
+                            <div class="media-left">
+                              <a href="#">
+                                <!-- <i class="fas fa-address-card reg_icon"></i> -->
+                                <!-- <i class="fas fa-user-tie reg_icon"></i> -->
+                                <i class="fas fa-cash-register reg_icon"></i>
+                                <!-- <img class="media-object" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+PGRlZnMvPjxyZWN0IHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgZmlsbD0iI0VFRUVFRSIvPjxnPjx0ZXh0IHg9IjEzLjQ2MDkzNzUiIHk9IjMyIiBzdHlsZT0iZmlsbDojQUFBQUFBO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1mYW1pbHk6QXJpYWwsIEhlbHZldGljYSwgT3BlbiBTYW5zLCBzYW5zLXNlcmlmLCBtb25vc3BhY2U7Zm9udC1zaXplOjEwcHQ7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+NjR4NjQ8L3RleHQ+PC9nPjwvc3ZnPg==" alt="..."> -->
+                              </a>
+                            </div>
+                            <div class="media-body">
+                              <p class="media-heading" style="padding-left: 11px;">500+ Markets available for Trading</p>
+                            </div>
+                          </div>
+                          
+                        </div>
+  
+                        <hr class="new1">
+  
+                        <div class="row">
+                          <div class="media">
+                            <div class="media-left">
+                              <a href="#">
+                                <i class="fas fa-balance-scale-right reg_icon"></i>
+                                <!-- <i class="far fa-seesaw reg_icon"></i> -->
+                                <!-- <img class="media-object" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+PGRlZnMvPjxyZWN0IHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgZmlsbD0iI0VFRUVFRSIvPjxnPjx0ZXh0IHg9IjEzLjQ2MDkzNzUiIHk9IjMyIiBzdHlsZT0iZmlsbDojQUFBQUFBO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1mYW1pbHk6QXJpYWwsIEhlbHZldGljYSwgT3BlbiBTYW5zLCBzYW5zLXNlcmlmLCBtb25vc3BhY2U7Zm9udC1zaXplOjEwcHQ7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+NjR4NjQ8L3RleHQ+PC9nPjwvc3ZnPg==" alt="..."> -->
+                              </a>
+                            </div>
+                            <div class="media-body">
+                              <p class="media-heading">Up To 125:1 Leverage</p>
+                            </div>
+                          </div>
+                          
+                        </div>
+                        <hr class="new1">
+  
+                        <div class="row">
+                          <div class="media">
+                            <div class="media-left">
+                              <a href="#">
+                                <!-- <i class="far fa-chart-bar reg_icon"></i> -->
+                                <i class="fas fa-user-lock reg_icon"></i>
+                                <!-- <img class="media-object" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+PGRlZnMvPjxyZWN0IHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgZmlsbD0iI0VFRUVFRSIvPjxnPjx0ZXh0IHg9IjEzLjQ2MDkzNzUiIHk9IjMyIiBzdHlsZT0iZmlsbDojQUFBQUFBO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1mYW1pbHk6QXJpYWwsIEhlbHZldGljYSwgT3BlbiBTYW5zLCBzYW5zLXNlcmlmLCBtb25vc3BhY2U7Zm9udC1zaXplOjEwcHQ7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+NjR4NjQ8L3RleHQ+PC9nPjwvc3ZnPg==" alt="..."> -->
+                              </a>
+                            </div>
+                            <div class="media-body">
+                              <p class="media-heading">Security of Funds</p>
+                            </div>
+                          </div>
+                          
+                        </div>
+  
+                        <hr class="new1">
+                        <div class="row">
+                            <div class="media">
+                              <div class="media-left">
+                                <a href="#">
+                                  <!-- <i class="fal fa-hand-holding-usd"></i> -->
+                                  <!-- <i class="fas fa-hand-holding-dollar"></i> -->
+                                  <i class="fas fa-umbrella reg_icon"></i>
+                                  </a>
+                              </div>
+                              <div class="media-body">
+                                <p class="media-heading" style="padding-left: 6px;">Risk Protection</p>
+                              </div>
+                            </div>
+                            
+                          </div>
+                          <hr class="new1">
+  
+                        
+  
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 py-5 border" style="background-color: #fdffff;">
+                <!-- <h4 class="pb-4" style="color: #242d74;">PERSONAL INFORMATION</h4> -->
+                <form name="form" #f="ngForm" (ngSubmit)="f.valid && signupData(true)">
+
+                    <div class="form-group">
+                      <div class="form-row">
+                        <div class="col">
+                          <input type="text" class="form-control validate" 
+                          pattern="[A-Za-zÀ-ÿ\s]{1,40}" name="firstName" 
+                          [(ngModel)]="signupObj.firstName" required 
+                          placeholder="First name *"
+                          #firstName="ngModel" [class.is-invalid]="firstName.dirty&&firstName.invalid"
+                          >
+                        <span class="text-danger" *ngIf="(firstName.dirty&&firstName.invalid)">Enter a valid first name</span>
+
+                        </div>
+                        <div class="col">
+                          <input type="text" class="form-control validate" 
+                          
+                          name="middleName" 
+                          [(ngModel)]="signupObj.middleName"  
+                          placeholder="Middle name"
+                          #middleName="ngModel">
+                        </div>
+                        <div class="col">
+                          <input type="text"
+                           class="form-control validate" 
+                          pattern="[A-Za-zÀ-ÿ\s]{3,40}" 
+                          name="lastName"
+                           [(ngModel)]="signupObj.lastName" required 
+                           placeholder="Last name *"
+                          #lastName="ngModel" [class.is-invalid]="lastName.dirty&&lastName.invalid"
+                          >
+                        <span class="text-danger" *ngIf="(lastName.dirty&&lastName.invalid)">Enter a valid last name</span>
+
+                        </div>
+
+                      </div>
+                    <!-- <label for="signupInputfName">Name</label><span class="required">*</span> -->
+                    <!-- <input class="form-control validate" name="fullName" id="signupInputfName" tabindex="1"
+                        [(ngModel)]="signupObj.fullName" type="text" placeholder="Enter Name" pattern="[A-Za-z\s]{3,40}" required
+                        #fullName="ngModel" [class.is-invalid]="fullName.dirty&&fullName.invalid">
+                    <span class="text-danger" *ngIf="fullName.dirty&&fullName.invalid">Enter a valid name</span> -->
+                    </div>
+
+                    <div class="form-group">
+                    <!-- <label for="signupInputEmail">Email</label><span class="required">*</span> -->
+                    <input class="form-control validate" [class.is-invalid]="email.dirty && email.invalid" name="email"
+                        id="signupInputEmail" [(ngModel)]="signupObj.email" placeholder="Enter Email *"
+                        (blur)="checkEmail()" appForbiddenName="bob" required #email="ngModel"
+                        pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
+                    <span class="text-danger" *ngIf="email.dirty && email.invalid">Enter a valid email</span>
+                    </div>
+                    <!-- <div class="form-group">
+                    <input class="form-control validate" id="signupInputAddress" [(ngModel)]="signupObj.address" type="text"
+                        placeholder="Enter Address" name="address" pattern="[A-Za-z0-9\s\.\,\-]{3,100}" #add="ngModel"
+                        [class.is-invalid]="add.dirty&&add.invalid" required>
+                    <span class="text-danger" *ngIf="add.dirty&&add.invalid">Enter a valid address (maximum 100 characters)</span>
+                    </div>
+
+                    <div class="form-group">
+                    <input class="form-control validate" name="pincode" id="signupInputPincode" [(ngModel)]="signupObj.zip"
+                        type="text" placeholder="Enter Zip Code" pattern="[0-9A-za-z\s\-]{3,10}" required #zip="ngModel"
+                        [class.is-invalid]="zip.dirty&&zip.invalid">
+                    <span class="text-danger" *ngIf="zip.dirty&&zip.invalid">Enter a valid zip code</span>
+                    </div>
+                    <div class="form-group">
+                    <input class="form-control validate" id="signupInputCity" [(ngModel)]="signupObj.city" type="text"
+                        placeholder="Enter City" required name="city" pattern="[A-Za-z\s]{3,58}" #city="ngModel"
+                        [class.is-invalid]="city.dirty&&city.invalid">
+                    <span class="text-danger" *ngIf="city.dirty&&city.invalid">Enter a valid city name</span>
+                    </div>
+                    <div class="form-group">
+                    <input class="form-control validate" name="state" id="signupInputState" [(ngModel)]="signupObj.state"
+                        type="text" placeholder="Enter State" required pattern="[A-Za-z\s]{1,30}" #state="ngModel"
+                        [class.is-invalid]="state.dirty&&state.invalid">
+                    <span class="text-danger" *ngIf="state.dirty&&state.invalid">Enter a valid state name</span>
+                    </div>
+
+                    <div class="form-group">
+                    <select class="form-control validate" id="signupInputCountry" name="country"
+                        [(ngModel)]="signupObj.country" required #country="ngModel"
+                        [class.is-invalid]="country.dirty&&country.invalid">
+                        <option value="" selected>Select Country</option>
+                        <option value="{{c.code}}" *ngFor="let c of contries">{{c.name}}</option>
+                    </select>
+                    </div> -->
+                    <!-- <div class="form-group">
+                    <label for="signupInputPhone">Phone Number</label><span class="required">*</span>
+                    <input class="form-control validate" name="phone" minlength="8" maxlength="15" id="signupInputPhone"
+                        [(ngModel)]="signupObj.phone" type="text" placeholder="" (blur)="checkPhone()" required
+                        pattern="[0-9]{8,15}" #phone="ngModel" [class.is-invalid]="phone.dirty&&phone.invalid">
+                    <span class="text-danger" *ngIf="phone.dirty&&phone.invalid">Enter a valid phone number</span>
+
+                    </div> -->
+                    <div class="form-group">
+                        <!-- <label for="signupInputPhone">Phone Number</label><span class="required">*</span> -->
+                        <div class="row" style="margin-left: 0px;margin-right: -3px;">
+                        <input type="text" class="form-control validate" name="dial_code"
+                        required
+                        pattern="[0-9]{8,15}" #phone="ngModel" [class.is-invalid]="phone.dirty&&phone.invalid"
+                        minlength="8" maxlength="15"
+                        [(ngModel)]="signupObj.phone" (blur)="checkPhone()" 
+                        (ng2TelOutput)="getNumber($event)"
+                        (intlTelInputObject)="telInputObject($event)"
+                        (countryChange)="onCountryChange($event)"
+                        ng2TelInput 
+                        style="padding-left: 53px;" placeholder="Enter Phone *"/>
+      
+                        </div>
+                        <span class="text-danger phoneError" *ngIf="phone.dirty&&phone.invalid">Enter a valid phone number</span>
+      
+                        </div>
+                    <div class="form-group">
+                    <!-- <label for="signupInputPassword">Password</label><span class="required">*</span> -->
+                    <input class="form-control validate" name="password" id="signupInputPassword" name='password'
+                        [(ngModel)]="signupObj.password" type="password" placeholder="Enter Password *" (blur)="checkPassword()" (change)="confirmPassword($event)"
+                        (keyup)="confirmPassword($event)" required
+                        pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$!@#.])[a-zA-Z0-9$!@.#]{8,35}$" #password="ngModel"
+                        [class.is-invalid]="password.invalid&&password.dirty">
+                        <span toggle="#signupInputPassword" (click)="showHide()" class="fa fa-fw fa-eye-slash field-icon showHide-password"></span>
+                    <span class="text-danger" *ngIf="password.dirty&&password.invalid">
+                        The password should be of minimum 8,maximum 35 characters and must contain at least one uppercase, one lowercase, number and a special character($@#.!).
+                    </span>
+                    </div>
+                    <div class="form-group">
+                    <!-- <label for="signupInputRetypePassword">Retype Password</label><span class="required">*</span> -->
+                    <input class="form-control validate" name="repassword1" id="signupInputRetypePassword" type="password"
+                        placeholder="Retype Password *" [(ngModel)]="signupObj.repassword1" (keyup)="confirmPassword($event)" (change)="confirmPassword($event)" required
+                        pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$!@#.])[a-zA-Z0-9$!@.#]{8,35}$" #repassword1="ngModel"
+                        [class.is-invalid]="repassword1.invalid&&repassword1.dirty">
+                    <span class="confirm_password_text"></span>
+                    </div>
+
+                    <div *ngIf="franchiseCode!=null ; else referralcodeuser" class="form-group referral-code">
+                    </div>
+                    <ng-template #referralcodeuser>
+                        <div class="form-group referral-code">
+                            <!-- <label for="signupInputReferralCode">Referral Code (Optional)</label> -->
+                            <input class="form-control validate" [class.is-invalid]="referralCode.dirty && referralCode.invalid" name="referralCode"
+                                id="signupInputReferralCode" [(ngModel)]="signupObj1.referralCode" placeholder="Referral Code (Optional)"
+                                (mouseout)="checkReferralCode()" appForbiddenName="bob" #referralCode="ngModel">
+                            <span class="text-danger" *ngIf="referralCode.dirty && referralCode.invalid">Enter a valid Referral Code </span>
+                       </div>
+                    </ng-template>
+
+                    <div class="form-group row">
+                      <div class="col-md-2">
+
+                      </div>
+                      <div class="col-md-4 mb-2" style="margin-left: 12px;">
+                        <re-captcha id="recaptcha" name="recaptcha" #recaptcha="ngModel" (resolved)="resolved($event)" [(ngModel)]="captcha" required ></re-captcha>
+                        <div class="invalid-feedback">
+                          <div>This field is required.</div>
+                        </div>
+                      </div>
+                      <div class="col-md-2">
+
+                      </div>
+                    </div>
+                    <button class="btn btn-primary btn-block text-black" id="submit_btn"
+                    [disabled]="f.form.invalid || !passwordMatch || !captchaNextButton">Submit</button>
+                </form>
+                <div class="row mt-2 forgot-pswd">
+                    <div class="col-12 mt-3 text-center">By registering you are agreeing to the <a target="_blank"
+                        href="https://www.paybito.com/terms-of-use" style="text-decoration: none;">terms
+                        of use</a>
+                    </div>
+                    <div class="col-12 text-center"><a routerLink="/login" style="text-decoration: none;">Already a member?</a></div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </section>
+
+</div>
+
+<div class="bitrump-body paybito-bitrump" *ngIf="data.BROKERID != 'PAYB18022021121103'">
+    
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top extraPadding">
+      <div class="container-fluid">
+        <a class="navbar-brand1" href="#">
+          <!-- <img src="./assets/img/logo-white-paybito.png" alt="..." style="width:70%"> -->
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          
+        </div>
+      </div>
+    </nav>
+    <section class="testimonial" id="testimonial" style="padding-top: 16px;">
+      <div class="container">
+        <div class="card card-login mx-auto mt-5">
+          <div class="card-header text-center text-blue bg-pbgreen bitrump-logo"><img [src]="data.brokerlogo" alt="">
+            <!-- <span><i class="fa fa-btc"></i></span>itrump -->
+            <!-- <h5 class="bittrmp-hedr text-white" id="text" style="color: black !important;">Please check that you are visiting <a href="https://trade.xobico.com/" target="_blank" class="text-white" style="color: black!important;">https://trade.xobico.com/</a></h5> -->
+          </div>
+            <div class="card-header text-center text-blue p-0">
+              <!--  <h5 class="p-3 mb-0" style="color: #86bbb8;font-size: 18px;font-weight: lighter;"><span class="bitrump-pro">{{data.exchange}} Login</span></h5> -->
+              <h5 class="text-white" style="color: black!important;">Register To {{data.exchange}}</h5>
+           </div>
+          <div class="card-body p-3 card-login-body" style="color: black;background-color: white;">
+            <form name="form" #f="ngForm" (ngSubmit)="f.valid && signupData(true)">
+
+              <div class="form-group">
+                <div class="form-row">
+                  <div class="col">
+                    <input type="text" class="form-control validate" 
+                    pattern="[A-Za-zÀ-ÿ\s]{1,40}" name="firstName" 
+                    [(ngModel)]="signupObj.firstName" required 
+                    placeholder="First name *"
+                    #firstName="ngModel" [class.is-invalid]="firstName.dirty&&firstName.invalid"
+                    >
+                  <span class="text-danger" *ngIf="(firstName.dirty&&firstName.invalid)">Enter a valid first name</span>
+
+                  </div>
+                  <div class="col">
+                    <input type="text" class="form-control validate" 
+                    
+                    name="middleName" 
+                    [(ngModel)]="signupObj.middleName"  
+                    placeholder="Middle Name"
+                    #middleName="ngModel">
+                  </div>
+                  <div class="col">
+                    <input type="text"
+                     class="form-control validate" 
+                    pattern="[A-Za-zÀ-ÿ\s]{3,40}" 
+                    name="lastName"
+                     [(ngModel)]="signupObj.lastName" required 
+                     placeholder="Last name *"
+                    #lastName="ngModel" [class.is-invalid]="lastName.dirty&&lastName.invalid"
+                    >
+                  <span class="text-danger" *ngIf="(lastName.dirty&&lastName.invalid)">Enter a valid last name</span>
+
+                  </div>
+
+                </div>
+              <!-- <label for="signupInputfName">Name</label><span class="required">*</span> -->
+              <!-- <input class="form-control validate" name="fullName" id="signupInputfName" tabindex="1"
+                  [(ngModel)]="signupObj.fullName" type="text" placeholder="Enter Name" pattern="[A-Za-z\s]{3,40}" required
+                  #fullName="ngModel" [class.is-invalid]="fullName.dirty&&fullName.invalid">
+              <span class="text-danger" *ngIf="fullName.dirty&&fullName.invalid">Enter a valid name</span> -->
+              </div>
+
+              <div class="form-group">
+              <!-- <label for="signupInputEmail">Email</label><span class="required">*</span> -->
+              <input class="form-control validate" [class.is-invalid]="email.dirty && email.invalid" name="email"
+                  id="signupInputEmail" [(ngModel)]="signupObj.email" placeholder="Enter Email *"
+                  (blur)="checkEmail()" appForbiddenName="bob" required #email="ngModel"
+                  pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
+              <span class="text-danger" *ngIf="email.dirty && email.invalid">Enter a valid email</span>
+              </div>
+              <!-- <div class="form-group">
+              <input class="form-control validate" id="signupInputAddress" [(ngModel)]="signupObj.address" type="text"
+                  placeholder="Enter Address" name="address" pattern="[A-Za-z0-9\s\.\,\-]{3,100}" #add="ngModel"
+                  [class.is-invalid]="add.dirty&&add.invalid" required>
+              <span class="text-danger" *ngIf="add.dirty&&add.invalid">Enter a valid address (maximum 100 characters)</span>
+              </div>
+
+              <div class="form-group">
+              <input class="form-control validate" name="pincode" id="signupInputPincode" [(ngModel)]="signupObj.zip"
+                  type="text" placeholder="Enter Zip Code" pattern="[0-9A-za-z\s\-]{3,10}" required #zip="ngModel"
+                  [class.is-invalid]="zip.dirty&&zip.invalid">
+              <span class="text-danger" *ngIf="zip.dirty&&zip.invalid">Enter a valid zip code</span>
+              </div>
+              <div class="form-group">
+              <input class="form-control validate" id="signupInputCity" [(ngModel)]="signupObj.city" type="text"
+                  placeholder="Enter City" required name="city" pattern="[A-Za-z\s]{3,58}" #city="ngModel"
+                  [class.is-invalid]="city.dirty&&city.invalid">
+              <span class="text-danger" *ngIf="city.dirty&&city.invalid">Enter a valid city name</span>
+              </div>
+              <div class="form-group">
+              <input class="form-control validate" name="state" id="signupInputState" [(ngModel)]="signupObj.state"
+                  type="text" placeholder="Enter State" required pattern="[A-Za-z\s]{1,30}" #state="ngModel"
+                  [class.is-invalid]="state.dirty&&state.invalid">
+              <span class="text-danger" *ngIf="state.dirty&&state.invalid">Enter a valid state name</span>
+              </div>
+
+              <div class="form-group">
+              <select class="form-control validate" id="signupInputCountry" name="country"
+                  [(ngModel)]="signupObj.country" required #country="ngModel"
+                  [class.is-invalid]="country.dirty&&country.invalid">
+                  <option value="" selected>Select Country</option>
+                  <option value="{{c.code}}" *ngFor="let c of contries">{{c.name}}</option>
+              </select>
+              </div> -->
+              <!-- <div class="form-group">
+              <label for="signupInputPhone">Phone Number</label><span class="required">*</span>
+              <input class="form-control validate" name="phone" minlength="8" maxlength="15" id="signupInputPhone"
+                  [(ngModel)]="signupObj.phone" type="text" placeholder="" (blur)="checkPhone()" required
+                  pattern="[0-9]{8,15}" #phone="ngModel" [class.is-invalid]="phone.dirty&&phone.invalid">
+              <span class="text-danger" *ngIf="phone.dirty&&phone.invalid">Enter a valid phone number</span>
+
+              </div> -->
+              <div class="form-group">
+                  <!-- <label for="signupInputPhone">Phone Number</label><span class="required">*</span> -->
+                  <div class="row" style="margin-left: 0px;margin-right: -3px;">
+                  <input type="text" class="form-control validate" name="dial_code"
+                  required
+                  pattern="[0-9]{8,15}" #phone="ngModel" [class.is-invalid]="phone.dirty&&phone.invalid"
+                  minlength="8" maxlength="15"
+                  [(ngModel)]="signupObj.phone" (blur)="checkPhone()" 
+                  (ng2TelOutput)="getNumber($event)"
+                  (intlTelInputObject)="telInputObject($event)"
+                  (countryChange)="onCountryChange($event)"
+                  ng2TelInput 
+                  style="padding-left: 53px;" placeholder="Enter Phone *"/>
+
+                  </div>
+                  <span class="text-danger phoneError" *ngIf="phone.dirty&&phone.invalid">Enter a valid phone number</span>
+
+                  </div>
+              <div class="form-group">
+              <!-- <label for="signupInputPassword">Password</label><span class="required">*</span> -->
+              <input class="form-control validate" name="password" id="signupInputPassword" name='password'
+                  [(ngModel)]="signupObj.password" type="password" placeholder="Enter Password *" (blur)="checkPassword()" (change)="confirmPassword($event)"
+                  (keyup)="confirmPassword($event)" required
+                  pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$!@#.])[a-zA-Z0-9$!@.#]{8,35}$" #password="ngModel"
+                  [class.is-invalid]="password.invalid&&password.dirty">
+                  <span toggle="#signupInputPassword" (click)="showHide()" class="fa fa-fw fa-eye-slash field-icon showHide-password"></span>
+              <span class="text-danger" *ngIf="password.dirty&&password.invalid">
+                  The password should be of minimum 8,maximum 35 characters and must contain at least one uppercase, one lowercase, number and a special character($@#.!).
+              </span>
+              </div>
+              <div class="form-group">
+              <!-- <label for="signupInputRetypePassword">Retype Password</label><span class="required">*</span> -->
+              <input class="form-control validate" name="repassword1" id="signupInputRetypePassword" type="password"
+              placeholder="Retype Password *" [(ngModel)]="signupObj.repassword1" (keyup)="confirmPassword($event)" (change)="confirmPassword($event)" required
+                  pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$!@#.])[a-zA-Z0-9$!@.#]{8,35}$" #repassword1="ngModel"
+                  [class.is-invalid]="repassword1.invalid&&repassword1.dirty">
+              <span class="confirm_password_text"></span>
+              </div>
+
+              <div *ngIf="franchiseCode!=null ; else referralcodeuser" class="form-group referral-code">
+              </div>
+              <ng-template #referralcodeuser>
+                  <div class="form-group referral-code">
+                      <!-- <label for="signupInputReferralCode">Referral Code (Optional)</label> -->
+                      <input class="form-control validate" [class.is-invalid]="referralCode.dirty && referralCode.invalid" name="referralCode"
+                          id="signupInputReferralCode" [(ngModel)]="signupObj1.referralCode" placeholder="Referral Code (Optional)"
+                          (mouseout)="checkReferralCode()" appForbiddenName="bob" #referralCode="ngModel">
+                      <span class="text-danger" *ngIf="referralCode.dirty && referralCode.invalid">Enter a valid Referral Code </span>
+                 </div>
+              </ng-template>
+
+              <div class="form-group row">
+                <div class="col-md-1">
+
+                </div>
+                <div class="col-md-4 mb-2" style="margin-left: 8px;">
+                  <re-captcha id="recaptcha" name="recaptcha" #recaptcha="ngModel" (resolved)="resolved($event)" [(ngModel)]="captcha" required ></re-captcha>
+                  <div class="invalid-feedback">
+                    <div>This field is required.</div>
+                  </div>
+                </div>
+                <div class="col-md-2">
+
+                </div>
+              </div>
+
+              <div class="form-group">
+              </div>
+              <button class="btn btn-primary btn-block text-black" id="submit_btn"
+              [disabled]="f.form.invalid || !passwordMatch || !captchaNextButton">Submit</button>
+          </form>
+
+          <div class="row mt-2 forgot-pswd">
+            <!-- <div class="col-12 mt-3 text-center">By registering you are agreeing to the <a target="_blank"
+                href="https://www.paybito.com/terms-of-use">terms
+                of use</a>
+            </div> -->
+            <div class="col-12 text-center"><a routerLink="/login">Already a member?</a></div>
+        </div>
+      
+          </div>
+          
+        </div>
+      </div>
+    </section>
+
+</div>
+
+

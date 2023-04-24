@@ -1,0 +1,49 @@
+#submit_btn{
+    margin-top: 11px;
+}
+.sign-up-from{
+    background-color: #24262d !important;
+    border: 1px solid #24262d !important;
+    /* color: #fff; */
+}
+
+.bg-black{
+    background-color: #202023 !important ;
+    
+    }
+
+.newRowShade{
+        background-color: #31313a ;
+        border-top: 2px solid #24262d;
+}
+
+.newRowShade-light{
+    background-color: #dedede ;
+    border-top: 2px solid #fff;
+}
+.text-black{
+    color: #474d57 ;
+}
+
+.bg-light-identity-verify{
+    background-color: #dedede ;
+
+}
+.form-control-light{
+    color: #474d57 !important;
+    background-color: #f8f9fa !important;
+    border: none !important;
+}
+
+.form-control-light::-webkit-input-placeholder{ 
+    color: #474d57;
+    opacity: 1; 
+  }
+
+  .spanText-dark{
+    color: #9ba7b2;
+  }
+
+  .spanText-light{
+    color: #474d57;
+  }
