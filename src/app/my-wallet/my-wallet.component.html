@@ -1,7 +1,7 @@
 <app-navbar (themeChanged)="themeChangedHandler($event)"></app-navbar>
 <div class="content-wrapper pt-0 pl-3" [ngClass]="Themecolor == 'Dark' ? '' : 'content-wrapper-light'">
-  <ngb-tabset justify="fill" *ngIf="!spot" [activeId]="activeIdString" [ngClass]="Themecolor == 'Dark' ? 'tab-dark' : 'tab-light'">
-    <ngb-tab id="spot" (click)="walletHistoryList('1')">
+  <ngb-tabset justify="fill" *ngIf="!spot" [activeId]="activeIdString" [ngClass]="Themecolor == 'Dark' ? 'tab-dark' : 'tab-light'" >
+    <ngb-tab id="spot" (click)="walletHistoryList('1')" *ngIf="data.isSpot == 1">
       <ng-template ngbTabTitle>
         <h5 class="market-reset" id="spotTab" style="padding: 8px 10px" (click)="handleSelectedTab('spot');marketTypeNavSeve('spot');data.checkUserBlockStatus()">SPOT</h5>
       </ng-template>
@@ -186,7 +186,7 @@
                     <tbody>
                       <tr *ngFor="let b of myBalanceList | myfilter: currencyFilter; let i = index" [ngClass]="Themecolor == 'Dark' ? 'newRowShade' : 'newRowShade-light'">
                         <td style="width: 14.28%; padding: 10px 0; border-bottom: 1px solid #ddd" class="text-yellow tablefirstRow">
-                          <img src="{{ './assets/img/currency/' + b.currencyCode.toUpperCase() + '.svg' }}" width="20px" height="20px" />
+                          <img alt="{{b.currencyCode}}" src="{{ './assets/img/currency/' + b.currencyCode.toUpperCase() + '.svg' }}" width="20px" height="20px" />
 
                           <span> {{ b.currencyCode | uppercase }} </span>
                         </td>
@@ -217,7 +217,7 @@
                           >
                             <span class="font-xs mr-1 deposit-withdraw-btn">
                               <span class="diposit-hover " [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">SEND</span>
-                              <img src="./assets/img/send.png" style="width: 20px" />
+                              <img alt="send" src="./assets/img/send.png" alt="send logo" style="width: 20px" />
                             </span>
                           </a>
                           <a
@@ -228,7 +228,7 @@
                           >
                             <span class="font-xs mr-1 deposit-withdraw-btn">
                               <span class="diposit-hover " [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">SEND</span>
-                              <img src="./assets/img/send.png" style="width: 20px" />
+                              <img alt="send" src="./assets/img/send.png" alt="send logo" style="width: 20px" />
                             </span>
                           </a>
                           <a
@@ -238,7 +238,7 @@
                           >
                             <span class="font-xs mr-1 deposit-withdraw-btn">
                               <span class="diposit-hover " [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">SEND</span>
-                              <img src="./assets/img/send.png" style="width: 20px" />
+                              <img alt="send" src="./assets/img/send.png" alt="send logo" style="width: 20px" />
                             </span>
                           </a>
                         </td>
@@ -251,7 +251,7 @@
                           >
                             <span class="font-xs mr-1 deposit-withdraw-btn">
                               <span class="diposit-hover " [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">RECEIVE</span>
-                              <img src="./assets/img/pay.png" style="width: 20px" />
+                              <img alt="RECEIVE" src="./assets/img/send.png" alt="pay logo" style="width: 20px" />
                             </span>
                           </a>
 
@@ -263,7 +263,7 @@
                           >
                             <span class="font-xs mr-1 deposit-withdraw-btn">
                               <span class="diposit-hover " [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">RECEIVE</span>
-                              <img src="./assets/img/pay.png" style="width: 20px" /> </span
+                              <img alt="RECEIVE" src="./assets/img/send.png" alt="pay logo" style="width: 20px" /> </span
                           ></a>
                           <a
                             *ngIf="(b.currencyCode == 'USD' || b.currencyCode == 'AED' || b.currencyCode == 'INR' || b.currencyCode == 'EUR' || b.currencyCode == 'SGD') && b.isDeposit == 1"
@@ -273,7 +273,7 @@
                           >
                             <span class="font-xs mr-1 deposit-withdraw-btn">
                               <span class="diposit-hover " [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">RECEIVE</span>
-                              <img src="./assets/img/pay.png" style="width: 20px" /> </span
+                              <img alt="RECEIVE" src="./assets/img/send.png" alt="pay logo" style="width: 20px" /> </span
                           ></a>
                         </td>
                       </tr>
@@ -387,12 +387,12 @@
                       <!-- <button class="btn btn-info" (click)="pager(1)" [disabled]="page==1">
                         <i class="fa fa-angle-double-left" aria-hidden="true"></i>
                       </button> -->
-                      <button class="btn btn-info" (click)="pagerPre(page)" [disabled]="page==1">
+                      <button name="paginationBUtton" class="btn btn-info" (click)="pagerPre(page)" [disabled]="page==1">
                         <i class="fa fa-angle-left" aria-hidden="true"></i>
                       </button>
-                      <button class="btn btn-info {{page==p?'active':''}} {{((p<page+5)&&(p>page-5))?'':'d-none'}}"
+                      <button name="paginationBUtton" class="btn btn-info {{page==p?'active':''}} {{((p<page+5)&&(p>page-5))?'':'d-none'}}"
                         (click)="pager(p);" *ngFor="let p of pgn">{{p}}</button>
-                      <button class="btn btn-info" (click)="pagerNext(page)" [disabled]="page==main.pgn.length">
+                      <button name="paginationBUtton" class="btn btn-info" (click)="pagerNext(page)" [disabled]="page==main.pgn.length">
                         <i class="fa fa-angle-right" aria-hidden="true"></i>
                       </button>
                       <!-- <button class="btn btn-info" (click)="pager(main.pgn.length)" [disabled]="page==main.pgn.length">
@@ -1298,8 +1298,8 @@
       </ng-template>
     </ngb-tab> -->
 
-    <ngb-tab id="future">
-      <ng-template ngbTabTitle>
+    <ngb-tab id="future" *ngIf="data.isFutures == 1">
+      <ng-template ngbTabTitle >
         <h5 class="market-reset" id="futuresTab" style="padding: 8px 10px" (click)="data.checkUserBlockStatus();handleSelectedTab('futures'); callMethodsOnFutureTabLoad();marketTypeNavSeve('future')">FUTURES</h5>
       </ng-template>
       <ng-template ngbTabContent>
@@ -2975,7 +2975,7 @@
     </ngb-tab>
     <!-- options tab -->
 
-    <ngb-tab id="options">
+    <ngb-tab id="options" *ngIf="data.isOptions == 1">
       <ng-template ngbTabTitle>
         <h5 class="market-reset" style="padding: 8px 10px" (click)="data.checkUserBlockStatus();callMethodsOnOptionsTabLoad();marketTypeNavSeve('options')">OPTIONS</h5>
       </ng-template>
@@ -5447,7 +5447,7 @@
           <input class="form-control" [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="model" [minDate]="minDate" ngbDatepicker #d="ngbDatepicker" />
           <!-- [minDate]="{year: year, month: month, day: day}"> -->
           <div class="input-group-append">
-            <button class="btn btn-info" (click)="d.toggle()" type="button">
+            <button name="toggleButton" class="btn btn-info" (click)="d.toggle()" type="button">
               <i class="fa fa-calendar" aria-hidden="true"></i>
             </button>
           </div>
@@ -5501,7 +5501,7 @@
           <input class="form-control" [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="model" [minDate]="minDate" ngbDatepicker #d="ngbDatepicker" />
           <!-- [minDate]="{year: year, month: month, day: day}"> -->
           <div class="input-group-append">
-            <button class="btn btn-info" (click)="d.toggle()" type="button">
+            <button name="toggleButton" class="btn btn-info" (click)="d.toggle()" type="button">
               <i class="fa fa-calendar" aria-hidden="true"></i>
             </button>
           </div>
@@ -5630,7 +5630,7 @@
           <input class="form-control" [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'" placeholder="yyyy-mm-dd" [minDate]="minDate" name="dp" [(ngModel)]="model" ngbDatepicker #d="ngbDatepicker" />
           <!-- [minDate]="{year: year, month: month, day: day}"> -->
           <div class="input-group-append">
-            <button class="btn btn-info" (click)="d.toggle()" type="button">
+            <button name="toggleButton" class="btn btn-info" (click)="d.toggle()" type="button">
               <i class="fa fa-calendar" aria-hidden="true"></i>
             </button>
           </div>
@@ -5695,7 +5695,7 @@
           <input class="form-control" [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'" placeholder="yyyy-mm-dd" [minDate]="minDate" name="dp" [(ngModel)]="model" ngbDatepicker #d="ngbDatepicker" />
           <!-- [minDate]="{year: year, month: month, day: day}"> -->
           <div class="input-group-append">
-            <button class="btn btn-info" (click)="d.toggle()" type="button">
+            <button name="toggleButton" class="btn btn-info" (click)="d.toggle()" type="button">
               <i class="fa fa-calendar" aria-hidden="true"></i>
             </button>
           </div>
@@ -5976,7 +5976,7 @@
           <input class="form-control" [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="model" [minDate]="minDate" ngbDatepicker #d="ngbDatepicker" />
           <!-- [minDate]="{year: year, month: month, day: day}"> -->
           <div class="input-group-append">
-            <button class="btn btn-info" (click)="d.toggle()" type="button">
+            <button name="toggleButton" class="btn btn-info" (click)="d.toggle()" type="button">
               <i class="fa fa-calendar" aria-hidden="true"></i>
             </button>
           </div>
@@ -6080,7 +6080,7 @@
           <input class="form-control" [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'" placeholder="yyyy-mm-dd" [minDate]="minDate" name="dp" [(ngModel)]="model" ngbDatepicker #d="ngbDatepicker" />
           <!-- [minDate]="{year: year, month: month, day: day}"> -->
           <div class="input-group-append">
-            <button class="btn btn-info" (click)="d.toggle()" type="button">
+            <button name="toggleButton" class="btn btn-info" (click)="d.toggle()" type="button">
               <i class="fa fa-calendar" aria-hidden="true"></i>
             </button>
           </div>

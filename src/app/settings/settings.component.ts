@@ -611,8 +611,40 @@ export class SettingsComponent implements OnInit {
                 response => {
                     this.apitype = response.apiTypeList;
 
+                    console.log('all apisss type before',this.apitype);
+
+                    if(this.data.isSpot != 1){
+
+                        this.removeObjectWithId(this.apitype, 4);
+
+                    }
+                    if(this.data.isFutures != 1){
+
+                        this.removeObjectWithId(this.apitype, 5);
+
+                    }
+                    if(this.data.isOptions != 1){
+
+                        this.removeObjectWithId(this.apitype, 6);
+
+                    }
+                    console.log('all apisss type after',this.apitype);
+                    
+
                 });
     }
+
+    removeObjectWithId(arr, id) {
+        const objWithIdIndex = arr.findIndex((obj) => obj.apiTypeId === id);
+      
+        if (objWithIdIndex > -1) {
+          arr.splice(objWithIdIndex, 1);
+        }
+
+        this.apitype = arr;
+      
+        return arr;
+      }
 
     handleIpCheckSelection = (param) => {
         //console.log('ipRestrictStatus',this.ipRestrictStatus)

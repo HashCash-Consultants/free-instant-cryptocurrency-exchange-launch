@@ -1,7 +1,7 @@
 <app-navbar (themeChanged)="themeChangedHandler($event)"></app-navbar>
 <div class="content-wrapper pt-0 pl-3" [ngClass]="Themecolor == 'Dark' ? '' : 'content-wrapper-light'">
       
-  <form name="form" #f="ngForm" style="margin-top: 20px;">
+  <form name="form" #f="ngForm" style="margin-top: 20px;" *ngIf="data.isSpot == 1">
     <span class="" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-dark'" style="font-size:25px;">
       Spot Reports
       <span style="cursor: pointer;margin-left:10px;">
@@ -166,7 +166,7 @@
 
 <!-- pagenation end -->
 </div>
-<form name="form" #f="ngForm">
+<form name="form" #f="ngForm" *ngIf="data.isFutures == 1">
   <br/>
   <span class="font-md mr-2" style="font-size:25px;" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">
     Futures Reports
@@ -337,7 +337,7 @@
   <!-- pagenation end -->
 </div>
 <br/>
-<form name="form" #f="ngForm">
+<form name="form" #f="ngForm" *ngIf="data.isOptions == 1">
   <span class="font-md mr-2" style="font-size:25px;" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">
     Options Reports
     <span style="cursor: pointer;margin-left:10px;">

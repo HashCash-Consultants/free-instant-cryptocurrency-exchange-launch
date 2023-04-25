@@ -788,7 +788,7 @@
           <div class="row">
             <div class="col-md-8 mb-5">
               <label for="orangeForm-email">E-mail verification code</label>
-              <input type="email" id="orangeForm-email" class="form-control validate">
+              <input type="email" id="orangeForm-email" class="form-control validate" autocomplete="new-name">
               <span>{{messageotp}}</span>
             </div>
             <div class="col-md-2 getcodebtn">
@@ -800,7 +800,7 @@
           <div class="row">
             <div class="col-md-8 mb-5">
               <label for="orangeForm-phoneOtp">Phone verification code</label>
-              <input type="password" id="orangeForm-phoneOtp" class="form-control validate" [(ngModel)]="phoneOtpForSaveApi">
+              <input type="password" id="orangeForm-phoneOtp" class="form-control validate" [(ngModel)]="phoneOtpForSaveApi" autocomplete="new-password">
               <!-- <span>{{messageotp}}</span> -->
             </div>
             <div class="col-md-2 ">
@@ -814,7 +814,7 @@
           <div class="row">
             <div class="mb-4 col-md-12">
               <label for="orangeForm-pass">Google verification code</label>
-              <input type="number" id="orangeForm-passkey" class="form-control validate vfygoogleauth">
+              <input type="number" id="orangeForm-passkey" class="form-control validate vfygoogleauth" autocomplete="new-number">
               <span>Enter the 6 digit code from Google Authenticator</span>
             </div>
           </div>
@@ -951,7 +951,7 @@
             <div class="row">
               <div class="col-md-8">
                 <input class="form-control " numbersOnly name="emailVerificationCode" id="emailOtpSpecific" type="password"
-                  [(ngModel)]="emailOtpSpecific" placeholder="OTP" autocomplete="email">
+                  [(ngModel)]="emailOtpSpecific" placeholder="OTP" autocomplete="name">
 
               </div>
               <button (click)="getCodeFromEmail('2fa')" class="btn getbtn btn-primary"
@@ -1286,7 +1286,7 @@
               <p class="text-left" style="color: rgb(248, 240, 240);">Input otp from your registered email address</p>
               <div class="row">
                 <div class="col-md-8">
-                  <input class="form-control " name="emailVerificationCode" id="emailOtpForSms" type="password" [(ngModel)]="emailOtpForSaveApi" placeholder="OTP" autofocus autocomplete="email">
+                  <input class="form-control " name="emailVerificationCode" id="emailOtpForSms" type="password" [(ngModel)]="emailOtpForSaveApi" placeholder="OTP" autofocus autocomplete="name">
                   
                 </div>
                 <button (click)="getCodeFromEmail('saveauth')" class="btn getbtn btn-primary" [disabled]="isGetCodeButtonDisabledForSmsAuth">Get Code</button>
@@ -1300,7 +1300,7 @@
               <p class="text-left" style="color: rgb(248, 240, 240);">Input otp from your registered phone number</p>
               <div class="row">
                 <div class="col-md-8">
-                  <input class="form-control " name="emailVerificationCode" id="phoneOtpForSms" type="password" [(ngModel)]="phoneOtpForSaveApi" placeholder="OTP" autofocus autocomplete="phone">
+                  <input class="form-control " name="emailVerificationCode" id="phoneOtpForSms" type="password" [(ngModel)]="phoneOtpForSaveApi" placeholder="OTP" autofocus autocomplete="phone-otp">
                   
                 </div>
                 <button (click)="handleSendSmsOtpForSaveApiVerification()" class="btn getbtn btn-primary" [disabled]="!isGetCodeForSmsOtpEnabledForSaveApi">Get Code</button>

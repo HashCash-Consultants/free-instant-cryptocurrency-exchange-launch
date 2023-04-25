@@ -450,6 +450,8 @@ export class LoginWithFacebookComponent implements OnInit {
               this.data.BROKERID = dataRecheck.userResult.brokerId;
 
               this.data.getAllBrokerDetails();
+              this.data.getAllBrokerMarkets();
+
           this.cookie.set('access_token', localStorage.getItem('access_token'), 60);
           var accesstoken = localStorage.getItem('access_token');
           document.cookie = cookieName2 + "=" + accesstoken + ";expires=" + myDate + ";domain=.paybito.com;path=/";
