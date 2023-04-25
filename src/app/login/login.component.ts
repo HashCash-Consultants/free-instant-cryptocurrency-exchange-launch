@@ -622,6 +622,8 @@ export class LoginComponent implements OnInit {
               this.data.BROKERID = dataRecheck.userResult.brokerId;
 
               this.data.getAllBrokerDetails();
+              this.data.getAllBrokerMarkets();
+
           this.cookie.set('access_token', localStorage.getItem('access_token'), 60);
           var accesstoken = localStorage.getItem('access_token');
           document.cookie = cookieName2 + "=" + accesstoken + ";expires=" + myDate + ";domain=.paybito.com;path=/";
@@ -632,14 +634,20 @@ export class LoginComponent implements OnInit {
             this.route.navigate(['/otc']);
           }
           else if (sessionStorage.getItem('proDashboard') == 'pro') {
-            this.route.navigate(['/dashboard']);
+            // this.route.navigate(['/dashboard']);
+            this.routeTolocation();
           }
           else {
             if (dataRecheck.userResult.userTierType == 2 || dataRecheck.userResult.userTierType == 3) {
-              this.route.navigateByUrl('/dashboard');
+              // this.route.navigateByUrl('/dashboard');
+            this.routeTolocation();
+
             }
             else {
-              this.route.navigateByUrl('/identity-verification');
+
+            this.routeTolocation();
+
+              // this.route.navigateByUrl('/identity-verification');
             }
           }
           this.modalService.dismissAll()
@@ -658,6 +666,36 @@ export class LoginComponent implements OnInit {
       this.isLoginButtonEnabled = true
     }); */
   }
+
+
+  async routeTolocation(){
+
+    var a = await this.data.getAllBrokerMarkets();
+
+    console.log('spot',this.data.isSpot,this.data.isFutures,this.data.isOptions);
+    
+
+    if(this.data.isSpot == 0 ){
+        if(this.data.isFutures == 0 ){
+            if(this.data.isOptions == 0){
+                this.route.navigateByUrl('/profile-details');
+                }
+
+        else{
+
+      this.route.navigateByUrl('/options-dashboard');
+            }
+
+      }
+      else{
+        this.route.navigateByUrl('/derivative-dashboard');
+          }
+
+    }
+    else{
+        this.route.navigateByUrl('/dashboard');
+      }
+    }
   /* method defination for validating otp */
   validateOtp = (e) => {
     let otp = e.target.value;

@@ -133,6 +133,10 @@ export class CoreDataService {
   auth2New:any;
   COPYTRADINGBOTURL: string;
 
+  isSpot: any = 0;
+  isFutures: any = 0;
+  isOptions: any = 0;
+
 
 
   constructor(private route: Router, 
@@ -216,6 +220,49 @@ export class CoreDataService {
       })
 
     
+
+  }
+
+  async getAllBrokerMarkets(){
+
+    // this.brokerlogo = './assets/loading-11.gif';
+
+    this.BROKERID = localStorage.getItem('BROKERID');
+
+    console.log('calling broker details');
+    var inputObj = {};
+    inputObj['brokerId'] = localStorage.getItem('BROKERID');
+    inputObj['uuid'] = localStorage.getItem('uuid');
+
+
+    
+
+
+    const response1 = await this.http.post<any>(this.WEBSERVICE +'/user/brokerCryptoMarket',JSON.stringify(inputObj),{
+      headers: {
+        'Content-Type': 'application/json',
+        'authorization': 'BEARER ' + localStorage.getItem('access_token')
+      }
+    }).toPromise();
+      // .subscribe(data => {
+
+       
+
+
+        this.isSpot = response1.brokerCryptoMarket.spot;
+        this.isFutures = response1.brokerCryptoMarket.futures;
+        this.isOptions = response1.brokerCryptoMarket.options;
+
+        // this.isSpot = 1;
+        // this.isFutures = 0;
+        // this.isOptions = 1;
+        
+        
+
+        
+      // })
+
+     
 
   }
 

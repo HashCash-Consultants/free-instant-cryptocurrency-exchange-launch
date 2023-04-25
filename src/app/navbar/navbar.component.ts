@@ -161,11 +161,14 @@ export class NavbarComponent implements OnInit {
   ngOnInit() {
     /*Method defination for checking user is blocked or not  */
    var a =this.data.checkUserBlockStatus();
+
+   this.data.getAllBrokerMarkets();
+
    console.log('blocked bb', a);
 
    this.disableMenuWait()
 
-  //  this.data.getAllBrokerDetails();
+    // this.data.getAllBrokerDetails();
    
     /* initializing google auth*/
     this.googleAuthSDK();

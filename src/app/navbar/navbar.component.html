@@ -53,7 +53,42 @@
     </ul>
     <ul class="navbar-nav mr-auto " [ngClass]="disableMenu == true ? 'disabledCLass' : ''">
       <li class="nav-item  {{currentRoute.url=='/'+u.alias ? 'active': ''}}" *ngFor="let u of upperMenu">
-        <a *ngIf="u.name == 'Basic';else pro" class="nav-link" routerLink="/{{u.alias}}" data-toggle="tooltip"
+
+
+        <a *ngIf="u.name == 'Basic';" class="nav-link" routerLink="/{{u.alias}}" data-toggle="tooltip"
+          data-placement="right" title="Trade with ease as a beginner">
+          <img src="./assets/img/menu-icon/{{u.alias}}.svg" width="20" height="14"  alt="{{u.name}}">
+          <span class="nav-link-text">{{u.name}}</span>
+        </a>
+
+        <a *ngIf="u.name == 'Spot' && data.isSpot == 1;" class="nav-link" routerLink="/{{u.alias}}" data-toggle="tooltip"
+          data-placement="right" title="Trade with ease as a beginner">
+          <img src="./assets/img/menu-icon/{{u.alias}}.svg" width="14" height="14" alt="{{u.name}}">
+          <span class="nav-link-text">{{u.name}}</span>
+        </a>
+
+        <a *ngIf="u.name == 'Futures'&& data.isFutures == 1;" class="nav-link" routerLink="/{{u.alias}}" data-toggle="tooltip"
+          data-placement="right" title="Trade with ease as a beginner">
+          <img src="./assets/img/menu-icon/{{u.alias}}.svg" width="20px"  alt="{{u.name}}">
+          <span class="nav-link-text">{{u.name}}</span>
+        </a>
+
+        <a *ngIf="u.name == 'Options' && data.isOptions == 1;" class="nav-link" routerLink="/{{u.alias}}" data-toggle="tooltip"
+          data-placement="right" title="Trade with ease as a beginner">
+          <img src="./assets/img/menu-icon/{{u.alias}}.svg" width="20px"  alt="{{u.name}}">
+          <span class="nav-link-text">{{u.name}}</span>
+        </a>
+
+        <a *ngIf="u.name == 'OTC';" class="nav-link" routerLink="/{{u.alias}}" data-toggle="tooltip"
+          data-placement="right" title="Trade with ease as a beginner">
+          <img src="./assets/img/menu-icon/{{u.alias}}.svg" width="20px"  alt="{{u.name}}">
+          <span class="nav-link-text">{{u.name}}</span>
+        </a>
+
+
+
+
+        <!-- <a *ngIf="u.name == 'Basic';else pro" class="nav-link" routerLink="/{{u.alias}}" data-toggle="tooltip"
           data-placement="right" title="Trade with ease as a beginner">
           <img src="./assets/img/menu-icon/{{u.alias}}.svg" width="20" height="14" alt="{{u.name}}">
           <span class="nav-link-text"> {{u.name}}</span>
@@ -85,7 +120,7 @@
             <img src="./assets/img/menu-icon/{{u.alias}}.svg" width="20px" alt="{{u.name}}">
             <span class="nav-link-text">{{u.name}}</span>
           </a>
-        </ng-template>
+        </ng-template> -->
 
       </li>
 
