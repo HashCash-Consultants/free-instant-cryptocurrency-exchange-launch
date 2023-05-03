@@ -22,22 +22,44 @@
       <h4 class="modal-title" id="modal-basic-title" style="color: black;">Security Authentication</h4>
       
       <div class="modal-body">
-          <p class="text-left" style="color: black;">Input otp from your google authenticator</p>
-          <!-- <p class="text-left" style="margin-top: -21px; color: black;">{{hiddenEmail}}</p> -->
+        
+          <div *ngIf="isPhoneVerificationEnable == true">
+            <p class="text-left" style="color: black;">Input otp from your registered phone number</p>
     
-          
           <form>
             <div class="form-group">
-              <input class="form-control" name="emailVerificationCode" id="twoFactorOtpSocial" type="password" [(ngModel)]="twoFactorOtp" placeholder="Two-Factor Authenticator code" autofocus >
-              
+              <input class="form-control" numbersOnly name="emailVerificationCode" id="smsOtp" type="password" [(ngModel)]="smsOtp"
+                placeholder="OTP from registered phone no" autofocus>
+                <span class="text-primary sendCode" [ngClass]="disabledSpan ? 'disableSpanClass' : ''" *ngIf="showGetCodeButtonInSmsOtpPopup" (click)="handleSendOtpThroughSms()" 
+                > Get code</span>
     
             </div>
-            </form>
+          </form>
           <p class="text-left">
-            
-          </p>
+            <span class="text-success"> {{intervalMessageForSmsPopup}}</span>
     
-          <button type="submit" class="btn btn-primary btn-block" [disabled]="twoFactorOtp == ''"  (click)="loginThroughOtp()" style="margin-top: 28px;">
+          </p>
+          </div>
+          <div *ngIf="isGoogleAuthEnable == true">
+            <p class="text-left" style="color: black;">Input otp from your google authenticator</p>
+      
+            
+            <form>
+              <div class="form-group">
+                <input class="form-control" name="emailVerificationCode" id="twoFactorOtpSocial" type="password" [(ngModel)]="twoFactorOtp" placeholder="Two-Factor Authenticator code" autofocus >
+                
+      
+              </div>
+              </form>
+            <p class="text-left">
+              
+            </p>
+          </div>
+          
+          <!-- [disabled]="twoFactorOtp == '' || smsOtp == '' " -->
+          <button type="submit" class="btn btn-primary btn-block" 
+            
+          (click)="handleLoginAPICall()" style="margin-top: 28px;">
             Confirm
             </button>
     

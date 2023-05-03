@@ -139,15 +139,18 @@ re-captcha.is-invalid > div {
 
 .sendCode{
   cursor: pointer;
-  position: absolute;
-  right: 23px;
-  top: 78px;
+  float: right;
+  margin-left: -25px;
+  margin-top: -29px;
+  position: relative;
+  z-index: 2;
+  margin-right: 6px;
 }
 .smsOtpSms{
   cursor: pointer;
   position: absolute;
   right: 23px;
-  top: 64px;
+  top: 171px;
 }
 
 .disableSpanClass{

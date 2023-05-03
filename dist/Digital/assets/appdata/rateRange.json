@@ -1,0 +1,25 @@
+ [
+    {"fromFee": "0.0005","toFee": "0.01","feeRate": "0.0005","currency": "btc"},
+    {"fromFee": "0.01","toFee": "0.05","feeRate": "0.0005","currency": "btc"},
+    {"fromFee": "0.05","toFee": "0.1","feeRate": "0.001","currency": "btc"},
+    {"fromFee": "0.1","toFee": "0.5","feeRate": "0.001","currency": "btc"},
+    {"fromFee": "0.5","toFee": "1","feeRate": "0.001","currency": "btc"},
+    {"fromFee": "1","toFee": "1000000","feeRate": "0.001","currency": "btc"},
+    {"fromFee": "0.0005","toFee": "0.01","feeRate": "0.0005","currency": "ltc"},
+    {"fromFee": "0.01","toFee": "0.05","feeRate": "0.0005","currency": "ltc"},
+    {"fromFee": "0.05","toFee": "0.1","feeRate": "0.001","currency": "ltc"},
+    {"fromFee": "0.1","toFee": "0.5","feeRate": "0.001","currency": "ltc"},
+    {"fromFee": "0.5","toFee": "1","feeRate": "0.001","currency": "ltc"},
+    {"fromFee": "1","toFee": "10000000","feeRate": "0.001","currency": "ltc"},
+    {"fromFee": "0.001", "toFee": "1000000", "feeRate": "0.001", "currency": "bch"},
+    {"fromFee":"1","toFee":"1000000","feeRate":"0.00001","currency": "hcx"},
+    {"fromFee":"1","toFee":"1000000","feeRate":"0.00001","currency": "diam"},
+    {"fromFee":"1","toFee":"1000000","feeRate":"0.00001","currency":"iec"},
+    {"fromFee":"0.0005","toFee":"0.01","feeRate":"0.0005","currency":"eth"},
+    {"fromFee":"0.01","toFee":"0.05","feeRate":"0.0005","currency":"eth"},
+    {"fromFee":"0.05","toFee":"0.1","feeRate":"0.001","currency":"eth"},
+    {"fromFee":"0.1","toFee":"0.5","feeRate":"0.001","currency":"eth"},
+    {"fromFee":"0.5","toFee":"1","feeRate":"0.001","currency":"eth"},
+    {"fromFee":"1","toFee":"1000000","feeRate":"0.001","currency":"eth"}
+]
+

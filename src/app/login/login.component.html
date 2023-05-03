@@ -79,7 +79,7 @@
                       <div class="p-1 " ><strong>Don't have an account yet?</strong><a routerLink="/signup"> Register<!--{{data.exchange}}--></a></div>
       
                   </div>
-                 <!--  <app-login-with-facebook [purpose]="'login'"></app-login-with-facebook> --> 
+                  <app-login-with-facebook [purpose]="'login'"></app-login-with-facebook>
                 
 <br/>
                   
@@ -98,7 +98,7 @@
 
 
 <ng-template #myModal let-modal>
-  <div  class=" lightTheme modal-header test proper-alighnment-header">
+  <div class=" lightTheme modal-header test proper-alighnment-header">
     <div class="row">
       <div class="col-md-3"></div>
       <div class="col-md-6">
@@ -106,95 +106,134 @@
 
       </div>
       <div class="col-md-3">
-        <i class="fa fa-times" aria-hidden="true"  (click)="modal.dismiss()" style="margin: 6px 0px 0px 32px;cursor: pointer;"></i>
+        <i class="fa fa-times" aria-hidden="true" (click)="modal.dismiss()"
+          style="margin: 6px 0px 0px 32px;cursor: pointer;"></i>
       </div>
     </div>
-    
+
     <div class="modal-body">
 
       <div class="row">
         <div class="col-md-2">
 
         </div>
-                    <div class="col-md-4 mb-2" style="margin-left: -7px;">
-                      <re-captcha id="recaptcha" name="recaptcha" #recaptcha="ngModel" (resolved)="resolved($event)" [(ngModel)]="token" required ></re-captcha>
-                      <div class="invalid-feedback">
-                        <div>This field is required.</div>
-                      </div>
-                    </div>
-                    <div class="col-md-2">
+        <div class="col-md-4 mb-2" style="margin-left: -7px;">
+          <re-captcha id="recaptcha" name="recaptcha" #recaptcha="ngModel" (resolved)="resolved($event)"
+            [(ngModel)]="token" required></re-captcha>
+          <div class="invalid-feedback">
+            <div>This field is required.</div>
+          </div>
+        </div>
+        <div class="col-md-2">
 
-                    </div>
-                  </div>
+        </div>
+      </div>
 
-                  <div class="row" style="
-                  margin-top: 18px;
-              ">
-                    <div class="col-md-2"></div>
-                    <div class="col-md-8">
-                      <button type="button" [disabled]="!captchaNextButton" class="btn btn-primary btn-block" (click)="redirectToAuthentication()" style="
-                      width: 304px;
-                      margin-left: -8px;
-                  ">Next</button>
+      <div class="row" style="
+                margin-top: 18px;
+            ">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+          <button type="button" [disabled]="!captchaNextButton" class="btn btn-primary btn-block"
+            (click)="redirectToAuthentication(captchaNextButton)" style="
+                    width: 304px;
+                    margin-left: -8px;
+                ">Next</button>
 
-                    </div>
-                    <div class="col-md-2"></div>
+        </div>
+        <div class="col-md-2"></div>
 
 
-                  </div>
-      
+      </div>
+
       <!-- <button type="button" class="btn btn-primary btn-block" (click)="redirectToAuthentication()">Next</button> -->
-    
+
     </div>
   </div>
 </ng-template>
 
 <ng-template #myModalAuth let-modal>
-  <div  class=" lightTheme modal-header test proper-alighnment-header">
+  <div class=" lightTheme modal-header test proper-alighnment-header">
     <div class="row">
       <div class="col-md-3"></div>
       <div class="col-md-6">
-        <h4 class="modal-title" id="modal-basic-title" style="color: black;">Security Authentication</h4> 
+        <h4 class="modal-title" id="modal-basic-title" style="color: black;">Security Authentication</h4>
       </div>
       <div class="col-md-3">
-        <i class="fa fa-times" aria-hidden="true"  (click)="modal.dismiss()" style="margin: 6px 0px 0px 32px;cursor: pointer;"></i>
+        <i class="fa fa-times" aria-hidden="true" (click)="modal.dismiss()"
+          style="margin: 6px 0px 0px 32px;cursor: pointer;"></i>
       </div>
     </div>
-    
-    <div class="modal-body">
-        <p class="text-left" style="color: black;">Please enter the email code from</p>
-        <p class="text-left" style="margin-top: -21px; color: black;">{{hiddenEmail}}</p>
 
-        
-        <form>
+
+    <div class="modal-body">
+      <p class="text-left" style="color: black;">Please enter the email code from</p>
+      <p class="text-left" style="margin-top: -21px; color: black;">{{hiddenEmail}}</p>
+
+
+      <form>
+        <div>
           <div class="form-group">
-            <input class="form-control" numbersOnly name="emailVerificationCode" id="emailVerificationCode" type="email" [(ngModel)]="emailVerificationCode" placeholder="E-mail verification code" autofocus >
-            <span class="text-primary sendCode" [ngClass]="disabledSpan ? 'disableSpanClass' : ''" *ngIf="!secondStatusCheck" (click)="sendVerificationCodeMail()"> Get code</span>
+            <input class="form-control" numbersOnly name="emailVerificationCode" id="emailVerificationCode" type="email"
+              [(ngModel)]="emailVerificationCode" placeholder="E-mail verification code" autofocus>
+            <span class="text-primary sendCode" [ngClass]="disabledSpan ? 'disableSpanClass' : ''"
+              *ngIf="!secondStatusCheck" (click)="sendVerificationCodeMail()"> Get code</span>
 
           </div>
-          </form>
-        <p class="text-left">
-          <span class="text-success"  *ngIf="secondStatusCheck"> Resend in {{countdownSec}} seconds</span>
+          <p class="text-left">
+            <span class="text-success" *ngIf="secondStatusCheck"> Resend in {{countdownSec}} seconds</span>
 
-        </p>
+          </p>
+        </div>
 
-        <button type="submit" class="btn btn-primary btn-block" [disabled]="emailVerificationCode == '' || emailVerificationCode == undefined"  (click)="loginData(true)" style="margin-top: 28px;">
-          Confirm
-          </button>
+        <div *ngIf="isPhoneVerificationEnable">
+          <p class="text-left" style="color: black;">Input otp from your registered phone number</p>
 
-          <!-- <p [hidden]="!error" class="text-danger text-center my-3">{{errormessage}}</p>
-                    <div id="unverifiesusermsgd" style="display: none;">
-                        <div style='display: flex;justify-content: space-between;align-items: center;'>
-                            Resend device verification mail &nbsp; &nbsp; <button id='verifyuser' class='btn btn-success'>RESEND</button>
-                        </div>
-                    </div>
-                    <div id="countermsg" style="display: none;"></div> -->
-      
-      
+          <div class="form-group">
+            <input class="form-control" name="emailVerificationCode" id="smsOtp" type="password" [(ngModel)]="smsOtp"
+              placeholder="OTP from registered phone no" autofocus>
+            <span class="text-primary sendCode" [ngClass]="disabledSpan ? 'disableSpanClass' : ''"
+              *ngIf="showGetCodeButtonInSmsOtpPopup" (click)="handleSendOtpThroughSms()"> Get code</span>
+
+          </div>
+          <p class="text-left">
+            <span class="text-success"> {{intervalMessageForSmsPopup}}</span>
+
+          </p>
+        </div>
+
+        <div *ngIf="isGoogleAuthEnable">
+          <p class="text-left" style="color: black;">Input otp from your google authenticator</p>
+          <div class="form-group">
+            <input class="form-control" name="emailVerificationCode" id="twoFactorOtp" type="password"
+              [(ngModel)]="twoFactorOtp" placeholder="Two-Factor Authenticator code" autofocus>
+          </div>
+          <p class="text-left">
+
+          </p>
+        </div>
+
+        
+      </form>
+      <!-- [disabled]="emailVerificationCode == '' || emailVerificationCode == undefined || smsOtp == '' || smsOtp == undefined || twoFactorOtp == '' || twoFactorOtp == undefined" -->
+
+      <button (click)="loginData(true)"  type="submit" class="btn btn-primary btn-block"
+        style="margin-top: 28px;">
+        Confirm
+      </button>
+
+      <!-- <p [hidden]="!error" class="text-danger text-center my-3">{{errormessage}}</p>
+                  <div id="unverifiesusermsgd" style="display: none;">
+                      <div style='display: flex;justify-content: space-between;align-items: center;'>
+                          Resend device verification mail &nbsp; &nbsp; <button id='verifyuser' class='btn btn-success'>RESEND</button>
+                      </div>
+                  </div>
+                  <div id="countermsg" style="display: none;"></div> -->
+
+
     </div>
   </div>
 </ng-template>
-
 <ng-template #twoFactorAuth let-modal>
   <div  class=" lightTheme modal-header test proper-alighnment-header">
     <!-- <h4 class="modal-title" id="modal-basic-title" style="color: black;">Security Authentication</h4> -->
@@ -258,7 +297,7 @@
     </div>
     </ng-template>
 
-    <ng-template #smsAuth let-modal>
+    <!-- <ng-template #smsAuth let-modal>
       <div class=" lightTheme modal-header test proper-alighnment-header">
         <div class="row">
           <div class="col-md-3"></div>
@@ -294,4 +333,4 @@
     
         </div>
       </div>
-    </ng-template>
+    </ng-template> -->
