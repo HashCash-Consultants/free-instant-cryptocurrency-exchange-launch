@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, DoCheck, ViewChild } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Router } from '@angular/router';
 import { CoreDataService } from '../core-data.service';
@@ -9,6 +9,8 @@ import { TvChartContainerComponent } from '../tv-chart-container/tv-chart-contai
 import * as $ from "jquery";
 import { ConnectionService } from 'ng-connection-service';
 declare var FB: any;
+
+
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
@@ -16,8 +18,11 @@ declare var FB: any;
 })
 export class NavbarComponent implements OnInit {
 
-  @Output() themeChanged: EventEmitter<number> =   new EventEmitter();
-  auth2:any;
+  @Output() themeChanged: EventEmitter<number> = new EventEmitter();
+  @Output() connectionData: EventEmitter<any> = new EventEmitter();
+  @ViewChild('myModal') myModal : any;
+
+  auth2: any;
   userName: any;
   profilePic: any;
   closeResult: string;
@@ -47,10 +52,11 @@ export class NavbarComponent implements OnInit {
   upperMenu: any = [
     { name: 'Basic', alias: 'basic' },
     { name: 'Spot', alias: 'dashboard' },
-    { name: 'OTC', alias: 'otc' },
     /* {name:'Portfolio Holdings',alias:'portfolio-holdings'} */
     { name: 'Futures', alias: 'derivative-dashboard' },
     { name: 'Options', alias: 'options-dashboard' },
+    { name: 'OTC', alias: 'otc' },
+
     // { name: 'Copy Trading / Social Trading', alias: 'copy-trading' }
 
 
@@ -64,141 +70,134 @@ export class NavbarComponent implements OnInit {
   userDocStatus: any;
   Themecolor: any;
   screencolor: any;
-  isConnected = true;  
-  noInternetConnection: boolean; 
-  disableMenu: boolean = false;
-  constructor(private modalService: NgbModal, private route: Router, public data: CoreDataService, 
-    private http: HttpClient, public main: BodyService, 
-    public tvChartContainerComponent: TvChartContainerComponent,private connectionService: ConnectionService) {
+  isConnected = true;
+  noInternetConnection: boolean;
+  constructor(private modalService: NgbModal, private route: Router, public data: CoreDataService,
+    private http: HttpClient, public main: BodyService,
+    public tvChartContainerComponent: TvChartContainerComponent, private connectionService: ConnectionService) {
     this.route.events.subscribe(val => {
       this.currentRoute = val;
       // console.log(this.currentRoute)
     });
 
-    this.connectionService.monitor().subscribe(isConnected => {  
-      this.isConnected = isConnected;  
-      if (this.isConnected) {  
-        this.noInternetConnection=false; 
+    this.connectionService.monitor().subscribe(isConnected => {
+      this.isConnected = isConnected;
+      if (this.isConnected) {
+        this.noInternetConnection = false;
         console.log('internet on');
         // this.data.alert('Please select a valid type','danger')
-         
-      }  
-      else {  
-        this.noInternetConnection=true;  
-         console.log('internet off');
+        this.connectionData.emit(this.noInternetConnection);
+
+
+      }
+      else {
+        this.noInternetConnection = true;
+        console.log('internet off');
+        this.connectionData.emit(this.noInternetConnection);
+        
+
         // this.data.alert('No internet Connection','danger')
 
-      }  
-    }) 
+      }
+    })
   }
 
   handleFacebookLogout = () => {
-     FB.logout(function(response) {
-      console.log('logout from facebook initiated',response);
-     });
+    FB.logout(function (response) {
+      console.log('logout from facebook initiated', response);
+    });
   }
 
   handleGoogleLogout = () => {
-
-    console.log('this.auth2',this.data.auth2New)
-    this.data.auth2New.signOut().then(function () {
+    this.auth2.signOut().then(function () {
       console.log('User signed out from google.');
-      // this.data.handlePageReloadForecibily(100)
-    //   this.zone.run(() => {
-    //     this.route.navigate(['/login']);
-  
-    // });
+      this.data.handlePageReloadForecibily(100)
     });
-    console.log('this.auth2after',this.data.auth2New)
   }
 
-    /* Method defination for goole auth initialization */
-    googleAuthSDK() {
+  /* Method defination for goole auth initialization */
+  googleAuthSDK() {
 
-      (<any>window)['googleSDKLoaded'] = () => {
-        (<any>window)['gapi'].load('auth2', () => {
-          this.data.auth2New = (<any>window)['gapi'].auth2.init({
-            client_id:this.data.GOOGLECLIENTID,
-            plugin_name:'login',
-            cookiepolicy: 'single_host_origin',
-            scope: 'profile email'
-          });
+    (<any>window)['googleSDKLoaded'] = () => {
+      (<any>window)['gapi'].load('auth2', () => {
+        this.auth2 = (<any>window)['gapi'].auth2.init({
+          client_id: this.data.GOOGLECLIENTID,
+          plugin_name: 'login',
+          cookiepolicy: 'single_host_origin',
+          scope: 'profile email'
         });
-      }
-  
-      (function (d, s, id) {
-        var js, fjs = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id)) { return; }
-        js = d.createElement('script');
-        js.id = id;
-        js.src = "https://apis.google.com/js/platform.js?onload=googleSDKLoaded";
-        fjs.parentNode.insertBefore(js, fjs);
-      }(document, 'script', 'google-jssdk'));
-
-      setTimeout(() => {
-
-        console.log('this.auth2 init',  this.data.auth2New);
-        
-        
-      }, 5000);
+      });
     }
 
+    (function (d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) { return; }
+      js = d.createElement('script');
+      js.id = id;
+      js.src = "https://apis.google.com/js/platform.js?onload=googleSDKLoaded";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'google-jssdk'));
+  }
 
-    disableMenuWait(){
-       console.log('CU',this.route.url)
-       if(this.route.url == '/dashboard' || this.route.url == '/derivative-dashboard' || this.route.url == '/options-dashboard'){
-         this.disableMenu = true;
-        setTimeout(() => {
-
-      this.disableMenu = false;
-        
-      }, 8000);
-       }
-      
-    }
-    
-
-  ngOnInit() {
+ 
+  async ngOnInit() {
     /*Method defination for checking user is blocked or not  */
-   var a =this.data.checkUserBlockStatus();
+// this.data.checkDashPermission('nav');
 
-   this.data.getAllBrokerMarkets();
+    this.data.getAllBrokerDetails();
+    this.data.getBrokerWhitelabelDetails();
 
-   console.log('blocked bb', a);
+    var a = await this.data.checkUserBlockStatus();
+    console.log('blocked statussss', a);
+    this.checkAndShowPaymentRenewPopup()
 
-   this.disableMenuWait()
 
-    // this.data.getAllBrokerDetails();
-   
+    $(document).ready(function() {
+      $('.goog-te-menu-value span').css('color', '#d6cece');
+    });
+
     /* initializing google auth*/
     this.googleAuthSDK();
     /* Initializing app */
-    // (window as any).fbAsyncInit = function () {
-    //   FB.init({
-    //     appId: '816280339515292',
-    //     cookie: false,
-    //     xfbml: true,
-    //     version: 'v2.10'
-    //   });
-    //   FB.AppEvents.logPageView();
-      
-    // };
+    (window as any).fbAsyncInit = function () {
+      FB.init({
+        appId: '816280339515292',
+        cookie: false,
+        xfbml: true,
+        version: 'v2.10'
+      });
+      FB.AppEvents.logPageView();
 
-    // (function (d, s, id) {
-    //   var js, fjs = d.getElementsByTagName(s)[0];
-    //   if (d.getElementById(id)) { return; }
-    //   js = d.createElement(s); js.id = id;
-    //   js.src = "https://connect.facebook.net/en_US/sdk.js";
-    //   fjs.parentNode.insertBefore(js, fjs);
-    // }(document, 'script', 'facebook-jssdk'));
+    };
+
+    (function (d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) { return; }
+      js = d.createElement(s); js.id = id;
+      js.src = "https://connect.facebook.net/en_US/sdk.js";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
 
     if (this.route.url != '/dashboard') {
     }
     if (this.token == null) {
       this.route.navigateByUrl('/login');
-      // this.data.handlePageReloadForecibily(100)
+      this.data.handlePageReloadForecibily(100)
     }
     this.userName = localStorage.getItem('user_name');
+
+    if(this.userName.length > 5){
+      this.userName = this.userName.substring(0, 5) + '..';
+
+    }
+    else{
+    this.userName = localStorage.getItem('user_name');
+
+    }
+
+
+
+
     this.userid = localStorage.getItem('user_id');
     this.act = localStorage.getItem('access_token');
     this.profilePic = localStorage.getItem('profile_pic');
@@ -210,7 +209,7 @@ export class NavbarComponent implements OnInit {
       document.body.classList.remove("overlay");
     }, 6000);
 
-    $(document).ready(function(){       
+    $(document).ready(function () {
       var scroll_pos = 0;
       let color = '#181d2b';
       let picker = "body::-webkit-scrollbar-thumb {background:" + color + ";}body::-webkit-scrollbar-track {background-color:#272f2721;}";
@@ -218,20 +217,21 @@ export class NavbarComponent implements OnInit {
 
       //check if stylsheet exists          
       let existingStylesheet = $("#currentCSS");
-      if (existingStylesheet.length) {$(existingStylesheet).replaceWith(new_stylesheet);}
-      else {$(new_stylesheet).appendTo('head');}
-  });
+      if (existingStylesheet.length) { $(existingStylesheet).replaceWith(new_stylesheet); }
+      else { $(new_stylesheet).appendTo('head'); }
+    });
     //this.userDocStatus = this.main.userDocStatus;
 
   }
   ngDoCheck() {
+    
     // this.userDocStatus = this.main.userDocStatus;
     //console.log(localStorage.getItem('profile_pic'));
     if (localStorage.getItem('profile_pic') != undefined && localStorage.getItem('profile_pic') != null && localStorage.getItem('profile_pic') != '' && localStorage.getItem('profile_pic') != 'null') {
-      
-      if(this.main.profilePic != undefined && this.main.profilePic  != null){
+
+      if (this.main.profilePic != undefined && this.main.profilePic != null) {
         this.imageLink = this.main.profilePic
-      }else{
+      } else {
         this.imageLink = this.data.WEBSERVICE + '/user/' + this.userid + '/file/' + this.profilePic + '?access_token=' + this.act;
       }
     } else {
@@ -239,48 +239,61 @@ export class NavbarComponent implements OnInit {
     }
     //console.log(this.imageLink)
 
-    // //this.Themecolor = this.dash.Themecolor;
+    // this.Themecolor = this.dash.Themecolor;
     this.Themecolor = localStorage.getItem('themecolor');
 
-    if(this.Themecolor == null || this.Themecolor == undefined){
+    if (this.Themecolor == null || this.Themecolor == undefined) {
       this.Themecolor = 'Dark'
       localStorage.setItem('themecolor', this.Themecolor);
 
     }
 
-    if(this.Themecolor == 'Dark'){
+    if (this.Themecolor == 'Dark') {
       this.lightActive = true;
+      let elem: any = document.querySelectorAll('.goog-te-gadget-simple');
+      if (elem[0] != undefined && elem[0] != null) {
+
+        elem[0].style.backgroundColor = "#24262D";
+      }
+      //let list :any = document.querySelectorAll('.VIpgJd-ZVi9od-vH1Gmf');
+      //list[0].style.backgroundColor = "#24262D";   
+      // let lang :any = document.querySelectorAll('.VIpgJd-ZVi9od-vH1Gmf-ibnC6b');
+      // lang[0].style.backgroundColor = "#24262D"; 
+
     }
-    else{
+    else {
       this.lightActive = false;
-
+      let elem: any = document.querySelectorAll('.goog-te-gadget-simple');
+      if (elem[0] != undefined && elem[0] != null) {
+        elem[0].style.backgroundColor = "#DEDEDE";
+      }
     }
 
-    if(this.Themecolor != 'Dark'){
+    if (this.Themecolor != 'Dark') {
       var scroll_pos = 0;
-let color = '#ffffff';
-let picker = "body::-webkit-scrollbar-thumb {background:" + color + ";}body::-webkit-scrollbar-track {background-color:#d3dddd;}";
-let new_stylesheet = "<style type='text/css' id='currentCSS'>" + picker + "</style>";
+      let color = '#ffffff';
+      let picker = "body::-webkit-scrollbar-thumb {background:" + color + ";}body::-webkit-scrollbar-track {background-color:#d3dddd;}";
+      let new_stylesheet = "<style type='text/css' id='currentCSS'>" + picker + "</style>";
 
-//check if stylsheet exists          
-let existingStylesheet = $("#currentCSS");
-if (existingStylesheet.length) { $(existingStylesheet).replaceWith(new_stylesheet); }
-else { $(new_stylesheet).appendTo('head'); }
-  }
+      //check if stylsheet exists          
+      let existingStylesheet = $("#currentCSS");
+      if (existingStylesheet.length) { $(existingStylesheet).replaceWith(new_stylesheet); }
+      else { $(new_stylesheet).appendTo('head'); }
+    }
 
-  else{
+    else {
 
-    var scroll_pos = 0;
-    let color = '#0c0f16';
-    let picker = "body::-webkit-scrollbar-thumb {background:" + color + ";}body::-webkit-scrollbar-track {background-color:#1a1f2a;}";
-    let new_stylesheet = "<style type='text/css' id='currentCSS'>" + picker + "</style>";
-    
-    //check if stylsheet exists          
-    let existingStylesheet = $("#currentCSS");
-    if (existingStylesheet.length) { $(existingStylesheet).replaceWith(new_stylesheet); }
-    else { $(new_stylesheet).appendTo('head'); }
+      var scroll_pos = 0;
+      let color = '#0c0f16';
+      let picker = "body::-webkit-scrollbar-thumb {background:" + color + ";}body::-webkit-scrollbar-track {background-color:#1a1f2a;}";
+      let new_stylesheet = "<style type='text/css' id='currentCSS'>" + picker + "</style>";
 
-  }
+      //check if stylsheet exists          
+      let existingStylesheet = $("#currentCSS");
+      if (existingStylesheet.length) { $(existingStylesheet).replaceWith(new_stylesheet); }
+      else { $(new_stylesheet).appendTo('head'); }
+
+    }
     // //console.log('saved theme', this.Themecolor)
 
   }
@@ -289,9 +302,7 @@ else { $(new_stylesheet).appendTo('head'); }
     this.modalService.open(content);
   }
 
-  changebg(val){
-    console.log('djdjdjdjdjdjdjdjdjdjd');
-    
+  changebg(val) {
     this.screencolor = val;
     this.data.changescreencolor = val;
     if (this.data.changescreencolor == true) {
@@ -299,9 +310,13 @@ else { $(new_stylesheet).appendTo('head'); }
       this.lightActive = false;
       localStorage.setItem('themecolor', this.Themecolor);
       this.themeChanged.emit(this.Themecolor);
-      $(".content-wrapper").css("background-color", "#fafafa").addClass("intro");
+      // $(".content-wrapper").css("background-color", "#fafafa").addClass("intro");
 
       this.tvChartContainerComponent.changeThemeColor('Light')
+
+      if (this.route.url == '/spot' || this.route.url == '/futures' || this.route.url == '/options') {
+        location.reload();
+      }
 
     } else {
       $(".content-wrapper").css("background-color", "#131722").removeClass("intro");
@@ -312,11 +327,43 @@ else { $(new_stylesheet).appendTo('head'); }
       this.themeChanged.emit(this.Themecolor);
 
       this.tvChartContainerComponent.changeThemeColor('Dark')
+      if (this.route.url == '/spot' || this.route.url == '/futures' || this.route.url == '/options') {
+        location.reload();
+      }
 
     }
 
   }
 
 
+  checkAndShowPaymentRenewPopup(){
+
+    // this.http
+    //   .get<any>(this.data.WEBSERVICE + "/home/brokerSubscriptionStatus?brokerId=" + this.data.BROKERID, {
+    //     headers: {
+    //       Authorization: "BEARER " + localStorage.getItem("access_token"),
+    //     },
+    //   })
+    //   .subscribe(
+
+       
+
+    //     (result) => {
+
+    //       if(this.data.BROKERID == 'ARNA06022023114437'){
+          
+    //       }
+    //       else{
+    //         if(result.paymentStatus == 2){
+    //           this.modalService.open(this.myModal, { centered: true,backdrop: 'static',
+    //              keyboard: false });
+    //         }
+    //       }
+          
+    //     }
+        
+
+    //   )
+  }
 
 }

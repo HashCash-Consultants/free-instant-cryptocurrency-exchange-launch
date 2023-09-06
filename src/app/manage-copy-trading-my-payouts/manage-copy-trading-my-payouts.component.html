@@ -1,0 +1,74 @@
+<!-- <app-navbar></app-navbar> -->
+<app-navbar (themeChanged)="themeChangedHandler($event)"></app-navbar>
+
+<div class="content-wrapper pt-0 pl-3">
+
+  <div class="container-fluid" data-ng-controller="profileCtrl" data-ng-init="loginDuration();">
+    <div class="row d-flex">
+
+      <div class="col-12 col-md-12 mt-3">
+        <div class=" p-2 pr-3 rounded align-self-stretch h-100"
+          [ngClass]="Themecolor == 'Dark' ? 'bg-dark' : 'bg-light'">
+          <div class="w-100 mt-2"></div>
+
+          <div class="d-flex justify-content-between">
+            <div class="p-2">
+              <h4>Payments Received from followers</h4>
+              <p>You can see the subscription payments you have received as a Trader from copy traders who followed you or your bots</p>
+              <!-- <p> Saving any other address type may result in the loss of funds.</p> -->
+
+            </div>
+          </div>
+
+          <!-- <div class="d-flex justify-content-between">
+            <form class="form-inline">
+
+              <div class="form-group mx-sm-3 mb-2 extramargin">
+                <input type="text" class="form-control addressInputField" id="amontField" placeholder="Enter Amount" [(ngModel)]="usdtAmount">
+              </div>
+              <div class="form-group mx-sm-3 mb-2 extramargin">
+                <input type="text" class="form-control addressInputField" id="addessField" placeholder="Enter Address" [(ngModel)]="usdtAddress">
+              </div>
+              <button type="submit" class="btn btn-primary mb-2 addressInputFieldbtn" (click)="saveUSDT()">Save</button>
+            </form>
+          </div> -->
+
+          <div class="row">
+            <div class="col-md-5 col-sm-12">
+          <div class="p-2 mr-auto"><span class="font-md  mr-2" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Payments I have received</span></div>
+
+              <div class="table-responsive-sm">
+                <table class="table table-sm table-hover">
+                  <thead>
+                    <tr align="center" [ngClass]="Themecolor == 'Dark' ? 'bg-black text-white' : 'tableHeader-bg-light'">
+                      <th scope="col" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'" class=""
+                        style="font-size:16px">Date</th>
+                      <th scope="col" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'" class=""
+                        style="font-size:16px">Amount in USDT</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+
+                    <tr *ngFor="let history of payoutHistory" align="center">
+
+                      <td> {{history.createdOn}} </td>
+                      <td> {{history.amountInUsd}}</td>
+
+
+                    </tr>
+    
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+          </div>
+
+          
+            
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

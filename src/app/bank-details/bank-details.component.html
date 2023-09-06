@@ -56,7 +56,7 @@
                 <div class="input-group mb-2">
                   <input type="text" class="form-control" id="account_no" [(ngModel)]="account_no" name="account_no"
                     [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'" placeholder="Account Number"
-                    (change)="checkBankInputfield('account_no')" (keypress)="keyPressAlphaNumeric($event)" maxlength="30" required #ac="ngModel" pattern="[A-Za-z0-9]{3,}"
+                    (change)="checkBankInputfield('account_no')" (keypress)="keyPressAlphaNumeric($event)" maxlength="20" required #ac="ngModel" pattern="[A-Za-z0-9]{3,}"
                     [class.is-invalid]="ac.dirty&&ac.invalid">
                 </div>
                 <div *ngIf="f.submitted && ac.invalid">

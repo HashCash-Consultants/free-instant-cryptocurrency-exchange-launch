@@ -2,7 +2,7 @@
 <span class="btn btn-dark font-xs filter-button btn_active fee_btn" (click)="handleOpenFeeModal(feeModal)">FEES</span>
 
 
-<div [ngResizable]="data.resize" class="trade-component p-2 pl-3 pr-3 rounded h-100 resizable-widget">
+<div   class="trade-component p-2 pl-3 pr-3 rounded h-100 resizable-widget">
   <ngb-tabset [ngClass]="Themecolors == 'Dark' ? 'tab-dark' : 'tab-light'">
   
 
@@ -823,7 +823,7 @@
         
       </tbody>
     </table>
-    <p style="font-size: 14px;">PayBito uses a maker-taker fee model for determining its trading fees. Orders that provide liquidity (maker orders) are charged different fees than orders that take liquidity (taker orders).
+    <p style="font-size: 14px;">{{data.exchange}} uses a maker-taker fee model for determining its trading fees. Orders that provide liquidity (maker orders) are charged different fees than orders that take liquidity (taker orders).
       <b>Fees are calculated based on the current pricing tier you are in when the order is placed, and not on the tier you would be in after a trade is completed.</b> When you place an order at the market price that gets filled immediately, you are considered a taker.
       When you place an order which is not immediately matched by an existing order, that order is placed on the order book. If another customer places an order that matches yours, you are considered the maker.
       When you place an order that gets partially matched immediately, you pay a taker fee for that portion. The remainder of the order is placed on the order book and, when matched, is considered a maker order.</p>

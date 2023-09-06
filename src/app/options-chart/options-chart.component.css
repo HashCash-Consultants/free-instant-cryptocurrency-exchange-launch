@@ -31,7 +31,7 @@
     width: 400px;
     position: absolute;
     left: -346px;
-    top:8px;
+    top:21px;
 }
 .btn-drpodwn{
     left:-16px;
@@ -40,11 +40,21 @@
     width: 539px;
     position: absolute;
     left: -386px;
-    top: 8px;
+    top: 21px;
 }
+.vasset {
+    position: relative;
+    left: -14px;
+    width: 360px;
+    top:8px;
+    text-align: left;
+    pointer-events: none;
+  
+  }
 .vasset {
   
     left: 88px;
+    top: 22px;
 }
 
 @media (max-width:767px) {

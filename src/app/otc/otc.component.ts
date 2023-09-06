@@ -404,7 +404,7 @@ export class OtcComponent implements OnInit {
               } else {
 
                 var inputObj = {};
-                inputObj['userId'] = localStorage.getItem('user_id');
+                // inputObj['userId'] = localStorage.getItem('user_id');
                 inputObj['selling_asset_code'] = (this.counter_currency).toUpperCase();
                 inputObj['buying_asset_code'] = (this.base_currency).toUpperCase();
                 inputObj['amount'] = parseFloat(this.onlySellAmount);
@@ -526,7 +526,7 @@ export class OtcComponent implements OnInit {
                 $('.tradeBtn').attr('disabled', true);
               } else {
                 var inputObj = {};
-                inputObj['userId'] = localStorage.getItem('user_id');
+                // inputObj['userId'] = localStorage.getItem('user_id');
                 inputObj['selling_asset_code'] = this.base_currency.toUpperCase();
                 inputObj['buying_asset_code'] = this.counter_currency.toUpperCase();
                 inputObj['amount'] = parseFloat(this.onlyBuyAmount);

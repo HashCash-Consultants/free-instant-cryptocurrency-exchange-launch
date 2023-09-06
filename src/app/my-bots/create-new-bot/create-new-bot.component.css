@@ -1,0 +1,89 @@
+.button {
+    float: left;
+    margin: 0 5px 0 0;
+    width: 100px;
+    height: 40px;
+    position: relative;
+  }
+  
+  .button label,
+  .button input {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: -7px;
+  }
+  
+  .button input[type="radio"] {
+    opacity: 0.011;
+    z-index: 100;
+  }
+  
+  .button input[type="radio"]:checked + label {
+    background: #20b8be;
+    border-radius: 4px;
+  }
+  
+  .button label {
+    cursor: pointer;
+    z-index: 90;
+    line-height: 1.8em;
+  }
+  .defaultColor{
+    background-color: #367af8;
+    color: white;
+  }
+  .marketOrderTPError{
+    color: red;
+    padding-left: 10px;
+  }
+  .assetBox{
+    background: #282e40;
+    border: none;
+    color: white;
+    height: 39px;
+    border-radius: 5px;
+    padding-left: 16px;
+  }
+  .assetBox-light{
+    background: #bab8b8;
+    border: none;
+    color: #282e40;
+    height: 39px;
+    border-radius: 5px;
+    padding-left: 16px;
+  }
+  .form-control-light{
+    color: #474d57 !important;
+    background-color: #bab8b8 !important;
+    border: none !important;
+  }
+  
+  
+  .form-control-light::-webkit-input-placeholder{ 
+    color: #474d57;
+    opacity: 1; 
+  }
+
+  .form-control-light-search{
+    color: #474d57 !important;
+    background-color: #fff !important;
+    border: none !important;
+  }
+  .form-control-light-search::-webkit-input-placeholder{ 
+    color: #474d57;
+    opacity: 1; 
+  }
+  
+
+  .content-wrapper {
+    overflow-x: inherit !important;
+    background: #131722;
+}
+
+.minusAdd{
+  padding-top: 8px;
+  font-size: 16px;
+}

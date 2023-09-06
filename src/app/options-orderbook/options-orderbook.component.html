@@ -1,4 +1,4 @@
-<div [ngResizable]="data.resize" class="order-component p-2 pl-3 pr-3 rounded h-35 resizable-widget">
+<div   class="order-component p-2 pl-3 pr-3 rounded h-35 resizable-widget">
   <!-- <button (click)="openPopupModal()">openPopup</button> -->
   <!-- <ul class="header-button">
     <li><button type="button" class="btn btn-outline-primary" (click)="handleOpenCrossModal(leverageCrossModal)"
@@ -33,7 +33,7 @@
   <div class="orderBookDropdown">
     <ul class="nav navbar-nav">
 
-      <li class="lidropdown" style="position: relative;right: -20px;">
+      <li class="lidropdown" style="">
         <span class="dropdown" style="position: static;"> 
         <a href="javascript:void(0);" style="font-size: 15px;"  [ngClass]="Themecolor == 'Dark' ? 'asset-font' : 'asset-font-light'" (click)="myFunction()"
           data-toggle="dropdown">{{this.assetPairName}} &nbsp;&nbsp;<i class="fa fa-angle-double-down"
@@ -57,7 +57,7 @@
             <button class="btn btn-dark font-xs filter-button asset-dtl-font btn-in" id="hcx-btn" (click)="getNewCurrency('HCX')">HCX</button>
             <button class="btn btn-dark font-xs filter-button asset-dtl-font btn-in" id="usdt-btn" (click)="getNewCurrency('USDT')">USDT</button>
             <button class="btn btn-dark font-xs filter-button asset-dtl-font label-sz btn-in fiatcur" id="fiat-btn" (click)="getselectval()">FIAT</button> -->
-            <button *ngFor="let c of header" [ngClass]="Themecolor == 'Dark' ? 'btn btn-dark font-xs filter-button asset-dtl-font btn-in' : 'btn btn-dark-light font-xs filter-button asset-dtl-font btn-in'" style="font-size: 18px !important;" id="btc-btn"
+            <button *ngFor="let c of header" [ngClass]="Themecolor == 'Dark' ? 'btn  asset-dtl-font btn-in text-white' : 'btn font-xs  asset-dtl-font btn-in text-black'" style="font-size: 18px !important;" id="btc-btn"
               (click)="getNewCurrency(c)">{{c}}</button>
   
             <!-- <span class="rap-select" >
@@ -92,7 +92,7 @@
                   <tr *ngFor="let m of assetetpairback">
                     <td class="asset-dtl-font font-weight-bold" style="color:white;"><a (click)="buySellCode(m)"
                         class="asset-dtl-font test-sanu text-center" style="font-size: 16px;" [ngStyle]="{color : Themecolor == 'Dark' ? 'white' : '#007bff'}"
-                        href="javascript:void(0);"><img src="{{'./assets/img/currency/'+ m.currencycode+'.svg'}}"
+                        href="javascript:void(0);"><img src="{{data.ASSETICONBASEURL+ m.currencycode+'.png'}}"
                           width="17" style="padding-right: 5px;" alt="" />{{m.assetPairName}}</a></td>
                     <td class="text-white asset-dtl-font text-right" style="font-size: 16px;"><span style="color:beige;"
                         *ngIf="m.lpricecolor==null">{{m.lasttrade1}}</span><span style="color: rgb(255, 0, 122);"
@@ -126,7 +126,7 @@
         </li>
         <li class="infoOrderBook" >
           <div class="icon-section pull-left">
-            <i class="fa fa-info-circle" aria-hidden="true" (click)="data.handleInfoSection('orderbookInfo')" style="position:relative;left:80px;font-size:16px;z-index:99;"></i>
+            <i class="fa fa-info-circle" aria-hidden="true" (click)="data.handleInfoSection('orderbookInfo')" style="position:relative;left:91px;font-size:16px;z-index:99;top: -4px;"></i>
           </div>
           <div class="info-section" id="orderbookInfo" style="display: none;">
             <div class="info-header">
@@ -147,13 +147,13 @@
 
   <div class="tab-pane fade show active" id="orderbook" role="tabpanel" aria-labelledby="orderbook-tab">
     <div class="row">
-      <div class="col-md-6 border-col order-gap">
+      <div class="col-md border-col order-gap">
         <div  [ngClass]="Themecolor == 'Dark' ? 'order-id table-responsive' : 'order-id-light table-responsive'">
           <div class="price-orderbook" style="padding-left: 8px;font-size: 15px;">Amount</div>
           <div class="price-orderbook1 text-center" style="padding-right: 20px;font-size: 15px;">Price</div>
           <div class="price-orderbook2" style="padding-top:3px;padding-right: 28px;font-size: 15px;">Total</div>
         </div>
-        <div [ngClass]="Themecolor == 'Dark' ? 'cont tabe-responsive_left_sell' : 'cont tabe-responsive_left_sell_light'">
+        <div [ngClass]="Themecolor == 'Dark' ? 'cont tabe-responsive_left_sell' : 'cont tabe-responsive_left_sell_light'" style="height: 378px;overflow-y: scroll;">
           <table class="table sell-orderbook table-sm" data-module="sticky-table">
             <thead>
               <tr class="bg-header">
@@ -163,7 +163,7 @@
               <tr class="" (click)="data.fetchOrderPrice(getPrice(m))" style="cursor: pointer;" *ngFor="let m of askdata;let i = index;" [ngClass]="m.newly==true?'bg-flash-red':''">
                 <td style="font-family:'Montserrat',sans-serif;padding-right: 8px;font-size: 15px;" [ngClass]="Themecolor == 'Dark' ? '' : 'ticker-light'" class="text-right">
                   {{(getAmount(m)*getPrice(m)).toFixed(p)}}</td>
-                <td style="font-family:'Montserrat',sans-serif;text-align: center;padding-left: 15px;color: #F5475D;font-size: 15px;" class="">
+                <td style="font-family:'Montserrat',sans-serif;text-align: center;padding-left: 5px;color: #F5475D;font-size: 15px;" class="">
                   {{getPrice(m)}}</td>
                 <td style="font-family:'Montserrat',sans-serif;padding-left: 8px;font-size: 15px;" [ngClass]="Themecolor == 'Dark' ? '' : 'ticker-light'" class="text-left">{{getAmount(m)}}</td>
               </tr>
@@ -196,7 +196,7 @@
           </small>
 
         </div>
-        <div [ngClass]="Themecolor == 'Dark' ? 'table-responsive tabe-responsive_left_buy' : 'table-responsive tabe-responsive_left_buy_light'" >
+        <div [ngClass]="Themecolor == 'Dark' ? 'table-responsive tabe-responsive_left_buy' : 'table-responsive tabe-responsive_left_buy_light'" style="height: 450px;overflow-y: scroll;">
 
           <table class="table table-sm mb-4">
             <thead>
@@ -207,7 +207,7 @@
             <tbody>
               <tr class="" *ngFor="let m of biddata ;let i = index;" [ngClass]="m.newly==true?'bg-flash-green':''" (click)="data.fetchOrderPrice(getPrice(m))" style="cursor: pointer;">
                 <td style="font-family:'Montserrat',sans-serif;padding-left: 8px;font-size: 15px;" [ngClass]="Themecolor == 'Dark' ? '' : 'ticker-light'" class="text-left">{{getAmount(m)}}</td>
-                <td style="font-family:'Montserrat',sans-serif; text-align: center;padding-left: 15px;color: #21CB80;font-size: 15px;"
+                <td style="font-family:'Montserrat',sans-serif; text-align: center;padding-left: 5px;color: #21CB80;font-size: 15px;"
                   class="">{{getPrice(m)}}</td>
                 <td style="font-family:'Montserrat',sans-serif;padding-right: 8px;font-size: 15px;" [ngClass]="Themecolor == 'Dark' ? '' : 'ticker-light'" class="text-right">
                   {{(getAmount(m)*getPrice(m)).toFixed(p)}}</td>
@@ -225,54 +225,7 @@
         </div>
 
       </div>
-      <div class="col-md-6" id="trade-details-tableContent">
-        <div [ngClass]="Themecolor == 'Dark' ? 'table-responsive tabe-responsive_right' : 'table-responsive tabe-responsive_right_light'">
-          <table class="table table-sm cust">
-            <thead>
-              <tr class="bg-header">
-                <th align="center" style="text-align: left;font-size: 15px;" scope="col"> Time</th>
-                <th align="center" style="text-align: center;font-size: 15px;" scope="col">Amount</th>
-                <th align="center" style="text-align: center;font-size: 15px;" scope="col">Price</th>
-              </tr>
-            </thead>
-            <tbody *ngIf="marketTradeRecords !=''">
-              <tr class="" (click)="data.fetchOrderPrice(getPrice(m))" style="cursor: pointer;" *ngFor="let m of marketTradeRecords;let i = index;">
-                <td *ngIf="m.side == 'BID';else tradegreenprice" [ngClass]="Themecolor == 'Dark' ? '' : 'ticker-light'" [ngClass]="m.newbid==true?'bg-flash-green':''"
-                  style="font-family:'Montserrat',sans-serif;font-size: 15px;text-align: left !important;" class="text-center">{{m.timestamp | date:'h:mm:ss '}}</td>
-                <ng-template #tradegreenprice>
-                  <td [ngClass]="Themecolor == 'Dark' ? '' : 'ticker-light'" [ngClass]="m.newask==true?'bg-flash-red':''" style="font-family:'Montserrat',sans-serif;font-size: 15px;text-align: left !important;"
-                    class="text-center">{{m.timestamp | date:'h:mm:ss '}}</td>
-                </ng-template>
-
-                <td *ngIf="m.side == 'BID';else tradegreenamount" [ngClass]="Themecolor == 'Dark' ? '' : 'ticker-light'" [ngClass]="m.newbid==true?'bg-flash-green':''"
-                  style="font-family:'Montserrat',sans-serif;font-size: 15px;" class="text-center">{{getTradeAmount(m)}}</td>
-                <ng-template #tradegreenamount>
-                  <td [ngClass]="Themecolor == 'Dark' ? '' : 'ticker-light'" [ngClass]="m.newask==true?'bg-flash-red':''" style="font-family:'Montserrat',sans-serif;font-size: 15px;"
-                    class="text-center">{{getTradeAmount(m)}}</td>
-                </ng-template>
-
-                <td style="font-family:'Montserrat',sans-serif;color: #21CB80;font-size: 15px;" [ngClass]="m.newbid==true?'bg-flash-green':''"
-                  *ngIf="m.side == 'BID'; else true_price" class="text-center">
-                  {{getTradePrice(m)}}</td>
-                <ng-template #true_price>
-                  <td [ngClass]="m.newask==true?'bg-flash-red':''" style="font-family:'Montserrat',sans-serif;color: #F5475D;font-size: 15px;"
-                    class="text-center">
-                    {{getTradePrice(m)}}
-                  </td>
-                </ng-template>
-
-              </tr>
-            </tbody>
-            <tbody id="marketTrade" *ngIf="marketTradeRecords ==''">
-              <tr>
-                <td>
-                  No Data
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
+     
     </div>
   </div>
 

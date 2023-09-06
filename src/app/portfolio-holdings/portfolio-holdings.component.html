@@ -124,13 +124,13 @@
 </div>
 
 <ng-template #buyoffer let-modal>
-  <div class="modal-header">
+  <div class="modal-header" [ngClass]="Themecolor == 'Dark' ? '' : 'lightTheme'">
     <h4 class="modal-title" id="modal-basic-title">Buy Offer</h4>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <div class="modal-body">
+  <div class="modal-body" [ngClass]="Themecolor == 'Dark' ? '' : 'lightThemeModalBody'">
     <p class="text-center">Are you sure you want to place this Buy offer?</p>
   </div>
   <div class="modal-footer">
@@ -140,13 +140,13 @@
 </ng-template>
 
 <ng-template #selloffer let-modal>
-  <div class="modal-header">
+  <div class="modal-header" [ngClass]="Themecolor == 'Dark' ? '' : 'lightTheme'">
     <h4 class="modal-title" id="modal-basic-title">Sell Offer</h4>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <div class="modal-body">
+  <div class="modal-body" [ngClass]="Themecolor == 'Dark' ? '' : 'lightThemeModalBody'">
     <p class="text-center">Are you sure you want to place this Sell offer?</p>
   </div>
   <div class="modal-footer">

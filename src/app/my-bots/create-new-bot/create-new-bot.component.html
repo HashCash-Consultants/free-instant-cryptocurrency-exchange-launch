@@ -1,0 +1,1416 @@
+<app-navbar (themeChanged)="themeChangedHandler($event)"></app-navbar>
+
+<!-- <app-loader></app-loader> -->
+<div class="content-wrapper pt-0 pl-3" [ngClass]="Themecolor == 'Dark' ? '' : 'content-wrapper-light'">
+
+
+
+  <div class="row d-flex" data-ng-init="loginDuration();" data-ng-controller="bankDetailsCtrl">
+    <div class="col-lg-12 col-12 bank-alighnment align-self-stretch bankDetailsCtrl">
+
+
+      <div class="p-2 rounded h-100">
+        <div class="w-100"></div>
+        <div class="row d-flex mt-3 mb-4 ml-0">
+          <div class="col-md-10">
+            <span class="font-md text-theme-dark-blue mr-2 pl-3">Create New Bots</span>
+          </div>
+          <div class="col-md-2">
+            <button class="btn btn-primary" routerLink="/my-bots"><i class="fa fa-long-arrow-left"
+                aria-hidden="true"></i> Back</button>
+          </div>
+        </div>
+
+        <div class="row d-flex ml-2 mr-2">
+          <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12" [ngClass]="Themecolor == 'Dark' ? 'bg-dark' : 'bg-light'">
+            <div class="form-row">
+              <label class="text-theme-dark-blue" for="beneficiary_name">Select Exchange</label>
+              <div class="input-group mb-2">
+                <select class="form-control" [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'" [(ngModel)]="exchangeName" (change)="getAssetPair(); resetApiKey();">
+                  <option value="">Select</option>
+                  <option value="PAYBITO">{{data.exchange}}</option>
+
+                  <option value="BINANCE">BINANCE</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <label class="text-theme-dark-blue" for="beneficiary_name">Bot Name</label>
+              <div class="input-group mb-2">
+                <input type="text" class="form-control" id="beneficiary_name" [(ngModel)]="botName"
+                  [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'"
+                   placeholder="Bot Name" name="botName" minlength="1" maxlength="30" (keypress)="VALIDATION1($event)">
+              </div>
+            </div>
+            <div class="form-row">
+              <label class="text-theme-dark-blue" for="beneficiary_name">Bot Description </label>
+              
+              <div class="input-group mb-2">
+                <textarea maxlength="120" class="form-control" id="beneficiary_name" [(ngModel)]="botDescription"
+                [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'" 
+                placeholder="Bot Description" minlength="1" minlength="100" name="botDescription" (keypress)="VALIDATION1($event)">
+
+                </textarea>
+                
+              </div>
+            </div>
+            <div class="form-row">
+              <label class="text-theme-dark-blue" for="beneficiary_name">Select Market</label>
+              <div class="input-group mb-2">
+                <select class="form-control" [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'" (change)="getAssetPair()" [(ngModel)]="marketName" >
+                  <option value="">Select</option>
+                  <option value="SPOT" *ngIf="data.isSpot == 1">SPOT</option>
+                  <option value="FUTURES" *ngIf="data.isFutures == 1">FUTURES</option>
+                  <!-- <option value="OPTIONS">OPTIONS</option> -->
+
+                  
+                </select>
+              </div>
+            </div>
+            <div class="form-row" *ngIf="marginShowStatus ">
+              <label class="text-theme-dark-blue" for="beneficiary_name">Select Margin Type</label>
+              <div class="input-group mb-2">
+                <select class="form-control" [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'" [(ngModel)]="marginType" [disabled]="marginTypeOptionStatus" (change)="changeMargintype()">
+                  <option value="0">Select</option>
+                  <option value="1">ISO Margin</option>
+                  <option value="2">Cross Margin</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row" *ngIf="marginShowStatus ">
+              <label class="text-theme-dark-blue" for="beneficiary_name">Select Leverage(X)</label>
+              <div class="input-group mb-2">
+
+                <input type="number" spNumbersOnly class="form-control" id="leverage"
+                  [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'"  name="leverage" [(ngModel)]="leverage" numbersOnly min="2" max="125" (blur)="leverageCheck()">
+                
+              </div>
+            </div>
+            <div class="form-row">
+              <label class="text-theme-dark-blue" for="beneficiary_name">Select API Key <i class="fa fa-info-circle" aria-hidden="true" placement="top" ngbTooltip="An API Key once used for one bot cannot be reused again."></i></label>
+              <div class="input-group mb-2">
+
+                <!-- <select class="form-control" [(ngModel)]="selectedApiKey"
+                  [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'">
+                  <option value="">Select any</option>
+                  <option *ngFor="let apis of selectedApiKey">{{apis.apiKeyName}}</option>
+
+                </select> -->
+
+                <angular2-multiselect [data]="selectedApiKey"  [(ngModel)]="selectedApiKeyMulti"
+                
+    [settings]="dropdownSettings" 
+    (onSelect)="onItemSelect($event)" 
+    (onDeSelect)="OnItemDeSelect($event)"
+    (onSelectAll)="onSelectAll($event)"
+    (onDeSelectAll)="onDeSelectAll($event)"
+    
+    >
+  
+  </angular2-multiselect>
+              </div>
+            </div>
+
+            
+
+            <div class="form-row">
+              <label class="text-theme-dark-blue" for="beneficiary_name">Select Order</label>
+              <div class="input-group mb-2">
+                <select class="form-control" [(ngModel)]="botOrder" (change)="getAssetPair();changeAssetPairForAssetBox()" [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'">
+                  <select value=""> Select Any</select>
+                  <option value="Buy">Buy</option>
+                  <option value="Sell">Sell</option>
+
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row" *ngIf="marketName == 'SPOT' || marketName == 'FUTURES' || marketName == 'OPTIONS'">
+              <label class="text-theme-dark-blue" for="beneficiary_name">Select Pair <i class="fa fa-info-circle" aria-hidden="true" placement="top" ngbTooltip="A maximum of 2 bots can be created for a single pair - one buy bot and one sell bot."></i></label>
+              <div class="input-group mb-2">
+                
+                
+                <select class="form-control" *ngIf="marketName == 'SPOT'" [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'" [(ngModel)]="botAssetPair" (change)="filterAvailableBalance();">
+                  <option value=""> Select Pair</option>
+                  <option value="" *ngFor="let pair of assetetpairback" value="{{pair.currency}}-{{pair.baseCurrency}}-{{pair.ltp}}">{{pair.currency}}-{{pair.baseCurrency}}</option>
+                  
+
+                </select>
+
+                
+                <select class="form-control" *ngIf="marketName == 'FUTURES'" [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'" [(ngModel)]="botAssetPair" (change)="filterAvailableBalanceFuture()">
+                  <option value=""> Select Pair</option>
+                  <option value="" *ngFor="let pair of assetetpairback" value="{{pair.currency}}-{{pair.baseCurrency}}-{{pair.ltp}}-{{pair.assetPair}}">{{pair.assetPair}}</option>
+
+
+                </select>
+
+                <select class="form-control" *ngIf="marketName == 'OPTIONS'" [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'" [(ngModel)]="botAssetPair" (change)="filterAvailableBalanceOptions()">
+                  <option value=""> Select Pair</option>
+                  <option value="" *ngFor="let pair of assetetpairback" value="{{pair.assetPair}}-{{pair.currency}}-{{pair.baseCurrency}}-{{pair.ltp}}">{{pair.assetPair}}</option>
+
+
+                </select>
+
+
+                
+
+                
+              </div>
+            </div>
+            
+            <div class="form-row">
+              <label class="text-theme-dark-blue" for="beneficiary_name">Your Available Balance</label>
+              <div class="input-group mb-2">
+                <input type="text" class="form-control" id="beneficiary_name"
+                  [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'" placeholder="Available Balance" name="selelectedSellingAssetBalance" [(ngModel)]="selelectedSellingAssetBalance" disabled>
+              </div>
+            </div>
+            <div class="form-row">
+              <label class="text-theme-dark-blue" for="beneficiary_name">Expire In</label>
+              <div class="row input-group mb-2 ml-1">
+                <input type="text" class="form-control col-md-9" id="botExpireTime" [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'" placeholder="Expire In" [(ngModel)]="botExpireTime" minlength="1" maxlength="8" spNumbersOnly (keyup)="investingTimeCheck(botExpireTime,'botExpireTime')" (change)="investingTimeCheck(botExpireTime,'botExpireTime')" />
+                <span class="col-md-1"></span>
+                <select class="form-control col-md-2" [(ngModel)]="botExpireTimeType" [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'" (change)="investingTimeCheck(botExpireTime,'botExpireTime')">
+                  <option value="min">Min</option>
+                  <option value="hrs">Hrs</option>
+                  <option value="days">Days</option>
+
+                </select>
+              </div>
+            </div>
+            <!-- <div class="form-row">
+              <label class="text-theme-dark-blue" for="beneficiary_name">How many times do you want to execute this bot</label>
+              <div class="row input-group mb-2 ml-1">
+                <input type="text" spNumbersOnly minlength="1" maxlength="8" class="form-control col-md-9" [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'" placeholder="How many times do you want to execute this bot" [(ngModel)]="maximum_trade_count" id="maximum_trade_count" (change)="investingTimeCheck(maximum_trade_count,'maximum_trade_count')"/>
+                <span class="col-md-1"></span>
+                <select class="form-control col-md-2" [(ngModel)]="time_frame" [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'">
+                  <option value="Every Minute">Every Minute</option>
+                  <option value="Every Hour">Every Hour</option>
+                  <option value="Never">Never</option>
+
+                </select>
+              </div>
+            </div> -->
+            <div class="form-row">
+              <label class="text-theme-dark-blue" for="beneficiary_name">Select Order Type</label>
+              <div class="input-group mb-2">
+                <select class="form-control" [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'"
+                  [(ngModel)]="orderType" (change)="resetLimitOrderType()">
+                  <option value="">Select any</option>
+                  <option value="Market Order">Market Order</option>
+                  <option value="Limit Order">Limit Order</option>
+
+                </select>
+              </div>
+            </div>
+            <div class="form-row" *ngIf="orderType == 'Market Order'">
+              <label class="text-theme-dark-blue" for="beneficiary_name">Select Bot Type</label>
+              <div class="input-group mb-2">
+                <select class="form-control" [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'"
+                  [(ngModel)]="botType">
+                  <option value="">Select</option>
+                  <option value="Single Entry">Single Entry</option>
+                  <option value="Take Profit">Take Profit</option>
+                  <option value="Dollar Cost Average">Dollar Cost Average</option>
+
+                </select>
+              </div>
+            </div>
+            <div class="row d-flex" *ngIf="orderType == 'Limit Order'">
+              <div class="col-md-12">
+
+                <div class="row d-flex">
+                  <div class="col-md-12">
+                    <h5>Limit Order Bot</h5>
+                  </div>
+                </div>
+                <div>
+                  <div class="row" style="margin-bottom: 20px;margin-top: 10px;">
+                    <div class="col-md-12 row">
+                      <label style="margin-left: 14px;">Take Profit 1 <input type="form-control col-md-2" type="checkbox"
+                          (click)="handleBotSelection('profit1',$event)"></label>
+
+                    </div>
+                  </div>
+                  <div *ngIf="isProfit1Checked">
+                    <div class="row">
+                      <p class="col-md-4">When the Market price reaches <i class="fa fa-info-circle" aria-hidden="true" placement="top" ngbTooltip="If Above is selected, the value entered here must be greater than the current market price. If Below is selected, the value entered here must be less than the current market price."></i></p>
+                      <select class="form-control col-md-2" [(ngModel)]="marketPriceReachForBotType" (change)="lmodtp1PriceChk()">
+                        <option value="">Select any</option>
+                        
+                        <option value="above">Above</option>
+                        <option value="below">Below</option>
+                      </select>
+                      <p class="col-md-2">this price a Limit Order shall be placed with the deviation described below:
+                      </p>
+
+                      <div class="form-group">
+                        <input type="number" [disabled]="marketPriceReachForBotType == ''" class="form-control" placeholder="Please enter price of the pair"
+                        [(ngModel)]="marketPriceReachForBot1" id="marketPriceReachForBot1" aria-describedby="emailHelp" (ngModelChange)="lmodtp1PriceChk()" (change)="investingTimeCheck(marketPriceReachForBot1,'marketPriceReachForBot1')">
+                        <small id="emailHelp" class="form-text text-green">Current Market Price: {{ltpData}} </small>
+                        <small id="emailHelp" class="form-text text-red" *ngIf="lmodtp1PriceErrorGrt">Price should be greater than Current Market Price.</small>
+                        <small id="emailHelp" class="form-text text-red" *ngIf="lmodtp1PriceErrorlwr">Price should be lower than Current Market Price.</small>
+
+
+                      </div>
+                      
+
+              
+                      
+                      
+
+
+
+                    </div>
+
+                    <div class="form-row">
+                      <label class="text-theme-dark-blue" for="beneficiary_name">Choose Deviation from</label>
+                      <div class="input-group mb-2">
+                        <select class="form-control" [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'"
+                          [(ngModel)]="deviationFromForBot1">
+                          <option value="">Select</option>
+                          <option value="marketPrice">Market Price</option>
+                          <option value="lastPrice">Last Price</option>
+                          <option value="askPrice">Ask Price</option>
+                          <option value="bidPrice">Bid Price</option>
+
+                        </select>
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <label class="text-theme-dark-blue" for="beneficiary_name">Deviation %</label>
+                      <div class="input-group mb-2">
+                        <input type="text" maxlength="8" numbersOnly class="form-control" [(ngModel)]="deviationPercentageForBot1" 
+                        id="deviationPercentageForBot1" 
+                        (change)="deviationValidationCheck(deviationPercentageForBot1,'deviationPercentageForBot1')"/>
+
+                      </div>
+                    </div>
+
+                    
+                    <div class="form-row">
+                    <div class="button">
+                      <input type="radio" id="a10" name="togglePercentageForBot1" (change)="onItemChange('10%');validateLimitOrderTPValue()"/>
+                      <label class="btn btn-default defaultColor" for="a10">10%</label>
+                    </div>
+                    <div class="button">
+                      <input type="radio" id="a25" name="togglePercentageForBot1" (change)="onItemChange('25%');validateLimitOrderTPValue()"/>/>
+                      <label class="btn btn-default defaultColor" for="a25">25%</label>
+                    </div>
+                    <div class="button">
+                      <input type="radio" id="a50" name="togglePercentageForBot1" (change)="onItemChange('50%');validateLimitOrderTPValue()"/>/>
+                      <label class="btn btn-default defaultColor" for="a50">50%</label>
+                    </div>
+                    <!-- <div class="button">
+                      <input type="radio" id="a75" name="togglePercentageForBot1" (change)="onItemChange('75%');validateLimitOrderTPValue()"/>/>
+                      <label class="btn btn-default defaultColor" for="a50">75%</label>
+                    </div>
+                    <div class="button">
+                      <input type="radio" id="a100" name="togglePercentageForBot1" (change)="onItemChange('100%');validateLimitOrderTPValue()"/>/>
+                      <label class="btn btn-default defaultColor" for="a100">100%</label>
+                    </div> -->
+                    <div class="button">
+                      <input type="text" id="assetBox" class="" [ngClass]="Themecolor == 'Dark' ? 'assetBox' : 'assetBox-light'" name="assetBox" readonly value="{{showAsset}}"/>
+                      
+                    </div>
+                  </div>
+                  <div class="row" *ngIf="limitOrderTPError">
+                    <span><small class="marketOrderTPError">Total percentage value of take profite cannot be greater than 100%</small></span>
+
+
+                  </div>
+                    
+
+
+                    <div class="form-row">
+                      <label class="text-theme-dark-blue" for="beneficiary_name">Define Postion Size</label>
+                      <div class="input-group mb-2">
+                        <select class="form-control" [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'"
+                          [(ngModel)]="positionSizeForBot1">
+                          <option value="">Select</option>
+                          <option value="Percent of Portfolio">Percent of Portfolio</option>
+                          <option value="Fixed Amount">Fixed Amount</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="form-row" *ngIf="positionSizeForBot1 == 'Percent of Portfolio'">
+                      <label class="text-theme-dark-blue" for="beneficiary_name">Percentage Of Portfolio</label>
+                      <div class="input-group mb-2">
+                        <input type="text" id="percentageOfPortfolioForBot1" numbersOnly minlength="1" maxlength="3" class="form-control"
+                         [(ngModel)]="percentageOfPortfolioForBot1" [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'"
+                         (change)="percentageValidation(percentageOfPortfolioForBot1,'percentageOfPortfolioForBot1');"
+
+                         (ngModelChange)="binanceLimitOrderPriceCheck('', deviationPercentageForBot1, 
+                         'LIMIT','PF',percentageOfPortfolioForBot1,
+                         0,percentageOfPortfolioForBot2,percentageOfPortfolioForBot3,
+                         fixedAmountForBot1,fixedAmountForBot2,fixedAmountForBot3);
+
+                         paybitoLimitOrderPriceCheck('Percent of Portfolio','Limit Order',
+          fixedAmountForBot1,fixedAmountForBot2,fixedAmountForBot3,
+          percentageOfPortfolioForBot1,percentageOfPortfolioForBot2,percentageOfPortfolioForBot3,deviationPercentageForBot1);"
+                         />
+
+                      </div>
+                    </div>
+                    
+
+
+                    <div class="form-row" *ngIf="positionSizeForBot1 == 'Percent of Portfolio'">
+                      <div class="button">
+                        <input type="radio" id="a10" name="togglePortfolioPercentageForBot1" (change)="onItemChangebot1('10%')"/>
+                        <label class="btn btn-default defaultColor" for="a10">10%</label>
+                      </div>
+                      <div class="button">
+                        <input type="radio" id="a25" name="togglePortfolioPercentageForBot1" (change)="onItemChangebot1('25%')"/>
+                        <label class="btn btn-default defaultColor" for="a25">25%</label>
+                      </div>
+                      <div class="button">
+                        <input type="radio" id="a50" name="togglePortfolioPercentageForBot1" (change)="onItemChangebot1('50%')"/>
+                        <label class="btn btn-default defaultColor" for="a50">50%</label>
+                      </div>
+                      <div class="button">
+                        <input type="radio" id="a75" name="togglePortfolioPercentageForBot1" (change)="onItemChangebot1('75%')"/>
+                        <label class="btn btn-default defaultColor" for="a50">75%</label>
+                      </div>
+                      <div class="button">
+                        <input type="radio" id="a100" name="togglePortfolioPercentageForBot1" (change)="onItemChangebot1('100%')"/>
+                        <label class="btn btn-default defaultColor" for="a100">100%</label>
+                      </div>
+                      <div class="button">
+                        <input type="text" id="assetBox" class="" [ngClass]="Themecolor == 'Dark' ? 'assetBox' : 'assetBox-light'" name="assetBox" readonly value="{{showAsset}}"/>
+                        
+                      </div>
+                    </div>
+
+
+
+                    <div class="form-row" *ngIf="positionSizeForBot1 == 'Fixed Amount'">
+                      <label class="text-theme-dark-blue" for="beneficiary_name">Fixed Amount</label>
+                      <div class="input-group mb-2">
+                        <input type="text" numbersOnly numbersOnly numeric numericType="decimal" id="fixedAmountForBot1" maxlength="10"   class="form-control" [(ngModel)]="fixedAmountForBot1" 
+                        (change)="fixedAmountminmaxCheck(fixedAmountForBot1,'fixedAmountForBot1'); "
+                        (ngModelChange)="binanceLimitOrderPriceCheck(fixedAmountForBot1, deviationPercentageForBot1, 
+                        'LIMIT','FA','',
+                        percentageOfPortfolioForBot1,percentageOfPortfolioForBot2,percentageOfPortfolioForBot3,
+                        0,fixedAmountForBot2,fixedAmountForBot3);
+
+                        paybitoLimitOrderPriceCheck('Fixed Amount','Limit Order',
+                        this.fixedAmountForBot1,this.fixedAmountForBot2,this.fixedAmountForBot3,
+                        percentageOfPortfolioForBot1,percentageOfPortfolioForBot2,percentageOfPortfolioForBot3,deviationPercentageForBot1)"
+                        
+                        />
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <div class="row" style="margin-bottom: 20px;margin-top: 10px;">
+                    <div class="col-md-12 row">
+                      <label style="margin-left: 14px;">Take Profit 2 <input type="form-control col-md-2" type="checkbox"
+                          (click)="handleBotSelection('profit2',$event)"></label>
+
+                    </div>
+                  </div>
+                  <div *ngIf="isProfit2Checked">
+                    <div class="row">
+                      <p class="col-md-4">When the Market price reaches <i class="fa fa-info-circle" aria-hidden="true" placement="top" ngbTooltip="If Above is selected, the value entered here must be greater than the current market price. If Below is selected, the value entered here must be less than the current market price."></i></p>
+                      <select class="form-control col-md-2" [(ngModel)]="marketPriceReachForBot2Type" (change)="lmodtp2PriceChk()">
+                        <option value="">Select any</option>
+                        <option value="above">Above</option>
+                        <option value="below">Below</option>
+                      </select>
+                      <p class="col-md-2">this price a Limit Order shall be placed with the deviation described below:
+                      </p>
+                      <div class="form-group">
+                        <input type="number" [disabled]="marketPriceReachForBot2Type == ''" class="form-control" placeholder="Please enter price of the pair"
+                        [(ngModel)]="marketPriceReachForBot2"  aria-describedby="emailHelp1" (ngModelChange)="lmodtp2PriceChk()" id="marketPriceReachForBot2" (change)="investingTimeCheck(marketPriceReachForBot2,'marketPriceReachForBot2')">
+                        <small id="emailHelp1" class="form-text text-green">Current Market Price: {{ltpData}}</small>
+                        <small id="emailHelp1" class="form-text text-red" *ngIf="lmodtp2PriceErrorGrt">Price should be greater than Current Market Price.</small>
+                        <small id="emailHelp1" class="form-text text-red" *ngIf="lmodtp2PriceErrorlwr">Price should be lower than Current Market Price.</small>
+
+
+                      </div>
+
+                      <!-- <input type="text" class="form-control col-md-3" placeholder="Please enter price of the pair"
+                        [(ngModel)]="marketPriceReachForBot2" />
+                      <span class="col-md-2">{{selectedFiat}}</span> -->
+                    </div>
+
+                    <div class="form-row">
+                      <label class="text-theme-dark-blue" for="beneficiary_name">Choose Deviation from</label>
+                      <div class="input-group mb-2">
+                        <select class="form-control" [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'"
+                          [(ngModel)]="deviationFromForBot2">
+                          <option value="">Select</option>
+                          <option value="marketPrice">Market Price</option>
+                          <option value="lastPrice">Last Price</option>
+                          <option value="askPrice">Ask Price</option>
+                          <option value="bidPrice">Bid Price</option>
+
+                        </select>
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <label class="text-theme-dark-blue" for="beneficiary_name">Deviation %</label>
+                      <div class="input-group mb-2">
+                        <input type="text" maxlength="8" numbersOnly class="form-control" [(ngModel)]="deviationPercentageForBot2" 
+                        id="deviationPercentageForBot2" 
+                        (change)="deviationValidationCheck(deviationPercentageForBot2,'deviationPercentageForBot2')"/>
+
+                      </div>
+                    </div>
+                    <!-- checkbox add arnab -->
+
+                    <!-- <div class="form-row">
+                      <button class="btn btn-sm btn-primary col-md-1 text-center">10%</button>
+                      <span class="col-md-1"></span>
+                      <button class="btn btn-sm btn-primary col-md-1 text-center">25%</button>
+                      <span class="col-md-1"></span>
+                      <button class="btn btn-sm btn-primary col-md-1 text-center">50%</button>
+                      <span class="col-md-1"></span>
+                      <button class="btn btn-sm btn-primary col-md-1 text-center">75%</button>
+                      <span class="col-md-1"></span>
+                      <button class="btn btn-sm btn-primary col-md-1 text-center">100%</button>
+                    </div> -->
+                    <div class="form-row">
+                      <div class="button">
+                        <input type="radio" id="a10" name="togglePercentageForBot2" (change)="onDeviationChangebot2('10%');validateLimitOrderTPValue()"/>
+                        <label class="btn btn-default defaultColor" for="a10">10%</label>
+                      </div>
+                      <div class="button">
+                        <input type="radio" id="a25" name="togglePercentageForBot2" (change)="onDeviationChangebot2('25%');validateLimitOrderTPValue()"/>
+                        <label class="btn btn-default defaultColor" for="a25">25%</label>
+                      </div>
+                      <div class="button">
+                        <input type="radio" id="a50" name="togglePercentageForBot2" (change)="onDeviationChangebot2('50%');validateLimitOrderTPValue()"/>
+                        <label class="btn btn-default defaultColor" for="a50">50%</label>
+                      </div>
+                      <!-- <div class="button">
+                        <input type="radio" id="a75" name="togglePercentageForBot2" (change)="onDeviationChangebot2('75%');validateLimitOrderTPValue()"/>
+                        <label class="btn btn-default defaultColor" for="a50">75%</label>
+                      </div>
+                      <div class="button">
+                        <input type="radio" id="a100" name="togglePercentageForBot2" (change)="onDeviationChangebot2('100%');validateLimitOrderTPValue()"/>
+                        <label class="btn btn-default defaultColor" for="a100">100%</label>
+                      </div> -->
+                      <div class="button">
+                        <input type="text" id="assetBox" class="" [ngClass]="Themecolor == 'Dark' ? 'assetBox' : 'assetBox-light'" name="assetBox" readonly value="{{showAsset}}"/>
+                        
+                      </div>
+                    </div>
+                    <div class="row" *ngIf="limitOrderTPError">
+                      <span><small class="marketOrderTPError">Total percentage value of take profite cannot be greater than 100%</small></span>
+  
+  
+                    </div>
+                    <div class="form-row">
+                      <label class="text-theme-dark-blue" for="beneficiary_name">Define Postion Size</label>
+                      <div class="input-group mb-2">
+                        <select class="form-control" [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'"
+                          [(ngModel)]="positionSizeForBot2">
+                          <option value="">Select</option>
+                          <option value="Percent of Portfolio">Percent of Portfolio</option>
+                          <option value="Fixed Amount">Fixed Amount</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="form-row" *ngIf="positionSizeForBot2 == 'Percent of Portfolio'">
+                      <label class="text-theme-dark-blue" for="beneficiary_name">Percentage Of Portfolio</label>
+                      <div class="input-group mb-2">
+                        <input type="text" id="percentageOfPortfolioForBot2" numbersOnly minlength="1" maxlength="3" class="form-control" [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'"
+                        [(ngModel)]="percentageOfPortfolioForBot2" 
+                        (change)="percentageValidation(percentageOfPortfolioForBot2,'percentageOfPortfolioForBot2');"
+
+
+                        (ngModelChange)="binanceLimitOrderPriceCheck('', deviationPercentageForBot2, 
+                        'LIMIT','PF',percentageOfPortfolioForBot2,
+                        percentageOfPortfolioForBot1,0,percentageOfPortfolioForBot3,
+                        fixedAmountForBot1,fixedAmountForBot2,fixedAmountForBot3);
+
+                        paybitoLimitOrderPriceCheck('Percent of Portfolio','Limit Order',
+                        fixedAmountForBot1,fixedAmountForBot2,fixedAmountForBot3,
+                        percentageOfPortfolioForBot1,percentageOfPortfolioForBot2,percentageOfPortfolioForBot3,deviationPercentageForBot2);
+                        
+                        "
+                        
+                        />
+                      </div>
+                    </div>
+                    <!-- checkbox add arnab -->
+
+                    <!-- <div class="form-row" *ngIf="positionSizeForBot2 == 'percentportfolio'">
+                      <button class="btn btn-sm btn-primary col-md-1 text-center">10%</button>
+                      <span class="col-md-1"></span>
+                      <button class="btn btn-sm btn-primary col-md-1 text-center">25%</button>
+                      <span class="col-md-1"></span>
+                      <button class="btn btn-sm btn-primary col-md-1 text-center">50%</button>
+                      <span class="col-md-1"></span>
+                      <button class="btn btn-sm btn-primary col-md-1 text-center">75%</button>
+                      <span class="col-md-1"></span>
+                      <button class="btn btn-sm btn-primary col-md-1 text-center">100%</button>
+                    </div> -->
+                    <div class="form-row" *ngIf="positionSizeForBot2 == 'Percent of Portfolio'">
+                      <div class="button">
+                        <input type="radio" id="a10" name="portfolioPercentageForBot2" (change)="onItemChangebot2('10%');"/>
+                        <label class="btn btn-default defaultColor" for="a10" value="10%">10%</label>
+                      </div>
+                      <div class="button">
+                        <input type="radio" id="a25" name="portfolioPercentageForBot2" (change)="onItemChangebot2('25%');"/>
+                        <label class="btn btn-default defaultColor" for="a25" value="25%">25%</label>
+                      </div>
+                      <div class="button">
+                        <input type="radio" id="a50" name="portfolioPercentageForBot2" (change)="onItemChangebot2('50%');"/>
+                        <label class="btn btn-default defaultColor" for="a50" value="50%">50%</label>
+                      </div>
+                      <div class="button">
+                        <input type="radio" id="a75" name="portfolioPercentageForBot2" (change)="onItemChangebot2('75%');"/>
+                        <label class="btn btn-default defaultColor" for="a75" value="75%">75%</label>
+                      </div>
+                      <div class="button">
+                        <input type="radio" id="a100" name="portfolioPercentageForBot2" (change)="onItemChangebot2('100%');"/>
+                        <label class="btn btn-default defaultColor" for="a100" value="100%">100%</label>
+                      </div>
+                    </div>
+                    <div class="form-row" *ngIf="positionSizeForBot2 == 'Fixed Amount'">
+                      <label class="text-theme-dark-blue" for="beneficiary_name">Fixed Amount</label>
+                      <div class="input-group mb-2">
+                        <input type="text" numbersOnly numeric numericType="decimal" id="fixedAmountForBot2" maxlength="10"  numbersOnly class="form-control" [(ngModel)]="fixedAmountForBot2" 
+                        (change)="fixedAmountminmaxCheck(fixedAmountForBot2,'fixedAmountForBot2');"
+
+                        (ngModelChange)="binanceLimitOrderPriceCheck(fixedAmountForBot2, deviationPercentageForBot2, 
+                        'LIMIT','FA','',
+                        percentageOfPortfolioForBot1,percentageOfPortfolioForBot2,percentageOfPortfolioForBot3,
+                        fixedAmountForBot1,0,fixedAmountForBot3);
+                        paybitoLimitOrderPriceCheck('Fixed Amount','Limit Order',
+                        this.fixedAmountForBot1,this.fixedAmountForBot2,this.fixedAmountForBot3,
+                        percentageOfPortfolioForBot1,percentageOfPortfolioForBot2,percentageOfPortfolioForBot3,deviationPercentageForBot2)"
+                        
+                        />
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <div class="row" style="margin-bottom: 20px;margin-top: 10px;">
+                    <div class="col-md-12 row">
+                      <label style="margin-left: 14px;">Take Profit 3 <input type="form-control col-md-2" type="checkbox"
+                          (click)="handleBotSelection('profit3',$event)"></label>
+
+                    </div>
+                  </div>
+                  <div *ngIf="isProfit3Checked">
+                    <div class="row">
+                      <p class="col-md-4">When the Market price reaches <i class="fa fa-info-circle" aria-hidden="true" placement="top" ngbTooltip="If Above is selected, the value entered here must be greater than the current market price. If Below is selected, the value entered here must be less than the current market price."></i></p>
+                      <select class="form-control col-md-2" [(ngModel)]="marketPriceReachForBot3Type" (change)="lmodtp3PriceChk()">
+                        <option value="">Select any</option>
+                        
+                        <option value="above">Above</option>
+                        <option value="below">Below</option>
+                      </select>
+                      <p class="col-md-2">this price a Limit Order shall be placed with the deviation described below:
+                      </p>
+                      <div class="form-group">
+                        <input type="number" [disabled]="marketPriceReachForBot3Type == ''" class="form-control" placeholder="Please enter price of the pair"
+                        [(ngModel)]="marketPriceReachForBot3"  aria-describedby="emailHelp2" (ngModelChange)="lmodtp3PriceChk()" (change)="investingTimeCheck(marketPriceReachForBot3,'marketPriceReachForBot3')">
+                        <small id="emailHelp2" class="form-text text-green">Current Market Price: {{ltpData}}</small>
+                        <small id="emailHelp2" class="form-text text-red" *ngIf="lmodtp3PriceErrorGrt">Price should be greater than Current Market Price.</small>
+                        <small id="emailHelp2" class="form-text text-red" *ngIf="lmodtp3PriceErrorlwr">Price should be lower than Current Market Price.</small>
+
+
+                      </div>
+                      <!-- <input type="text" class="form-control col-md-3" placeholder="Please enter price of the pair"
+                        [(ngModel)]="marketPriceReachForBot3" />
+                      <span class="col-md-2">{{selectedFiat}}</span> -->
+                    </div>
+
+                    <div class="form-row">
+                      <label class="text-theme-dark-blue" for="beneficiary_name">Choose Deviation from</label>
+                      <div class="input-group mb-2">
+                        <select class="form-control" [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'"
+                          [(ngModel)]="deviationFromForBot3">
+                          <option value="">Select</option>
+                          <option value="marketPrice">Market Price</option>
+                          <option value="lastPrice">Last Price</option>
+                          <option value="askPrice">Ask Price</option>
+                          <option value="bidPrice">Bid Price</option>
+
+                        </select>
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <label class="text-theme-dark-blue" for="beneficiary_name">Deviation %</label>
+                      <div class="input-group mb-2">
+                        <input type="text" maxlength="8" numbersOnly class="form-control" [(ngModel)]="deviationPercentageForBot3" 
+                        id="deviationPercentageForBot3" 
+                        (change)="deviationValidationCheck(deviationPercentageForBot3,'deviationPercentageForBot3')"/>
+
+                      </div>
+                    </div>
+                    <!-- checkbox add arnab -->
+
+                    <!-- <div class="form-row">
+                      <button class="btn btn-sm btn-primary col-md-1 text-center">10%</button>
+                      <span class="col-md-1"></span>
+                      <button class="btn btn-sm btn-primary col-md-1 text-center">25%</button>
+                      <span class="col-md-1"></span>
+                      <button class="btn btn-sm btn-primary col-md-1 text-center">50%</button>
+                      <span class="col-md-1"></span>
+                      <button class="btn btn-sm btn-primary col-md-1 text-center">75%</button>
+                      <span class="col-md-1"></span>
+                      <button class="btn btn-sm btn-primary col-md-1 text-center">100%</button>
+                    </div> -->
+                    <div class="form-row">
+                      <div class="button">
+                        <input type="radio" id="a10" name="togglePercentageForBot3" (change)="deviationChangebot3('10%');validateLimitOrderTPValue()"/>
+                        <label class="btn btn-default defaultColor" for="a10" value="10%">10%</label>
+                      </div>
+                      <div class="button">
+                        <input type="radio" id="a25" name="togglePercentageForBot3" (change)="deviationChangebot3('25%');validateLimitOrderTPValue()"/>
+                        <label class="btn btn-default defaultColor" for="a25" value="25%">25%</label>
+                      </div>
+                      <div class="button">
+                        <input type="radio" id="a50" name="togglePercentageForBot3" (change)="deviationChangebot3('50%');validateLimitOrderTPValue()"/>
+                        <label class="btn btn-default defaultColor" for="a50" value="50%">50%</label>
+                      </div>
+                      <!-- <div class="button">
+                        <input type="radio" id="a75" name="togglePercentageForBot3" (change)="deviationChangebot3('75%');validateLimitOrderTPValue()"/>
+                        <label class="btn btn-default defaultColor" for="a75" value="75%">75%</label>
+                      </div>
+                      <div class="button">
+                        <input type="radio" id="a100" name="togglePercentageForBot3" (change)="deviationChangebot3('100%');validateLimitOrderTPValue()"/>
+                        <label class="btn btn-default defaultColor" for="a100" value="100%">100%</label>
+                      </div> -->
+                      <div class="button">
+                        <input type="text" id="assetBox" class="" [ngClass]="Themecolor == 'Dark' ? 'assetBox' : 'assetBox-light'" name="assetBox" readonly value="{{showAsset}}"/>
+                        
+                      </div>
+                    </div>
+                    <div class="row" *ngIf="limitOrderTPError">
+                      <span><small class="marketOrderTPError">Total percentage value of take profite cannot be greater than 100%</small></span>
+  
+  
+                    </div>
+                    <div class="form-row">
+                      <label class="text-theme-dark-blue" for="beneficiary_name">Define Postion Size</label>
+                      <div class="input-group mb-2">
+                        <select class="form-control" [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'"
+                          [(ngModel)]="positionSizeForBot3">
+                          <option value="">Select</option>
+                          <option value="Percent of Portfolio">Percent of Portfolio</option>
+                          <option value="Fixed Amount">Fixed Amount</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="form-row" *ngIf="positionSizeForBot3 == 'Percent of Portfolio'">
+                      <label class="text-theme-dark-blue" for="beneficiary_name">Percentage Of Portfolio</label>
+                      <div class="input-group mb-2">
+                        <input type="text" numbersOnly id="percentageOfPortfolioForBot3" minlength="1" maxlength="8" class="form-control" 
+                        [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'" [(ngModel)]="percentageOfPortfolioForBot3" 
+                        (change)="percentageValidation(percentageOfPortfolioForBot3,'percentageOfPortfolioForBot3');"
+
+                        (ngModelChange)="binanceLimitOrderPriceCheck('', deviationPercentageForBot3, 
+                        'LIMIT','PF',percentageOfPortfolioForBot3,
+                        percentageOfPortfolioForBot1,percentageOfPortfolioForBot2,0,
+                        fixedAmountForBot1,fixedAmountForBot2,fixedAmountForBot3);
+                        
+                        paybitoLimitOrderPriceCheck('Percent of Portfolio','Limit Order',
+                        fixedAmountForBot1,fixedAmountForBot2,fixedAmountForBot3,
+                        percentageOfPortfolioForBot2,percentageOfPortfolioForBot1,percentageOfPortfolioForBot3,deviationPercentageForBot3)
+                        "/>
+
+                      </div>
+                    </div>
+                    <!-- checkbox add arnab -->
+
+                    <!-- <div class="form-row" *ngIf="positionSizeForBot3 == 'percentportfolio'">
+                      <button class="btn btn-sm btn-primary col-md-1 text-center">10%</button>
+                      <span class="col-md-1"></span>
+                      <button class="btn btn-sm btn-primary col-md-1 text-center">25%</button>
+                      <span class="col-md-1"></span>
+                      <button class="btn btn-sm btn-primary col-md-1 text-center">50%</button>
+                      <span class="col-md-1"></span>
+                      <button class="btn btn-sm btn-primary col-md-1 text-center">75%</button>
+                      <span class="col-md-1"></span>
+                      <button class="btn btn-sm btn-primary col-md-1 text-center">100%</button>
+                    </div> -->
+
+                    <div class="form-row" *ngIf="positionSizeForBot3 == 'Percent of Portfolio'">
+                      <div class="button">
+                        <input type="radio" id="a10" name="percentagePercentageForBot3" (change)="onItemChangebot3('10%')"/>
+                        <label class="btn btn-default defaultColor" for="a10" value="10%">10%</label>
+                      </div>
+                      <div class="button">
+                        <input type="radio" id="a25" name="percentagePercentageForBot3" (change)="onItemChangebot3('25%')"/>
+                        <label class="btn btn-default defaultColor" for="a25" value="25%">25%</label>
+                      </div>
+                      <div class="button">
+                        <input type="radio" id="a50" name="percentagePercentageForBot3" (change)="onItemChangebot3('50%')"/>
+                        <label class="btn btn-default defaultColor" for="a50" value="50%">50%</label>
+                      </div>
+                      <div class="button">
+                        <input type="radio" id="a75" name="percentagePercentageForBot3" (change)="onItemChangebot3('75%')"/>
+                        <label class="btn btn-default defaultColor" for="a75" value="75%">75%</label>
+                      </div>
+                      <div class="button">
+                        <input type="radio" id="a100" name="percentagePercentageForBot3" (change)="onItemChangebot3('100%')"/>
+                        <label class="btn btn-default defaultColor" for="a100" value="100%">100%</label>
+                      </div>
+                    </div>
+                    <div class="form-row" *ngIf="positionSizeForBot3 == 'Fixed Amount'">
+                      <label class="text-theme-dark-blue" for="beneficiary_name">Fixed Amount</label>
+                      <div class="input-group mb-2">
+                        <input type="text" id="fixedAmountForBot3" maxlength="10"  numbersOnly numbersOnly numeric numericType="decimal" class="form-control" [(ngModel)]="fixedAmountForBot3" 
+                        (change)="fixedAmountminmaxCheck(fixedAmountForBot3,'fixedAmountForBot3');"
+
+                        (ngModelChange)="binanceLimitOrderPriceCheck(fixedAmountForBot3, deviationPercentageForBot3, 
+                        'LIMIT','FA','',
+                        percentageOfPortfolioForBot1,percentageOfPortfolioForBot2,percentageOfPortfolioForBot3,
+                        fixedAmountForBot1,fixedAmountForBot2,0);
+                        paybitoLimitOrderPriceCheck('Fixed Amount','Limit Order',
+                        this.fixedAmountForBot1,this.fixedAmountForBot2,this.fixedAmountForBot3,
+                        percentageOfPortfolioForBot1,percentageOfPortfolioForBot2,percentageOfPortfolioForBot3,deviationPercentageForBot2)"
+                        />
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row d-flex" *ngIf="orderType == 'Market Order' && botType == 'Single Entry'">
+              <div class="col-md-12">
+                <div class="row">
+                  <label class="col-md-12">Single Entry</label>
+                </div>
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="row">
+                      <p class="col-md-5">Execute this Market Order when the Market Price reaches at or <i class="fa fa-info-circle" aria-hidden="true" placement="top" ngbTooltip="If Above is selected, the value entered here must be greater than the current market price. If Below is selected, the value entered here must be less than the current market price."></i></p>
+                      <select class="form-control col-md-2" (change)="modSngPriceChk()" [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'" [(ngModel)]="marketPriceReachTypeForSingleEntry">
+                        <option value="">Select any</option>
+                        <option value="above">Above</option>
+                        <option value="below">Below</option>
+                      </select>
+                      <p class="col-md-1">this price </p>
+                      <div class="form-group">
+                        <input type="number" class="form-control" [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'" placeholder="Please enter price of the pair"
+                        [(ngModel)]="marketPriceReachForSingleEntry" id="priceCheck"
+                         aria-describedby="emailHelpSingle" 
+                         (change)="investingTimeCheck(marketPriceReachForSingleEntry,'priceCheck')"  
+                         (ngModelChange)="modSngPriceChk()" 
+                         [disabled]="marketPriceReachTypeForSingleEntry == ''" minlength="1" maxlength="10">
+                        <small id="emailHelpSingle" class="form-text text-green">Current Market Price: {{ltpData}}</small>
+                        <small id="emailHelpSingle" class="form-text text-red" *ngIf="moSngEntErrorGrt">Price should be greater than Current Market Price.</small>
+                        <small id="emailHelpSingle" class="form-text text-red" *ngIf="moSngEntErrorlwr">Price should be lower than Current Market Price.</small>
+
+
+                      </div>
+                      <!-- <input type="text" class="form-control col-md-2" placeholder="Please enter price of the pair"
+                        [(ngModel)]="marketPriceReachForSingleEntry" />
+                      <span class="col-md-1">{{selectedFiat}}</span> -->
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <label class="text-theme-dark-blue" for="beneficiary_name">Define Postion Size</label>
+                  <div class="input-group mb-2">
+                    <select class="form-control" [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'"
+                      [(ngModel)]="positionSizeForSingleEntry">
+                      <option value="">Select</option>
+                      <option value="Percent of Portfolio">Percent of Portfolio</option>
+                      <option value="Fixed Amount">Fixed Amount</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-row" *ngIf="positionSizeForSingleEntry == 'Percent of Portfolio'">
+                  <label class="text-theme-dark-blue" for="beneficiary_name">Percentage Of Portfolio</label>
+                  <div class="input-group mb-2">
+                    <input type="text" [(ngModel)]="percentageOfPortfolioForSingleEntry" numbersOnly minlength="1" maxlength="8" class="form-control" 
+                    id="percentageOfPortfolioForSingleEntry" [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'"
+                    (change)="percentageValidation(percentageOfPortfolioForSingleEntry,'percentageOfPortfolioForSingleEntry');"
+                    (ngModelChange)="singeEntryBinanceFixedPriceCheck('','','MARKET','PF',percentageOfPortfolioForSingleEntry,'','');
+                    singeEntryBinanceFixedPriceCheck('','','MARKET','PF',percentageOfPortfolioForSingleEntry,'','');
+                    paybitoMarketOrderPriceCheck('','Market Order','Percent of Portfolio',percentageOfPortfolioForSingleEntry,'')"
+                    
+                     />
+
+                  </div>
+                </div>
+
+                   
+                <div class="form-row" *ngIf="positionSizeForSingleEntry == 'Percent of Portfolio'">
+                  <div class="button">
+                    <input type="radio" id="a10" name="percentageportfolioPositionSizeForSingleEntry" (change)="perPforChangePos('10%')"/>
+                    <label class="btn btn-default defaultColor" for="a10" value="10%">10%</label>
+                  </div>
+                  <div class="button">
+                    <input type="radio" id="a25" name="percentageportfolioPositionSizeForSingleEntry" (change)="perPforChangePos('25%')"/>
+                    <label class="btn btn-default defaultColor" for="a25" value="25%">25%</label>
+                  </div>
+                  <div class="button">
+                    <input type="radio" id="a50" name="percentageportfolioPositionSizeForSingleEntry" (change)="perPforChangePos('50%')"/>
+                    <label class="btn btn-default defaultColor" for="a50" value="50%">50%</label>
+                  </div>
+                  <div class="button">
+                    <input type="radio" id="a75" name="percentageportfolioPositionSizeForSingleEntry" (change)="perPforChangePos('75%')"/>
+                    <label class="btn btn-default defaultColor" for="a75" value="75%">75%</label>
+                  </div>
+                  <div class="button">
+                    <input type="radio" id="a100" name="percentageportfolioPositionSizeForSingleEntry" (change)="perPforChangePos('100%')"/>
+                    <label class="btn btn-default defaultColor" for="a100" value="100%">100%</label>
+                  </div>
+                  <div class="button">
+                    <input type="text" id="assetBox" class="" [ngClass]="Themecolor == 'Dark' ? 'assetBox' : 'assetBox-light'" name="assetBox" readonly value="{{showAsset}}"/>
+                    
+                  </div>
+                </div>
+                <div class="form-row" *ngIf="positionSizeForSingleEntry == 'Fixed Amount'">
+                  <label class="text-theme-dark-blue" for="beneficiary_name">Fixed Amount</label>
+                  <div class="input-group mb-2">
+                    <input type="text" numbersOnly numeric numericType="decimal" maxlength="10"  class="form-control" id="fixedAmountForSingleEntry" [(ngModel)]="fixedAmountForSingleEntry" 
+                    (change)="fixedAmountminmaxCheck(fixedAmountForSingleEntry,'fixedAmountForSingleEntry');
+                    paybitoMarketOrderPriceCheck(fixedAmountForSingleEntry,'Market Order','Fixed Amount','','')" 
+                    (ngModelChange)="singleEntryFixedPriceChk();
+                    paybitoMarketOrderPriceCheck(fixedAmountForSingleEntry,'Market Order','Fixed Amount','','');
+                    singeEntryBinanceFixedPriceCheck(fixedAmountForSingleEntry,'','MARKET','FA','','','');
+                    "/>
+                    <!-- <small id="emailHelpSingle" class="form-text text-red" *ngIf="fixedAmountForSingleEntryError">Amount must be less than available balance</small> -->
+
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row d-flex" *ngIf="orderType == 'Market Order' && botType == 'Take Profit'">
+              <div class="col-md-12">
+                <div class="row">
+                  <label class="col-md-12">Take Profit Market Order Bot</label>
+                </div>
+                <div class="row" style="margin-bottom: 20px;margin-top: 10px;">
+
+                  <div class="col-md-12 row">
+                    <label style="margin-left: 14px;">Take Profit 1 <input type="form-control col-md-2" type="checkbox"
+                        (click)="handleBotSelection('profit1ForTakeProfit',$event)"></label>
+
+                  </div>
+                </div>
+                <div *ngIf="isProfit1CheckedForTakeProfit">
+                  <div class="row">
+                    <p class="col-md-5">Execute this Market Order when the Market Price reaches at or <i class="fa fa-info-circle" aria-hidden="true" placement="top" ngbTooltip="If Above is selected, the value entered here must be greater than the current market price. If Below is selected, the value entered here must be less than the current market price."></i></p>
+                    <select class="form-control col-md-2" [(ngModel)]="marketPriceReachProfit1ForTakeProfit" (change)="moLtpPosChkTp1()">
+                      <option value="">Select any</option>
+                      
+                      <option value="above">Above</option>
+                      <option value="below">Below</option>
+                    </select>
+                    <p class="col-md-1">this price</p>
+                    <div class="form-group">
+                      <input type="number" [disabled]="marketPriceReachProfit1ForTakeProfit == ''" class="form-control" placeholder="Please enter price of the pair"
+                      [(ngModel)]="marketPriceProfit1ForTakeProfit"  (ngModelChange)="priceAndPnLValidationtp1();moLtpPosChkTp1()" 
+                      id="marketPriceProfit1ForTakeProfit" (change)="investingTimeCheck(marketPriceProfit1ForTakeProfit,'marketPriceProfit1ForTakeProfit')"  
+                      aria-describedby="emailHelptp1">
+                      <small id="emailHelptp1" class="form-text text-green">Current Market Price: {{ltpData}}</small>
+                      <small id="emailHelptp1" class="form-text text-red" *ngIf="modtp1PriceErrorGrt">Price should be greater than Current Market Price.</small>
+                      <small id="emailHelptp1" class="form-text text-red" *ngIf="modtp1PriceErrorlwr">Price should be lower than Current Market Price.</small>
+
+
+                    </div>
+                  </div>
+
+                  <div class="form-row">
+                    <label class="text-theme-dark-blue" for="beneficiary_name">Your P/L %</label>
+                    <div class="input-group mb-2">
+                     <span class="minusAdd" *ngIf="pNlStatus">(<i class="fa fa-minus" aria-hidden="true"></i>)</span> <input type="text" numbersOnly class="form-control col-md-3" placeholder="Please enter P/L %"
+                        [(ngModel)]="plPercentProfit1ForTakeProfit" (ngModelChange)="PnLAndValidationtp1()" maxlength="8"
+                        id="plPercentProfit1ForTakeProfit" 
+                        (change)="cheeckpnlValidation(plPercentProfit1ForTakeProfit,'plPercentProfit1ForTakeProfit')"/>
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <label class="text-theme-dark-blue" for="beneficiary_name">Percentage of Portfolio</label>
+                    <div class="input-group mb-2">
+                      <input type="text" id="portfolioPercentageProfit1ForTakeProfit1" numbersOnly minlength="1" maxlength="8" class="form-control" [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'"
+                      [(ngModel)]="portfolioPercentageProfit1ForTakeProfit1"
+                      (change)="percentageValidation(portfolioPercentageProfit1ForTakeProfit1,'portfolioPercentageProfit1ForTakeProfit1');
+                      "
+
+                      (ngModelChange)="singeEntryBinanceFixedPriceCheck('', '', 'MARKET','PF',portfolioPercentageProfit1ForTakeProfit1,'','');
+                        marketSingleEntryPercentagePriceCheck('','Market Order','Percent of Portfolio',portfolioPercentageProfit1ForTakeProfit1,portfolioPercentageProfit2ForTakeProfit1,portfolioPercentageProfit3ForTakeProfit1,'')
+
+                      "
+                       />
+
+                    </div>
+                  </div>
+                    
+
+                  <div class="form-row">
+                    <div class="button">
+                      <input type="radio" id="a10" name="portfolioPercentageProfit1ForTakeProfit1Toggle" (change)="perPfprofit1orChangePos('10%');validateMarketOrderTPValue()"/>
+                      <label class="btn btn-default defaultColor" for="a10" value="10%">10%</label>
+                    </div>
+                    <div class="button">
+                      <input type="radio" id="a25" name="portfolioPercentageProfit1ForTakeProfit1Toggle" (change)="perPfprofit1orChangePos('25%');validateMarketOrderTPValue()"/>
+                      <label class="btn btn-default defaultColor" for="a25" value="25%">25%</label>
+                    </div>
+                    <div class="button">
+                      <input type="radio" id="a50" name="portfolioPercentageProfit1ForTakeProfit1Toggle" (change)="perPfprofit1orChangePos('50%');validateMarketOrderTPValue()"/>
+                      <label class="btn btn-default defaultColor" for="a50" value="50%">50%</label>
+                    </div>
+                    <div class="button">
+                      <input type="radio" id="a75" name="portfolioPercentageProfit1ForTakeProfit1Toggle" (change)="perPfprofit1orChangePos('75%');validateMarketOrderTPValue()"/>
+                      <label class="btn btn-default defaultColor" for="a75" value="75%">75%</label>
+                    </div>
+                    <div class="button">
+                      <input type="radio" id="a100" name="portfolioPercentageProfit1ForTakeProfit1Toggle" (change)="perPfprofit1orChangePos('100%');validateMarketOrderTPValue()"/>
+                      <label class="btn btn-default defaultColor" for="a100" value="100%">100%</label>
+                    </div>
+
+                    <div class="button">
+                      <input type="text" id="assetBox" class="" [ngClass]="Themecolor == 'Dark' ? 'assetBox' : 'assetBox-light'" name="assetBox" readonly value="{{showAsset}}"/>
+                      
+                    </div>
+
+                  </div>
+                  <div class="row" *ngIf="marketOrderTPError">
+                    <span><small class="marketOrderTPError">Total percentage value of take profite cannot be greater than 100%</small></span>
+
+
+                  </div>
+
+
+
+                </div>
+                <div class="row" style="margin-bottom: 20px;margin-top: 10px;">
+                  <div class="col-md-12 row">
+                    <label style="margin-left: 14px;">Take Profit 2 <input type="form-control col-md-2" type="checkbox"
+                        (click)="handleBotSelection('profit2ForTakeProfit',$event)"></label>
+
+                  </div>
+                  </div>
+                  <div *ngIf="isProfit2CheckedForTakeProfit">
+                    <div class="row">
+                      <p class="col-md-5">Execute this Market Order when the Market Price reaches at or <i class="fa fa-info-circle" aria-hidden="true" placement="top" ngbTooltip="If Above is selected, the value entered here must be greater than the current market price. If Below is selected, the value entered here must be less than the current market price."></i></p>
+                      <select class="form-control col-md-2" [(ngModel)]="marketPriceReachProfit2ForTakeProfit" (change)="moLtpPosChkTp2()">
+                        <option value="">Select any</option>
+                        
+                        <option value="above">Above</option>
+                        <option value="below">Below</option>
+                      </select>
+                      <p class="col-md-2">this price</p>
+                      <!-- <input type="text" class="form-control col-md-2" placeholder="Please enter price of the pair"
+                        [(ngModel)]="marketPriceProfit2ForTakeProfit" (ngModelChange)="priceAndPnLValidationtp2()"/>
+                      <span class="col-md-1">{{selectedFiat}}</span> -->
+                      <div class="form-group">
+                      <input type="number" [disabled]="marketPriceReachProfit2ForTakeProfit == ''" class="form-control" placeholder="Please enter price of the pair"
+                      [(ngModel)]="marketPriceProfit2ForTakeProfit" (ngModelChange)="priceAndPnLValidationtp2();moLtpPosChkTp2()"
+                      id="marketPriceProfit2ForTakeProfit" (change)="investingTimeCheck(marketPriceProfit2ForTakeProfit,'marketPriceProfit2ForTakeProfit')"  aria-describedby="emailHelptp2">
+                      <small id="emailHelptp2" class="form-text text-green">Current Market Price: {{ltpData}}</small>
+                      <small id="emailHelptp2" class="form-text text-red" *ngIf="modtp2PriceErrorGrt">Price should be greater than Current Market Price.</small>
+                      <small id="emailHelptp2" class="form-text text-red" *ngIf="modtp2PriceErrorlwr">Price should be lower than Current Market Price.</small>
+                      </div>
+                    </div>
+
+                    <div class="form-row">
+                      <label class="text-theme-dark-blue" for="beneficiary_name">Your P/L %</label>
+                      <div class="input-group mb-2">
+                        <span class="minusAdd">(<i class="fa fa-minus" aria-hidden="true"></i>)</span><input type="text" class="form-control col-md-3" placeholder="Please enter P/L %" maxlength="8"
+                          [(ngModel)]="plPercentProfit2ForTakeProfit" (ngModelChange)="PnLAndValidationtp2()"
+                          id="plPercentProfit2ForTakeProfit" 
+                        (change)="cheeckpnlValidation(plPercentProfit2ForTakeProfit,'plPercentProfit2ForTakeProfit')"/>
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <label class="text-theme-dark-blue" for="beneficiary_name">Percentage of Portfolio</label>
+                      <div class="input-group mb-2">
+                        <input type="text" id="portfolioPercentageProfit2ForTakeProfit1" numbersOnly minlength="1" maxlength="8" class="form-control"
+                        [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'"
+                          [(ngModel)]="portfolioPercentageProfit2ForTakeProfit1"
+                        (change)="percentageValidation(portfolioPercentageProfit2ForTakeProfit1,'portfolioPercentageProfit2ForTakeProfit1');
+                        "
+
+                        (ngModelChange)="singeEntryBinanceFixedPriceCheck('', '', 'MARKET','PF',portfolioPercentageProfit2ForTakeProfit1,'',portfolioPercentageProfit1ForTakeProfit1);
+                        marketSingleEntryPercentagePriceCheck('','Market Order','Percent of Portfolio',portfolioPercentageProfit1ForTakeProfit1,portfolioPercentageProfit2ForTakeProfit1,portfolioPercentageProfit3ForTakeProfit1,'')
+
+                      "
+                        />
+
+                      </div>
+                    </div>
+
+                    <div class="form-row">
+                      <div class="button">
+                        <input type="radio" id="a10" name="portfolioPercentageProfit2ForTakeProfit1Toggle" (change)="perPfprofit2orChangePos('10%');validateMarketOrderTPValue()"/>
+                        <label class="btn btn-default defaultColor" for="a10" value="10%">10%</label>
+                      </div>
+                      <div class="button">
+                        <input type="radio" id="a25" name="portfolioPercentageProfit2ForTakeProfit1Toggle" (change)="perPfprofit2orChangePos('25%');validateMarketOrderTPValue()"/>
+                        <label class="btn btn-default defaultColor" for="a25" value="25%">25%</label>
+                      </div>
+                      <div class="button">
+                        <input type="radio" id="a50" name="portfolioPercentageProfit2ForTakeProfit1Toggle" (change)="perPfprofit2orChangePos('50%');validateMarketOrderTPValue()"/>
+                        <label class="btn btn-default defaultColor" for="a50" value="50%">50%</label>
+                      </div>
+                      <div class="button">
+                        <input type="radio" id="a75" name="portfolioPercentageProfit2ForTakeProfit1Toggle" (change)="perPfprofit2orChangePos('75%');validateMarketOrderTPValue()"/>
+                        <label class="btn btn-default defaultColor" for="a75" value="75%">75%</label>
+                      </div>
+                      <div class="button">
+                        <input type="radio" id="a100" name="portfolioPercentageProfit2ForTakeProfit1Toggle" (change)="perPfprofit2orChangePos('100%');validateMarketOrderTPValue()"/>
+                        <label class="btn btn-default defaultColor" for="a100" value="100%">100%</label>
+                      </div>
+
+                      <div class="button">
+                        <input type="text" id="assetBox" class="" [ngClass]="Themecolor == 'Dark' ? 'assetBox' : 'assetBox-light'" name="assetBox" readonly value="{{showAsset}}"/>
+                        
+                      </div>
+                    </div>
+
+                    <div class="row" *ngIf="marketOrderTPError">
+                      <span><small class="marketOrderTPError">Total percentage value of take profite cannot be greater than 100%</small></span>
+  
+  
+                    </div>
+
+
+
+                  </div>
+                
+                <div class="row" style="margin-bottom: 20px;margin-top: 10px;">
+                  <div class="col-md-12 row">
+                    <label style="margin-left: 14px;">Take Profit 3 <input type="form-control col-md-2" type="checkbox"
+                        (click)="handleBotSelection('profit3ForTakeProfit',$event)"></label>
+
+                  </div>
+                  </div>
+                  <div *ngIf="isProfit3CheckedForTakeProfit">
+                    <div class="row">
+                      <p class="col-md-5">Execute this Market Order when the Market Price reaches at or <i class="fa fa-info-circle" aria-hidden="true" placement="top" ngbTooltip="If Above is selected, the value entered here must be greater than the current market price. If Below is selected, the value entered here must be less than the current market price."></i></p>
+                      <select class="form-control col-md-2" [(ngModel)]="marketPriceReachProfit3ForTakeProfit" (change)="moLtpPosChkTp3()">
+                        <option value="">Select any</option>
+                        
+                        <option value="above">Above</option>
+                        <option value="below">Below</option>
+                      </select>
+                      <p class="col-md-2">this price</p>
+                      <!-- <input type="text" class="form-control col-md-2" placeholder="Please enter price of the pair"
+                        [(ngModel)]="marketPriceProfit3ForTakeProfit" (ngModelChange)="priceAndPnLValidationtp3()"/>
+                      <span class="col-md-1">{{selectedFiat}}</span> -->
+                      <div class="form-group">
+                        <input type="number" [disabled]="marketPriceReachProfit3ForTakeProfit == ''" class="form-control" placeholder="Please enter price of the pair"
+                        [(ngModel)]="marketPriceProfit3ForTakeProfit" (ngModelChange)="priceAndPnLValidationtp3();moLtpPosChkTp3()" 
+                        id="marketPriceProfit3ForTakeProfit" (change)="investingTimeCheck(marketPriceProfit3ForTakeProfit,'marketPriceProfit3ForTakeProfit')" aria-describedby="emailHelptp3">
+                        <small id="emailHelptp3" class="form-text text-green">Current Market Price: {{ltpData}}</small>
+                        <small id="emailHelptp3" class="form-text text-red" *ngIf="modtp3PriceErrorGrt">Price should be greater than Current Market Price.</small>
+                        <small id="emailHelptp3" class="form-text text-red" *ngIf="modtp3PriceErrorlwr">Price should be lower than Current Market Price.</small>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                      <label class="text-theme-dark-blue" for="beneficiary_name">Your P/L %</label>
+                      <div class="input-group mb-2">
+                        <span class="minusAdd">(<i class="fa fa-minus" aria-hidden="true"></i>)</span> <input type="text" class="form-control col-md-3" placeholder="Please enter P/L %" maxlength="8"
+                          [(ngModel)]="plPercentProfit3ForTakeProfit" (ngModelChange)="PnLAndValidationtp3()"
+                          id="plPercentProfit3ForTakeProfit" 
+                        (change)="cheeckpnlValidation(plPercentProfit3ForTakeProfit,'plPercentProfit3ForTakeProfit')"/>
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <label class="text-theme-dark-blue" for="beneficiary_name">Percentage of Portfolio</label>
+                      <div class="input-group mb-2">
+                        <input type="text" id="portfolioPercentageProfit3ForTakeProfit1" numbersOnly minlength="1" maxlength="8" class="form-control"
+                          [(ngModel)]="portfolioPercentageProfit3ForTakeProfit1" 
+                          [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'"
+                          (change)="percentageValidation(portfolioPercentageProfit3ForTakeProfit1,'portfolioPercentageProfit3ForTakeProfit1');
+                          "
+                          
+                          (ngModelChange)="MarketTakeProfitBinanceFixedPriceCheck('', '', 'MARKET','PF',portfolioPercentageProfit3ForTakeProfit1,'',portfolioPercentageProfit1ForTakeProfit1,portfolioPercentageProfit2ForTakeProfit1);
+                          marketSingleEntryPercentagePriceCheck('','Market Order','Percent of Portfolio',portfolioPercentageProfit1ForTakeProfit1,portfolioPercentageProfit2ForTakeProfit1,portfolioPercentageProfit3ForTakeProfit1,'')
+
+                      "
+                      
+                      />
+
+                      </div>
+                    </div>
+
+                    
+                    <div class="form-row">
+                      <div class="button">
+                        <input type="radio" id="a10" name="portfolioPercentageProfit3ForTakeProfit1Toggle" (change)="perPfprofit3orChangePos('10%');validateMarketOrderTPValue()"/>
+                        <label class="btn btn-default defaultColor" for="a10" value="10%">10%</label>
+                      </div>
+                      <div class="button">
+                        <input type="radio" id="a25" name="portfolioPercentageProfit3ForTakeProfit1Toggle" (change)="perPfprofit3orChangePos('25%');validateMarketOrderTPValue()"/>
+                        <label class="btn btn-default defaultColor" for="a25" value="25%">25%</label>
+                      </div>
+                      <div class="button">
+                        <input type="radio" id="a50" name="portfolioPercentageProfit3ForTakeProfit1Toggle" (change)="perPfprofit3orChangePos('50%');validateMarketOrderTPValue()"/>
+                        <label class="btn btn-default defaultColor" for="a50" value="50%">50%</label>
+                      </div>
+                      <div class="button">
+                        <input type="radio" id="a75" name="portfolioPercentageProfit3ForTakeProfit1Toggle" (change)="perPfprofit3orChangePos('75%');validateMarketOrderTPValue()"/>
+                        <label class="btn btn-default defaultColor" for="a75" value="75%">75%</label>
+                      </div>
+                      <div class="button">
+                        <input type="radio" id="a100" name="portfolioPercentageProfit3ForTakeProfit1Toggle" (change)="perPfprofit3orChangePos('100%');validateMarketOrderTPValue()"/>
+                        <label class="btn btn-default defaultColor" for="a100" value="100%">100%</label>
+                      </div>
+
+                      <div class="button">
+                        <input type="text" id="assetBox" class="" [ngClass]="Themecolor == 'Dark' ? 'assetBox' : 'assetBox-light'" name="assetBox" readonly value="{{showAsset}}"/>
+                        
+                      </div>
+                      
+                    </div>
+
+                    <div class="row" *ngIf="marketOrderTPError">
+                      <span><small class="marketOrderTPError">Total percentage value of take profite cannot be greater than 100%</small></span>
+  
+  
+                    </div>
+
+                  </div>
+                
+              </div>
+            </div>
+
+
+            <div class="row d-flex" *ngIf="orderType == 'Market Order' && botType == 'Dollar Cost Average'">
+              <div class="col-md-12">
+                <div class="row">
+                  <label class="col-md-12">Dollar Cost Average Market Order Bot</label>
+                </div>
+    
+                <div class="form-row">
+                  <label class="text-theme-dark-blue" for="beneficiary_name">Define Postion Size</label>
+                  <div class="input-group mb-2">
+                    <select class="form-control" [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'"
+                      [(ngModel)]="positionSizeForDollarCostAverage">
+                      <option value="">Select</option>
+                      <option value="Percent of Portfolio">Percent of Portfolio</option>
+                      <option value="Fixed Amount">Fixed Amount</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-row" *ngIf="positionSizeForDollarCostAverage == 'Percent of Portfolio'">
+                  <label class="text-theme-dark-blue" for="beneficiary_name">Percentage Of Portfolio</label>
+                  <div class="input-group mb-2">
+                    <input type="text" id="percentageOfPortfolioForDollarCostAverage" numbersOnly minlength="1" maxlength="8" class="form-control"
+                    [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'" 
+                    [(ngModel)]="percentageOfPortfolioForDollarCostAverage" 
+                    (change)="percentageValidation(percentageOfPortfolioForDollarCostAverage,'percentageOfPortfolioForDollarCostAverage')"
+                    (ngModelChange)="singeEntryBinanceFixedPriceCheck('','','MARKET','PF',percentageOfPortfolioForDollarCostAverage,'','');
+                    paybitoMarketOrderPriceCheck('','Market Order','Percent of Portfolio',percentageOfPortfolioForDollarCostAverage,'')
+                    "/>
+                    
+                  </div>
+                </div>
+                  
+
+                <div class="form-row" *ngIf="positionSizeForDollarCostAverage == 'Percent of Portfolio'">
+                  <div class="button">
+                    <input type="radio" id="a10" name="portfolioPercentagepositionSizeForDollarCostAverage" (change)="positionDollerChangePos('10%')"/>
+                    <label class="btn btn-default defaultColor" for="a10" value="10%">10%</label>
+                  </div>
+                  <div class="button">
+                    <input type="radio" id="a25" name="portfolioPercentagepositionSizeForDollarCostAverage" (change)="positionDollerChangePos('25%')"/>
+                    <label class="btn btn-default defaultColor" for="a25" value="25%">25%</label>
+                  </div>
+                  <div class="button">
+                    <input type="radio" id="a50" name="portfolioPercentagepositionSizeForDollarCostAverage" (change)="positionDollerChangePos('50%')"/>
+                    <label class="btn btn-default defaultColor" for="a50" value="50%">50%</label>
+                  </div>
+                  <div class="button">
+                    <input type="radio" id="a75" name="portfolioPercentagepositionSizeForDollarCostAverage" (change)="positionDollerChangePos('75%')"/>
+                    <label class="btn btn-default defaultColor" for="a75" value="75%">75%</label>
+                  </div>
+                  <div class="button">
+                    <input type="radio" id="a100" name="portfolioPercentagepositionSizeForDollarCostAverage" (change)="positionDollerChangePos('100%')"/>
+                    <label class="btn btn-default defaultColor" for="a100" value="100%">100%</label>
+                  </div>
+                  <div class="button">
+                    <input type="text" id="assetBox" class="" [ngClass]="Themecolor == 'Dark' ? 'assetBox' : 'assetBox-light'" name="assetBox" readonly value="{{showAsset}}"/>
+                    
+                  </div>
+                </div>
+                <div class="form-row" *ngIf="positionSizeForDollarCostAverage == 'Fixed Amount'">
+                  <label class="text-theme-dark-blue" for="beneficiary_name">Fixed Amount</label>
+                  <div class="input-group mb-2">
+                    <input type="text" numeric numericType="decimal" maxlength="10"  numbersOnly class="form-control"
+                     id="fixedAmountForDollarCostAverage" 
+                     [(ngModel)]="fixedAmountForDollarCostAverage"
+
+                      (change)="fixedAmountminmaxCheck(fixedAmountForDollarCostAverage,'fixedAmountForDollarCostAverage');
+                      paybitoMarketOrderPriceCheck(fixedAmountForDollarCostAverage,'Market Order','Fixed Amount','','')
+                      "
+                      (ngModelChange)="singeEntryBinanceFixedPriceCheck(fixedAmountForDollarCostAverage,'','MARKET','FA','','','');
+                      paybitoMarketOrderPriceCheck(fixedAmountForDollarCostAverage,'Market Order','Fixed Amount','','')"/>
+    
+                  </div>
+                </div>
+                <div class="form-row">
+                  <label class="text-theme-dark-blue" for="beneficiary_name">My investing Time interval: I want to Invest in
+                    every</label>
+                  <div class="input-group mb-2 ml-1 row">
+                    <input type="text" numbersOnly id="investTimeForDolarCostAverage" class="form-control col-md-6" 
+                    minlength="1" maxlength="10" [(ngModel)]="investTimeForDolarCostAverage" 
+                    (change)="investingTimeCheck(investTimeForDolarCostAverage,'investTimeForDolarCostAverage')"/>
+                    <span class="col-md-1"></span>
+                    <select class="form-control col-md-5" [(ngModel)]="investTimeForDolarCostAverageType">
+                      <option value="">Select</option>
+                      <option value="mins">Mins</option>
+                      <option value="hrs">Hours</option>
+                      <option value="days">Days</option>
+                    </select>
+    
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row d-flex">
+              <span class="text-red" style="padding-left: 10px;"
+              *ngIf="
+              botName == '' 
+                || botDescription == '' 
+                || marketName == '' 
+                || botAssetPair == ''
+                || botExpireTime == ''
+                || botExpireTimeType == '' 
+                || orderType == ''
+                || marketOrderTPError == true
+                || lmodtp1PriceErrorGrt == true
+                || lmodtp1PriceErrorlwr == true
+                || lmodtp2PriceErrorGrt == true
+                || lmodtp2PriceErrorlwr == true
+                || lmodtp3PriceErrorGrt == true
+                || lmodtp3PriceErrorlwr == true
+                || limitOrderTPError == true
+                || modtp1PriceErrorGrt == true
+                || modtp2PriceErrorGrt == true
+                || modtp3PriceErrorGrt == true
+                || modtp1PriceErrorlwr == true
+                || modtp2PriceErrorlwr == true
+                || modtp3PriceErrorlwr == true
+                || moSngEntErrorGrt == true
+                || moSngEntErrorlwr == true
+                || multiIdString == ''
+                || apipublicKey == ''
+                || BinanceBalanceCheckStatus
+                || (orderType == 'Market Order' && botType =='')
+                || (botType == 'Single Entry' && (marketPriceReachTypeForSingleEntry == '' || marketPriceReachForSingleEntry == '' || positionSizeForSingleEntry == ''))
+                || (botType == 'Single Entry' && positionSizeForSingleEntry == 'Percent of Portfolio' && percentageOfPortfolioForSingleEntry == '')
+                || (botType == 'Single Entry' && positionSizeForSingleEntry == 'Fixed Amount' && fixedAmountForSingleEntry == '')
+                
+                || (botType == 'Take Profit' && !isProfit1CheckedForTakeProfit && !isProfit2CheckedForTakeProfit && !isProfit3CheckedForTakeProfit)
+                || (botType == 'Take Profit' && isProfit1CheckedForTakeProfit && ( marketPriceReachProfit1ForTakeProfit == '' || marketPriceProfit1ForTakeProfit == '' || plPercentProfit1ForTakeProfit == '' || portfolioPercentageProfit1ForTakeProfit1 == ''))
+                || (botType == 'Take Profit' && isProfit2CheckedForTakeProfit && (marketPriceReachProfit2ForTakeProfit == '' || marketPriceProfit2ForTakeProfit == '' || plPercentProfit2ForTakeProfit == '' || portfolioPercentageProfit2ForTakeProfit1 == ''))
+                || (botType == 'Take Profit' && isProfit3CheckedForTakeProfit && (marketPriceReachProfit3ForTakeProfit == '' || marketPriceProfit3ForTakeProfit == '' || plPercentProfit3ForTakeProfit == '' || portfolioPercentageProfit3ForTakeProfit1 == ''))
+
+                || (botType == 'Dollar Cost Average' && (positionSizeForDollarCostAverage == '' || investTimeForDolarCostAverage == '' || investTimeForDolarCostAverageType == '' ))
+                || (botType == 'Dollar Cost Average' && positionSizeForDollarCostAverage == 'Percent of Portfolio' && percentageOfPortfolioForDollarCostAverage == '' )
+                || (botType == 'Dollar Cost Average' && positionSizeForDollarCostAverage == 'Fixed Amount' && fixedAmountForDollarCostAverage == '' )
+
+                || (orderType == 'Limit Order' && isProfit1Checked == false && isProfit2Checked == false && isProfit3Checked == false)
+                || (orderType == 'Limit Order' && isProfit1Checked && ( marketPriceReachForBotType == '' || marketPriceReachForBot1 == '' || deviationFromForBot1 == '' || deviationPercentageForBot1 == '' || positionSizeForBot1 == ''))
+                || (orderType == 'Limit Order' && positionSizeForBot1 == 'Percent of Portfolio' &&  percentageOfPortfolioForBot1 == '' )
+                || (orderType == 'Limit Order' && positionSizeForBot1 == 'Fixed Amount' &&  fixedAmountForBot1 == '' )
+
+                || (orderType == 'Limit Order' && isProfit2Checked && ( marketPriceReachForBotType == '' || marketPriceReachForBot2 == '' || deviationFromForBot2 == '' || deviationPercentageForBot2 == '' || positionSizeForBot2 == ''))
+                || (orderType == 'Limit Order' && positionSizeForBot2 == 'Percent of Portfolio' &&  percentageOfPortfolioForBot2 == '' )
+                || (orderType == 'Limit Order' && positionSizeForBot2 == 'Fixed Amount' &&  fixedAmountForBot2 == '' )
+
+                || (orderType == 'Limit Order' && isProfit3Checked && ( marketPriceReachForBotType == '' || marketPriceReachForBot3 == '' || deviationFromForBot3 == '' || deviationPercentageForBot3 == '' || positionSizeForBot3 == ''))
+                || (orderType == 'Limit Order' && positionSizeForBot3 == 'Percent of Portfolio' &&  percentageOfPortfolioForBot3 == '' )
+                || (orderType == 'Limit Order' && positionSizeForBot3 == 'Fixed Amount' &&  fixedAmountForBot3 == '' )
+
+
+
+
+
+                
+                "
+              >Please fill all the fields to create the bot.</span>
+
+            </div>
+            <div class="row" style="margin-top: 15px;">
+              <div class="col-md-4">
+                <button type="button" class="btn btn-primary" 
+                [disabled]="botName == '' 
+                || botDescription == '' 
+                || marketName == '' 
+                || botAssetPair == ''
+                || botExpireTime == ''
+                || botExpireTimeType == '' 
+                || orderType == ''
+                || marketOrderTPError == true
+                || lmodtp1PriceErrorGrt == true
+                || lmodtp1PriceErrorlwr == true
+                || lmodtp2PriceErrorGrt == true
+                || lmodtp2PriceErrorlwr == true
+                || lmodtp3PriceErrorGrt == true
+                || lmodtp3PriceErrorlwr == true
+                || limitOrderTPError == true
+                || modtp1PriceErrorGrt == true
+                || modtp2PriceErrorGrt == true
+                || modtp3PriceErrorGrt == true
+                || modtp1PriceErrorlwr == true
+                || modtp2PriceErrorlwr == true
+                || modtp3PriceErrorlwr == true
+                || moSngEntErrorGrt == true
+                || moSngEntErrorlwr == true
+                || multiIdString == ''
+                || apipublicKey == ''
+                || BinanceBalanceCheckStatus
+                || (orderType == 'Market Order' && botType =='')
+                || (botType == 'Single Entry' && (marketPriceReachTypeForSingleEntry == '' || marketPriceReachForSingleEntry == '' || positionSizeForSingleEntry == ''))
+                || (botType == 'Single Entry' && positionSizeForSingleEntry == 'Percent of Portfolio' && percentageOfPortfolioForSingleEntry == '')
+                || (botType == 'Single Entry' && positionSizeForSingleEntry == 'Fixed Amount' && fixedAmountForSingleEntry == '')
+                
+                || (botType == 'Take Profit' && !isProfit1CheckedForTakeProfit && !isProfit2CheckedForTakeProfit && !isProfit3CheckedForTakeProfit)
+                || (botType == 'Take Profit' && isProfit1CheckedForTakeProfit && ( marketPriceReachProfit1ForTakeProfit == '' || marketPriceProfit1ForTakeProfit == '' || plPercentProfit1ForTakeProfit == '' || portfolioPercentageProfit1ForTakeProfit1 == ''))
+                || (botType == 'Take Profit' && isProfit2CheckedForTakeProfit && (marketPriceReachProfit2ForTakeProfit == '' || marketPriceProfit2ForTakeProfit == '' || plPercentProfit2ForTakeProfit == '' || portfolioPercentageProfit2ForTakeProfit1 == ''))
+                || (botType == 'Take Profit' && isProfit3CheckedForTakeProfit && (marketPriceReachProfit3ForTakeProfit == '' || marketPriceProfit3ForTakeProfit == '' || plPercentProfit3ForTakeProfit == '' || portfolioPercentageProfit3ForTakeProfit1 == ''))
+
+                || (botType == 'Dollar Cost Average' && (positionSizeForDollarCostAverage == '' || investTimeForDolarCostAverage == '' || investTimeForDolarCostAverageType == '' ))
+                || (botType == 'Dollar Cost Average' && positionSizeForDollarCostAverage == 'Percent of Portfolio' && percentageOfPortfolioForDollarCostAverage == '' )
+                || (botType == 'Dollar Cost Average' && positionSizeForDollarCostAverage == 'Fixed Amount' && fixedAmountForDollarCostAverage == '' )
+
+                || (orderType == 'Limit Order' && isProfit1Checked == false && isProfit2Checked == false && isProfit3Checked == false)
+                || (orderType == 'Limit Order' && isProfit1Checked && ( marketPriceReachForBotType == '' || marketPriceReachForBot1 == '' || deviationFromForBot1 == '' || deviationPercentageForBot1 == '' || positionSizeForBot1 == ''))
+                || (orderType == 'Limit Order' && positionSizeForBot1 == 'Percent of Portfolio' &&  percentageOfPortfolioForBot1 == '' )
+                || (orderType == 'Limit Order' && positionSizeForBot1 == 'Fixed Amount' &&  fixedAmountForBot1 == '' )
+
+                || (orderType == 'Limit Order' && isProfit2Checked && ( marketPriceReachForBotType == '' || marketPriceReachForBot2 == '' || deviationFromForBot2 == '' || deviationPercentageForBot2 == '' || positionSizeForBot2 == ''))
+                || (orderType == 'Limit Order' && positionSizeForBot2 == 'Percent of Portfolio' &&  percentageOfPortfolioForBot2 == '' )
+                || (orderType == 'Limit Order' && positionSizeForBot2 == 'Fixed Amount' &&  fixedAmountForBot2 == '' )
+
+                || (orderType == 'Limit Order' && isProfit3Checked && ( marketPriceReachForBotType == '' || marketPriceReachForBot3 == '' || deviationFromForBot3 == '' || deviationPercentageForBot3 == '' || positionSizeForBot3 == ''))
+                || (orderType == 'Limit Order' && positionSizeForBot3 == 'Percent of Portfolio' &&  percentageOfPortfolioForBot3 == '' )
+                || (orderType == 'Limit Order' && positionSizeForBot3 == 'Fixed Amount' &&  fixedAmountForBot3 == '' )
+
+
+
+
+
+                
+                " 
+                (click)="createBotApiCall()">Create Bot</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+      <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" [ngClass]="Themecolor == 'Dark' ? 'bg-dark' : 'bg-light'">
+      </div>
+    </div>
+
+
+
+  </div>
+
+</div>

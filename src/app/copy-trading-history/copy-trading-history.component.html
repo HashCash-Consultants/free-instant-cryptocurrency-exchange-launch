@@ -1,0 +1,240 @@
+<!-- <app-navbar></app-navbar> -->
+<app-navbar></app-navbar>
+<br/>
+
+<div class="content-wrapper pt-0 pl-3">
+
+
+  <div class="row d-flex" data-ng-init="loginDuration();" data-ng-controller="bankDetailsCtrl">
+    <div class="col-lg-12 col-12 bank-alighnment align-self-stretch bankDetailsCtrl" [ngClass]="Themecolor == 'Dark' ? 'bg-dark' : 'bg-light'">
+      
+      
+      <div class="p-2 rounded h-100"> 
+        <div class="w-100"></div>
+        
+
+        <div class="row" >
+
+          <!-- <form> -->
+
+            
+
+            
+            <div class="col-md-2 col-sm-6">
+              <select class="form-control" [(ngModel)]="marketType" name="marketType" (change)="getBotList();changeBotdrop()">
+                <option value="">Select Market</option>
+                
+                <option value="Spot">Spot</option>
+                <option value="Futures">Futures</option>
+
+                
+
+
+              </select>
+            </div>
+
+            <div class="col-md-2 col-sm-6" *ngIf="marketSelected">
+              <select class="form-control" name="viewType" [(ngModel)]="exchanageName" (change)="getBotList(); changeBotdrop()">
+                <option value="BINANCE">BINANCE</option>
+                <option value="PAYBITO">{{data.exchange}}</option>
+
+
+
+              </select>
+            </div>
+
+            <div class="col-md-2 col-sm-6" *ngIf="marketSelected && exchangeSelected">
+              <select class="form-control" [(ngModel)]="botSelect" name="marketType" (change)="getBotList(); enableBotDrop()">
+                <option value="">Select a bot</option>
+
+                <option *ngFor="let bot of botList" value="{{bot.bot_id}}">{{bot.bot_id}}-{{bot.bot_name}}</option>
+                
+            </select>
+            </div>
+
+            <div class="col-md-2 col-sm-6" *ngIf="marketSelected && exchangeSelected && botSelected">
+              <select class="form-control" name="viewType" [(ngModel)]="viewType" (change)="getDataButton = true">
+                <option value="">Select a view type</option>
+                <option value="1">Open offers</option>
+                <option value="2">Trade</option>
+
+              </select>
+            </div>
+
+            <div class="col-md-2 col-sm-6" *ngIf="getDataButton">
+              <button (click)="getList()" class="btn btn-primary">Get List</button>
+            </div>
+
+          
+
+
+         
+
+          
+
+          
+
+          <!-- </form> -->
+        </div>
+        <div class="w-100"></div>
+        <br/>
+        <span class="font-md text-theme-dark-blue mr-2 pl-3">Bots History</span>
+
+        <div class="table-responsive-sm" *ngIf="orderView">
+          <table class="table table-sm table-hover">
+            <thead>
+              <tr align="center" class="" [ngClass]="Themecolor == 'Dark' ? 'bg-black text-white' : 'tableHeader-bg-light'">
+                <th scope="col">TRANSACTION ID</th>
+                <th scope="col">EXCHANGE_ID</th>
+
+                <th scope="col">SYMBOL</th>
+                <th scope="col">TXN_DATE</th>
+                <th scope="col">TXN_TYPE</th>
+                <th scope="col">ORDER_ID</th>
+                <th scope="col">PRICE</th>
+                <th scope="col">AMOUNT</th>
+                <th scope="col">TOTAL_VALUE</th>
+                <th scope="col">ACTION</th>
+
+              </tr>
+            </thead>
+            
+            <tbody class="walletHistoryTableBody" id="walletHistoryTableBody">
+
+              <tr align="center"  *ngFor = "let history of botTableList" >
+                <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">{{history.TRANSACTION_ID}}</td>
+                <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">{{history.EXCHANGE_ID}}</td>
+
+                <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"> {{history.SYMBOL}}</td>
+                <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">{{history.TXN_DATE}}</td>
+                <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">{{history.TXN_TYPE}}</td>
+                <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">{{history.ORDER_ID}}</td>
+                <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">{{history.PRICE}}</td>
+                <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">{{history.AMOUNT}}</td>
+                <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">{{history.TOTAL_VALUE}}</td>
+                <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'" *ngIf="history.EXCHANGE_ID == 'BINANCE'" (click)="removeBotHistory(history.EXCHANGE_ID,history.ORDER_ID,history.SYMBOL)"><button class="btn btn-danger">Delete</button></td>
+                <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'" *ngIf="history.EXCHANGE_ID == 'PAYBITO'" (click)="removeBotHistoryPaybito(history.EXCHANGE_ID,history.ORDER_ID,history.SYMBOL,history.TXN_TYPE,history.PRICE)"><button class="btn btn-danger">Delete</button></td>
+
+                
+               
+                
+              </tr>
+              
+              
+            </tbody>
+            
+          </table>
+        </div>
+
+        <div class="table-responsive-sm" *ngIf="!orderView">
+          <table class="table table-sm table-hover">
+            <thead>
+              <tr align="center" class="" [ngClass]="Themecolor == 'Dark' ? 'bg-black text-white' : 'tableHeader-bg-light'">
+                <th scope="col">TRANSACTION ID</th>
+                <th scope="col">EXCHANGE_ID</th>
+
+                <th scope="col">SYMBOL</th>
+                <th scope="col">TXN_DATE</th>
+                <th scope="col">TXN_TYPE</th>
+                <th scope="col">TRADE_ID</th>
+                <th scope="col">PRICE</th>
+                <th scope="col">AMOUNT</th>
+                <th scope="col">TOTAL_VALUE</th>
+              </tr>
+            </thead>
+            
+            <tbody class="walletHistoryTableBody" id="walletHistoryTableBody">
+
+              <tr align="center"  *ngFor = "let history of botTableList" >
+                <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">{{history.TRANSACTION_ID}}</td>
+                <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">{{history.EXCHANGE_ID}}</td>
+
+                <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"> {{history.SYMBOL}}</td>
+                <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">{{history.TXN_DATE}}</td>
+                <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">{{history.TXN_TYPE}}</td>
+                <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">{{history.TRADE_ID}}</td>
+                <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">{{history.PRICE}}</td>
+                <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">{{history.AMOUNT}}</td>
+                <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">{{history.TOTAL_VALUE}}</td>
+                
+               
+                
+              </tr>
+              
+              
+            </tbody>
+            
+          </table>
+        </div>
+
+        <div class="row">
+          <div class="col-12">
+            <div class="float-sm-right btn-group btn-group-sm pagination_div" role="group"
+              aria-label="transaction-history">
+              <div class="btn-group">
+                <button class="btn btn-info" (click)="pager(1)" [disabled]="pageNo==1">
+                  <i class="fa fa-angle-double-left" aria-hidden="true"></i>
+                </button>
+                <button class="btn btn-info" (click)="pagerPre(pageNo)" [disabled]="pageNo==1">
+                  <i class="fa fa-angle-left" aria-hidden="true"></i>
+                </button>
+                <button [disabled]="pgn.length == 0" class="btn btn-info {{pageNo==p?'active':''}} {{((p<pageNo+5)&&(p>pageNo-5))?'':'d-none'}}"
+                  (click)="pager(p);" *ngFor="let p of pgn">{{p}}</button>
+                <button class="btn btn-info" (click)="pagerNext(pageNo)" [disabled]="pageNo==pgn.length">
+                  <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </button>
+                <button class="btn btn-info" (click)="pager(pgn.length)" [disabled]="pageNo==pgn.length">
+                  <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    
+    </div>
+  </div>
+
+  
+
+
+  <ng-template #subscription let-modal>
+    <div id="myDiv" [ngClass]="Themecolor == 'Dark' ? '' : 'lightTheme'">
+    <div [ngClass]="Themecolor == 'Dark' ? '' : 'lightTheme'" class="modal-header sendreceive-wallet">
+      <h4 class="modal-title" id="modal-basic-title receiveModalLabel">Subscription info</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    
+    <div [ngClass]="Themecolor == 'Dark' ? '' : 'lightThemeModalBody'" class="modal-body">
+
+      
+<form>
+ 
+ 
+  <div class="form-group">
+    <label >Price:</label>
+   
+    <input type="text" class="form-control" value="{{subscriptionPrice}} USDT/mo"  name="price" readonly>
+  </div>
+  <div class="form-group">
+    <label >Period: </label>
+    <input type="text" class="form-control" value="30 days" name="period" readonly >
+  </div>
+  
+  <button type="submit" class="btn btn-primary" (click)="followTrader()">Subscribe</button>
+</form>
+      
+      </div>
+    </div>
+  </ng-template>
+
+  <footer class="sticky-footer">
+    <div class="container">
+      <div class="text-center"> <small>Copyright © Paybito 2019</small> </div>
+    </div>
+  </footer>
+  <a class="scroll-to-top rounded" href="#page-top"> <i class="fa fa-angle-up"></i> </a>
+</div>

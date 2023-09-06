@@ -98,15 +98,25 @@ export class OptionsTradeComponent implements OnInit {
   userExchnageFee : Object = {};
   selectedCounterCurrencyPrecision:any;
   selectedBaseCurrencyPrecision:any;
-  buySellDivStatus: boolean = true;
+  buySellDivStatus: any = 'all';
   tradeofferbyIdBuy: any = [];
   tradeofferbyIdSell: any = [];
   filterMyOfferStatus: any = 'ALL';
 
-  myTradeTableAllPairs: any;
+  myTradeTableAllPairs: boolean = false;
+  myOfferTableAllPairs: boolean = false;
   tradehistrybyIdNewData: any;
-  myOfferTableAllPairs: any;
   tradeofferbyIdNewData: any;
+  myStopLimitAllPairs: boolean = false;
+  buydataNew: any = [];
+  buyselldata: any[];
+  filterStatusForOpenOrder: any = 0;
+  allStoplimitButtonStatus: boolean = true;
+  allbuySelldata: any;
+  buydataStream: any;
+  selldataStream: any;
+  assetPairForStopLossModifyDelete : any = '';
+
 
 
   @Input() Themecolor = 'Dark';
@@ -123,12 +133,13 @@ export class OptionsTradeComponent implements OnInit {
 
   ngOnInit() {
     // this.Themecolor = this.dash.Themecolor;
-    this.changemode();
-
     this.getTradeNavHist()
     this.data.getAllPrecision();
     /* calling API to render data before event source for my trade, my offer and stop limit */
     this.data.renderDataForMyTradeOptions(); 
+    this.changemode();
+    this.callAllStopLimitOffers();
+
      /** setting precision for selected **/
      this.selectedCounterCurrencyPrecision = this.data.getSpecificCurrencyPrecision(localStorage.getItem('buying_crypto_asset').toUpperCase())
      this.selectedBaseCurrencyPrecision = this.data.getSpecificCurrencyPrecision(localStorage.getItem('selling_crypto_asset').toUpperCase())
@@ -182,11 +193,11 @@ export class OptionsTradeComponent implements OnInit {
 
     // this.changemode();
     // this.Themecolor = this.dash.Themecolor
-    //console.log('docheck',this.Themecolor)
+    ////console.log('docheck',this.Themecolor)
     this.tradehistrybyId  = this.data.optionsMyTradeData;
     this.tradeofferbyId  = this.data.optionsMyOfferData;
-    this.buydata = this.data.optionsSpotLimitBuyData;
-    this.selldata = this.data.optionsSpotLimitSellData;
+    // this.buydata = this.data.optionsSpotLimitBuyData;
+    // this.selldata = this.data.optionsSpotLimitSellData;
     /** setting precision for selected **/
     this.selectedCounterCurrencyPrecision = this.data.getSpecificCurrencyPrecision(localStorage.getItem('buying_crypto_asset').toUpperCase())
     this.selectedBaseCurrencyPrecision = this.data.getSpecificCurrencyPrecision(localStorage.getItem('selling_crypto_asset').toUpperCase())
@@ -203,6 +214,9 @@ export class OptionsTradeComponent implements OnInit {
         return e.txn_type == 2;
     });
         }
+
+    this.ref.detectChanges();
+
   }
 
   getTradePrice(m) {
@@ -218,7 +232,7 @@ export class OptionsTradeComponent implements OnInit {
     if(parseFloat(liqPrice)>0){
       //liqPrice = (parseFloat(liqPrice)).toFixed(2)
       result = true
-      //console.log(m);
+      ////console.log(m);
       if(m.action.toUpperCase() == 'BUY'){
         if(parseFloat(liqPrice) > parseFloat(m.price)){
           result = false;
@@ -253,6 +267,32 @@ export class OptionsTradeComponent implements OnInit {
       $(".text-blue").css("color", "white");
 
     }
+
+    
+        if(this.Themecolor != 'Dark'){
+        $(".bg_new_class")
+          .removeClass("bg-dark")
+          .css("background-color", "#fefefe");
+        $(".sp-highlow").css("background-color", "#d3dddd");
+        $(".sp-highlow").css("color", "Black");
+        $(".border-col").css("border-color", "#d3dddd");
+        $("th").css({ "background-color": "#d3dddd", color: "#273338" });
+        $(".text-left").css("color", "black");
+        $(".text-right").css("color", "black");
+      } else {
+        $(".bg_new_class")
+          .removeClass("bg-dark")
+          .css("background-color", "#16181a");
+        $(".sp-highlow").css("background-color", "#273338");
+        $(".sp-highlow").css("color", "yellow");
+        $(".border-col").css("border-color", "#273338");
+        $("th").css({ "background-color": "#273338", color: "#d3dddd" });
+        $(".text-left")
+          .css("color", "")
+          .css("color", "rgb(153, 152, 152)");
+        $(".text-right").css("color", "rgb(153, 152, 152)");
+      }
+    
   }
 
 
@@ -299,13 +339,13 @@ export class OptionsTradeComponent implements OnInit {
     //   this.flag1 = true;
     //   this.data.source4 = new EventSource(url);
     //   var result: any = new Object();
-    //   //console.log(this.data.source4)
+    //   ////console.log(this.data.source4)
     //   this.data.source4.onmessage = (event: MessageEvent) => {
-    //     console.log('*****************************')
+    //     //console.log('*****************************')
     //     var response = JSON.parse(event.data);
-    //     console.log(response)
+    //     //console.log(response)
     //     this.flag1 = false;
-    //     console.log(response.tradeListResult)
+    //     //console.log(response.tradeListResult)
     //     this.tradehistrybyId = response.tradeListResult;
     //     if (this.tradehistrybyId == null) {
     //       this.flag1 = false
@@ -401,6 +441,7 @@ export class OptionsTradeComponent implements OnInit {
     this.data.alert('Loading...', 'dark');
     inputObj['offer_id'] = offerId;
     inputObj['userId'] = localStorage.getItem('user_id');
+    inputObj['uuid'] = localStorage.getItem('uuid');
     //inputObj['leverage'] = localStorage.getItem('selected_leverage').slice(0, -1);
     var jsonString = JSON.stringify(inputObj);
     this.http.post<any>(this.data.WEBSERVICE + '/optionsTrade/GetOfferByID', jsonString, { headers: { 'Content-Type': 'application/json' } })
@@ -440,9 +481,10 @@ export class OptionsTradeComponent implements OnInit {
     this.data.alert('Loading...', 'dark');
     inputObj['offer_id'] = offerId;
     inputObj['userId'] = localStorage.getItem('user_id');
+    inputObj['uuid'] = localStorage.getItem('uuid');
     // inputObj['leverage'] = localStorage.getItem('selected_leverage').slice(0, -1);
     var jsonString = JSON.stringify(inputObj);
-    this.http.post<any>(this.data.WEBSERVICE + '/optionsTrade/GetOfferByID', jsonString, { headers: { 'Content-Type': 'application/json' } })
+    this.http.post<any>(this.data.WEBSERVICE + '/optionsTrade/GetOfferByID', jsonString, { headers: { 'Content-Type': 'application/json',authorization: "BEARER " + localStorage.getItem("access_token") } })
       .subscribe(response => {
         document.body.classList.remove("overlay")
         this.data.loader = false;
@@ -714,8 +756,8 @@ export class OptionsTradeComponent implements OnInit {
     inputObj["offerType"] = 'L';
     inputObj['leverage'] = this.delLeverage;
     inputObj['uuid'] = localStorage.getItem('uuid')
-    if (parseInt(this.delLeverage) > 1) {
-      inputObj['marginType'] = this.delMarginType;
+    if(parseInt(this.delLeverage) > 1){
+    inputObj['marginType'] = this.delMarginType;
     }
     var jsonString = JSON.stringify(inputObj);
     this.trademngofferapi = this.http.post<any>(this.data.WEBSERVICE + '/optionsTrade/TradeManageOffer', jsonString, {
@@ -732,7 +774,8 @@ export class OptionsTradeComponent implements OnInit {
           this.data.alert(result.error.error_msg, 'warning');
         } else {
           // this.GetTradeDetail();
-          this.data.renderDataForMyTradeOptions();
+          this.data.renderDataForMyTradeFutures();
+
           this._StopLossComponent.getUserTransaction();
           $('.reset').click();
           this.data.alert(result.error.error_msg, 'success');
@@ -748,78 +791,78 @@ export class OptionsTradeComponent implements OnInit {
   }
 
   getStopLossOfferForSell() {
-    // var userId = localStorage.getItem('user_id');
-    // this.flag4 = true;
-    // var transactiontype = '2';
-    // var url = " https://stream.paybito.com/StreamingApi/rest/getStopLossBuySell?userID=" + userId + "&buyingAssetCode=" + this.data.selectedSellingAssetText.toUpperCase() + "&sellingAssetCode=" + this.data.selectedBuyingAssetText.toUpperCase() + "&txnType=" + transactiontype;
-    // if (this.data.source4 != undefined) {
-    //   this.data.source4.close();
+    var userId = localStorage.getItem('user_id');
+    this.flag4 = true;
+    var transactiontype = '2';
+    var url = "https://stream.paybito.com/StreamingApi/rest/getStopLossBuySell?userID=" + userId + "&buyingAssetCode=" + this.data.selectedSellingAssetText.toUpperCase() + "&sellingAssetCode=" + this.data.selectedBuyingAssetText.toUpperCase() + "&txnType=" + transactiontype;
+    if (this.data.source4 != undefined) {
+      this.data.source4.close();
 
-    // }
-    // if (this.data.source5 != undefined) {
+    }
+    if (this.data.source5 != undefined) {
 
-    //   this.data.source5.close();
-    // }
+      this.data.source5.close();
+    }
 
-    // if (this.data.source6 != undefined) {
-    //   this.data.source6.close();
-    // }
-    // if (this.data.source7 != undefined) {
-    //   this.data.source7.close();
-    // }
-    // if (userId != "") {
-    //   this.data.source7 = new EventSource(url);
-    //   var result: any = new Object();
-    //   this.data.source7.onmessage = (event: MessageEvent) => {
-    //     var response = JSON.parse(event.data);
-    //     this.flag4 = false;
-    //     var selldata = JSON.parse(response.apiResponse);
-    //     this.selldata = selldata.response;
-    //     if (!this.ref['destroyed']) {
-    //       this.ref.detectChanges();
-    //     }
-    //   }
-    // }
+    if (this.data.source6 != undefined) {
+      this.data.source6.close();
+    }
+    if (this.data.source7 != undefined) {
+      this.data.source7.close();
+    }
+    if (userId != "") {
+      this.data.source7 = new EventSource(url);
+      var result: any = new Object();
+      this.data.source7.onmessage = (event: MessageEvent) => {
+        var response = JSON.parse(event.data);
+        this.flag4 = false;
+        var selldata = JSON.parse(response.apiResponse);
+        this.selldata = selldata.response;
+        if (!this.ref['destroyed']) {
+          this.ref.detectChanges();
+        }
+      }
+    }
   }
 
   getStopLossOfferForBuy() {
-    // this.flag3 = true;
-    // var userId = localStorage.getItem('user_id');
-    // var transactiontype = '1';
-    // var url = " https://stream.paybito.com/StreamingApi/rest/.toUpperCase()?userID=" + userId + "&buyingAssetCode=" + this.data.selectedBuyingAssetText.toUpperCase() + "&sellingAssetCode=" + this.data.selectedSellingAssetText.toUpperCase() + "&txnType=" + transactiontype;
-    // if (this.data.source4 != undefined) {
-    //   this.data.source4.close();
+    this.flag3 = true;
+    var userId = localStorage.getItem('user_id');
+    var transactiontype = '1';
+    var url = "https://stream.paybito.com/StreamingApi/rest/getStopLossBuySell?userID=" + userId + "&buyingAssetCode=" + this.data.selectedBuyingAssetText.toUpperCase() + "&sellingAssetCode=" + this.data.selectedSellingAssetText.toUpperCase() + "&txnType=" + transactiontype;
+    if (this.data.source4 != undefined) {
+      this.data.source4.close();
 
-    // }
-    // if (this.data.source5 != undefined) {
+    }
+    if (this.data.source5 != undefined) {
 
-    //   this.data.source5.close();
-    // }
+      this.data.source5.close();
+    }
 
-    // if (this.data.source6 != undefined) {
-    //   this.data.source6.close();
-    // }
-    // if (this.data.source7 != undefined) {
-    //   this.data.source7.close();
-    // }
+    if (this.data.source6 != undefined) {
+      this.data.source6.close();
+    }
+    if (this.data.source7 != undefined) {
+      this.data.source7.close();
+    }
 
-    // if (url != "") {
-    //   this.data.source6 = new EventSource(url);
-    //   var result: any = new Object();
-    //   this.data.source6.onmessage = (event: MessageEvent) => {
-    //     var response = JSON.parse(event.data);
-    //     this.flag3 = false;
-    //     var buydata = JSON.parse(response.apiResponse);
-    //     this.buydata = buydata.response;
-    //     if (!this.ref['destroyed']) {
-    //       this.ref.detectChanges();
-    //     }
-    //   }
-    // }
+    if (url != "") {
+      // this.data.source6 = new EventSource(url);
+      // var result: any = new Object();
+      // this.data.source6.onmessage = (event: MessageEvent) => {
+      //   var response = JSON.parse(event.data);
+      //   this.flag3 = false;
+      //   var buydata = JSON.parse(response.apiResponse);
+      //   this.buydata = buydata.response;
+      //   if (!this.ref['destroyed']) {
+      //     this.ref.detectChanges();
+      //   }
+      // }
+    }
   }
 
   getStoplossPrice(s) {
-    return (parseFloat(s.stopPrice)).toFixed(parseInt(this.tradep));
+    return (parseFloat(s.stopLossPrice)).toFixed(parseInt(this.tradep));
   }
   getStoplossTriggerPrice(s) {
     return (parseFloat(s.triggerPrice)).toFixed(parseInt(this.tradep));
@@ -828,21 +871,22 @@ export class OptionsTradeComponent implements OnInit {
     return (parseFloat(s.quantity)).toFixed(parseInt(this.tradem));
   }
 
-  modifyStoploss(content, id, q, p, t, flag) {
+  modifyStoploss(content, id, q, p, t, flag,assetPair) {
     this.modalService.open(content, { centered: true });
     this.modifySlAmount = q;
     this.modifySlPrice = p;
     this.modifySlTrigger = t;
     this.modifySlOffer = id;
     this.flag = flag;
+    this.assetPairForStopLossModifyDelete = assetPair;
   }
 
   manageStoploss() {
     this.data.alert('Loading...', 'dark');
     if (this.flag == 'Buy') {
-      var marketOrderUrl = this.data.TRADESERVICE + '?symbol=' + this.data.selectedBuyingAssetText.toUpperCase() + this.data.selectedSellingAssetText.toUpperCase() + '&side=BID' + '&amount=' + this.modifySlAmount;
+      var marketOrderUrl = this.data.FUTURESOCKETSTREAMURL+ '/marketPrice?symbol=' + localStorage.getItem('selected_options_asset_pair') + '&side=BID&amount=' + this.modifySlAmount
     } else {
-      var marketOrderUrl = this.data.TRADESERVICE + '?symbol=' + this.data.selectedBuyingAssetText.toUpperCase() + this.data.selectedSellingAssetText.toUpperCase() + '&side=ASK' + '&amount=' + this.modifySlAmount;
+      var marketOrderUrl = this.data.FUTURESOCKETSTREAMURL+ '/marketPrice?symbol=' + localStorage.getItem('selected_options_asset_pair') + '&side=ASK&amount=' + this.modifySlAmount
     }
 
     this.getamntapi = this.http.get<any>(marketOrderUrl)
@@ -852,7 +896,10 @@ export class OptionsTradeComponent implements OnInit {
         var result = data;
         if (result.statuscode != '0') {
           this.marketOrderPrice = parseFloat(result.price);
-          if (this.flag == 'Buy') {
+          if (this.flag == '1') {
+            console.log( 'Market order < trigger ',this.marketOrderPrice,this.modifySlTrigger)
+            console.log( 'Market order < stop loss',this.marketOrderPrice,this.modifySlPrice)
+            console.log( 'trigger < stoploss',this.modifySlTrigger,this.modifySlPrice)
             if (
               this.marketOrderPrice < this.modifySlTrigger &&
               this.marketOrderPrice < this.modifySlPrice &&
@@ -862,18 +909,17 @@ export class OptionsTradeComponent implements OnInit {
               var inputObj = {};
               inputObj['selling_asset_code'] = localStorage.getItem('selling_crypto_asset').toUpperCase();
               inputObj['buying_asset_code'] = localStorage.getItem('buying_crypto_asset').toUpperCase();
-              inputObj['userId'] = localStorage.getItem('user_id');
+              // inputObj['userId'] = localStorage.getItem('user_id');
               inputObj['modify_type'] = 'edit';
               inputObj['stoploss_id'] = this.modifySlOffer;
               inputObj['stop_loss_price'] = this.modifySlPrice;
               inputObj['trigger_price'] = this.modifySlTrigger;
               inputObj['quantity'] = this.modifySlAmount;
-              inputObj['txn_type'] = '1';
-              inputObj['leverage'] = localStorage.getItem('selected_leverage').slice(0, -1);
-               inputObj['uuid'] = localStorage.getItem('uuid');
+              //inputObj['txn_type'] = '1';
+              inputObj['uuid'] = localStorage.getItem('uuid');
 
               var jsonString = JSON.stringify(inputObj);
-              this.modifystoplossapi = this.http.post<any>(this.data.WEBSERVICE + '/userTrade/ModifyStopLossBuySell', jsonString, { headers: { "Content-Type": "application/json" } })
+              this.modifystoplossapi = this.http.post<any>(this.data.WEBSERVICE + '/optionsTrade/ModifyStopLossBuySell', jsonString, { headers: { "Content-Type": "application/json","authorization": "BEARER " + localStorage.getItem("access_token") } })
                 .subscribe(data => {
                   this.data.loader = false;
                   var result = data;
@@ -881,7 +927,7 @@ export class OptionsTradeComponent implements OnInit {
                     this.data.alert(result.error.error_msg, 'danger');
                   } else {
                     this.data.alert(result.error.error_msg, 'success');
-                    this.getStopLossOfferForBuy();
+                    this.callAllStopLimitOffers();
                   }
 
                 });
@@ -897,18 +943,17 @@ export class OptionsTradeComponent implements OnInit {
               var inputObj = {};
               inputObj['selling_asset_code'] = localStorage.getItem('buying_crypto_asset').toUpperCase();
               inputObj['buying_asset_code'] = localStorage.getItem('selling_crypto_asset').toUpperCase();
-              inputObj['userId'] = localStorage.getItem('user_id');
+              // inputObj['userId'] = localStorage.getItem('user_id');
               inputObj['modify_type'] = 'edit';
               inputObj['stoploss_id'] = this.modifySlOffer;
               inputObj['stop_loss_price'] = this.modifySlPrice;
               inputObj['trigger_price'] = this.modifySlTrigger;
               inputObj['quantity'] = this.modifySlAmount;
-              inputObj['txn_type'] = '2';
-              inputObj['leverage'] = localStorage.getItem('selected_leverage').slice(0, -1);
-               inputObj['uuid'] = localStorage.getItem('uuid');
+              //inputObj['txn_type'] = '2';
+              inputObj['uuid'] = localStorage.getItem('uuid');
 
               var jsonString = JSON.stringify(inputObj);
-              this.stoploss2api = this.http.post<any>(this.data.WEBSERVICE + '/userTrade/ModifyStopLossBuySell', jsonString, { headers: { "Content-Type": "application/json" } })
+              this.stoploss2api = this.http.post<any>(this.data.WEBSERVICE + '/optionsTrade/ModifyStopLossBuySell', jsonString, { headers: { "Content-Type": "application/json","authorization": "BEARER " + localStorage.getItem("access_token") } })
                 .subscribe(data => {
                   this.data.loader = false;
                   var result = data;
@@ -916,7 +961,7 @@ export class OptionsTradeComponent implements OnInit {
                     this.data.alert(result.error.error_msg, 'danger');
                   } else {
                     this.data.alert(result.error.error_msg, 'success');
-                    $('#trade').click();
+                    this.callAllStopLimitOffers();
                   }
                 });
             } else {
@@ -929,13 +974,15 @@ export class OptionsTradeComponent implements OnInit {
       });
   }
 
-  delStoploss(content, id, q, p, t, flag) {
+  delStoploss(content, id, q, p, t, flag,assetPair) {
     this.modalService.open(content, { centered: true });
     this.modifySlAmount = q;
     this.modifySlPrice = p;
     this.modifySlTrigger = t;
     this.modifySlOffer = id;
     this.flag = flag;
+    this.assetPairForStopLossModifyDelete = assetPair;
+    console.log(q,p,t,id,flag,assetPair)
   }
 
   removeStoploss() {
@@ -945,7 +992,7 @@ export class OptionsTradeComponent implements OnInit {
     var inputObj = {};
     inputObj['selling_asset_code'] = (this.stopLossSellingAsset).toUpperCase();
     inputObj['buying_asset_code'] = (this.stopLossBuyingAsset).toUpperCase();
-    inputObj['userId'] = localStorage.getItem('user_id');
+    // inputObj['userId'] = localStorage.getItem('user_id');
     inputObj['modify_type'] = 'delete';
     inputObj['stoploss_id'] = this.modifySlOffer;
     inputObj['stop_loss_price'] = this.modifySlPrice;
@@ -953,17 +1000,13 @@ export class OptionsTradeComponent implements OnInit {
     inputObj['quantity'] = this.modifySlAmount;
     inputObj['uuid'] = localStorage.getItem('uuid');
 
-    if (this.flag == 'buy') {
-      inputObj['txn_type'] = '1';
-    } else {
-      inputObj['txn_type'] = '2';
-    }
-    inputObj['leverage'] = localStorage.getItem('selected_leverage').slice(0, -1);
+    inputObj['txn_type'] = this.flag;
 
     var jsonString = JSON.stringify(inputObj);
-    this.stoplossdelapi = this.http.post<any>(this.data.WEBSERVICE + '/userTrade/ModifyStopLossBuySell', jsonString, {
+    this.stoplossdelapi = this.http.post<any>(this.data.WEBSERVICE + '/optionsTrade/ModifyStopLossBuySell', jsonString, {
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        "authorization": "BEARER " + localStorage.getItem("access_token")
       }
     })
       .subscribe(data => {
@@ -973,17 +1016,115 @@ export class OptionsTradeComponent implements OnInit {
           this.data.alert(result.error.error_msg, 'danger');
         } else {
           this.data.alert(result.error.error_msg, 'success');
-          $('#trade').click();
+          this.callAllStopLimitOffers();
         }
 
       });
   }
 
-  /* Method defination for selected tab */
-  handleSelectTab = (index) => {
-    this.selectedTab = index;
+  checkValueStopLimit(isChecked) {
+    console.log('check checkbox', isChecked.target.checked)
+    this.myStopLimitAllPairs = isChecked.target.checked;
+    if (this.myStopLimitAllPairs == true) {
+      this.callStopLimitAllPairsAPI();
+    }else{
+      this.callAllStopLimitOffers();
+    }
   }
 
+  handleStopLimitAllButton = () => {
+    if (this.myStopLimitAllPairs == true) {
+      this.callStopLimitAllPairsAPI();
+    }else{
+      this.callAllStopLimitOffers();
+    }
+  }
+
+  callAllStopLimitOffers() {
+    //console.log('my tstr')
+    //this.allStoplimitButtonStatus = true;
+
+    let payload = {
+      uuid : localStorage.getItem('uuid'),
+      assetPair : localStorage.getItem("selected_options_asset_pair")
+    }
+    this.stoplossdelapi = this.http.post<any>(this.data.WEBSERVICE + "/optionsTrade/GetStopLossBuySell",JSON.stringify(payload), {
+      headers: {
+        'Content-Type': 'application/json',
+        'authorization': 'BEARER ' + localStorage.getItem('access_token'),
+      }
+    })
+      .subscribe(data => {
+       // console.log('getall buy sell data', data)
+        let apiResponse = JSON.parse(data.apiResponse);
+        this.buyselldata = apiResponse.stopLossList;
+
+        console.log('Iteration for stop loss data',this.buyselldata);
+      
+
+        this.buydata = this.buyselldata.filter(function (el) {
+          return el.action == 1
+
+        });
+
+        this.selldata = this.buyselldata.filter(function (el) {
+          return el.action == 2
+
+        });
+
+        console.log('Iteration buy',this.buydata);
+        console.log('Iteration sell',this.selldata);
+
+
+
+      })
+
+
+  }
+
+
+  callStopLimitAllPairsAPI() {
+    this.stoplossdelapi = this.http.get<any>('https://stream.paybito.com/StreamingApi/rest/getStopLimitByAccountIDAll?userID=' + localStorage.getItem('user_id'), {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .subscribe(data => {
+
+        this.buydataNew = data.tradeListResult;
+        console.log(this.buydataNew.length,typeof(this.buydataNew.length))
+        //this.clickAllButton();
+
+        //  console.log('ttttt', data)
+        this.handleClickAllButton('spotStopLimitAllButton')
+        
+
+      });
+  }
+
+/* method for establishing click event and perform programiticcaly click on all filter button*/
+
+handleClickAllButton = (param) => {
+  let elem = document.getElementById(param)
+   //console.log(elem);
+   var evt = document.createEvent('MouseEvents');
+   evt.initMouseEvent('mousedown', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+   if(elem != null && elem != undefined){
+     elem.dispatchEvent(evt);
+
+     elem.click();
+     elem.click();
+     
+   }
+}
+clickAllButton() {
+  //let el: HTMLElement = this.allButtonClick.nativeElement;
+  //console.log(el)
+  this.callAllStopLimitOffers();
+  //el.click();
+  // $('#allButtonClick').click();
+
+}
   /* Method defination to handle close button in my trade */
   handleCloseButton = (param,content) => {
     console.log('*********** CLOSED BUTTON CLICKED  **************')
@@ -997,7 +1138,7 @@ export class OptionsTradeComponent implements OnInit {
     this.modalService.open(content, { centered: true });
 
   }
-  /* Method defination for confirm close button */ 
+  /* Method defination for confirm close button */
   handleConfirmCloseButton = () =>{
     document.body.classList.add("overlay")
     let param = this.selectedCounterBuySellTxn;
@@ -1013,15 +1154,15 @@ export class OptionsTradeComponent implements OnInit {
     }else if(param.offer_type == 6){
       marginType = '2';
     }
-   /*  this.http.get<any>("https://options-socket.paybito.com/oSocketStream/api/marketPrice" + '?symbol=' + param.asset_pair + '&side=' + txnSide + '&amount=' + parseFloat(param.amount).toFixed(6), {
-      headers: {
-        'Content-Type': 'application/json',
-        //'authorization': 'BEARER ' + localStorage.getItem('access_token'),
-      }
-    })
-      .subscribe(data => {
-        var result = data;
-        if (result.statuscode != '0') { */
+    // this.http.get<any>(this.data.FUTURESOCKETSTREAMURL+ "/marketPrice" + '?symbol=' + param.asset_pair + '&side=' + txnSide + '&amount=' + parseFloat(param.amount).toFixed(6), {
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //     //'authorization': 'BEARER ' + localStorage.getItem('access_token'),
+    //   }
+    // })
+    //   .subscribe(data => {
+    //     var result = data;
+    //     if (result.statuscode != '0') {
 
           var inputObj = {};
           // inputObj['userId'] = localStorage.getItem('user_id');
@@ -1037,7 +1178,7 @@ export class OptionsTradeComponent implements OnInit {
           }
           inputObj['assetCode'] = param.assetcode;
           inputObj['portfolioId'] = param.mpTransactionId;
-          //inputObj['marginType'] = marginType;
+          inputObj['marginType'] = marginType;
           inputObj['assetPair'] = param.asset_pair;
           inputObj['leverage'] = param.leverage;
           inputObj['uuid'] = localStorage.getItem('uuid')
@@ -1053,13 +1194,15 @@ export class OptionsTradeComponent implements OnInit {
                 this.data.loader = false;
                 var result = data;
                 if (result.error.error_data != '0') {
-                  this.data.alert(result.error.error_msg, 'danger');
                   document.body.classList.remove("overlay")
+                  this.data.alert(result.error.error_msg, 'danger');
                 } else {
                   this.data.alert(result.error.error_msg, 'success');
-                  this.data.renderDataForMyTradeOptions();
+                  this.data.renderDataForMyTradeFutures();
                   if (parseInt(localStorage.getItem('selected_leverage').slice(0, -1)) > 1) {
-                    this.data.renderAvailableBalance(this.data.selectedSellingAssetText, localStorage.getItem('selected_leverage_margin_type'), localStorage.getItem('selected_leverage').slice(0, -1),'options')
+                    this.data.renderAvailableBalance(this.data.selectedSellingAssetText, localStorage.getItem('selected_leverage_margin_type'), localStorage.getItem('selected_leverage').slice(0, -1),'futures')
+                   // this.data.alert(result.error.error_msg, 'success');
+                    
                   }
                 }
               });
@@ -1068,20 +1211,20 @@ export class OptionsTradeComponent implements OnInit {
               document.body.classList.remove("overlay")
               this.data.alert('Offer Value is lesser than permissible value', 'warning');
             }
-          /* }
-          else {
-            document.body.classList.remove("overlay")
-            this.data.alert(result.message, 'danger');
-          }
+        //   }
+        //   else {
+        //     document.body.classList.remove("overlay")
+        //     this.data.alert(result.message, 'danger');
+        //   }
           
-        }) */
+        // })
   }
 
   /* Method defination for checking if PNL is positive or negative */
   handlePnlPositiveValue = (param) => {
     let pnl = param.split('(');
     pnl = pnl[1].split('%')
-    //console.log("PNL VALUE => ",pnl)
+    ////console.log("PNL VALUE => ",pnl)
     let isPositive = false
     if (parseFloat(pnl) >= 0) {
       isPositive = true
@@ -1195,7 +1338,7 @@ export class OptionsTradeComponent implements OnInit {
   }
 
   checkValueMyTrade(isChecked){
-    console.log('check checkbox', isChecked.target.checked)
+    //console.log('check checkbox', isChecked.target.checked)
     this.myTradeTableAllPairs = isChecked.target.checked;
     if(this.myTradeTableAllPairs == true){
       this.callMyTradeAllPairsAPI();
@@ -1221,7 +1364,7 @@ export class OptionsTradeComponent implements OnInit {
         });
   }
   checkValueMyOffer(isChecked){
-    console.log('check checkbox', isChecked.target.checked)
+    //console.log('check checkbox', isChecked.target.checked)
     this.myOfferTableAllPairs = isChecked.target.checked;
     if(this.myOfferTableAllPairs == true){
      this.callMyOfferAllPairsAPI();
@@ -1237,7 +1380,7 @@ export class OptionsTradeComponent implements OnInit {
 
         this.tradeofferbyIdNewData = data.tradeListResult;
 
-      //  console.log('ttttt', data)
+      //  //console.log('ttttt', data)
 
       });
   }

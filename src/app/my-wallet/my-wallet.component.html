@@ -1,7 +1,14 @@
 <app-navbar (themeChanged)="themeChangedHandler($event)"></app-navbar>
 <div class="content-wrapper pt-0 pl-3" [ngClass]="Themecolor == 'Dark' ? '' : 'content-wrapper-light'">
   <ngb-tabset justify="fill" *ngIf="!spot" [activeId]="activeIdString" [ngClass]="Themecolor == 'Dark' ? 'tab-dark' : 'tab-light'" >
-    <ngb-tab id="spot" (click)="walletHistoryList('1')" *ngIf="data.isSpot == 1">
+    <ngb-tab id="spot" (click)="walletHistoryList('1')" 
+    *ngIf="data.isSpot == 1 
+    || data.isFutures == 1 
+    || data.isOptions == 1
+    || data.isConvert == 1
+    || data.isOtc == 1
+
+    ">
       <ng-template ngbTabTitle>
         <h5 class="market-reset" id="spotTab" style="padding: 8px 10px" (click)="handleSelectedTab('spot');marketTypeNavSeve('spot');data.checkUserBlockStatus()">SPOT</h5>
       </ng-template>
@@ -186,7 +193,7 @@
                     <tbody>
                       <tr *ngFor="let b of myBalanceList | myfilter: currencyFilter; let i = index" [ngClass]="Themecolor == 'Dark' ? 'newRowShade' : 'newRowShade-light'">
                         <td style="width: 14.28%; padding: 10px 0; border-bottom: 1px solid #ddd" class="text-yellow tablefirstRow">
-                          <img alt="{{b.currencyCode}}" src="{{ './assets/img/currency/' + b.currencyCode.toUpperCase() + '.svg' }}" width="20px" height="20px" />
+                          <img alt="{{b.currencyCode}}" src="{{ data.ASSETICONBASEURL + b.currencyCode.toUpperCase() + '.png' }}" width="20px" height="20px" />
 
                           <span> {{ b.currencyCode | uppercase }} </span>
                         </td>
@@ -217,7 +224,7 @@
                           >
                             <span class="font-xs mr-1 deposit-withdraw-btn">
                               <span class="diposit-hover " [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">SEND</span>
-                              <img alt="send" src="./assets/img/send.png" alt="send logo" style="width: 20px" />
+                              <img alt="send" src="../../assets/img/send.png" alt="send logo" style="width: 20px" />
                             </span>
                           </a>
                           <a
@@ -228,7 +235,7 @@
                           >
                             <span class="font-xs mr-1 deposit-withdraw-btn">
                               <span class="diposit-hover " [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">SEND</span>
-                              <img alt="send" src="./assets/img/send.png" alt="send logo" style="width: 20px" />
+                              <img alt="send" src="../../assets/img/send.png" alt="send logo" style="width: 20px" />
                             </span>
                           </a>
                           <a
@@ -238,7 +245,7 @@
                           >
                             <span class="font-xs mr-1 deposit-withdraw-btn">
                               <span class="diposit-hover " [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">SEND</span>
-                              <img alt="send" src="./assets/img/send.png" alt="send logo" style="width: 20px" />
+                              <img alt="send" src="../../assets/img/send.png" alt="send logo" style="width: 20px" />
                             </span>
                           </a>
                         </td>
@@ -251,7 +258,7 @@
                           >
                             <span class="font-xs mr-1 deposit-withdraw-btn">
                               <span class="diposit-hover " [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">RECEIVE</span>
-                              <img alt="RECEIVE" src="./assets/img/send.png" alt="pay logo" style="width: 20px" />
+                              <img alt="RECEIVE" src="../../assets/img/send.png" alt="pay logo" style="width: 20px" />
                             </span>
                           </a>
 
@@ -263,7 +270,7 @@
                           >
                             <span class="font-xs mr-1 deposit-withdraw-btn">
                               <span class="diposit-hover " [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">RECEIVE</span>
-                              <img alt="RECEIVE" src="./assets/img/send.png" alt="pay logo" style="width: 20px" /> </span
+                              <img alt="RECEIVE" src="../../assets/img/send.png" alt="pay logo" style="width: 20px" /> </span
                           ></a>
                           <a
                             *ngIf="(b.currencyCode == 'USD' || b.currencyCode == 'AED' || b.currencyCode == 'INR' || b.currencyCode == 'EUR' || b.currencyCode == 'SGD') && b.isDeposit == 1"
@@ -273,7 +280,7 @@
                           >
                             <span class="font-xs mr-1 deposit-withdraw-btn">
                               <span class="diposit-hover " [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">RECEIVE</span>
-                              <img alt="RECEIVE" src="./assets/img/send.png" alt="pay logo" style="width: 20px" /> </span
+                              <img alt="RECEIVE" src="../../assets/img/send.png" alt="pay logo" style="width: 20px" /> </span
                           ></a>
                         </td>
                       </tr>
@@ -3469,7 +3476,7 @@
 </div>
 <!-- send modal -->
 <ng-template #sendmd let-modal>
-  <div id="myDiv">
+  <div id="myDiv" [ngClass]="Themecolor == 'Dark' ? '' : 'lightThemeModalBody'">
     <div *ngIf="cryptoCurrency == 'HCX'; else sendcurrency" class="modal-header sendreceive-wallet">
       <h4 class="modal-title" id="modal-basic-title">Send {{ cryptoCurrency }} Native</h4>
       <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
@@ -3484,9 +3491,9 @@
         </button>
       </div>
     </ng-template>
-    <div class="modal-body text-center send-wallet">
+    <div class="modal-body text-center send-wallet" [ngClass]="Themecolor == 'Dark' ? '' : 'lightThemeModalBodyInner'">
       <ngb-tabset>
-        <ngb-tab title="Paybito Wallet" *ngIf="cryptoCurrency != 'triggers'">
+        <ngb-tab title="Broker Wallet" *ngIf="cryptoCurrency != 'triggers'">
           <ng-template ngbTabContent>
             <div style="top: 78px; left: 37px; position: absolute; z-index: 99999999">
               <div class="icon-section pull-left">
@@ -3494,12 +3501,12 @@
               </div>
               <div class="info-section" id="paybitoWalletInfo" style="display: none; left: -459px; top: -20px">
                 <div class="info-header">
-                  <div class="info-title">Paybito Wallet</div>
+                  <div class="info-title">{{data.exchange}} Wallet</div>
                   <div class="info-close">
                     <i class="fa fa-times" aria-hidden="true" (click)="data.handleInfoSection('paybitoWalletInfo')"></i>
                   </div>
                 </div>
-                <div class="info-body">You can send asset from Paybito wallet to Paybito wallet through a users registered mobile number</div>
+                <div class="info-body">You can send asset from {{data.exchange}} wallet to {{data.exchange}} wallet through a users registered mobile number</div>
               </div>
             </div>
             <form name="form" #f="ngForm" novalidate>
@@ -3515,7 +3522,9 @@
                     (keyup)="handleValidatePhone($event)"
                     autocomplete="off"
                   /> -->
-                  <input type="text" class="form-control paybitophone validate" name="dial_code"
+                  <input type="text" class="form-control paybitophone validate"
+                  [ngClass]="Themecolor == 'form-control' ? '' : 'form-control-light'"
+                    name="dial_code"
                           pattern="[0-9]{8,15}"
                           required
                           [(ngModel)]="paybito_phone"
@@ -3533,7 +3542,7 @@
               <div class="form-group row">
                 <div class="col-4 text-right">Amount</div>
                 <div class="col-8">
-                  <input type="textbox" class="form-control" numbersOnly [(ngModel)]="paybito_amount" name="b" placeholder="0.00"  (keyup)="checkAmoutPrecision(cryptoCurrency, paybito_amount, 'WALLET')" />
+                  <input type="textbox" class="form-control" [ngClass]="Themecolor == 'form-control' ? '' : 'form-control-light'" numbersOnly [(ngModel)]="paybito_amount" name="b" placeholder="0.00"  (keyup)="checkAmoutPrecision(cryptoCurrency, paybito_amount, 'WALLET')" />
                 </div>
               </div>
               <div class="form-group row">
@@ -3545,15 +3554,15 @@
 
               <small>
                 <small style="font-size: 15px"
-                  >Minimum of <img src="{{ './assets/img/currency/' + cryptoCurrency + '.svg' }}" width="20" style="padding-right: 5px" alt="" />{{ minValueCoin }} and Maximum
-                  <img src="{{ './assets/img/currency/' + cryptoCurrency + '.svg' }}" width="20" style="padding-right: 5px" alt="" />{{ maxValueCoin }} can be sent</small
+                  >Minimum of <img src="{{ data.ASSETICONBASEURL + cryptoCurrency + '.png' }}" width="20" style="padding-right: 5px" alt="" />{{ minValueCoin }} and Maximum
+                  <img src="{{ data.ASSETICONBASEURL + cryptoCurrency + '.png' }}" width="20" style="padding-right: 5px" alt="" />{{ maxValueCoin }} can be sent</small
                 >
               </small>
               <!--   <small *ngIf="cryptoCurrency =='BTC'">
                 <small style="font-size:15px;">Minimum of <img
-                    src="{{'./assets/img/currency/'+cryptoCurrency+'.svg'}}" width="20" style="padding-right: 5px;"
+                    src="{{data.ASSETICONBASEURL+cryptoCurrency+'.png'}}" width="20" style="padding-right: 5px;"
                     alt="" />{{minvalueBtc}} and Maximum <img
-                    src="{{'./assets/img/currency/'+cryptoCurrency+'.svg'}}" width="20" style="padding-right: 5px;"
+                    src="{{data.ASSETICONBASEURL+cryptoCurrency+'.png'}}" width="20" style="padding-right: 5px;"
                     alt="" />{{maxvalueBtc}} can be sent</small>
               </small>
               <small *ngIf="cryptoCurrency == 'ETH'">
@@ -3561,7 +3570,7 @@
                   >Minimum of
                   <img
                     src="{{
-                      './assets/img/currency/' + cryptoCurrency + '.svg'
+                      data.ASSETICONBASEURL + cryptoCurrency + '.png'
                     }}"
                     width="20"
                     style="padding-right: 5px"
@@ -3569,7 +3578,7 @@
                   />{{ minvalueEth }} and Maximum
                   <img
                     src="{{
-                      './assets/img/currency/' + cryptoCurrency + '.svg'
+                      data.ASSETICONBASEURL + cryptoCurrency + '.png'
                     }}"
                     width="20"
                     style="padding-right: 5px"
@@ -3582,7 +3591,7 @@
                   >Minimum of
                   <img
                     src="{{
-                      './assets/img/currency/' + cryptoCurrency + '.svg'
+                      data.ASSETICONBASEURL + cryptoCurrency + '.png'
                     }}"
                     width="20"
                     style="padding-right: 5px"
@@ -3591,7 +3600,7 @@
                   {{ minvalueBch }} and Maximum
                   <img
                     src="{{
-                      './assets/img/currency/' + cryptoCurrency + '.svg'
+                      data.ASSETICONBASEURL + cryptoCurrency + '.png'
                     }}"
                     width="20"
                     style="padding-right: 5px"
@@ -3604,7 +3613,7 @@
                   >Minimum of
                   <img
                     src="{{
-                      './assets/img/currency/' + cryptoCurrency + '.svg'
+                      data.ASSETICONBASEURL + cryptoCurrency + '.png'
                     }}"
                     width="20"
                     style="padding-right: 5px"
@@ -3613,7 +3622,7 @@
                   {{ minvalueLtc }} and Maximum
                   <img
                     src="{{
-                      './assets/img/currency/' + cryptoCurrency + '.svg'
+                      data.ASSETICONBASEURL + cryptoCurrency + '.png'
                     }}"
                     width="20"
                     style="padding-right: 5px"
@@ -3626,7 +3635,7 @@
                   >Minimum of
                   <img
                     src="{{
-                      './assets/img/currency/' + cryptoCurrency + '.svg'
+                      data.ASSETICONBASEURL + cryptoCurrency + '.png'
                     }}"
                     width="20"
                     style="padding-right: 5px"
@@ -3634,7 +3643,7 @@
                   />{{ minvalueUsdt }} and Maximum
                   <img
                     src="{{
-                      './assets/img/currency/' + cryptoCurrency + '.svg'
+                      data.ASSETICONBASEURL + cryptoCurrency + '.png'
                     }}"
                     width="20"
                     style="padding-right: 5px"
@@ -3647,7 +3656,7 @@
                   >Minimum of
                   <img
                     src="{{
-                      './assets/img/currency/' + cryptoCurrency + '.svg'
+                      data.ASSETICONBASEURL + cryptoCurrency + '.png'
                     }}"
                     width="20"
                     style="padding-right: 5px"
@@ -3655,7 +3664,7 @@
                   />{{ minvalueDiam }} and Maximum
                   <img
                     src="{{
-                      './assets/img/currency/' + cryptoCurrency + '.svg'
+                      data.ASSETICONBASEURL + cryptoCurrency + '.png'
                     }}"
                     width="20"
                     style="padding-right: 5px"
@@ -3668,7 +3677,7 @@
                   >Minimum of
                   <img
                     src="{{
-                      './assets/img/currency/' + cryptoCurrency + '.svg'
+                      data.ASSETICONBASEURL + cryptoCurrency + '.png'
                     }}"
                     width="20"
                     style="padding-right: 5px"
@@ -3676,7 +3685,7 @@
                   />{{ minvalueHcx }} and Maximum
                   <img
                     src="{{
-                      './assets/img/currency/' + cryptoCurrency + '.svg'
+                      data.ASSETICONBASEURL + cryptoCurrency + '.png'
                     }}"
                     width="20"
                     style="padding-right: 5px"
@@ -3689,7 +3698,7 @@
                   >Minimum of
                   <img
                     src="{{
-                      './assets/img/currency/' + cryptoCurrency + '.svg'
+                      data.ASSETICONBASEURL + cryptoCurrency + '.png'
                     }}"
                     width="20"
                     style="padding-right: 5px"
@@ -3697,7 +3706,7 @@
                   />{{ minvalueBat }} and Maximum
                   <img
                     src="{{
-                      './assets/img/currency/' + cryptoCurrency + '.svg'
+                      data.ASSETICONBASEURL + cryptoCurrency + '.png'
                     }}"
                     width="20"
                     style="padding-right: 5px"
@@ -3710,7 +3719,7 @@
                   >Minimum of
                   <img
                     src="{{
-                      './assets/img/currency/' + cryptoCurrency + '.svg'
+                      data.ASSETICONBASEURL + cryptoCurrency + '.png'
                     }}"
                     width="20"
                     style="padding-right: 5px"
@@ -3718,7 +3727,7 @@
                   />{{ minvalueHbar }} and Maximum
                   <img
                     src="{{
-                      './assets/img/currency/' + cryptoCurrency + '.svg'
+                      data.ASSETICONBASEURL + cryptoCurrency + '.png'
                     }}"
                     width="20"
                     style="padding-right: 5px"
@@ -3731,7 +3740,7 @@
                   >Minimum of
                   <img
                     src="{{
-                      './assets/img/currency/' + cryptoCurrency + '.svg'
+                      data.ASSETICONBASEURL + cryptoCurrency + '.png'
                     }}"
                     width="20"
                     style="padding-right: 5px"
@@ -3739,7 +3748,7 @@
                   />{{ minvalueLink }} and Maximum
                   <img
                     src="{{
-                      './assets/img/currency/' + cryptoCurrency + '.svg'
+                      data.ASSETICONBASEURL + cryptoCurrency + '.png'
                     }}"
                     width="20"
                     style="padding-right: 5px"
@@ -3752,7 +3761,7 @@
                   >Minimum of
                   <img
                     src="{{
-                      './assets/img/currency/' + cryptoCurrency + '.svg'
+                      data.ASSETICONBASEURL + cryptoCurrency + '.png'
                     }}"
                     width="20"
                     style="padding-right: 5px"
@@ -3760,7 +3769,7 @@
                   />{{ minvalueXrp }} and Maximum
                   <img
                     src="{{
-                      './assets/img/currency/' + cryptoCurrency + '.svg'
+                      data.ASSETICONBASEURL + cryptoCurrency + '.png'
                     }}"
                     width="20"
                     style="padding-right: 5px"
@@ -3773,7 +3782,7 @@
                   >Minimum of
                   <img
                     src="{{
-                      './assets/img/currency/' + cryptoCurrency + '.svg'
+                      data.ASSETICONBASEURL + cryptoCurrency + '.png'
                     }}"
                     width="20"
                     style="padding-right: 5px"
@@ -3781,7 +3790,7 @@
                   />{{ minvalueKicks }} and Maximum
                   <img
                     src="{{
-                      './assets/img/currency/' + cryptoCurrency + '.svg'
+                      data.ASSETICONBASEURL + cryptoCurrency + '.png'
                     }}"
                     width="20"
                     style="padding-right: 5px"
@@ -3795,7 +3804,7 @@
                   >Minimum of
                   <img
                     src="{{
-                      './assets/img/currency/' + cryptoCurrency + '.svg'
+                      data.ASSETICONBASEURL + cryptoCurrency + '.png'
                     }}"
                     width="20"
                     style="padding-right: 5px"
@@ -3803,7 +3812,7 @@
                   />{{ minvalueMrc }} and Maximum
                   <img
                     src="{{
-                      './assets/img/currency/' + cryptoCurrency + '.svg'
+                      data.ASSETICONBASEURL + cryptoCurrency + '.png'
                     }}"
                     width="20"
                     style="padding-right: 5px"
@@ -3816,7 +3825,7 @@
                   >Minimum of
                   <img
                     src="{{
-                      './assets/img/currency/' + cryptoCurrency + '.svg'
+                      data.ASSETICONBASEURL + cryptoCurrency + '.png'
                     }}"
                     width="20"
                     style="padding-right: 5px"
@@ -3824,7 +3833,7 @@
                   />{{ minvalueAda }} and Maximum
                   <img
                     src="{{
-                      './assets/img/currency/' + cryptoCurrency + '.svg'
+                      data.ASSETICONBASEURL + cryptoCurrency + '.png'
                     }}"
                     width="20"
                     style="padding-right: 5px"
@@ -3837,7 +3846,7 @@
                   >Minimum of
                   <img
                     src="{{
-                      './assets/img/currency/' + cryptoCurrency + '.svg'
+                      data.ASSETICONBASEURL + cryptoCurrency + '.png'
                     }}"
                     width="20"
                     style="padding-right: 5px"
@@ -3845,7 +3854,7 @@
                   />{{ minvalueSol }} and Maximum
                   <img
                     src="{{
-                      './assets/img/currency/' + cryptoCurrency + '.svg'
+                      data.ASSETICONBASEURL + cryptoCurrency + '.png'
                     }}"
                     width="20"
                     style="padding-right: 5px"
@@ -3858,7 +3867,7 @@
                   >Minimum of
                   <img
                     src="{{
-                      './assets/img/currency/' + cryptoCurrency + '.svg'
+                      data.ASSETICONBASEURL + cryptoCurrency + '.png'
                     }}"
                     width="20"
                     style="padding-right: 5px"
@@ -3866,7 +3875,7 @@
                   />{{ minvalueCar }} and Maximum
                   <img
                     src="{{
-                      './assets/img/currency/' + cryptoCurrency + '.svg'
+                      data.ASSETICONBASEURL + cryptoCurrency + '.png'
                     }}"
                     width="20"
                     style="padding-right: 5px"
@@ -3879,7 +3888,7 @@
                   >Minimum of
                   <img
                     src="{{
-                      './assets/img/currency/' + cryptoCurrency + '.svg'
+                      data.ASSETICONBASEURL + cryptoCurrency + '.png'
                     }}"
                     width="20"
                     style="padding-right: 5px"
@@ -3887,7 +3896,7 @@
                   />{{ minvalueXlm }} and Maximum
                   <img
                     src="{{
-                      './assets/img/currency/' + cryptoCurrency + '.svg'
+                      data.ASSETICONBASEURL + cryptoCurrency + '.png'
                     }}"
                     width="20"
                     style="padding-right: 5px"
@@ -3897,9 +3906,9 @@
               </small>
               <small>
                 <small style="font-size:15px;">Minimum of <img
-                    src="{{'./assets/img/currency/'+cryptoCurrency+'.svg'}}" width="20" style="padding-right: 5px;"
+                    src="{{data.ASSETICONBASEURL+cryptoCurrency+'.png'}}" width="20" style="padding-right: 5px;"
                     alt="" />{{minValueCoin}} and Maximum <img
-                    src="{{'./assets/img/currency/'+cryptoCurrency+'.svg'}}" width="20" style="padding-right: 5px;"
+                    src="{{data.ASSETICONBASEURL+cryptoCurrency+'.png'}}" width="20" style="padding-right: 5px;"
                     alt="" />{{maxValueCoin}} can be send</small>
               </small> -->
             </form>
@@ -3931,6 +3940,7 @@
                   <input
                     type="text"
                     class="form-control receiveaddrs"
+                    [ngClass]="Themecolor == 'form-control' ? '' : 'form-control-light'"
                     [(ngModel)]="other_address"
                     placeholder="Receiver's Address"
                     (keyup)=" checkNodeaddress()"
@@ -3952,49 +3962,49 @@
               <div *ngIf="cryptoCurrency == 'XRP'" class="form-group row">
                 <div class="col-3 text-right">XRP Tag</div>
                 <div class="col-9">
-                  <input type="text" (keypress)="keyPress($event)" maxlength="10" class="form-control xrpaddrs" [(ngModel)]="memo" placeholder="XRP Tag" name="a" required />
+                  <input type="text" (keypress)="keyPress($event)" maxlength="10" class="form-control xrpaddrs" [ngClass]="Themecolor == 'form-control' ? '' : 'form-control-light'" [(ngModel)]="memo" placeholder="XRP Tag" name="a" required />
                 </div>
               </div>
               <div *ngIf="cryptoCurrency == 'DIAM'" class="form-group row">
                 <div class="col-3 text-right">DIAM Tag</div>
                 <div class="col-9">
-                  <input type="text" (keypress)="keyPress($event)" maxlength="10" class="form-control diamaddrs" [(ngModel)]="memo" placeholder="DIAM Tag" name="a" required />
+                  <input type="text" (keypress)="keyPress($event)" maxlength="10" class="form-control diamaddrs" [ngClass]="Themecolor == 'form-control' ? '' : 'form-control-light'" [(ngModel)]="memo" placeholder="DIAM Tag" name="a" required />
                 </div>
               </div>
               <div *ngIf="cryptoCurrency == 'HCX'" class="form-group row">
                 <div class="col-3 text-right">HCX Tag</div>
                 <div class="col-9">
-                  <input type="text" (keypress)="keyPress($event)" maxlength="10" class="form-control hcxaddrs" [(ngModel)]="memo" placeholder="HCX Tag" name="a" required />
+                  <input type="text" (keypress)="keyPress($event)" maxlength="10" class="form-control hcxaddrs" [ngClass]="Themecolor == 'form-control' ? '' : 'form-control-light'" [(ngModel)]="memo" placeholder="HCX Tag" name="a" required />
                 </div>
               </div>
               <div *ngIf="cryptoCurrency == 'CAR'" class="form-group row">
                 <div class="col-3 text-right">CAR Tag</div>
                 <div class="col-9">
-                  <input type="text" (keypress)="keyPress($event)" maxlength="10" class="form-control hcxaddrs" [(ngModel)]="memo" placeholder="CAR Tag" name="a" required />
+                  <input type="text" (keypress)="keyPress($event)" maxlength="10" class="form-control hcxaddrs" [ngClass]="Themecolor == 'form-control' ? '' : 'form-control-light'" [(ngModel)]="memo" placeholder="CAR Tag" name="a" required />
                 </div>
               </div>
               <div *ngIf="cryptoCurrency == 'XLM'" class="form-group row">
                 <div class="col-3 text-right">XLM Tag</div>
                 <div class="col-9">
-                  <input type="text" (keypress)="keyPress($event)" maxlength="10" class="form-control hcxaddrs" [(ngModel)]="memo" placeholder="XLM Tag" name="a" required />
+                  <input type="text" (keypress)="keyPress($event)" maxlength="10" class="form-control hcxaddrs" [ngClass]="Themecolor == 'form-control' ? '' : 'form-control-light'" [(ngModel)]="memo" placeholder="XLM Tag" name="a" required />
                 </div>
               </div>
               <div *ngIf="cryptoCurrency == 'LUNA'" class="form-group row">
                 <div class="col-3 text-right">LUNA Tag</div>
                 <div class="col-9">
-                  <input type="text" (keypress)="keyPress($event)" maxlength="10" class="form-control hcxaddrs" [(ngModel)]="memo" placeholder="LUNA Tag" name="a" required />
+                  <input type="text" (keypress)="keyPress($event)" maxlength="10" class="form-control hcxaddrs" [ngClass]="Themecolor == 'form-control' ? '' : 'form-control-light'" [(ngModel)]="memo" placeholder="LUNA Tag" name="a" required />
                 </div>
               </div>
               <div *ngIf="cryptoCurrency == 'HBAR'" class="form-group row">
                 <div class="col-3 text-right">HBAR Tag</div>
                 <div class="col-9">
-                  <input type="text" (keypress)="keyPress($event)" maxlength="10" class="form-control hcxaddrs" [(ngModel)]="memo" placeholder="HBAR Tag" name="a" required />
+                  <input type="text" (keypress)="keyPress($event)" maxlength="10" class="form-control hcxaddrs" [ngClass]="Themecolor == 'form-control' ? '' : 'form-control-light'" [(ngModel)]="memo" placeholder="HBAR Tag" name="a" required />
                 </div>
               </div>
               <div *ngIf="cryptoCurrency == 'EOS'" class="form-group row">
                 <div class="col-3 text-right">EOS Tag</div>
                 <div class="col-9">
-                  <input type="text" (keypress)="keyPress($event)" maxlength="10" class="form-control hcxaddrs" [(ngModel)]="memo" placeholder="EOS Tag" name="a" required />
+                  <input type="text" (keypress)="keyPress($event)" maxlength="10" class="form-control hcxaddrs" [ngClass]="Themecolor == 'form-control' ? '' : 'form-control-light'" [(ngModel)]="memo" placeholder="EOS Tag" name="a" required />
                 </div>
               </div>
               <div class="form-group row">
@@ -4004,6 +4014,7 @@
                     type="textbox"
                     id="otherWallet"
                     class="form-control"
+                    [ngClass]="Themecolor == 'form-control' ? '' : 'form-control-light'"
                     [(ngModel)]="other_amount"
                     placeholder="0.00"
                     step="0.1"
@@ -4042,8 +4053,8 @@
                 <p>
                   <small>
                     <small style="font-size: 15px"
-                      >Minimum of <img src="{{ './assets/img/currency/' + cryptoCurrency + '.svg' }}" width="20" style="padding-right: 5px" alt="" />{{ minValueCoin }} and Maximum
-                      <img src="{{ './assets/img/currency/' + cryptoCurrency + '.svg' }}" width="20" style="padding-right: 5px" alt="" />{{ maxValueCoin }} can be sent.</small
+                      >Minimum of <img src="{{ data.ASSETICONBASEURL + cryptoCurrency + '.png' }}" width="20" style="padding-right: 5px" alt="" />{{ minValueCoin }} and Maximum
+                      <img src="{{ data.ASSETICONBASEURL + cryptoCurrency + '.png' }}" width="20" style="padding-right: 5px" alt="" />{{ maxValueCoin }} can be sent.</small
                     >
                     <p style="font-size: 15px" *ngIf="sendDisclaimerCoin != ''">{{ sendDisclaimerCoin }}</p>
                   </small>
@@ -4151,7 +4162,7 @@
     </div>
     <div class="modal-body text-center send-wallet">
       <ngb-tabset>
-        <ngb-tab title="Paybito Wallet" *ngIf="cryptoCurrency != 'triggers'">
+        <ngb-tab title="Broker Wallet" *ngIf="cryptoCurrency != 'triggers'">
           <ng-template ngbTabContent>
             <form namw="form" #f="ngForm" novalidate>
               <div class="form-group row">
@@ -4182,8 +4193,8 @@
               </div>
               <small>
                 <small style="font-size: 15px"
-                  >Minimum of <img src="{{ './assets/img/currency/' + cryptoCurrency + '.svg' }}" width="20" style="padding-right: 5px" alt="" />{{ minValueCoin }} and Maximum
-                  <img src="{{ './assets/img/currency/' + cryptoCurrency + '.svg' }}" width="20" style="padding-right: 5px" alt="" />{{ maxValueCoin }} can be sent</small
+                  >Minimum of <img src="{{ data.ASSETICONBASEURL + cryptoCurrency + '.png' }}" width="20" style="padding-right: 5px" alt="" />{{ minValueCoin }} and Maximum
+                  <img src="{{ data.ASSETICONBASEURL + cryptoCurrency + '.png' }}" width="20" style="padding-right: 5px" alt="" />{{ maxValueCoin }} can be sent</small
                 >
               </small>
             </form>
@@ -4295,16 +4306,16 @@
                 <p>
                   <small>
                     <small style="font-size: 15px"
-                      >Minimum of <img src="{{ './assets/img/currency/' + cryptoCurrency + '.svg' }}" width="20" style="padding-right: 5px" alt="" />{{ minValueCoin }} and Maximum
-                      <img src="{{ './assets/img/currency/' + cryptoCurrency + '.svg' }}" width="20" style="padding-right: 5px" alt="" />{{ maxValueCoin }} can be sent.</small
+                      >Minimum of <img src="{{ data.ASSETICONBASEURL + cryptoCurrency + '.png' }}" width="20" style="padding-right: 5px" alt="" />{{ minValueCoin }} and Maximum
+                      <img src="{{ data.ASSETICONBASEURL + cryptoCurrency + '.png' }}" width="20" style="padding-right: 5px" alt="" />{{ maxValueCoin }} can be sent.</small
                     >
                     <p style="font-size: 15px" *ngIf="sendisclaimerBtc != ''">{{ sendDisclaimerCoin }}</p>
                   </small>
                   <!--   <small *ngIf="cryptoCurrency =='BTC'">
                     <small style="font-size:15px;">Minimum of <img
-                        src="{{'./assets/img/currency/'+cryptoCurrency+'.svg'}}" width="20"
+                        src="{{data.ASSETICONBASEURL+cryptoCurrency+'.png'}}" width="20"
                         style="padding-right: 5px;" alt="" />{{minvalueBtc}} and Maximum <img
-                        src="{{'./assets/img/currency/'+cryptoCurrency+'.svg'}}" width="20"
+                        src="{{data.ASSETICONBASEURL+cryptoCurrency+'.png'}}" width="20"
                         style="padding-right: 5px;" alt="" />{{maxvalueBtc}} can be sent.</small>
                     <p style="font-size:15px;" *ngIf="sendisclaimerBtc !=''"> {{sendisclaimerBtc}} </p>
                   </small>
@@ -4313,7 +4324,7 @@
                       >Minimum of
                       <img
                         src="{{
-                          './assets/img/currency/' + cryptoCurrency + '.svg'
+                          data.ASSETICONBASEURL + cryptoCurrency + '.png'
                         }}"
                         width="20"
                         style="padding-right: 5px"
@@ -4321,7 +4332,7 @@
                       />{{ minvalueEth }} and Maximum
                       <img
                         src="{{
-                          './assets/img/currency/' + cryptoCurrency + '.svg'
+                          data.ASSETICONBASEURL + cryptoCurrency + '.png'
                         }}"
                         width="20"
                         style="padding-right: 5px"
@@ -4340,7 +4351,7 @@
                       >Minimum of
                       <img
                         src="{{
-                          './assets/img/currency/' + cryptoCurrency + '.svg'
+                          data.ASSETICONBASEURL + cryptoCurrency + '.png'
                         }}"
                         width="20"
                         style="padding-right: 5px"
@@ -4349,7 +4360,7 @@
                       {{ minvalueBch }} and Maximum
                       <img
                         src="{{
-                          './assets/img/currency/' + cryptoCurrency + '.svg'
+                          data.ASSETICONBASEURL + cryptoCurrency + '.png'
                         }}"
                         width="20"
                         style="padding-right: 5px"
@@ -4368,7 +4379,7 @@
                       >Minimum of
                       <img
                         src="{{
-                          './assets/img/currency/' + cryptoCurrency + '.svg'
+                          data.ASSETICONBASEURL + cryptoCurrency + '.png'
                         }}"
                         width="20"
                         style="padding-right: 5px"
@@ -4377,7 +4388,7 @@
                       {{ minvalueLtc }} and Maximum
                       <img
                         src="{{
-                          './assets/img/currency/' + cryptoCurrency + '.svg'
+                          data.ASSETICONBASEURL + cryptoCurrency + '.png'
                         }}"
                         width="20"
                         style="padding-right: 5px"
@@ -4396,7 +4407,7 @@
                       >Minimum of
                       <img
                         src="{{
-                          './assets/img/currency/' + cryptoCurrency + '.svg'
+                          data.ASSETICONBASEURL + cryptoCurrency + '.png'
                         }}"
                         width="20"
                         style="padding-right: 5px"
@@ -4404,7 +4415,7 @@
                       />{{ minvalueUsdt }} and Maximum
                       <img
                         src="{{
-                          './assets/img/currency/' + cryptoCurrency + '.svg'
+                          data.ASSETICONBASEURL + cryptoCurrency + '.png'
                         }}"
                         width="20"
                         style="padding-right: 5px"
@@ -4420,7 +4431,7 @@
                       >Minimum of
                       <img
                         src="{{
-                          './assets/img/currency/' + cryptoCurrency + '.svg'
+                          data.ASSETICONBASEURL + cryptoCurrency + '.png'
                         }}"
                         width="20"
                         style="padding-right: 5px"
@@ -4428,7 +4439,7 @@
                       />{{ minvalueDiam }} and Maximum
                       <img
                         src="{{
-                          './assets/img/currency/' + cryptoCurrency + '.svg'
+                          data.ASSETICONBASEURL + cryptoCurrency + '.png'
                         }}"
                         width="20"
                         style="padding-right: 5px"
@@ -4447,7 +4458,7 @@
                       >Minimum of
                       <img
                         src="{{
-                          './assets/img/currency/' + cryptoCurrency + '.svg'
+                          data.ASSETICONBASEURL + cryptoCurrency + '.png'
                         }}"
                         width="20"
                         style="padding-right: 5px"
@@ -4455,7 +4466,7 @@
                       />{{ minvalueHcx }} and Maximum
                       <img
                         src="{{
-                          './assets/img/currency/' + cryptoCurrency + '.svg'
+                          data.ASSETICONBASEURL + cryptoCurrency + '.png'
                         }}"
                         width="20"
                         style="padding-right: 5px"
@@ -4474,7 +4485,7 @@
                       >Minimum of
                       <img
                         src="{{
-                          './assets/img/currency/' + cryptoCurrency + '.svg'
+                          data.ASSETICONBASEURL + cryptoCurrency + '.png'
                         }}"
                         width="20"
                         style="padding-right: 5px"
@@ -4482,7 +4493,7 @@
                       />{{ minvalueHbar }} and Maximum
                       <img
                         src="{{
-                          './assets/img/currency/' + cryptoCurrency + '.svg'
+                          data.ASSETICONBASEURL + cryptoCurrency + '.png'
                         }}"
                         width="20"
                         style="padding-right: 5px"
@@ -4498,7 +4509,7 @@
                       >Minimum of
                       <img
                         src="{{
-                          './assets/img/currency/' + cryptoCurrency + '.svg'
+                          data.ASSETICONBASEURL + cryptoCurrency + '.png'
                         }}"
                         width="20"
                         style="padding-right: 5px"
@@ -4506,7 +4517,7 @@
                       />{{ minvalueBat }} and Maximum
                       <img
                         src="{{
-                          './assets/img/currency/' + cryptoCurrency + '.svg'
+                          data.ASSETICONBASEURL + cryptoCurrency + '.png'
                         }}"
                         width="20"
                         style="padding-right: 5px"
@@ -4525,7 +4536,7 @@
                       >Minimum of
                       <img
                         src="{{
-                          './assets/img/currency/' + cryptoCurrency + '.svg'
+                          data.ASSETICONBASEURL + cryptoCurrency + '.png'
                         }}"
                         width="20"
                         style="padding-right: 5px"
@@ -4533,7 +4544,7 @@
                       />{{ minvalueLink }} and Maximum
                       <img
                         src="{{
-                          './assets/img/currency/' + cryptoCurrency + '.svg'
+                          data.ASSETICONBASEURL + cryptoCurrency + '.png'
                         }}"
                         width="20"
                         style="padding-right: 5px"
@@ -4549,9 +4560,9 @@
                   </small>
                   <small *ngIf="cryptoCurrency =='XRP'">
                     <small style="font-size:15px;">Minimum of <img
-                        src="{{'./assets/img/currency/'+cryptoCurrency+'.svg'}}" width="20"
+                        src="{{data.ASSETICONBASEURL+cryptoCurrency+'.png'}}" width="20"
                         style="padding-right: 5px;" alt="" />{{minvalueXrp}} and Maximum <img
-                        src="{{'./assets/img/currency/'+cryptoCurrency+'.svg'}}" width="20"
+                        src="{{data.ASSETICONBASEURL+cryptoCurrency+'.png'}}" width="20"
                         style="padding-right: 5px;" alt="" />{{maxvalueXrp}} can be send.</small>
                     <p style="font-size:15px;margin-top: 5px;" *ngIf="sendisclaimerXrp !=''"> {{sendisclaimerXrp}} </p>
                   </small> -->
@@ -4669,7 +4680,7 @@
         <small>
           <small style="font-size: 15px"
             ><img
-              src="{{ './assets/img/currency/' + cryptoCurrency + '.svg' }}"
+              src="{{ data.ASSETICONBASEURL + cryptoCurrency + '.png' }}"
               width="40"
               alt=""
           /></small>
@@ -4683,7 +4694,7 @@
     <div class="modal-body text-center send-wallet" [ngClass]="Themecolor == 'Dark' ? '' : 'lightTheme'">
       <div class="table-responsive-sm col-md-12">
         <small>
-          <small style="font-size: 15px"><img src="{{ './assets/img/currency/' + cryptoCurrency + '.svg' }}" width="40" alt="" /></small>
+          <small style="font-size: 15px"><img src="{{ data.ASSETICONBASEURL + cryptoCurrency + '.png' }}" width="40" alt="" /></small>
         </small>
         <h4 style="margin-top: 10px">Only send {{ currencyFullName }} ({{ cryptoCurrency }}) to this address</h4>
         <p>Sending any other cryptocurrency will result in permanent loss</p>
@@ -4696,7 +4707,7 @@
             <small style="font-size: 15px"
               ><img
                 src="{{
-                  './assets/img/currency/' + cryptoCurrency + '.svg'
+                  data.ASSETICONBASEURL + cryptoCurrency + '.png'
                 }}"
                 width="40"
                 alt=""
@@ -4720,7 +4731,7 @@
             <small style="font-size: 15px"
               ><img
                 src="{{
-                  './assets/img/currency/' + cryptoCurrency + '.svg'
+                  data.ASSETICONBASEURL + cryptoCurrency + '.png'
                 }}"
                 width="40"
                 alt=""
@@ -4744,7 +4755,7 @@
             <small style="font-size: 15px"
               ><img
                 src="{{
-                  './assets/img/currency/' + cryptoCurrency + '.svg'
+                  data.ASSETICONBASEURL + cryptoCurrency + '.png'
                 }}"
                 width="40"
                 alt=""
@@ -4768,7 +4779,7 @@
             <small style="font-size: 15px"
               ><img
                 src="{{
-                  './assets/img/currency/' + cryptoCurrency + '.svg'
+                  data.ASSETICONBASEURL + cryptoCurrency + '.png'
                 }}"
                 width="40"
                 alt=""
@@ -4792,7 +4803,7 @@
             <small style="font-size: 15px"
               ><img
                 src="{{
-                  './assets/img/currency/' + cryptoCurrency + '.svg'
+                  data.ASSETICONBASEURL + cryptoCurrency + '.png'
                 }}"
                 width="40"
                 alt=""
@@ -4817,7 +4828,7 @@
             <small style="font-size: 15px"
               ><img
                 src="{{
-                  './assets/img/currency/' + cryptoCurrency + '.svg'
+                  data.ASSETICONBASEURL + cryptoCurrency + '.png'
                 }}"
                 width="40"
                 alt=""
@@ -4841,7 +4852,7 @@
             <small style="font-size: 15px"
               ><img
                 src="{{
-                  './assets/img/currency/' + cryptoCurrency + '.svg'
+                  data.ASSETICONBASEURL + cryptoCurrency + '.png'
                 }}"
                 width="40"
                 alt=""
@@ -4865,7 +4876,7 @@
             <small style="font-size: 15px"
               ><img
                 src="{{
-                  './assets/img/currency/' + cryptoCurrency + '.svg'
+                  data.ASSETICONBASEURL + cryptoCurrency + '.png'
                 }}"
                 width="40"
                 alt=""
@@ -4888,7 +4899,7 @@
             <small style="font-size: 15px"
               ><img
                 src="{{
-                  './assets/img/currency/' + cryptoCurrency + '.svg'
+                  data.ASSETICONBASEURL + cryptoCurrency + '.png'
                 }}"
                 width="40"
                 alt=""
@@ -4911,7 +4922,7 @@
             <small style="font-size: 15px"
               ><img
                 src="{{
-                  './assets/img/currency/' + cryptoCurrency + '.svg'
+                  data.ASSETICONBASEURL + cryptoCurrency + '.png'
                 }}"
                 width="40"
                 alt=""
@@ -4934,7 +4945,7 @@
             <small style="font-size: 15px"
               ><img
                 src="{{
-                  './assets/img/currency/' + cryptoCurrency + '.svg'
+                  data.ASSETICONBASEURL + cryptoCurrency + '.png'
                 }}"
                 width="40"
                 alt=""
@@ -4957,7 +4968,7 @@
             <small style="font-size: 15px"
               ><img
                 src="{{
-                  './assets/img/currency/' + cryptoCurrency + '.svg'
+                  data.ASSETICONBASEURL + cryptoCurrency + '.png'
                 }}"
                 width="40"
                 alt=""
@@ -4998,7 +5009,7 @@
     <div class="modal-body text-center send-wallet" [ngClass]="Themecolor == 'Dark' ? '' : 'lightTheme'">
       <div class="table-responsive-sm col-md-12">
         <small>
-          <small style="font-size: 15px"><img src="{{ './assets/img/currency/' + cryptoCurrency + '.svg' }}" width="40" alt="" /></small>
+          <small style="font-size: 15px"><img src="{{ data.ASSETICONBASEURL + cryptoCurrency + '.png' }}" width="40" alt="" /></small>
         </small>
         <h4 style="margin-top: 10px">Only send {{ cryptoCurrency }} ({{ cryptoCurrency }}) to this address</h4>
         <p>Sending any other cryptocurrency will result in permanent loss</p>
@@ -5192,7 +5203,7 @@
 
     <div class="modal-body text-center">
       <ngb-tabset>
-        <ngb-tab style="margin-left: 35%" title="Paybito Wallet" *ngIf="cryptoCurrency != 'triggers'">
+        <ngb-tab style="margin-left: 35%" title="Broker Wallet" *ngIf="cryptoCurrency != 'triggers'">
           <ng-template ngbTabContent>
             <!-- <div>
           <p>you are Going to close about 10 seconds.</p>
@@ -5807,13 +5818,13 @@
   </div>
 </ng-template>
 <ng-template #buyoffer let-modal>
-  <div class="modal-header">
+  <div class="modal-header" [ngClass]="Themecolor == 'Dark' ? '' : 'lightTheme'">
     <h4 class="modal-title" id="modal-basic-title">Buy Offer</h4>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <div class="modal-body">
+  <div class="modal-body" [ngClass]="Themecolor == 'Dark' ? '' : 'lightThemeModalBody'">
     <p class="text-center">Are you sure you want to place this Buy offer?</p>
   </div>
   <div class="modal-footer">
@@ -5823,13 +5834,13 @@
 </ng-template>
 
 <ng-template #selloffer let-modal>
-  <div class="modal-header">
+  <div class="modal-header" [ngClass]="Themecolor == 'Dark' ? '' : 'lightTheme'">
     <h4 class="modal-title" id="modal-basic-title">Sell Offer</h4>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <div class="modal-body">
+  <div class="modal-body" [ngClass]="Themecolor == 'Dark' ? '' : 'lightThemeModalBody'">
     <p class="text-center">Are you sure you want to place this Sell offer?</p>
   </div>
   <div class="modal-footer">
@@ -5838,13 +5849,13 @@
   </div>
 </ng-template>
 <ng-template #buyofferForFuture let-modal>
-  <div class="modal-header">
+  <div class="modal-header" [ngClass]="Themecolor == 'Dark' ? '' : 'lightTheme'">
     <h4 class="modal-title" id="modal-basic-title">Buy Offer</h4>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <div class="modal-body">
+  <div class="modal-body" [ngClass]="Themecolor == 'Dark' ? '' : 'lightThemeModalBody'">
     <p class="text-center">Are you sure you want to place this Buy offer?</p>
   </div>
   <div class="modal-footer">
@@ -5854,13 +5865,13 @@
 </ng-template>
 
 <ng-template #sellofferForFuture let-modal>
-  <div class="modal-header">
+  <div class="modal-header" [ngClass]="Themecolor == 'Dark' ? '' : 'lightTheme'">
     <h4 class="modal-title" id="modal-basic-title">Sell Offer</h4>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <div class="modal-body">
+  <div class="modal-body" [ngClass]="Themecolor == 'Dark' ? '' : 'lightThemeModalBody'">
     <p class="text-center">Are you sure you want to place this Sell offer?</p>
   </div>
   <div class="modal-footer">
@@ -6148,13 +6159,13 @@
 </ng-template>
 
 <ng-template #buyofferForOption let-modal>
-  <div class="modal-header">
+  <div class="modal-header" [ngClass]="Themecolor == 'Dark' ? '' : 'lightTheme'">
     <h4 class="modal-title" id="modal-basic-title">Buy Offer</h4>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <div class="modal-body">
+  <div class="modal-body" [ngClass]="Themecolor == 'Dark' ? '' : 'lightThemeModalBody'">
     <p class="text-center">Are you sure you want to place this position?</p>
   </div>
   <div class="modal-footer">
@@ -6164,13 +6175,13 @@
 </ng-template>
 
 <ng-template #sellofferForOption let-modal>
-  <div class="modal-header">
+  <div class="modal-header" [ngClass]="Themecolor == 'Dark' ? '' : 'lightTheme'">
     <h4 class="modal-title" id="modal-basic-title">Sell Offer</h4>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <div class="modal-body">
+  <div class="modal-body" [ngClass]="Themecolor == 'Dark' ? '' : 'lightThemeModalBody'">
     <p class="text-center">Are you sure you want to place this position?</p>
   </div>
   <div class="modal-footer">
@@ -6179,20 +6190,20 @@
   </div>
 </ng-template>
 <ng-template #twoFactorAuth let-modal>
-  <div  class="modal-header test proper-alighnment-header">
-    <h4 class="modal-title" id="modal-basic-title" style="color: brgb(248, 240, 240);">Security Authentication</h4>
+  <div  class="modal-header test proper-alighnment-header" [ngClass]="Themecolor == 'Dark' ? '' : 'lightTheme'">
+    <h4 class="modal-title" id="modal-basic-title" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Security Authentication</h4>
     
-    <div class="modal-body">
+    <div class="modal-body" [ngClass]="Themecolor == 'Dark' ? '' : 'lightThemeModalBody'">
        <!--  <p class="text-left" style="color: rgb(248, 240, 240);">Input otp from your google authenticator</p> -->
         <!-- <p class="text-left" style="margin-top: -21px; color: black;">{{hiddenEmail}}</p> -->
   
         
         <form>
           <div class="form-group">
-            <p class="text-left" style="color: rgb(248, 240, 240);">Input otp from your registered email address</p>
+            <p class="text-left" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Input otp from your registered email address</p>
             <div class="row">
               <div class="col-md-8">
-                <input class="form-control " numbersOnly name="emailVerificationCode" id="emailOtp" type="password" [(ngModel)]="emailOtp" placeholder="OTP" autofocus >
+                <input class="form-control " [ngClass]="Themecolor == 'Dark' ? 'form-control' : 'form-control-light'" numbersOnly name="emailVerificationCode" id="emailOtp" type="password" [(ngModel)]="emailOtp" placeholder="OTP" autofocus >
                 
               </div>
               <button (click)="getCodeFromEmail()" class="btn getbtn btn-primary" [disabled]="isGetCodeButtonDisabled">Get Code</button>
@@ -6203,10 +6214,10 @@
             <span id="messageotp">{{messageotp}}</span>
           </div>
           <div class="form-group">
-            <p class="text-left" style="color: rgb(248, 240, 240);">Input otp from your registered phone number</p>
+            <p class="text-left" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Input otp from your registered phone number</p>
             <div class="row">
               <div class="col-md-8">
-                <input class="form-control " numbersOnly name="emailVerificationCode" id="smsOtp" type="password" [(ngModel)]="smsOtp" placeholder="OTP" autofocus >
+                <input class="form-control " [ngClass]="Themecolor == 'Dark' ? 'form-control' : 'form-control-light'" numbersOnly name="emailVerificationCode" id="smsOtp" type="password" [(ngModel)]="smsOtp" placeholder="OTP" autofocus >
                 
               </div>
               <button (click)="getCodeFromSmsForExternalWallet()" class="btn getbtn btn-primary" [disabled]="isGetCodeButtonForSmsDisabled">Get Code</button>
@@ -6217,7 +6228,7 @@
             <span id="messageotp">{{messageotpforsms}}</span>
           </div>
           <div class="form-group">
-            <input class="form-control" name="emailVerificationCode" id="twoFactorOtp" type="password" [(ngModel)]="twoFactorOtp" placeholder="Two-Factor Authenticator code" autofocus >
+            <input class="form-control" [ngClass]="Themecolor == 'Dark' ? 'form-control' : 'form-control-light'" name="emailVerificationCode" id="twoFactorOtp" type="password" [(ngModel)]="twoFactorOtp" placeholder="Two-Factor Authenticator code" autofocus >
             
   
           </div>
@@ -6252,10 +6263,10 @@
   </div>
   </ng-template>
 <ng-template #twoFactorAuthOnly let-modal>
-  <div  class="modal-header test proper-alighnment-header">
-    <h4 class="modal-title" id="modal-basic-title" style="color: brgb(248, 240, 240);">Security Authentication</h4>
+  <div  class="modal-header test proper-alighnment-header" [ngClass]="Themecolor == 'Dark' ? '' : 'lightTheme'">
+    <h4 class="modal-title" id="modal-basic-title" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Security Authentication</h4>
     
-    <div class="modal-body">
+    <div class="modal-body" [ngClass]="Themecolor == 'Dark' ? '' : 'lightThemeModalBody'">
        <!--  <p class="text-left" style="color: rgb(248, 240, 240);">Input otp from your google authenticator</p> -->
         <!-- <p class="text-left" style="margin-top: -21px; color: black;">{{hiddenEmail}}</p> -->
   
@@ -6266,7 +6277,7 @@
             <span id="messageotp">{{messageotp}}</span>
           </div>
           <div class="form-group">
-            <input class="form-control" name="emailVerificationCode" id="twoFactorOtp" type="password" [(ngModel)]="twoFactorOtpOnly" placeholder="Two-Factor Authenticator code" autofocus >
+            <input class="form-control" [ngClass]="Themecolor == 'Dark' ? 'form-control' : 'form-control-light'" name="emailVerificationCode" id="twoFactorOtp" type="password" [(ngModel)]="twoFactorOtpOnly" placeholder="Two-Factor Authenticator code" autofocus >
             
   
           </div>
@@ -6278,9 +6289,7 @@
         <button type="submit"  class="btn btn-primary btn-block" [disabled]="twoFactorOtpOnly == '' || twoFactorOtpOnly == undefined"  (click)="transactionSendWithinPaybito();modal.dismiss();" style="margin-top: 28px;">
           Confirm
           </button>
-        
-  
-          <!-- <p [hidden]="!error" class="text-danger text-center my-3">{{errormessage}}</p>
+         <!-- <p [hidden]="!error" class="text-danger text-center my-3">{{errormessage}}</p>
                     <div id="unverifiesusermsgd" style="display: none;">
                         <div style='display: flex;justify-content: space-between;align-items: center;'>
                             Resend device verification mail &nbsp; &nbsp; <button id='verifyuser' class='btn btn-success'>RESEND</button>

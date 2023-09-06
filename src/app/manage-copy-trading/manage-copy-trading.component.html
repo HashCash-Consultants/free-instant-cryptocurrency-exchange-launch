@@ -1,0 +1,278 @@
+<app-navbar (themeChanged)="themeChangedHandler($event)"></app-navbar>
+
+<div class="content-wrapper pt-0 pl-3">
+
+  <div class="container-fluid" data-ng-controller="profileCtrl" data-ng-init="loginDuration();">
+    <div class="row d-flex">
+
+      <div class="col-12 col-md-12 mt-3">
+        <div class=" p-2 pr-3 rounded align-self-stretch h-100" [ngClass]="Themecolor == 'Dark' ? 'bg-dark' : 'bg-light'">
+          <div class="w-100 mt-2"></div>
+
+          <div class="p-2 mr-auto"><span class="font-md  mr-2" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Manage Copy trading</span></div>
+
+      <ngb-tabset [ngClass]="Themecolor == 'Dark' ? 'tab-dark' : 'tab-light'">
+
+
+        <ngb-tab class="darkss">
+          <ng-template ngbTabTitle>
+            <h6 id="trade" style="padding: 8px 10px -2px 10px;">API Keys</h6>
+
+          </ng-template>
+          <ng-template ngbTabContent>
+           <div class="table-responsive-sm">
+            <table class="table table-sm table-hover">
+              <thead>
+                <tr align="center" [ngClass]="Themecolor == 'Dark' ? 'bg-black text-white' : 'tableHeader-bg-light'">
+                  <th  scope="col" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="" style="font-size:16px">Key Name</th>
+                  <th  scope="col" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="" style="font-size:16px">Exchange Name</th>
+
+                  <th scope="col" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="" style="font-size:16px">Market</th>
+                  <th scope="col" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="" style="font-size:16px">Price</th>
+                  <th scope="col" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="" style="font-size:16px">Show in Marketplace</th>
+                  <th scope="col" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="" style="font-size:16px">Allow Copy Trading</th>
+                  <th colspan="2" scope="col" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="" style="font-size:16px">Publish to Marketplace</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr align="center" *ngFor="let key of allApiKeys">
+                  <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="extraPaddingTop">{{key.apiKeyName}}</td>
+                  <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="extraPaddingTop">{{key.exchange_name}}</td>
+
+                  <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="extraPaddingTop">{{key.marketType}}</td>
+
+                  <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="extraPaddingTop" *ngIf="key.isPayable == 2">-</td>
+                  <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="extraPaddingTop" *ngIf="key.isPayable == 0">Free</td>
+                  <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="extraPaddingTop" *ngIf="key.isPayable == 1">Paid</td>
+
+                  
+                  
+                  <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="extraPaddingTop readOnlyDiv" *ngIf="key.isPayable == 2">
+                    <label class="switch">
+                      <input type="checkbox" [checked]="key.showInMarketplace == 1">
+                      <span class="slider round" [ngClass]="key.isPayable == 2 ? 'readOnlyCheckbox' : ''"></span>
+                    </label>
+                  </td>
+
+                  <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="extraPaddingTop" *ngIf="key.isPayable ==1 || key.isPayable ==0 " >
+                    <label class="switch">
+                      <input type="checkbox" [checked]="key.showInMarketplace == 1" (click)="changeSatusShowInMarketplace(key.apiKeyId,$event,'apiKey')">
+                      <span class="slider round" [ngClass]="key.isPayable == 2 ? 'readOnlyCheckbox' : ''"></span>
+                    </label>
+                  </td>
+
+
+                  
+                  
+                  
+                  <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="extraPaddingTop readOnlyDiv" *ngIf="key.isPayable == 2">
+                    <label class="switch">
+                      <input type="checkbox" [checked]="key.allowCopyTrading == 1">
+                      <span class="slider round" [ngClass]="key.isPayable == 2 ? 'readOnlyCheckbox' : ''"></span>
+                    </label>
+                  </td>
+
+                  <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="extraPaddingTop" *ngIf="key.isPayable ==1 || key.isPayable ==0 ">
+                    <label class="switch">
+                      <input type="checkbox" [checked]="key.allowCopyTrading == 1" (click)="changeSatusAllowInCopyTrading(key.apiKeyId,$event, 'apiKey')">
+                      <span class="slider round" [ngClass]="key.isPayable == 2 ? 'readOnlyCheckbox' : ''"></span>
+                    </label>
+                  </td>
+
+
+
+
+                
+                  <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="">
+                    <button  class="btn btn-primary disabled" *ngIf="key.isPayable ==1 || key.isPayable ==0 ">Publish</button>
+                    <button  class="btn btn-primary" (click)="publishMarketplaceApi(publishApi,key)" *ngIf="key.isPayable == 2">Publish</button>
+
+                  </td>
+
+
+                </tr>
+                
+                
+                
+              </tbody>
+            </table>
+          </div>
+          </ng-template>
+        </ngb-tab>
+
+        <ngb-tab class="darkss">
+          <ng-template ngbTabTitle>
+            <h6 id="trade" style="padding: 8px 10px -2px 10px;">Trading Bots</h6>
+
+          </ng-template>
+          <ng-template ngbTabContent>
+
+            <div class="table-responsive-sm">
+              <table class="table table-sm table-hover">
+                <thead>
+                  <tr align="center" [ngClass]="Themecolor == 'Dark' ? 'bg-black text-white' : 'tableHeader-bg-light'">
+                    <th  scope="col" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="" style="font-size:16px">Bot Name</th>
+                    <th  scope="col" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="" style="font-size:16px">Exchange Name</th>
+
+                    <th scope="col" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="" style="font-size:16px">Market</th>
+                    <th scope="col" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="" style="font-size:16px">Price</th>
+                    <th scope="col" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="" style="font-size:16px">Show in Marketplace</th>
+                    <th scope="col" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="" style="font-size:16px">Allow Copy Trading</th>
+                    <th colspan="2" scope="col" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="" style="font-size:16px" >Publish to Marketplace</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr align="center" *ngFor="let bot of allTradingBots">
+                    <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="extraPaddingTop">{{bot.botName}}</td>
+                    <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="extraPaddingTop">{{bot.exchange_name}}</td>
+
+                    <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="extraPaddingTop">{{bot.botMarketType}}</td>
+
+                    <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="extraPaddingTop" *ngIf="bot.isPayable == 2">-</td>
+                  <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="extraPaddingTop" *ngIf="bot.isPayable == 0">Free</td>
+                  <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="extraPaddingTop" *ngIf="bot.isPayable == 1">Paid</td>
+                    
+                    
+                    <!-- <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="extraPaddingTop">
+                      <label class="switch">
+                        <input type="checkbox" >
+                        <span class="slider round"></span>
+                      </label>
+                    </td>
+                    
+                    <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="extraPaddingTop">
+                      <label class="switch">
+                        <input type="checkbox" >
+                        <span class="slider round"></span>
+                      </label>
+                    </td> -->
+
+                    <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="extraPaddingTop readOnlyDiv" *ngIf="bot.isPayable == 2">
+                      <label class="switch">
+                        <input type="checkbox" [checked]="bot.showInMarketplace == 1">
+                        <span class="slider round" [ngClass]="bot.isPayable == 2 ? 'readOnlyCheckbox' : ''"></span>
+                      </label>
+                    </td>
+  
+                    <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="extraPaddingTop" *ngIf="bot.isPayable ==1 || bot.isPayable ==0 ">
+                      <label class="switch">
+                        <input type="checkbox" [checked]="bot.showInMarketplace == 1" (click)="changeSatusShowInMarketplace(bot.botId,$event,'bot')">
+                        <span class="slider round" [ngClass]="bot.isPayable == 2 ? 'readOnlyCheckbox' : ''"></span>
+                      </label>
+                    </td>
+  
+  
+                    
+                    
+                    
+                    <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="extraPaddingTop readOnlyDiv" *ngIf="bot.isPayable == 2">
+                      <label class="switch">
+                        <input type="checkbox" [checked]="bot.allowCopyTrading == 1">
+                        <span class="slider round" [ngClass]="bot.isPayable == 2 ? 'readOnlyCheckbox' : ''"></span>
+                      </label>
+                    </td>
+  
+                    <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="extraPaddingTop" *ngIf="bot.isPayable ==1 || bot.isPayable ==0 ">
+                      <label class="switch">
+                        <input type="checkbox" [checked]="bot.allowCopyTrading == 1" (click)="changeSatusAllowInCopyTrading(bot.botId,$event, 'bot')">
+                        <span class="slider round" [ngClass]="bot.isPayable == 2 ? 'readOnlyCheckbox' : ''"></span>
+                      </label>
+                    </td>
+
+                    <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="">
+                      <button  class="btn btn-primary disabled" *ngIf="bot.isPayable ==1 || bot.isPayable ==0 ">Publish</button>
+                      <button  class="btn btn-primary" (click)="publishMarketplaceBot(publishApi,bot)" *ngIf="bot.isPayable == 2">Publish</button>
+  
+                    </td>
+                  
+                    <!-- <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="">
+                      <button [disabled]="bot.isPayable != null" class="btn btn-primary" (click)="publishMarketplaceBot(publishApi,bot)">Publish</button>
+                    </td> -->
+  
+  
+                  </tr>
+                  
+                  
+                  
+                </tbody>
+              </table>
+            </div>
+
+          </ng-template>
+        </ngb-tab>
+      </ngb-tabset>
+      </div>
+      </div>
+
+
+
+      <ng-template #publishApi let-modal>
+        <div id="myDiv" [ngClass]="Themecolor == 'Dark' ? '' : 'lightTheme'">
+        <div [ngClass]="Themecolor == 'Dark' ? '' : 'lightTheme'" class="modal-header sendreceive-wallet">
+          <h4 class="modal-title" id="modal-basic-title receiveModalLabel">Publish to Marketplace</h4>
+          <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        
+        <div [ngClass]="Themecolor == 'Dark' ? '' : 'lightThemeModalBody'" class="modal-body">
+    
+          
+    <form>
+      
+      <div class="form-group">
+        <label >Profile Name</label>
+        <input type="text" minlength="1" maxlength="30" class="form-control" [(ngModel)]="profileName" name="profileName"  placeholder="Enter profile name" (keyup)="VALIDATION1()">
+      </div>
+      <div class="form-group">
+        <label >Description</label>
+        <input type="text" minlength="1" maxlength="100" class="form-control" [(ngModel)]="description" name="description" placeholder="Enter description" (keyup)="VALIDATION1()">
+      </div>
+      <div class="form-group">
+        <label >Min Capital Requirement</label>
+        <input type="text" numbersOnly maxlength="8" id="minCapReq" (change)="captitalrqValidation(minCapReq,'minCapReq')" class="form-control" [(ngModel)]="minCapReq" name="minCapReq"  placeholder="Enter Min Capital Requirement">
+      </div>
+      <div class="form-group" *ngIf="showCryptofollowField">
+        <label > Cryptos the Followers must hold</label>
+        <input type="text" class="form-control" readonly name="cryptos" [value]="cryptos" >
+
+      <!-- <select class="form-control" [(ngModel)]="cryptos" name="cryptos">
+        <option *ngFor="let item of counterCurrency" [value]="item">{{item}}</option> -->
+
+          
+      <!-- </select>   -->
+      </div>
+
+      <div class="wrapper">
+  
+           
+        <input type="radio" name="select" id="option-1" checked (click)="changeStatus(true)">
+        <input type="radio" name="select" id="option-2" (click)="changeStatus(false)">
+          <label for="option-1" class="option option-1" >
+            <!-- <div class="dot"></div> -->
+             <span>Paid</span>
+             </label>
+          <label for="option-2" class="option option-2">
+            <!-- <div class="dot"></div> -->
+             <span>Free</span>
+          </label>
+       </div>
+
+       <div class="form-group" *ngIf="paidStatus == 1">
+        <label >Subscription charges per month (In USDT)</label>
+        <input type="text" numbersOnly maxlength="8" id="subscriptionCharge" (change)="captitalrqValidation(subscriptionCharge,'subscriptionCharge')" class="form-control" [(ngModel)]="subscriptionCharge" name="secretKey"  placeholder="">
+      </div>
+      <div class="d-flex justify-content-center">
+        <button type="submit" class="btn btn-primary text-center" (click)="addApiKeyFunc()">Confirm</button>
+      </div>
+      
+    </form>
+          
+          </div>
+        </div>
+      </ng-template>
+
+
+    </div>
+  </div>
+</div>

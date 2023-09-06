@@ -1,4 +1,4 @@
-import { Component, OnInit, DoCheck, OnDestroy,ChangeDetectionStrategy,ChangeDetectorRef, Input } from "@angular/core";
+import { Component, OnInit, DoCheck, OnDestroy,EventEmitter,ChangeDetectionStrategy,ChangeDetectorRef, Input,Output } from "@angular/core";
 import { TradesComponent } from "../trades/trades.component";
 import * as $ from "jquery";
 import { CoreDataService } from "../core-data.service";
@@ -94,6 +94,10 @@ export class OrderBookComponent implements OnInit {
   selectedFiat : string = 'FIAT'
   buySellDiff: any = 0;
   @Input() Themecolor = 'Dark';
+  @Output() tradeBookData: EventEmitter<any> = new EventEmitter();
+  @Output() callTradeHistory: EventEmitter<any> = new EventEmitter();
+  @Output() bidDataOutput: EventEmitter<any> =   new EventEmitter();
+
 
   constructor(private titleService: Title,
     public data: CoreDataService,
@@ -102,8 +106,7 @@ export class OrderBookComponent implements OnInit {
     private trade: TradesComponent,
     public websocket: WebSocketAPI,
     public stoploss: StopLossComponent,
-    private changeDetectorRef: ChangeDetectorRef,
-    public route: Router
+    private changeDetectorRef: ChangeDetectorRef
 
   ) {
 
@@ -134,7 +137,19 @@ export class OrderBookComponent implements OnInit {
       this.base_currency = localStorage.getItem('selling_crypto_asset');
     }
 
-    this.getNewCurrency('ALL');
+    var fiatStorage = localStorage.getItem('fiatStorageSave');
+
+    if(fiatStorage == null || fiatStorage == undefined){
+      this.getNewCurrency('ALL');
+
+    }
+    else{
+      this.selectedFiat = fiatStorage;
+      this.getNewCurrency(this.selectedFiat);
+
+    }
+
+    this.getPrecission();
     $(".caret").on('click', function () {
       $(this).toggleClass('is-active').next(".caret").stop().slideToggle(500);
       if ($(this).hasClass('is-active')) {
@@ -159,6 +174,7 @@ export class OrderBookComponent implements OnInit {
       this.highprice = this.data.highprice;
     this.serverSentEventForOrderbookAsk();
     this.tardebookHistory();
+    this.changemode();
     // this.Themecolor = this.dash.Themecolor
     // this.renderFiatDropdown();
 
@@ -191,11 +207,35 @@ export class OrderBookComponent implements OnInit {
     }, 4000)
   }
 
+  getPrecission(){
+
+    this.tradep = localStorage.getItem('priceprc')
+    console.log('buying asset',localStorage.getItem('buying_crypto_asset'))
+
+
+    if(this.tradep == null || this.tradep == 'null' || this.tradep == undefined || this.tradep == 'undefined'){
+      this.tradep = 6;
+      console.log('5',this.tradep)
+
+
+      localStorage.setItem('priceprc',this.tradep)
+    }
+    else if(localStorage.getItem('buying_crypto_asset') == 'BTC' || localStorage.getItem('buying_crypto_asset') == 'btc' ){
+      this.tradep = 6;
+
+    }
+    else{
+      console.log('6',this.tradep)
+    }
+  }
+
 
   myFunction() {
     document.getElementById("myDropdown").classList.toggle("show");
     $('.filterseacrh').val('');
     this.assetetpairback = [...this.assetetpair];
+    this.changeDetectorRef.detectChanges();
+
   }
 
   changemode() {
@@ -225,7 +265,7 @@ export class OrderBookComponent implements OnInit {
   }
 
   ngDoCheck() {
-    this.changemode();
+    //this.changemode();
     // this.Themecolor = this.dash.Themecolor
     var randomNoForFlashArr = [];
     var arraylength = 2;
@@ -244,23 +284,12 @@ export class OrderBookComponent implements OnInit {
     }
     var randomNo = this.randomNoForOrderBook(0, arraylength);
     randomNoForFlashArr.push(randomNo);
-    // for (var i = 0; i < arraylength; i++) {
-    //   if (!$.inArray(i, randomNoForFlashArr)) {
-    //     if (i == 0) {
-    //       document.getElementById("pricered").style.display = "inline-block";
-    //       document.getElementById("pricegreen").style.display = "none";
-    //     } else {
-    //       document.getElementById("pricered").style.display = "none";
-    //       document.getElementById("pricegreen").style.display = "inline-block";
-    //     }
-    //   }
-    // }
+    
     /* logic for if asset pair has changed 5 times then reload the page */
     if(localStorage.getItem('assetChangeCounterForSpot') == '5'){
       document.body.classList.add("overlay")
       localStorage.setItem('assetChangeCounterForSpot','1');
-      // location.reload();
-      this.data.reloadPage(this.route.url);
+      location.reload();
     }
 
     if (localStorage.getItem('isUnsubscribeOccured') == 'true') {
@@ -277,17 +306,18 @@ export class OrderBookComponent implements OnInit {
  
     this.assetetpair = [];
     this.assetetpairback = [];
-    this.http.get<any>('https://accounts.paybito.com/CacheService/api/getData?Name=Assets')
+    this.http.get<any>('https://accounts.paybito.com/CacheService/api/getAssetsData?Name=Assets&BrokerId='+this.data.BROKERID)
       .subscribe(responseCurrency => {
         this.filterCurrency = JSON.parse(responseCurrency.value);
         localStorage.setItem('spot_assets',JSON.stringify(this.filterCurrency.Values))
         this.header = this.filterCurrency.Header;
         this.assets = this.filterCurrency.Values;
+       // console.log('all values',this.assets)
         let basecur = this.assets.filter(x => x.baseCurrency == 'USD' && x.currencyCode == 'BTC')
 
         let fiat1 = this.assets.filter(x => x.currencyType == 1)
 
-
+       // console.log('all currency having currency type as 1',fiat1)
         let fiat2 = fiat1.map(item => item.baseCurrency)
           .filter((value, index, self) => self.indexOf(value) === index)
 
@@ -299,9 +329,10 @@ export class OrderBookComponent implements OnInit {
               arr.push(fiat2[i]);
         }
         this.dropdownFiatList = arr;
-        console.log('all fiat drop', this.dropdownFiatList);
+       // console.log('all fiat drop', this.dropdownFiatList);
 
         
+        this.changeDetectorRef.detectChanges();
         
 
 
@@ -392,6 +423,9 @@ export class OrderBookComponent implements OnInit {
               this.assetetpairback = [...this.assetetpair];
             }
           }
+
+        this.changeDetectorRef.detectChanges();
+
         }
       })
   }
@@ -448,6 +482,8 @@ export class OrderBookComponent implements OnInit {
         return item;
       }
     });
+    this.changeDetectorRef.detectChanges();
+
   }
 
   resetstoplossinputfield() {
@@ -542,6 +578,7 @@ export class OrderBookComponent implements OnInit {
     this.tickerResponse();
     this.serverSentEventForOrderbookAsk();
     this.tardebookHistory();
+    
     this.trade.reload();
     this.trade.myTradeDisplay(0);
     $('#trade').click();
@@ -567,6 +604,9 @@ export class OrderBookComponent implements OnInit {
      } else {
        localStorage.setItem('assetChangeCounterForSpot','1');
      }
+
+
+     this.callTradeHistory.emit('click');
  
   }
 
@@ -721,14 +761,14 @@ export class OrderBookComponent implements OnInit {
  
   getPrice(m) {
     this.p = localStorage.getItem('priceprc');
-    return (parseFloat(m.price)).toFixed(parseInt(this.p));
+    return (parseFloat(m.price)).toFixed(parseInt(this.tradep));
   }
 
   getAmount(m) {
     this.s = localStorage.getItem('amountprc');
-    return (parseFloat(m.amount)).toFixed(parseInt(this.s));
+    return (parseFloat(m.amount)).toFixed(this.tradep);
   }
-
+  
   serverSentEventForOrderbookAsk() {
     this.biddata = [];
     this.askdata = [];
@@ -753,85 +793,28 @@ export class OrderBookComponent implements OnInit {
         }
         this.biddataFinal = this.biddata
         this.askdataFinal = this.askdata
+
+        var a = {'ask':this.askdataFinal, 'bid':this.biddataFinal}
+
+        this.bidDataOutput.emit(a);
       });
 
     this.subscription = this.websocket.currentMessage.subscribe(message => {
       this.message = message;
       if (this.message != " ") {
+       
         var orderbookdata = JSON.parse(this.message);
         let askIterFirstPrice: any = 0;
         let bidIterFirstPrice: any = 0;
         if (orderbookdata.e == 'depthUpdate' && orderbookdata.ask != '') {
-         /*  for (var i = 0; i < orderbookdata.ask.length; i++) {
-            if (orderbookdata.ask[i].action == 'NEW' && orderbookdata.ask[i].side == "ASK") {
-              this.askdata.push({ 'price': (parseFloat(orderbookdata.ask[i].price)).toFixed(parseInt(this.p)), 'amount': (parseFloat(orderbookdata.ask[i].quantity)).toFixed(parseInt(this.s)), 'newly': true });
-              for (var h = 0; h < this.askdata.length; h++) {
-                if (this.askdata[h].newly == true) {
-                  setTimeout(() => {
-                    this.askdata.forEach(element => {
-                      element['newly'] = false;
-                    });
-                  }, 2000)
-                }
-                break;
-              }
-            }
-
-            if (orderbookdata.ask[i].action == 'CHANGE' && orderbookdata.ask[i].side == "ASK") {
-              let index = this.askdata.findIndex((x) => parseFloat(x.price).toFixed(this.tradep) == parseFloat(orderbookdata.ask[i].price).toFixed(this.tradep))
-              if(index > -1){
-                this.askdata[index].amount = orderbookdata.ask[i].quantity
-                this.askdata[index].newly = true
-              }
-              
-              setTimeout(() => {
-                this.askdata.forEach(element => {
-                  element['newly'] = false;
-                });
-              }, 2000)
-              
-            }
-
-            if (orderbookdata.ask[i].action == 'DELETE' && orderbookdata.ask[i].side == "ASK") {
-              var index = this.askdata.findIndex((y) => parseFloat(y.price).toFixed(this.tradep) == parseFloat(orderbookdata.ask[i].price).toFixed(this.tradep));
-              if (index > -1) {
-                this.askdata.splice(index, 1);
-              }
-              
-            }
-            if (orderbookdata.ask[i].action == 'TRADEDELETE' && orderbookdata.ask[i].side == "ASK") {
-              var index = this.askdata.findIndex((y) => parseFloat(y.price).toFixed(this.tradep) == parseFloat(orderbookdata.ask[i].price).toFixed(this.tradep));
-              if (index > -1) {
-                this.askdata.splice(index, 1);
-              }
-              
-            }
-
-            
-          } */
+         
 
           orderbookdata.ask.forEach((item,i)=>{
             //console.log(i,item);
             if(item.action == 'NEW'){
               this.askdata.push({ 'price': (parseFloat(item.price)).toFixed(parseInt(this.p)), 'amount': (parseFloat(item.quantity)).toFixed(parseInt(this.s)), 'newly': true });
               let index = this.askdata.findIndex((x)=> parseFloat(x.price).toFixed(this.tradep) == parseFloat(item.price).toFixed(this.tradep))
-              // timer(2000).subscribe(()=>{
-              //   let elem = document.getElementById(item.price)
-              //   //console.log('elem',elem);
-              //   if(elem != null && elem != undefined){
-              //     elem.classList.remove('bg-flash-red')
-              //   }
-              // });
-              // if(index > -1){
-              //   //console.log(index,this.askdata[index]);
-              //   setTimeout(() => {
-              //     //console.log(index,this.askdata[index]);
-              //     if(this.askdata[index] != undefined){
-              //       this.askdata[index].newly = false
-              //       //console.log(index,this.askdata[index]);
-              //     }
-              //   }, 0);
-              // }
+              
 
             }else if(item.action == 'CHANGE'){
               let index = this.askdata.findIndex((x) => parseFloat(x.price).toFixed(this.tradep) == parseFloat(item.price).toFixed(this.tradep))
@@ -840,19 +823,7 @@ export class OrderBookComponent implements OnInit {
                 this.askdata[index].newly = true
               }
 
-              // timer(2000).subscribe(()=>{
-              //   let elem = document.getElementById(item.price)
-              //   //console.log('elem',elem);
-              //   if(elem != null && elem != undefined){
-              //     elem.classList.remove('bg-flash-red')
-              //   }
-              // });
               
-              // setTimeout(() => {
-              //   if(this.askdata[index] != undefined){
-              //     this.askdata[index].newly = false
-              //   }
-              // }, 0)
             }else if(item.action == 'DELETE'){
               let index = this.askdata.findIndex((y) => parseFloat(y.price).toFixed(this.tradep) == parseFloat(item.price).toFixed(this.tradep));
               if (index > -1) {
@@ -864,6 +835,13 @@ export class OrderBookComponent implements OnInit {
                 this.askdata.splice(index, 1);
               }
             }
+
+            this.biddataFinal = this.biddata
+        this.askdataFinal = this.askdata
+
+        var a = {'ask':this.askdataFinal, 'bid':this.biddataFinal}
+
+        this.bidDataOutput.emit(a);
           })
 
           
@@ -874,9 +852,7 @@ export class OrderBookComponent implements OnInit {
           }
 
           this.askdata = this.askdata.sort((a, b) => b.price - a.price);
-          // if(this.askdata.length>50){
-          //  this.askdata = this.askdata.slice(0,50);
-          // }
+          
            /* removing trade which has same amount and price */
           for (let i = 0; i < this.askdata.length; i++) {
             if (i != 0) {
@@ -886,58 +862,18 @@ export class OrderBookComponent implements OnInit {
             }
           }
           this.askdataFinal = this.askdata;
+
+          this.biddataFinal = this.biddata
+        this.askdataFinal = this.askdata
+
+        var a = {'ask':this.askdataFinal, 'bid':this.biddataFinal}
+
+        this.bidDataOutput.emit(a);
         }
 
 
         else if (orderbookdata.e == 'depthUpdate' && orderbookdata.bid != '') {
-          /* for (var i = 0; i < orderbookdata.bid.length; i++) {
-            if (orderbookdata.bid[i].action == 'NEW' && orderbookdata.bid[i].side == "BID") {
-              this.biddata.push({ 'price': (parseFloat(orderbookdata.bid[i].price)).toFixed(parseInt(this.p)), 'amount': (parseFloat(orderbookdata.bid[i].quantity)).toFixed(parseInt(this.s)), 'newly': true });
-
-              for (var h = 0; h < this.biddata.length; h++) {
-                if (this.biddata[h].newly == true) {
-                  setTimeout(() => {
-                    this.biddata.forEach(element => {
-                      element['newly'] = false;
-                    });
-                  }, 2000);
-                }
-                break;
-              }
-            }
-
-            if (orderbookdata.bid[i].action == 'CHANGE' && orderbookdata.bid[i].side == "BID") {
-              let index = this.biddata.findIndex((x) => parseFloat(x.price).toFixed(this.tradep) == parseFloat(orderbookdata.bid[i].price).toFixed(this.tradep))
-              if(index > -1){
-                this.biddata[index].amount = orderbookdata.bid[i].quantity
-                this.biddata[index].newly = true
-              }
-             
-
-              setTimeout(() => {
-                this.biddata.forEach(element => {
-                  element['newly'] = false;
-                });
-              }, 2000);
-              
-            }
-
-            if (orderbookdata.bid[i].action == 'DELETE' && orderbookdata.bid[i].side == "BID") {
-              var index = this.biddata.findIndex((x) => parseFloat(x.price).toFixed(this.tradep) == parseFloat(orderbookdata.bid[i].price).toFixed(this.tradep));
-              if (index > -1) {
-                this.biddata.splice(index, 1);
-              }
-              
-            }
-            if (orderbookdata.bid[i].action == 'TRADEDELETE' && orderbookdata.bid[i].side == "BID") {
-              var index = this.biddata.findIndex((x) => parseFloat(x.price).toFixed(this.tradep) == parseFloat(orderbookdata.bid[i].price).toFixed(this.tradep));
-              if (index > -1) {
-                this.biddata.splice(index, 1);
-              }
-              
-            }
-
-          } */
+         
           orderbookdata.bid.forEach((item,i)=>{
             //console.log(i,item);
             if(item.action == 'NEW'){
@@ -966,18 +902,7 @@ export class OrderBookComponent implements OnInit {
                 this.biddata[index].newly = true
               }
               
-              /* setTimeout(() => {
-                if(this.biddata[index] != undefined){
-                  this.biddata[index].newly = false
-                }
-              }, 0) */
-              // timer(2000).subscribe(()=>{
-              //   let elem = document.getElementById(item.price)
-              //   //console.log('elem',elem);
-              //   if(elem != null && elem != undefined){
-              //     elem.classList.remove('bg-flash-green')
-              //   }
-              // });
+              
             }else if(item.action == 'DELETE'){
               let index = this.biddata.findIndex((y) => parseFloat(y.price).toFixed(this.tradep) == parseFloat(item.price).toFixed(this.tradep));
               if (index > -1) {
@@ -1019,24 +944,13 @@ export class OrderBookComponent implements OnInit {
               this.askdata.splice(i,1)
             }
           })
-          /* for (var i = 0; i < orderbookdata.bid.length; i++) {
-              for(let j=0;j<this.biddata.length;j++){
-                if(parseFloat(this.biddata[j].price).toFixed(this.tradep) > parseFloat(orderbookdata.bid[0].price).toFixed(this.tradep)){
-                  this.biddata.splice(j,1)
-                }
-              }
-          } */
-         /*  for (var i = 0; i < orderbookdata.ask.length; i++) {
-              for(let j=0;j<this.askdata.length;j++){
-                if(parseFloat(this.askdata[j].price).toFixed(this.tradep) < parseFloat(orderbookdata.ask[0].price).toFixed(this.tradep)){
-                  this.askdata.splice(j,1)
-                }
-              }
-          } */
+          
           this.askdataFinal = this.askdata
           this.biddataFinal = this.biddata
 
-          
+          var a = {'ask':this.askdataFinal, 'bid':this.biddataFinal}
+
+          this.bidDataOutput.emit(a);
         }
         if (this.askdata == '') {
           askIterFirstPrice = 0
@@ -1063,6 +977,8 @@ export class OrderBookComponent implements OnInit {
 
 
   tardebookHistory() {
+    this.marketTradeRecords = [];
+    this.tradeBookData.emit(this.marketTradeRecords);
     this.http.get<any>("https://stream.paybito.com/SocketStream/api/tradeHistory?symbol=" + localStorage.getItem("buying_crypto_asset") + localStorage.getItem("selling_crypto_asset") + "&limit=50", {
       headers: {
         'Content-Type': 'application/json',
@@ -1072,6 +988,8 @@ export class OrderBookComponent implements OnInit {
       .subscribe(data => {
         var result = data;
         this.marketTradeRecords = result;
+        //console.log('TRADEBOK DATA +++',this.marketTradeRecords)
+        this.tradeBookData.emit(this.marketTradeRecords);
         //console.log('Trade History Data',this.marketTradeRecords)
         this.ctpdata = this.data.ltpdata = this.marketTradeRecords[0].price;
         //console.log('CTP DATA',this.ctpdata)
@@ -1123,6 +1041,8 @@ export class OrderBookComponent implements OnInit {
 
           if (this.marketTradeRecords.length > 100) {
             this.marketTradeRecords = this.marketTradeRecords.slice(0, 100);
+            //console.log('TRADEBOK DATA +++',this.marketTradeRecords)
+            this.tradeBookData.emit(this.marketTradeRecords);
 
           }
         }
@@ -1147,32 +1067,45 @@ export class OrderBookComponent implements OnInit {
   handleSelectFiatValue = (param) => {
     this.showFiatDopdown = false;
     this.selectedFiat = param.toUpperCase();
+    localStorage.setItem('fiatStorageSave',this.selectedFiat)
     this.getNewCurrency(this.selectedFiat);
   }
 
   ngOnDestroy() {
-    if (this.tickerSubscription != undefined) {
-      this.tickerSubscription.unsubscribe();
-    }
 
-    if (this.subscription != undefined) {
-      this.subscription.unsubscribe();
+    try{
+      if (this.tickerSubscription != undefined) {
+        this.tickerSubscription.unsubscribe();
+      }
+  
+      if (this.subscription != undefined) {
+        this.subscription.unsubscribe();
+      }
+      if (this.subscription1 != undefined) {
+        this.subscription1.unsubscribe();
+      }
+      if (this.data.source2 != undefined) {
+        this.data.source2.close();
+      }
+      if (this.source1 != undefined) {
+        this.source1.close();
+      }
+      if (this.websocket.stompClient != null) {
+        this.websocket.unsubscribe();
+      }
+      if (this.websocket.stompClient != null) {
+        this.websocket._disconnect();
+      }
+
     }
-    if (this.subscription1 != undefined) {
-      this.subscription1.unsubscribe();
+    catch{
+
+      console.log('connection not established');
+      
+
     }
-    if (this.data.source2 != undefined) {
-      this.data.source2.close();
-    }
-    if (this.source1 != undefined) {
-      this.source1.close();
-    }
-    if (this.websocket.stompClient != null) {
-      this.websocket.unsubscribe();
-    }
-    if (this.websocket.stompClient != null) {
-      this.websocket._disconnect();
-    }
+    
+    
   }
   
 

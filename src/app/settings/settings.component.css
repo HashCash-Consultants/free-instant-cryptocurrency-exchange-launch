@@ -107,7 +107,7 @@ margin-top: 32px;
     margin-top: 8px;
     margin-left: 0;
     width: 100%;
-    /* background-color: #24262d; */
+    background-color: #24262d;
 }
 .bs-example .card-header{
     background-color: #24262d;
@@ -226,3 +226,17 @@ display: flex;
   .bg-light-bankDetils{
     background-color: #dedede;
   }
+  .ip {
+    display:inline;
+    vertical-align: 5px;
+}
+.ip-bubble{
+    background: #007bff;
+    padding: 3px 15px 3px 8px;
+    border-radius: 8px;
+}
+.ip-bubble-default {
+    background: #7b7e7e;
+    border-radius: 7px;
+    padding: 0 7px 0 7px;
+}

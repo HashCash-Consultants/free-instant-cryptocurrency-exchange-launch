@@ -135,7 +135,7 @@ export class ForgetPasswordComponent implements OnInit {
   
          this.data.alert('Password successfully reset','success');
          this.route.navigateByUrl('/login');
-        //  this.data.handlePageReloadForecibily(100)
+         this.data.handlePageReloadForecibily(100)
   
          }
   
@@ -176,7 +176,7 @@ export class ForgetPasswordComponent implements OnInit {
       var jsonString=JSON.stringify(tokenObj);
      
       this.isGetCodeButtonDisabled = true;
-      this.http.post<any>(this.data.WEBSERVICE+'/user/SendOtp/securetoken',jsonString,{headers: {
+      this.http.post<any>(this.data.WEBSERVICE+'/user/SendOtp/forgetpassword',jsonString,{headers: {
           'Content-Type': 'application/json'
         }})
      .subscribe(response=>{
@@ -188,7 +188,6 @@ export class ForgetPasswordComponent implements OnInit {
             this.isGetCodeButtonDisabled = false;
         } else {
           this.data.alert('Secure Token sent to registered email','success');
-            // var timeleft = 60;
             var timeleft = this.data.timeIntervalForEmail;
             this.interval;
             var s = timer(1000, 1000);

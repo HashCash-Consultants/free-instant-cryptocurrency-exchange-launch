@@ -10,7 +10,7 @@
           <div class="row">
             <div class="col-12 col-md-2 text-center">
 
-              <img src="./assets/img/default.png" [lazyLoad]="main.profilePic" offset="100" width="100" height="100"
+              <img src="./assets/img/default-old.png" [lazyLoad]="main.profilePic" offset="100" width="100" height="100"
                 alt="{{main.fullName}}" class="mx-auto img-fluid rounded-circle d-block m-3"> <span class="mb-3">
                 <h5 class="text-uppercase" style="font-family:Lucida Console">{{main.fullName}}</h5>
               </span>
@@ -93,18 +93,18 @@
               <div class="float-sm-right btn-group btn-group-sm pagination_div" role="group"
                 aria-label="transaction-history">
                 <div class="btn-group">
-                  <button class="btn btn-info" (click)="pager(1)" [disabled]="page==1">
+                  <button name="button-pagination" class="btn btn-info" (click)="pager(1)" [disabled]="page==1">
                     <i class="fa fa-angle-double-left" aria-hidden="true"></i>
                   </button>
-                  <button class="btn btn-info" (click)="pagerPre(page)" [disabled]="page==1">
+                  <button name="button-pagination" class="btn btn-info" (click)="pagerPre(page)" [disabled]="page==1">
                     <i class="fa fa-angle-left" aria-hidden="true"></i>
                   </button>
-                  <button class="btn btn-info {{page==p?'active':''}} {{((p<page+5)&&(p>page-5))?'':'d-none'}}"
+                  <button name="button-pagination" class="btn btn-info {{page==p?'active':''}} {{((p<page+5)&&(p>page-5))?'':'d-none'}}"
                     (click)="pager(p);" *ngFor="let p of pgn">{{p}}</button>
-                  <button class="btn btn-info" (click)="pagerNext(page)" [disabled]="page==pgn.length">
+                  <button name="button-pagination" class="btn btn-info" (click)="pagerNext(page)" [disabled]="page==pgn.length">
                     <i class="fa fa-angle-right" aria-hidden="true"></i>
                   </button>
-                  <button class="btn btn-info" (click)="pager(pgn.length)" [disabled]="page==pgn.length">
+                  <button name="button-pagination" class="btn btn-info" (click)="pager(pgn.length)" [disabled]="page==pgn.length">
                     <i class="fa fa-angle-double-right" aria-hidden="true"></i>
                   </button>
                 </div>
@@ -117,7 +117,7 @@
   </div>
   <footer class="sticky-footer">
     <div class="container">
-      <div class="text-center"> <small>Copyright © Paybito 2019</small> </div>
+      <div class="text-center"> <small>Copyright © {{data.exchange}} 2019</small> </div>
     </div>
   </footer>
   <a class="scroll-to-top rounded" href="#page-top"> <i class="fa fa-angle-up"></i> </a>

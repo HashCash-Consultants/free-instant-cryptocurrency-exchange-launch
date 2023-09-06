@@ -93,6 +93,11 @@
    background-color: #22252e;
     border: 1px solid #22252e;
 }
+
+.stoploss-from-control-light{
+  color: black !important;
+   
+}
 .text-red {
   color: #ea4704 !important;
   font-size: 10px;
@@ -115,15 +120,15 @@
   display: block;
   position: absolute;
   z-index: 99999;
-  margin-top: 58px;
-  right: 459px;
+  margin-top: 51px;
+  right: 1104px;
 }
 .order-type-dropdown{
   display: block;
   position: absolute;
   z-index: 99999;
   margin-top: 80px;
-  right: 459px;
+  right: 1104px;
   box-shadow: 5px 10px 18px #888888;
 }
 .order-type-dropdown li {
@@ -173,7 +178,7 @@
   display: block;
   position: absolute;
   z-index: 99999;
-  margin-top: 58px;
+  margin-top: 51px;
   right: 459px;
 }
 .order-type-dropdown{
@@ -187,97 +192,330 @@
 
 }
 
-@media only screen and (max-width: 1550px) {
+
+
+
+
+
+
+
+
+@media (min-width: 900px) {
   .order-type-caret{
     display: block;
     position: absolute;
     z-index: 99999;
-    margin-top: 58px;
-    right: 455px;
+    margin-top: 51px;
+    right: 435px;
   }
   .order-type-dropdown{
     display: block;
     position: absolute;
     z-index: 99999;
     margin-top: 80px;
-    right: 455px;
+    right: 430px;
     box-shadow: 5px 10px 18px #888888;
   }
 }
-@media only screen and (max-width: 1450px) {
+
+@media (min-width: 1024px) {
   .order-type-caret{
     display: block;
     position: absolute;
     z-index: 99999;
-    margin-top: 58px;
-    right: 375px;
+    margin-top: 51px;
+    right: 543px;
   }
   .order-type-dropdown{
     display: block;
     position: absolute;
     z-index: 99999;
     margin-top: 80px;
-    right: 375px;
+    right: 540px;
     box-shadow: 5px 10px 18px #888888;
   }
 }
-@media only screen and (max-width: 1250px) {
+
+@media (min-width: 1200px) {
   .order-type-caret{
     display: block;
     position: absolute;
     z-index: 99999;
-    margin-top: 58px;
-    right: 296px;
+    margin-top: 51px;
+    right: 688px;
   }
   .order-type-dropdown{
     display: block;
     position: absolute;
     z-index: 99999;
     margin-top: 80px;
-    right: 296px;
+    right: 681px;
     box-shadow: 5px 10px 18px #888888;
   }
 }
-@media only screen and (max-width: 1350px) {
+
+@media (min-width: 1250px) {
   .order-type-caret{
     display: block;
     position: absolute;
     z-index: 99999;
-    margin-top: 58px;
-    right: 346px;
+    margin-top: 51px;
+    right: 726px;
   }
   .order-type-dropdown{
     display: block;
     position: absolute;
     z-index: 99999;
     margin-top: 80px;
-    right: 346px;
+    right: 720px;
     box-shadow: 5px 10px 18px #888888;
   }
 }
-@media only screen and (max-width: 1024px) {
+
+@media (min-width: 1300px) {
   .order-type-caret{
     display: block;
     position: absolute;
     z-index: 99999;
-    margin-top: 58px;
-    right: 206px;
+    margin-top: 51px;
+    right: 766px;
   }
   .order-type-dropdown{
     display: block;
     position: absolute;
     z-index: 99999;
     margin-top: 80px;
-    right: 206px;
+    right: 766px;
     box-shadow: 5px 10px 18px #888888;
   }
 }
-@media only screen and (min-width: 2560px) {
+
+@media (min-width: 1350px) {
   .order-type-caret{
     display: block;
     position: absolute;
     z-index: 99999;
-    margin-top: 58px;
+    margin-top: 51px;
+    right: 809px;
+  }
+  .order-type-dropdown{
+    display: block;
+    position: absolute;
+    z-index: 99999;
+    margin-top: 80px;
+    right: 809px;
+    box-shadow: 5px 10px 18px #888888;
+  }
+}
+
+@media (min-width: 1400px) {
+  .order-type-caret{
+    display: block;
+    position: absolute;
+    z-index: 99999;
+    margin-top: 51px;
+    right: 852px;
+  }
+  .order-type-dropdown{
+    display: block;
+    position: absolute;
+    z-index: 99999;
+    margin-top: 80px;
+    right: 852px;
+    box-shadow: 5px 10px 18px #888888;
+  }
+}
+
+@media (min-width: 1450px) {
+  .order-type-caret{
+    display: block;
+    position: absolute;
+    z-index: 99999;
+    margin-top: 51px;
+    right: 900px;
+  }
+  .order-type-dropdown{
+    display: block;
+    position: absolute;
+    z-index: 99999;
+    margin-top: 80px;
+    right: 900px;
+    box-shadow: 5px 10px 18px #888888;
+  }
+}
+
+@media (min-width: 1500px) {
+  .order-type-caret{
+    display: block;
+    position: absolute;
+    z-index: 99999;
+    margin-top: 51px;
+    right: 944px;
+  }
+  .order-type-dropdown{
+    display: block;
+    position: absolute;
+    z-index: 99999;
+    margin-top: 80px;
+    right: 944px;
+    box-shadow: 5px 10px 18px #888888;
+  }
+}
+
+@media (min-width: 1550px) {
+  .order-type-caret{
+    display: block;
+    position: absolute;
+    z-index: 99999;
+    margin-top: 51px;
+    right: 979px;
+  }
+  .order-type-dropdown{
+    display: block;
+    position: absolute;
+    z-index: 99999;
+    margin-top: 80px;
+    right: 979px;
+    box-shadow: 5px 10px 18px #888888;
+  }
+}
+
+@media (min-width: 1600px) {
+  .order-type-caret{
+    display: block;
+    position: absolute;
+    z-index: 99999;
+    margin-top: 51px;
+    right: 1023px;
+  }
+  .order-type-dropdown{
+    display: block;
+    position: absolute;
+    z-index: 99999;
+    margin-top: 80px;
+    right: 1020px;
+    box-shadow: 5px 10px 18px #888888;
+  }
+}
+
+
+@media (min-width: 1650px) {
+  .order-type-caret{
+    display: block;
+    position: absolute;
+    z-index: 99999;
+    margin-top: 51px;
+    right: 1060px;
+  }
+  .order-type-dropdown{
+    display: block;
+    position: absolute;
+    z-index: 99999;
+    margin-top: 80px;
+    right: 1060px;
+    box-shadow: 5px 10px 18px #888888;
+  }
+}
+
+
+
+@media (min-width: 1700px) {
+  .order-type-caret{
+    display: block;
+    position: absolute;
+    z-index: 99999;
+    margin-top: 51px;
+    right: 1106px;
+  }
+  .order-type-dropdown{
+    display: block;
+    position: absolute;
+    z-index: 99999;
+    margin-top: 80px;
+    right: 1106px;
+    box-shadow: 5px 10px 18px #888888;
+  }
+}
+
+@media (min-width: 1750px) {
+  .order-type-caret{
+    display: block;
+    position: absolute;
+    z-index: 99999;
+    margin-top: 51px;
+    right: 1145px;
+  }
+  .order-type-dropdown{
+    display: block;
+    position: absolute;
+    z-index: 99999;
+    margin-top: 80px;
+    right: 1145px;
+    box-shadow: 5px 10px 18px #888888;
+  }
+}
+
+@media (min-width: 1800px) {
+  .order-type-caret{
+    display: block;
+    position: absolute;
+    z-index: 99999;
+    margin-top: 51px;
+    right: 1182px;
+  }
+  .order-type-dropdown{
+    display: block;
+    position: absolute;
+    z-index: 99999;
+    margin-top: 80px;
+    right: 1182px;
+    box-shadow: 5px 10px 18px #888888;
+  }
+}
+
+@media (min-width: 1850px) {
+  .order-type-caret{
+    display: block;
+    position: absolute;
+    z-index: 99999;
+    margin-top: 51px;
+    right: 1220px;
+  }
+  .order-type-dropdown{
+    display: block;
+    position: absolute;
+    z-index: 99999;
+    margin-top: 80px;
+    right: 1220px;
+    box-shadow: 5px 10px 18px #888888;
+  }
+}
+
+@media (min-width: 1900px) {
+  .order-type-caret{
+    display: block;
+    position: absolute;
+    z-index: 99999;
+    margin-top: 51px;
+    right: 1028px;
+  }
+  .order-type-dropdown{
+    display: block;
+    position: absolute;
+    z-index: 99999;
+    margin-top: 80px;
+    right: 1028px;
+    box-shadow: 5px 10px 18px #888888;
+  }
+}
+
+
+@media (min-width: 2560px) {
+  .order-type-caret{
+    display: block;
+    position: absolute;
+    z-index: 99999;
+    margin-top: 51px;
     right: 538px;
   }
   .order-type-dropdown{
@@ -286,23 +524,6 @@
     z-index: 99999;
     margin-top: 80px;
     right: 538px;
-    box-shadow: 5px 10px 18px #888888;
-  }
-}
-@media only screen and (max-width: 900px) {
-  .order-type-caret{
-    display: block;
-    position: absolute;
-    z-index: 99999;
-    margin-top: 58px;
-    right: 157px;
-  }
-  .order-type-dropdown{
-    display: block;
-    position: absolute;
-    z-index: 99999;
-    margin-top: 80px;
-    right: 157px;
     box-shadow: 5px 10px 18px #888888;
   }
 }
@@ -310,6 +531,13 @@
   margin-left: -15px;
 }
 #customRange3{
+  width: 88%;
+  margin-top: 10px;
+  margin-left: -14px;
+  
+}
+
+#customRange4{
   width: 88%;
   margin-top: 10px;
   margin-left: -14px;
@@ -382,12 +610,12 @@ input[type="range"]::-ms-fill-lower {
 .loading {
   width: 100%;
   height: 100%;
-  position: fixed;
+  position:absolute;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
-  background-color: rgb(19 23 34 / 0%);
+  background-color: rgba(228, 221, 221, 0);
   z-index: 10000000;
 
 }
@@ -426,7 +654,11 @@ margin-bottom: -13px;
 
 @media (min-width: 1300px) {
   #customRange3{
-    width: 85%;
+    width: 83%;
+    
+  }
+  #customRange4{
+    width: 83%;
     
   }
   
@@ -434,7 +666,11 @@ margin-bottom: -13px;
 }
 @media (min-width: 1400px) {
   #customRange3{
-    width: 86%;
+    width: 84%;
+    
+  }
+  #customRange4{
+    width: 84%;
     
   }
   
@@ -442,7 +678,11 @@ margin-bottom: -13px;
 }
 @media (min-width: 1500px) {
   #customRange3{
-    width: 87%;
+    width: 83%;
+    
+  }
+  #customRange4{
+    width: 83%;
     
   }
   
@@ -450,15 +690,22 @@ margin-bottom: -13px;
 }
 @media (min-width: 1600px) {
   #customRange3{
-    width: 88%;
+    width: 84%;
     
   }
-  
+  #customRange4{
+    width: 84%;
+    
+  }
 
 }
 @media (min-width: 1700px) {
   #customRange3{
-    width: 89%;
+    width: 85%;
+    
+  }
+  #customRange4{
+    width: 85%;
     
   }
   
@@ -466,7 +713,11 @@ margin-bottom: -13px;
 }
 @media (min-width: 1800px) {
   #customRange3{
-    width: 90%;
+    width: 86%;
+    
+  }
+  #customRange4{
+    width: 86%;
     
   }
   
@@ -474,15 +725,22 @@ margin-bottom: -13px;
 }
 @media (min-width: 1900px) {
   #customRange3{
-    width: 88%;
+    width: 84%;
     
   }
-  
+  #customRange4{
+    width: 84%;
+    
+  }
 
 }
 @media (min-width: 2000px) {
   #customRange3{
-    width: 89%;
+    width: 85%;
+    
+  }
+  #customRange4{
+    width: 85%;
     
   }
   
@@ -490,10 +748,13 @@ margin-bottom: -13px;
 }
 @media (min-width: 2100px) {
   #customRange3{
-    width: 89%;
+    width: 85%;
     
   }
-  
+  #customRange4{
+    width: 85%;
+    
+  }
 
 }
 /* .removePaddingEx{

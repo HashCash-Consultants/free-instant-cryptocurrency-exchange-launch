@@ -122,7 +122,7 @@ export class OtcRevisedComponent implements OnInit {
   }
 
   getBasecurrencyList() {
-    this.http.get<any>(this.data.WEBSERVICE + '/home/getAllCurrency', {
+    this.http.get<any>(this.data.WEBSERVICE + '/home/getAllCurrency/'+this.data.BROKERID, {
       headers: {
         'Content-Type': 'application/json',
         'authorization': 'BEARER ' + localStorage.getItem('access_token'),
@@ -417,7 +417,7 @@ export class OtcRevisedComponent implements OnInit {
                 } else {
 
                   var inputObj = {};
-                  inputObj['userId'] = localStorage.getItem('user_id');
+                  // inputObj['userId'] = localStorage.getItem('user_id');
                   inputObj['selling_asset_code'] = (this.counter_currency).toUpperCase();
                   inputObj['buying_asset_code'] = (this.base_currency).toUpperCase();
                   inputObj['amount'] = parseFloat(this.onlySellAmount);
@@ -547,7 +547,7 @@ export class OtcRevisedComponent implements OnInit {
                   $('.tradeBtn').attr('disabled', true);
                 } else {
                   var inputObj = {};
-                  inputObj['userId'] = localStorage.getItem('user_id');
+                  // inputObj['userId'] = localStorage.getItem('user_id');
                   inputObj['selling_asset_code'] = this.base_currency.toUpperCase();
                   inputObj['buying_asset_code'] = this.counter_currency.toUpperCase();
                   inputObj['amount'] = parseFloat(this.onlyBuyAmount);

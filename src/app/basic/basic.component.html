@@ -12,13 +12,13 @@
    <br/>
    
             
-  <h5 class="text-theme-dark-blue mb-3" >Instant Buy</h5>
+  <h5 class="text-theme-dark-blue mb-3" >Instant Buy / Sell</h5>
   <br/>
   <div class="row mt-2 buycurrency">
   <div class="col-md-3">
     <div style="align-items: center;" class="d-flex">
       <div style="margin-right: 10px;" class="text-theme-dark-blue" [ngClass]="Themecolor == 'Dark' ? 'text-white': 'text-black' ">Buy</div>
-      <select class="buywith" [ngClass]="Themecolor == 'Dark' ? 'form-control': 'form-control-light' " (change)="getCounterCurrency($event.target.value)">
+      <select class="buywith" [ngClass]="Themecolor == 'Dark' ? 'form-control': 'form-control-light' "  (change)="getCounterCurrency($event.target.value)">
         <option [value]="">Select</option>
         <option *ngFor="let item of counterCurrency" [value]="item">{{item}}</option>
       </select>
@@ -48,7 +48,7 @@
       </select>
     </div>
   </div>
-  <div class="col-md-2">
+  <div class="col-md-3">
     <div style="align-items:center;" class="d-flex">
       <div style="margin-right: 10px;" class="text-theme-dark-blue" [ngClass]="Themecolor == 'Dark' ? 'text-white': 'text-black' ">For</div>
       <select disabled class="buywith base" id="base-cur-bas" (change)="getBaseCurrency($event.target.value)">
@@ -56,6 +56,9 @@
         <option *ngFor="let item of basecurrency" [value]="item">{{item}}</option>
       </select>
     </div>
+  </div>
+  <div class="col-md-6">
+    <span class="btn btn-dark font-xs filter-button btn_active fee_btn pull-right" (click)="handleOpenFeeModal(feeModal)">FEES</span>
   </div>
 </div>
   <div class="row">
@@ -81,12 +84,12 @@
                   </span>
                   <span class="font-xs mr-1 deposit-withdraw-btn" *ngIf="valid">
                     <span class="diposit-hover">DEPOSIT</span>
-                    <img src="./assets/img/send.png" style="width: 20px;" routerLink="/deposit-funds" />
+                    <img src="../../assets/img/send.png" alt="send logo" alt="sendlogo" style="width: 20px;" routerLink="/deposit-funds" />
 
                   </span>
                   <span class="font-xs mr-1 deposit-withdraw-btn" *ngIf="!valid">
                     <span class="diposit-hover">RECEIVE</span>
-                    <img src="./assets/img/pay.png" style="width: 20px;" routerLink="/my-wallet" />
+                    <img src="../../assets/img/send.png" alt="pay logo" style="width: 20px;" routerLink="/my-wallet" />
                   </span>
 
                 </span>
@@ -163,7 +166,7 @@
                     {{counter_currency | uppercase}}</small></span>
                 <span class="font-xs mr-1 deposit-withdraw-btn">
                   <span class="diposit-hover">RECEIVE</span>
-                  <img src="./assets/img/pay.png" style="width: 20px;" routerLink="/my-wallet" />
+                  <img src="../../assets/img/send.png" alt="pay logo" style="width: 20px;" routerLink="/my-wallet" />
                 </span>
                 </span>
                 <div class="form-row">
@@ -239,25 +242,25 @@
   <div class="vertical-line"></div>
   <h6 class="text-theme-dark-blue" style="margin: 26px; font-weight: bold;size: 18px;" [ngClass]="Themecolor == 'Dark' ? '' : 'text-black'">Guide:</h6>
   <ul  [ngClass]="Themecolor == 'Dark' ? 'list-of-norms' : 'list-of-norms-light'">
-    <li>Select the cryptocurrency you want to buy.</li>
+    <li>Select the cryptocurrency you want to {{buttonTypeSmall}}.</li>
     <li>Select the cryptocurrency or fiat you want to "Sell" in order to "Buy" the above selected cryptocurrency.</li>
-    <li>Enter the amount of Cryptocurrency you wish to buy next to "Buying Amount".</li>
+    <li>Enter the amount of cryptocurrency you wish to {{buttonTypeSmall}} next to "{{accountType}} Amount".</li>
     <li>Review the price that will automatically populate afterwards.</li>  
     <li>Review the total trade cost next to "Total Price".</li>  
-    <li>Once you are happy with all elements, click on "Buy" and the transaction will excute as ordered.</li>  
+    <li>Once you are happy with all elements, click on "{{buttonType}}" and the transaction will execute as ordered.</li>  
   </ul>
 </div>
 </div>
 </div>
 </div>
 <ng-template #feeModal let-modal>
-  <div class="modal-header" style="background: #3d3e42; color: #fff;">
+  <div class="modal-header" [ngClass]="Themecolor == 'Dark' ? '' : 'lightTheme'">
     <h4 class="modal-title" id="modal-basic-title">Fees </h4>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <div class="modal-body" style="background: #3d3e42; color: #fff; font-family: system-ui;">
+  <div class="modal-body" [ngClass]="Themecolor == 'Dark' ? '' : 'lightTheme'">
     <h5 style="font-family: -webkit-pictograph;">Summary - 30 Days</h5>
     <table class="table table-borderless">
       <thead>
@@ -297,7 +300,7 @@
         
       </tbody>
     </table>
-    <p style="font-size: 14px;">{{data.exchnage}} uses a maker-taker fee model for determining its trading fees. Orders that provide liquidity (maker orders) are charged different fees than orders that take liquidity (taker orders).
+    <p style="font-size: 14px;">{{data.exchange}} uses a maker-taker fee model for determining its trading fees. Orders that provide liquidity (maker orders) are charged different fees than orders that take liquidity (taker orders).
       <b>Fees are calculated based on the current pricing tier you are in when the order is placed, and not on the tier you would be in after a trade is completed.</b> When you place an order at the market price that gets filled immediately, you are considered a taker.
       When you place an order which is not immediately matched by an existing order, that order is placed on the order book. If another customer places an order that matches yours, you are considered the maker.
       When you place an order that gets partially matched immediately, you pay a taker fee for that portion. The remainder of the order is placed on the order book and, when matched, is considered a maker order.</p>

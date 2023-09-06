@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import * as $ from "jquery";
 import { CoreDataService } from "../core-data.service";
 import { Router } from "@angular/router";
@@ -10,6 +10,7 @@ import { getQueryPredicate } from "@angular/compiler/src/render3/view/util";
 import { OptionsDashboardComponent } from '../options-dashboard/options-dashboard.component';
 import { OptionsTradeComponent } from '../options-trade/options-trade.component';
 import { OptionsStoplossComponent } from '../options-stoploss/options-stoploss.component';
+import Swal from 'sweetalert2/dist/sweetalert2.js';
 declare const toggleslide: any;
 
 
@@ -105,6 +106,13 @@ export class OptionsOrderbookComponent implements OnInit {
   selectedOptionHeader: any;
   openPopupStatus: boolean = true;
   @ViewChild('myModal') myModal : any;
+  @Output() tradeBookData: EventEmitter<any> = new EventEmitter();
+  @Output() bidDataOutput: EventEmitter<any> =   new EventEmitter();
+
+
+  biddataFinal: any;
+  askdataFinal: any;
+
 
   constructor(private titleService: Title,
     public data: CoreDataService,
@@ -113,8 +121,7 @@ export class OptionsOrderbookComponent implements OnInit {
     private trade: OptionsTradeComponent,
     public websocket: OptionsWebSocketAPI,
     private modalService: NgbModal,
-    public stoploss: OptionsStoplossComponent,
-    public route: Router) {
+    public stoploss: OptionsStoplossComponent) {
       // this.modalService.open(this.noofferPopupModal, {ariaLabelledBy: 'modal-basic-title'})
     // this.modalService.open(this.noofferPopupModal, { centered: true });
 
@@ -125,11 +132,9 @@ export class OptionsOrderbookComponent implements OnInit {
   }
 
   ngOnInit() {
-
     this.changemode();
     //this.Themecolor = this.dash.Themecolor
-    this.toggleTheme();
-    
+    // this.toggleTheme();
     $('.orderbook-dropdown').hover(function () {
       $('.fa-angle-double-down').addClass('fa-angle-double-up').removeClass('fa-angle-double-down');
     }, function () {
@@ -306,8 +311,7 @@ export class OptionsOrderbookComponent implements OnInit {
     if(localStorage.getItem('assetChangeCounterForOptions')=='5'){
       document.body.classList.add("overlay")
       localStorage.setItem('assetChangeCounterForOptions','1');
-      // location.reload();
-      this.data.reloadPage(this.route.url)
+      location.reload();
     }
 
   }
@@ -796,6 +800,16 @@ export class OptionsOrderbookComponent implements OnInit {
           }else{
            this.buySellDiff = ''
           }
+
+          this.biddataFinal = this.biddata
+        this.askdataFinal = this.askdata
+
+        var a = {'ask':this.askdataFinal, 'bid':this.biddataFinal}
+
+        console.log('socket option askbid1',a);
+
+
+        this.bidDataOutput.emit(a);
         }
        
       });
@@ -863,6 +877,16 @@ export class OptionsOrderbookComponent implements OnInit {
           }
           //console.log('ASK DATA => ',this.askdata)
 
+          this.askdataFinal = this.askdata
+          this.biddataFinal = this.biddata
+
+          var a = {'ask':this.askdataFinal, 'bid':this.biddataFinal}
+
+          console.log('socket option askbid',a);
+          
+
+          this.bidDataOutput.emit(a);
+
         }
 
 
@@ -919,6 +943,16 @@ export class OptionsOrderbookComponent implements OnInit {
               }
             }
           }
+
+          this.askdataFinal = this.askdata
+          this.biddataFinal = this.biddata
+
+          var a = {'ask':this.askdataFinal, 'bid':this.biddataFinal}
+
+          console.log('socket option askbid',a);
+          
+
+          this.bidDataOutput.emit(a);
         }
         if (this.askdata == '') {
           askIterFirstPrice = 0
@@ -937,6 +971,16 @@ export class OptionsOrderbookComponent implements OnInit {
          this.buySellDiff = ''
         }
         console.log(askIterFirstPrice + ' - ' + bidIterFirstPrice + ' = ' + this.buySellDiff)
+
+        this.askdataFinal = this.askdata
+          this.biddataFinal = this.biddata
+
+          var a = {'ask':this.askdataFinal, 'bid':this.biddataFinal}
+
+          console.log('socket option askbid',a);
+          
+
+          this.bidDataOutput.emit(a);
       }
 
     });
@@ -947,6 +991,8 @@ export class OptionsOrderbookComponent implements OnInit {
 
 
   tardebookHistory() {
+    this.marketTradeRecords = [];
+    this.tradeBookData.emit(this.marketTradeRecords);
     this.http.get<any>("https://options-socket.paybito.com/oSocketStream/api/tradeHistory?symbol=" + localStorage.getItem("selected_options_asset_pair") + "&limit=50", {
       headers: {
         'Content-Type': 'application/json',
@@ -957,6 +1003,8 @@ export class OptionsOrderbookComponent implements OnInit {
         var result = data;
         console.log(data)
         this.marketTradeRecords = result;
+        this.tradeBookData.emit(this.marketTradeRecords);
+
       });
 
     this.subscription1 = this.websocket.currentMessage.subscribe(message => {
@@ -996,6 +1044,8 @@ export class OptionsOrderbookComponent implements OnInit {
 
           if (this.marketTradeRecords.length > 100) {
             this.marketTradeRecords = this.marketTradeRecords.slice(0, 100);
+            this.tradeBookData.emit(this.marketTradeRecords);
+
 
           }
 

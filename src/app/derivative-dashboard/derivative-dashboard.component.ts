@@ -30,6 +30,12 @@ export class DerivativeDashboardComponent implements OnInit {
   screencolor: boolean;
   public Themecolor;
   myInterval: any;
+  tradeBookDataInput: any;
+  stableConnectionData: any;
+  chartselector: boolean = true;
+  bidDataInput: any;
+
+
 
   constructor(  public data: CoreDataService,
     private route: Router,
@@ -39,6 +45,8 @@ export class DerivativeDashboardComponent implements OnInit {
     }
 
     ngOnInit() {
+    this.data.checkDashPermission('futures')
+
     this.checkThemeIfApplied()
 
       // const prodashboard = this.route1.snapshot.queryParamMap.get('pro');
@@ -61,7 +69,7 @@ export class DerivativeDashboardComponent implements OnInit {
 
       document.body.classList.add("overlay");
      /* Event defination for checking if page is ideal */
-     var IDLE_TIMEOUT = 120; //seconds
+     var IDLE_TIMEOUT = 60; //seconds
      var _idleSecondsCounter = 0;
      document.onclick = function () {
        _idleSecondsCounter = 0;
@@ -80,20 +88,18 @@ export class DerivativeDashboardComponent implements OnInit {
      function CheckIdleTime() {
        _idleSecondsCounter++;
        var oPanel = document.getElementById("dashboardContent");
-        console.log('IDLE TIME ', IDLE_TIMEOUT, _idleSecondsCounter)
+        // console.log('IDLE TIME ', IDLE_TIMEOUT, _idleSecondsCounter)
        if (_idleSecondsCounter >= IDLE_TIMEOUT) {
          //alert("Time expired!");
         //  clearInterval(this.myInterval);
         //  location.reload()
-        this.data.reloadPage(this.route.url);
-
        }
      }
    }
 
    checkThemeIfApplied(){
     var themecolor = localStorage.getItem('themecolor');
-    console.log('saved theme', themecolor)
+    //console.log('saved theme', themecolor)
     if(themecolor == null || themecolor == undefined){
       $(".content-wrapper").css("background-color", "#131722").removeClass("intro");
       document.getElementById("light").style.display = "block";
@@ -104,7 +110,7 @@ export class DerivativeDashboardComponent implements OnInit {
 
       this.Themecolor = 'Dark';
       localStorage.setItem('themecolor', this.Themecolor);
-      this.tvChartContainerComponent.changeThemeColor('Dark')
+      // this.tvChartContainerComponent.changeThemeColor('Dark')
 
     }
     else{
@@ -119,7 +125,7 @@ export class DerivativeDashboardComponent implements OnInit {
 
         this.Themecolor = 'Dark';
       localStorage.setItem('themecolor', this.Themecolor);
-      this.tvChartContainerComponent.changeThemeColor('Dark')
+      // this.tvChartContainerComponent.changeThemeColor('Dark')
 
       }
       if(themecolor == 'Light'){
@@ -141,7 +147,7 @@ export class DerivativeDashboardComponent implements OnInit {
       // }, 100);
       
 
-      this.tvChartContainerComponent.changeThemeColor('Light')
+      // this.tvChartContainerComponent.changeThemeColor('Light')
 
       }
 
@@ -164,7 +170,7 @@ export class DerivativeDashboardComponent implements OnInit {
         $(".content-wrapper").css("background-color", "#ececec").addClass("intro");
         document.getElementById("night").style.display = "block";
         document.getElementById("light").style.display = "none";
-        this.tvChartContainerComponent.changeThemeColor('Light')
+        // this.tvChartContainerComponent.changeThemeColor('Light')
         // this.dTrade.Themecolor = 'Light';
         
       } else {
@@ -173,7 +179,7 @@ export class DerivativeDashboardComponent implements OnInit {
         document.getElementById("night").style.display = "none";
         this.Themecolor = 'Dark';
         localStorage.setItem('themecolor', this.Themecolor);
-        this.tvChartContainerComponent.changeThemeColor('Dark');
+        // this.tvChartContainerComponent.changeThemeColor('Dark');
         // this.dTrade.Themecolor = 'Dark';
 
 
@@ -191,5 +197,33 @@ export class DerivativeDashboardComponent implements OnInit {
       this.Themecolor = val;
   
     }
+
+    tradeBookDataHandler(val){
+
+      this.tradeBookDataInput = val;
+      //console.log('IN PARENT +++',this.tradeBookDataInput)
+  
+    }
+
+    connectionChangedHandler(val){
+      this.stableConnectionData = val;
+      console.log('connnnn', this.stableConnectionData);
+      
+      
+    }
+
+    
+  toggleChart(val){
+
+    this.chartselector = val;
+  }
+
+  bidDataHandler(data){
+    this.bidDataInput = data;
+
+    // console.log('askbid data',this.bidDataInput);
+    
+
+  }
 
 }

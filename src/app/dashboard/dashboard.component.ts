@@ -1,10 +1,9 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { CoreDataService } from "../core-data.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import * as $ from "jquery";
 import { HttpClient } from "@angular/common/http";
-import { TvChartContainerComponent } from "src/app/tv-chart-container/tv-chart-container.component";
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { TvChartContainerComponent } from "../tv-chart-container/tv-chart-container.component";
 
 @Component({
   selector: "app-dashboard",
@@ -30,25 +29,22 @@ export class DashboardComponent implements OnInit {
   screencolor: boolean;
   public Themecolor;
   myInterval: any;
-
-  @ViewChild('myModal') myModal : any;
-
+  tradeBookDataInput : any;
+  stableConnectionData: any;
+  callingFunc: boolean;
+  bidDataInput: any;
+  chartselector: boolean = true;
 
   constructor(
     public data: CoreDataService,
     private route: Router,
     private http: HttpClient,
-    public tvChartContainerComponent: TvChartContainerComponent,
-    private route1: ActivatedRoute,
-    private modalService: NgbModal,
-
+    // public tvChartContainerComponent: TvChartContainerComponent,
+    private route1: ActivatedRoute
   ) { }
 
   ngOnInit() {
-
-    this.checkAndShowPaymentRenewPopup()
-    
-    
+    this.data.checkDashPermission('spot')
 
     this.checkThemeIfApplied()
     const prodashboard = this.route1.snapshot.queryParamMap.get('pro');
@@ -70,7 +66,7 @@ export class DashboardComponent implements OnInit {
     });
     document.body.classList.add("overlay");
      /* Event defination for checking if page is ideal */
-     var IDLE_TIMEOUT = 120; //seconds
+     var IDLE_TIMEOUT = 60; //seconds
      var _idleSecondsCounter = 0;
      document.onclick = function () {
        _idleSecondsCounter = 0;
@@ -89,13 +85,11 @@ export class DashboardComponent implements OnInit {
      function CheckIdleTime() {
        _idleSecondsCounter++;
        var oPanel = document.getElementById("dashboardContent");
-        console.log('IDLE TIME ', IDLE_TIMEOUT, _idleSecondsCounter)
+        // console.log('IDLE TIME ', IDLE_TIMEOUT, _idleSecondsCounter)
        if (_idleSecondsCounter >= IDLE_TIMEOUT) {
          //alert("Time expired!");
         //  clearInterval(this.myInterval);
         //  location.reload()
-        this.data.reloadPage(this.route.url);
-
        }
      }
 
@@ -104,37 +98,10 @@ export class DashboardComponent implements OnInit {
      
   }
 
-  checkAndShowPaymentRenewPopup(){
-
-    this.http
-      .get<any>(this.data.WEBSERVICE + "/home/brokerSubscriptionStatus?brokerId=" + this.data.BROKERID, {
-        headers: {
-          Authorization: "BEARER " + localStorage.getItem("access_token"),
-        },
-      })
-      .subscribe(
-
-        (result) => {
-          if(result.paymentStatus == 2){
-            this.modalService.open(this.myModal, { centered: true,backdrop: 'static',
-               keyboard: false });
-          }
-        }
-        
-
-      )
-  }
-
-  redirectToPayment(){
-    window.location.href = 'https://pay.hashcashconsultants.com/product/broker-monthly-subsciption-payment/';
-  }
-
   checkThemeIfApplied(){
     var themecolor = localStorage.getItem('themecolor');
-    console.log('saved theme', themecolor)
+    //console.log('saved theme', themecolor)
     if(themecolor == null || themecolor == undefined){
-      this.Themecolor = 'Dark';
-      localStorage.setItem('themecolor', this.Themecolor);
       $(".content-wrapper").css("background-color", "#131722").removeClass("intro");
       document.getElementById("light").style.display = "block";
       document.getElementById("night").style.display = "none";
@@ -142,15 +109,14 @@ export class DashboardComponent implements OnInit {
     this.screencolor = false;
     this.data.changescreencolor = false;
 
-      
-      this.tvChartContainerComponent.changeThemeColor('Dark')
+      this.Themecolor = 'Dark';
+      localStorage.setItem('themecolor', this.Themecolor);
+      // this.tvChartContainerComponent.changeThemeColor('Dark')
 
     }
     else{
 
       if(themecolor == 'Dark'){
-        this.Themecolor = 'Dark';
-      localStorage.setItem('themecolor', this.Themecolor);
         $(".content-wrapper").css("background-color", "#131722").removeClass("intro");
       document.getElementById("light").style.display = "block";
       document.getElementById("night").style.display = "none";
@@ -158,13 +124,12 @@ export class DashboardComponent implements OnInit {
         this.screencolor = false;
         this.data.changescreencolor = false;
 
-        
-      this.tvChartContainerComponent.changeThemeColor('Dark')
+        this.Themecolor = 'Dark';
+      localStorage.setItem('themecolor', this.Themecolor);
+      // this.tvChartContainerComponent.changeThemeColor('Dark')
 
       }
       if(themecolor == 'Light'){
-        this.Themecolor = 'Light';
-        localStorage.setItem('themecolor', this.Themecolor);
 
         $(".content-wrapper").css("background-color", "#fafafa").addClass("intro");
 
@@ -174,7 +139,8 @@ export class DashboardComponent implements OnInit {
       this.screencolor = true;
       this.data.changescreencolor = true;
 
-     
+      this.Themecolor = 'Light';
+      localStorage.setItem('themecolor', this.Themecolor);
       console.log('changing tv color theme to light');
       // setTimeout(() => {
       // this.tvChartContainerComponent.changeThemeColor('Light')
@@ -182,7 +148,7 @@ export class DashboardComponent implements OnInit {
       // }, 100);
       
 
-      this.tvChartContainerComponent.changeThemeColor('Light')
+      // this.tvChartContainerComponent.changeThemeColor('Light')
 
       }
 
@@ -203,20 +169,17 @@ export class DashboardComponent implements OnInit {
       localStorage.setItem('themecolor', this.Themecolor);
       // $(".content-wrapper").css("background-color", "#ececec").addClass("intro");
       $(".content-wrapper").css("background-color", "#fafafa").addClass("intro");
-      // document.body.style.background = "#fafafa !important";
 
       document.getElementById("night").style.display = "block";
       document.getElementById("light").style.display = "none";
-      this.tvChartContainerComponent.changeThemeColor('Light')
+      // this.tvChartContainerComponent.changeThemeColor('Light')
     } else {
-      // document.body.style.background = "#131722 !important";
-
       $(".content-wrapper").css("background-color", "#131722").removeClass("intro");
       document.getElementById("light").style.display = "block";
       document.getElementById("night").style.display = "none";
       this.Themecolor = 'Dark';
       localStorage.setItem('themecolor', this.Themecolor);
-      this.tvChartContainerComponent.changeThemeColor('Dark')
+      // this.tvChartContainerComponent.changeThemeColor('Dark')
 
     }
   }
@@ -232,5 +195,37 @@ export class DashboardComponent implements OnInit {
 
     this.Themecolor = val;
 
+  }
+  connectionChangedHandler(val){
+    this.stableConnectionData = val;
+    console.log('connnnn', this.stableConnectionData);
+    
+    
+  }
+
+  tradeHistoyCompCall(val){
+    this.callingFunc = true;
+    localStorage.setItem('tradeFuncCall', 'true');
+    // this
+  }
+  
+  tradeBookDataHandler(val){
+
+    this.tradeBookDataInput = val;
+    //console.log('IN PARENT +++',this.tradeBookDataInput)
+
+  }
+
+  bidDataHandler(data){
+    this.bidDataInput = data;
+
+    // console.log('askbid data',this.bidDataInput);
+    
+
+  }
+
+  toggleChart(val){
+
+    this.chartselector = val;
   }
 }

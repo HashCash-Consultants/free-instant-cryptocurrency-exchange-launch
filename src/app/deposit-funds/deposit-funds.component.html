@@ -345,18 +345,18 @@
               aria-label="transaction-history">
               <!-- <ngb-pagination [collectionSize]="collection" [(page)]="page" [directionLinks]="false" (click)="pager(page);" ></ngb-pagination> -->
               <div class="btn-group">
-                <button class="btn btn-info" (click)="pager(1)" [disabled]="page==1">
+                <button name="paginationButton" class="btn btn-info" (click)="pager(1)" [disabled]="page==1">
                   <i class="fa fa-angle-double-left" aria-hidden="true"></i>
                 </button>
-                <button class="btn btn-info" (click)="pagerPre(page)" [disabled]="page==1">
+                <button name="paginationButton" class="btn btn-info" (click)="pagerPre(page)" [disabled]="page==1">
                   <i class="fa fa-angle-left" aria-hidden="true"></i>
                 </button>
-                <button class="btn btn-info {{page==p?'active':''}} {{((p<page+5)&&(p>page-5))?'':'d-none'}}"
+                <button name="paginationButton" class="btn btn-info {{page==p?'active':''}} {{((p<page+5)&&(p>page-5))?'':'d-none'}}"
                   (click)="pager(p);" *ngFor="let p of pgn">{{p}}</button>
-                <button class="btn btn-info" (click)="pagerNext(page)" [disabled]="page==pgn.length">
+                <button name="paginationButton" class="btn btn-info" (click)="pagerNext(page)" [disabled]="page==pgn.length">
                   <i class="fa fa-angle-right" aria-hidden="true"></i>
                 </button>
-                <button class="btn btn-info" (click)="pager(pgn.length)" [disabled]="page==pgn.length">
+                <button name="paginationButton" class="btn btn-info" (click)="pager(pgn.length)" [disabled]="page==pgn.length">
                   <i class="fa fa-angle-double-right" aria-hidden="true"></i>
                 </button>
               </div>
@@ -368,41 +368,41 @@
     
     <ng-template #orderID let-modal>
       <div id="myDiv">
-        <div class="modal-header sendreceive-wallet">
+        <div class="modal-header sendreceive-wallet" [ngClass]="Themecolor == 'Dark' ? '' : 'lightTheme'">
           <h5 class="modal-title " id="receiveModalLabel">Payment Order Generated</h5>
           <button class="close" type="button" (click)="modal.close()"> <span aria-hidden="true">×</span> </button>
         </div>
-        <div class="modal-body send-wallet">
+        <div class="modal-body send-wallet" [ngClass]="Themecolor == 'Dark' ? '' : 'lightThemeModalBody'">
           <div clas="row">
             <div class="col-md-12">
               <h5>Order No: <span class=" order_no">{{orderNoToShow}}</span></h5>
               <span>Please do a transfer within 72 hours to the below account </span>
               <ul class="list-group mb-2">
-                <li class="list-group-item">
+                <li class="list-group-item" [ngClass]="Themecolor == 'Dark' ? '' : 'lightThemeModalBody'">
                   <div class="d-flex">
                     <div class="mr-auto ">Beneficiary Name:</div>
                     <div><span class=" font-weight-bold font-sm">{{beneficiaryName}}</span></div>
                   </div>
                 </li>
-                <li class="list-group-item">
+                <li class="list-group-item" [ngClass]="Themecolor == 'Dark' ? '' : 'lightThemeModalBody'">
                   <div class="d-flex">
                     <div class="mr-auto ">Beneficiary Address:</div>
                     <div><span class=" font-weight-bold font-sm">{{beneficiaryAddress}}</span></div>
                   </div>
                 </li>
-                <li class="list-group-item">
+                <li class="list-group-item" [ngClass]="Themecolor == 'Dark' ? '' : 'lightThemeModalBody'">
                   <div class="d-flex">
                     <div class="mr-auto ">Bank account No:</div>
                     <div><span class=" font-weight-bold font-sm">{{accountNo}}</span></div>
                   </div>
                 </li>
-                <li class="list-group-item">
+                <li class="list-group-item" [ngClass]="Themecolor == 'Dark' ? '' : 'lightThemeModalBody'">
                   <div class="d-flex">
                     <div class="mr-auto ">Account Type:</div>
                     <div><span class=" font-weight-bold font-sm">{{accountType}}</span></div>
                   </div>
                 </li>
-                <li class="list-group-item">
+                <li class="list-group-item" [ngClass]="Themecolor == 'Dark' ? '' : 'lightThemeModalBody'">
                   <div class="d-flex">
                   <div *ngIf="ibanNo ==null && ifscCode==null || routingNo==''" class="mr-auto ">Routing No:</div>
                 <div *ngIf="ibanNo !=null && ibanNo!=null" class="mr-auto ">IBAN:</div>
@@ -425,19 +425,19 @@
                     </div> -->
                   </div>
                 </li>
-                <li class="list-group-item" id="sft-viz">
+                <li class="list-group-item" id="sft-viz" [ngClass]="Themecolor == 'Dark' ? '' : 'lightThemeModalBody'">
                   <div class="d-flex" >
                     <div class="mr-auto ">Swift Code:</div>
                     <div><span class=" font-weight-bold font-sm">{{swiftCode}}</span></div>
                   </div>
                 </li>
-                <li class="list-group-item">
+                <li class="list-group-item" [ngClass]="Themecolor == 'Dark' ? '' : 'lightThemeModalBody'">
                   <div class="d-flex">
                     <div class="mr-auto ">Bank Name:</div>
                     <div><span class=" font-weight-bold font-sm">{{bankname}}</span></div>
                   </div>
                 </li>
-                <li class="list-group-item">
+                <li class="list-group-item" [ngClass]="Themecolor == 'Dark' ? '' : 'lightThemeModalBody'">
                   <div class="d-flex">
                     <div class="mr-auto ">Bank Address:</div>
                     <div><span class=" font-weight-bold font-sm">{{Baddress}}</span></div>
@@ -467,41 +467,41 @@
     </ng-template>
     <ng-template #paymentOrderDisplay let-modal>
       <div id="myDiv">
-      <div class="modal-header sendreceive-wallet">
+      <div class="modal-header sendreceive-wallet" [ngClass]="Themecolor == 'Dark' ? '' : 'lightTheme'">
         <h5 class="modal-title " id="receiveModalLabel">Payment Order Generated</h5>
         <button class="close" type="button" (click)="modal.close()"> <span aria-hidden="true">×</span> </button>
       </div>
-      <div class="modal-body send-wallet">
-        <div clas="row">
+      <div class="modal-body send-wallet" [ngClass]="Themecolor == 'Dark' ? '' : 'lightThemeModalBody'">
+        <div clas="row" >
           <div class="col-md-12">
             <h5>Order No: <span class=" order_no">{{displableOrderNo}}</span></h5>
             <span>Please do a transfer within 72 hours to the below account </span>
             <ul class="list-group mb-2">
-              <li class="list-group-item">
+              <li class="list-group-item" [ngClass]="Themecolor == 'Dark' ? '' : 'lightThemeModalBody'">
                 <div class="d-flex">
                   <div class="mr-auto ">Beneficiary Name:</div>
                   <div><span class=" font-weight-bold font-sm">{{displableBeneficiaryName}}</span></div>
                 </div>
               </li>
-              <li class="list-group-item">
+              <li class="list-group-item" [ngClass]="Themecolor == 'Dark' ? '' : 'lightThemeModalBody'">
                 <div class="d-flex">
                   <div class="mr-auto ">Beneficiary Address:</div>
                   <div><span class=" font-weight-bold font-sm">{{displableBeneficiaryAddress}}</span></div>
                 </div>
               </li>
-              <li class="list-group-item">
+              <li class="list-group-item" [ngClass]="Themecolor == 'Dark' ? '' : 'lightThemeModalBody'">
                 <div class="d-flex">
                   <div class="mr-auto ">Bank account No:</div>
                   <div><span class=" font-weight-bold font-sm">{{displableAccNo}}</span></div>
                 </div>
               </li>
-              <li class="list-group-item">
+              <li class="list-group-item" [ngClass]="Themecolor == 'Dark' ? '' : 'lightThemeModalBody'">
                 <div class="d-flex">
                   <div class="mr-auto ">Account Type:</div>
                   <div><span class=" font-weight-bold font-sm">{{displableAccountType}}</span></div>
                 </div>
               </li>
-              <li class="list-group-item">
+              <li class="list-group-item" [ngClass]="Themecolor == 'Dark' ? '' : 'lightThemeModalBody'">
                 <div class="d-flex">
                 <div *ngIf="displableRoutingNo!==null" class="mr-auto ">Routing No:</div>
               <div *ngIf="displableIbanNo!==null" class="mr-auto ">IBAN:</div>
@@ -530,13 +530,13 @@
                   <div><span class=" font-weight-bold font-sm">{{displableSwiftCode}}</span></div>
                 </div>
               </li> -->
-              <li class="list-group-item">
+              <li class="list-group-item" [ngClass]="Themecolor == 'Dark' ? '' : 'lightThemeModalBody'">
                 <div class="d-flex">
                   <div class="mr-auto">Bank Name:</div>
                   <div><span class=" font-weight-bold font-sm">{{displableBankName}}</span></div>
                 </div>
               </li>
-              <li class="list-group-item">
+              <li class="list-group-item" [ngClass]="Themecolor == 'Dark' ? '' : 'lightThemeModalBody'">
                 <div class="d-flex">
                   <div class="mr-auto">Bank Address:</div>
                   <div><span class=" font-weight-bold font-sm">{{displableBankAddress}}</span></div>
@@ -587,72 +587,76 @@
   <div id="myDiv">
     <div class="modal-content" style="border: 0px !important;">
 
-    <div class="modal-header sendreceive-wallet">
+    <div class="modal-header sendreceive-wallet" [ngClass]="Themecolor == 'Dark' ? '' : 'lightTheme'">
       <h4 class="modal-title">Invoice</h4>
       <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
         <span aria-hidden="true">&times;</span>
       </button>
     </div>
-    <div class="modal-body send-wallet">
+    <div class="modal-body send-wallet" [ngClass]="Themecolor == 'Dark' ? '' : 'lightThemeModalBody'">
       <div clas="row">
         <div class="col-md-12">
           <ul class="list-group mb-2">
-            <li class="list-group-item bg-pbgreen">
+            <li class="list-group-item bg-pbgreen" [ngClass]="Themecolor == 'Dark' ? '' : 'lightThemeModalBody'">
               <div class="d-flex">
-                <div class="mr-auto text-white">Order No:</div>
-                <div><span class="text-white font-weight-bold font-sm">{{invoiceOrderNoI}}</span></div>
+                <div class="mr-auto " [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Order No:</div>
+                <div><span class="font-weight-bold font-sm" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">{{invoiceOrderNoI}}</span></div>
               </div>
               <div class="d-flex">
-                <div class="mr-auto text-white">Payment Method:</div>
-                <div><span class="text-white font-weight-bold font-sm">Bank Transfer</span></div>
+                <div class="mr-auto " [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Payment Method:</div>
+                <div><span class=" font-weight-bold font-sm" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Bank Transfer</span></div>
               </div>
               <div class="d-flex">
-                <div class="mx-auto text-white font-weight-bold">CONFIRMED</div>
+                <div class="mx-auto  font-weight-bold" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">CONFIRMED</div>
               </div>
             </li>
-            <li class="list-group-item">
+            <li class="list-group-item" [ngClass]="Themecolor == 'Dark' ? '' : 'lightThemeModalBody'">
               <div class="d-flex">
                 <div class="mr-auto ">Beneficiary Name:</div>
                 <div><span class=" font-weight-bold font-sm">{{beneficiaryNameI}}</span></div>
               </div>
             </li>
-            <li class="list-group-item">
+            <li class="list-group-item" [ngClass]="Themecolor == 'Dark' ? '' : 'lightThemeModalBody'">
               <div class="d-flex">
                 <div class="mr-auto ">Bank account No:</div>
                 <div><span class=" font-weight-bold font-sm">{{accountNoI}}</span></div>
               </div>
             </li>
-            <li class="list-group-item">
+            <li class="list-group-item" [ngClass]="Themecolor == 'Dark' ? '' : 'lightThemeModalBody'">
               <div class="d-flex">
                 <div class="mr-auto ">Account Type:</div>
                 <div><span class=" font-weight-bold font-sm">{{accountTypeI}}</span></div>
               </div>
             </li>
-            <li class="list-group-item">
+            <li class="list-group-item" [ngClass]="Themecolor == 'Dark' ? '' : 'lightThemeModalBody'">
               <div class="d-flex">
-                <div *ngIf="routingNoI !=''" class="mr-auto ">Routing No:</div>
+                <!-- <div *ngIf="routingNoI !=''" class="mr-auto ">Routing No:</div>
                 <div *ngIf="ibanNoI !='' && routingNoI==''" class="mr-auto ">IBAN:</div>
-                <div *ngIf="ifscCodeI !='' && routingNoI==''" class="mr-auto ">IFSC:</div>
+                <div *ngIf="ifscCodeI !='' && routingNoI==''" class="mr-auto ">IFSC:</div> -->
+
+                <div *ngIf="routingNoI !=null" class="mr-auto ">Routing No:</div>
+                <div *ngIf="ibanNoI !=null && routingNoI==null" class="mr-auto ">IBAN:</div>
+                <div *ngIf="ifscCodeI !=null && routingNoI==null" class="mr-auto ">IFSC:</div>
   
-                <div *ngIf="ibanNoI !=''">
+                <div *ngIf="ibanNoI !=null">
                   <span class=" font-weight-bold font-sm">{{ibanNoI}}</span>
                 </div>
-                <div *ngIf="routingNoI !=''">
+                <div *ngIf="routingNoI !=null">
                   <span class=" font-weight-bold font-sm">{{routingNoI}}</span>
                 </div>
-                <div *ngIf="ifscCodeI !=''">
+                <div *ngIf="ifscCodeI !=null">
                   <span class=" font-weight-bold font-sm">{{ifscCodeI}}</span>
                 </div>
                 
               </div>
             </li>
-            <li class="list-group-item" id="swft-noI">
+            <li class="list-group-item" id="swft-noI" [ngClass]="Themecolor == 'Dark' ? '' : 'lightThemeModalBody'">
               <div class="d-flex">
                 <div class="mr-auto " >Swift Code:</div>
                 <div><span class=" font-weight-bold font-sm">{{swiftCodeI}}</span></div>
               </div>
             </li>
-            <li class="list-group-item">
+            <li class="list-group-item" [ngClass]="Themecolor == 'Dark' ? '' : 'lightThemeModalBody'">
               <div class="d-flex">
                 <div class="mr-auto ">Bank Name:</div>
                 <div><span class=" font-weight-bold font-sm">{{bankNameI}}</span></div>
@@ -661,41 +665,41 @@
             
            
            
-            <li class="list-group-item bg-pbgreen">
+            <li class="list-group-item bg-pbgreen" [ngClass]="Themecolor == 'Dark' ? '' : 'lightThemeModalBody'">
               <div class="d-flex">
-                <div class="mr-auto text-white">Amount:</div>
+                <div class="mr-auto " [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Amount:</div>
                 <div *ngIf="currencynameI ==='USD'">
-                  <span class="text-white font-weight-bold font-sm">$ {{invoiceAmountI}}</span>
+                  <span class=" font-weight-bold font-sm" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">$ {{invoiceAmountI}}</span>
                 </div>
                 <div *ngIf="currencynameI =='AED'">
-                  <span class="text-white font-weight-bold font-sm"> {{invoiceAmountI}} د.إ</span>
+                  <span class=" font-weight-bold font-sm" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"> {{invoiceAmountI}} د.إ</span>
                 </div>
                 <div *ngIf="currencynameI =='INR'">
-                  <span class="text-white font-weight-bold font-sm"> ₹ {{invoiceAmountI}}</span>
+                  <span class=" font-weight-bold font-sm" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"> ₹ {{invoiceAmountI}}</span>
                 </div>
                 <div *ngIf="currencynameI =='EUR'">
-                  <span class="text-white font-weight-bold font-sm"> € {{invoiceAmountI}}</span>
+                  <span class=" font-weight-bold font-sm" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"> € {{invoiceAmountI}}</span>
                 </div>
                 <div *ngIf="currencynameI =='SGD'">
-                  <span class="text-white font-weight-bold font-sm"> S$ {{invoiceAmountI}}</span>
+                  <span class=" font-weight-bold font-sm" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"> S$ {{invoiceAmountI}}</span>
                 </div>
               </div>
               <div class="d-flex">
-                <div class="mr-auto text-white">Total Amount:</div>
+                <div class="mr-auto " [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Total Amount:</div>
                 <div *ngIf="currencynameI =='USD'">
-                  <span class="text-white font-weight-bold font-sm">$ {{invoiceAmountI}}</span>
+                  <span class=" font-weight-bold font-sm" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">$ {{invoiceAmountI}}</span>
                 </div>
                 <div *ngIf="currencynameI =='AED'">
-                  <span class="text-white font-weight-bold font-sm">{{invoiceAmountI}} د.إ </span>
+                  <span class=" font-weight-bold font-sm" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">{{invoiceAmountI}} د.إ </span>
                 </div>
                 <div *ngIf="currencynameI =='INR'">
-                  <span class="text-white font-weight-bold font-sm"> ₹ {{invoiceAmountI}}</span>
+                  <span class=" font-weight-bold font-sm" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"> ₹ {{invoiceAmountI}}</span>
                 </div>
                 <div *ngIf="currencynameI =='EUR'">
-                  <span class="text-white font-weight-bold font-sm"> € {{invoiceAmountI}}</span>
+                  <span class=" font-weight-bold font-sm" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"> € {{invoiceAmountI}}</span>
                 </div>
                 <div *ngIf="currencynameI =='SGD'">
-                  <span class="text-white font-weight-bold font-sm"> S$ {{invoiceAmountI}}</span>
+                  <span class=" font-weight-bold font-sm" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"> S$ {{invoiceAmountI}}</span>
                 </div>
               </div>
             </li>

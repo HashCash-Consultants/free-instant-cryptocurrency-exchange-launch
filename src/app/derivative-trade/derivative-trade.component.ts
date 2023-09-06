@@ -93,6 +93,7 @@ export class DerivativeTradeComponent implements OnInit {
   public delLeverage:any;
   public delMarginType:any;
   selectedTab: any = '1';
+  assetPairForStopLossModifyDelete : any = '';
   // public Themecolor: any;
   selectedCounterBuySellTxn : any;
   selectedCounterType:any
@@ -100,7 +101,7 @@ export class DerivativeTradeComponent implements OnInit {
   userExchnageFee : Object = {};
   selectedCounterCurrencyPrecision:any;
   selectedBaseCurrencyPrecision:any;
-  buySellDivStatus: boolean = true;
+  buySellDivStatus: string = 'all';
   tradeofferbyIdBuy: any = [];
   tradeofferbyIdSell: any = [];
   filterMyOfferStatus: any = 'ALL';
@@ -109,6 +110,14 @@ export class DerivativeTradeComponent implements OnInit {
   myOfferTableAllPairs: boolean = false;
   tradehistrybyIdNewData: any;
   tradeofferbyIdNewData: any;
+  myStopLimitAllPairs: boolean = false;
+  buydataNew: any = [];
+  buyselldata: any[];
+  filterStatusForOpenOrder: any = 0;
+  allStoplimitButtonStatus: boolean = true;
+  allbuySelldata: any;
+  buydataStream: any;
+  selldataStream: any;
 
   @Input() Themecolor = 'Dark';
   activeIdString: string;
@@ -126,8 +135,11 @@ export class DerivativeTradeComponent implements OnInit {
     this.getTradeNavHist()
     this.Themecolor = theme;
     this.data.getAllPrecision();
+    this.changemode();
+
     /* calling API to render data before event source for my trade, my offer and stop limit */
     this.data.renderDataForMyTradeFutures();
+    this.callAllStopLimitOffers();
 
     /** setting precision for selected **/
     this.selectedCounterCurrencyPrecision = this.data.getSpecificCurrencyPrecision(localStorage.getItem('buying_crypto_asset').toUpperCase())
@@ -159,6 +171,8 @@ export class DerivativeTradeComponent implements OnInit {
     }, 6000);
   }
 
+  
+
   themeChange(val){
     this.Themecolor = val;
     
@@ -187,7 +201,6 @@ export class DerivativeTradeComponent implements OnInit {
     // console.log('new theme is ',this.Themecolor);
     
 
-    this.changemode();
     this.tradehistrybyId  = this.data.futuresMyTradeData;
     this.tradeofferbyId  = this.data.futuresMyOfferData;
     this.buydata = this.data.futuresSpotLimitBuyData;
@@ -208,6 +221,8 @@ export class DerivativeTradeComponent implements OnInit {
     return e.txn_type == 2;
 });
     }
+
+    this.ref.detectChanges();
   }
 
   getTradePrice(m) {
@@ -219,18 +234,29 @@ export class DerivativeTradeComponent implements OnInit {
   }
 
   changemode() {
-    if (this.data.changescreencolor == true) {
-      $(".bg_new_class").removeClass("bg-dark").css("background-color", "#fefefe");
-      $(".bg-black").css("background-color", "transparent");
-      $(".btn").css("color", "#000");
-      $(".text-blue").css("color", "black");
-    }
-    else {
-      $(".bg_new_class").removeClass("bg-dark").css("background-color", "#16181a");
-      $(".bg-black").css("background-color", "transparent");
-      $(".btn").css("color", "#fff");
-      $(".text-blue").css("color", "white");
-
+    // if (this.data.changescreencolor == true) {
+      if(this.Themecolor != 'Dark'){
+      $(".bg_new_class")
+        .removeClass("bg-dark")
+        .css("background-color", "#fefefe");
+      $(".sp-highlow").css("background-color", "#d3dddd");
+      $(".sp-highlow").css("color", "Black");
+      $(".border-col").css("border-color", "#d3dddd");
+      $("th").css({ "background-color": "#d3dddd", color: "#273338" });
+      $(".text-left").css("color", "black");
+      $(".text-right").css("color", "black");
+    } else {
+      $(".bg_new_class")
+        .removeClass("bg-dark")
+        .css("background-color", "#16181a");
+      $(".sp-highlow").css("background-color", "#273338");
+      $(".sp-highlow").css("color", "yellow");
+      $(".border-col").css("border-color", "#273338");
+      $("th").css({ "background-color": "#273338", color: "#d3dddd" });
+      $(".text-left")
+        .css("color", "")
+        .css("color", "rgb(153, 152, 152)");
+      $(".text-right").css("color", "rgb(153, 152, 152)");
     }
   }
 
@@ -371,8 +397,9 @@ export class DerivativeTradeComponent implements OnInit {
     this.data.alert('Loading...', 'dark');
     inputObj['offer_id'] = offerId;
     inputObj['userId'] = localStorage.getItem('user_id');
+    inputObj['uuid'] = localStorage.getItem('uuid');
     var jsonString = JSON.stringify(inputObj);
-    this.http.post<any>(this.data.WEBSERVICE + '/fTrade/GetOfferByID', jsonString, { headers: { 'Content-Type': 'application/json' } })
+    this.http.post<any>(this.data.WEBSERVICE + '/fTrade/GetOfferByID', jsonString, { headers: { 'Content-Type': 'application/json',authorization: "BEARER " + localStorage.getItem("access_token") } })
       .subscribe(response => {
         document.body.classList.remove("overlay")
         this.data.loader = false;
@@ -409,8 +436,9 @@ export class DerivativeTradeComponent implements OnInit {
     this.data.alert('Loading...', 'dark');
     inputObj['offer_id'] = offerId;
     inputObj['userId'] = localStorage.getItem('user_id');
+    inputObj['uuid'] = localStorage.getItem('uuid');
     var jsonString = JSON.stringify(inputObj);
-    this.http.post<any>(this.data.WEBSERVICE + '/fTrade/GetOfferByID', jsonString, { headers: { 'Content-Type': 'application/json' } })
+    this.http.post<any>(this.data.WEBSERVICE + '/fTrade/GetOfferByID', jsonString, { headers: { 'Content-Type': 'application/json',authorization: "BEARER " + localStorage.getItem("access_token") } })
       .subscribe(response => {
         document.body.classList.remove("overlay")
         this.data.loader = false;
@@ -491,7 +519,7 @@ export class DerivativeTradeComponent implements OnInit {
 
           var inputObj = {};
           inputObj["offer_id"] = this.manageOfferId;
-          inputObj["userId"] = localStorage.getItem("user_id");
+          // inputObj["userId"] = localStorage.getItem("user_id");
           if (this.modifyType == 1) {
             inputObj["selling_asset_code"] = this.data.selectedSellingAssetText.toUpperCase();
             inputObj["buying_asset_code"] = this.data.selectedBuyingAssetText.toUpperCase();
@@ -598,7 +626,7 @@ export class DerivativeTradeComponent implements OnInit {
 
           var inputObj = {};
           inputObj["offer_id"] = this.manageOfferId;
-          inputObj["userId"] = localStorage.getItem("user_id");
+          // inputObj["userId"] = localStorage.getItem("user_id");
           if (this.modifyType == 1) {
             inputObj["selling_asset_code"] = this.data.selectedSellingAssetText.toUpperCase();
             inputObj["buying_asset_code"] = this.data.selectedBuyingAssetText.toUpperCase();
@@ -684,7 +712,7 @@ export class DerivativeTradeComponent implements OnInit {
     $('.load').fadeIn();
     var inputObj = {};
     inputObj['offer_id'] = this.delOfferId;
-    inputObj['userId'] = localStorage.getItem('user_id');
+    // inputObj['userId'] = localStorage.getItem('user_id');
     if (this.delTxnType == 2) {
       inputObj['selling_asset_code'] = this.data.selectedBuyingAssetText.toUpperCase();
       inputObj['buying_asset_code'] = this.data.selectedSellingAssetText.toUpperCase();
@@ -736,78 +764,78 @@ export class DerivativeTradeComponent implements OnInit {
   }
 
   getStopLossOfferForSell() {
-    // var userId = localStorage.getItem('user_id');
-    // this.flag4 = true;
-    // var transactiontype = '2';
-    // var url = "https://stream.paybito.com/StreamingApi/rest/getStopLossBuySell?userID=" + userId + "&buyingAssetCode=" + this.data.selectedSellingAssetText.toUpperCase() + "&sellingAssetCode=" + this.data.selectedBuyingAssetText.toUpperCase() + "&txnType=" + transactiontype;
-    // if (this.data.source4 != undefined) {
-    //   this.data.source4.close();
+    var userId = localStorage.getItem('user_id');
+    this.flag4 = true;
+    var transactiontype = '2';
+    var url = "https://stream.paybito.com/StreamingApi/rest/getStopLossBuySell?userID=" + userId + "&buyingAssetCode=" + this.data.selectedSellingAssetText.toUpperCase() + "&sellingAssetCode=" + this.data.selectedBuyingAssetText.toUpperCase() + "&txnType=" + transactiontype;
+    if (this.data.source4 != undefined) {
+      this.data.source4.close();
 
-    // }
-    // if (this.data.source5 != undefined) {
+    }
+    if (this.data.source5 != undefined) {
 
-    //   this.data.source5.close();
-    // }
+      this.data.source5.close();
+    }
 
-    // if (this.data.source6 != undefined) {
-    //   this.data.source6.close();
-    // }
-    // if (this.data.source7 != undefined) {
-    //   this.data.source7.close();
-    // }
-    // if (userId != "") {
-    //   this.data.source7 = new EventSource(url);
-    //   var result: any = new Object();
-    //   this.data.source7.onmessage = (event: MessageEvent) => {
-    //     var response = JSON.parse(event.data);
-    //     this.flag4 = false;
-    //     var selldata = JSON.parse(response.apiResponse);
-    //     this.selldata = selldata.response;
-    //     if (!this.ref['destroyed']) {
-    //       this.ref.detectChanges();
-    //     }
-    //   }
-    // }
+    if (this.data.source6 != undefined) {
+      this.data.source6.close();
+    }
+    if (this.data.source7 != undefined) {
+      this.data.source7.close();
+    }
+    if (userId != "") {
+      this.data.source7 = new EventSource(url);
+      var result: any = new Object();
+      this.data.source7.onmessage = (event: MessageEvent) => {
+        var response = JSON.parse(event.data);
+        this.flag4 = false;
+        var selldata = JSON.parse(response.apiResponse);
+        this.selldata = selldata.response;
+        if (!this.ref['destroyed']) {
+          this.ref.detectChanges();
+        }
+      }
+    }
   }
 
   getStopLossOfferForBuy() {
-    // this.flag3 = true;
-    // var userId = localStorage.getItem('user_id');
-    // var transactiontype = '1';
-    // var url = "https://stream.paybito.com/StreamingApi/rest/getStopLossBuySell?userID=" + userId + "&buyingAssetCode=" + this.data.selectedBuyingAssetText.toUpperCase() + "&sellingAssetCode=" + this.data.selectedSellingAssetText.toUpperCase() + "&txnType=" + transactiontype;
-    // if (this.data.source4 != undefined) {
-    //   this.data.source4.close();
+    this.flag3 = true;
+    var userId = localStorage.getItem('user_id');
+    var transactiontype = '1';
+    var url = "https://stream.paybito.com/StreamingApi/rest/getStopLossBuySell?userID=" + userId + "&buyingAssetCode=" + this.data.selectedBuyingAssetText.toUpperCase() + "&sellingAssetCode=" + this.data.selectedSellingAssetText.toUpperCase() + "&txnType=" + transactiontype;
+    if (this.data.source4 != undefined) {
+      this.data.source4.close();
 
-    // }
-    // if (this.data.source5 != undefined) {
+    }
+    if (this.data.source5 != undefined) {
 
-    //   this.data.source5.close();
-    // }
+      this.data.source5.close();
+    }
 
-    // if (this.data.source6 != undefined) {
-    //   this.data.source6.close();
-    // }
-    // if (this.data.source7 != undefined) {
-    //   this.data.source7.close();
-    // }
+    if (this.data.source6 != undefined) {
+      this.data.source6.close();
+    }
+    if (this.data.source7 != undefined) {
+      this.data.source7.close();
+    }
 
-    // if (url != "") {
-    //   this.data.source6 = new EventSource(url);
-    //   var result: any = new Object();
-    //   this.data.source6.onmessage = (event: MessageEvent) => {
-    //     var response = JSON.parse(event.data);
-    //     this.flag3 = false;
-    //     var buydata = JSON.parse(response.apiResponse);
-    //     this.buydata = buydata.response;
-    //     if (!this.ref['destroyed']) {
-    //       this.ref.detectChanges();
-    //     }
-    //   }
-    // }
+    if (url != "") {
+      this.data.source6 = new EventSource(url);
+      var result: any = new Object();
+      this.data.source6.onmessage = (event: MessageEvent) => {
+        var response = JSON.parse(event.data);
+        this.flag3 = false;
+        var buydata = JSON.parse(response.apiResponse);
+        this.buydata = buydata.response;
+        if (!this.ref['destroyed']) {
+          this.ref.detectChanges();
+        }
+      }
+    }
   }
 
   getStoplossPrice(s) {
-    return (parseFloat(s.stopPrice)).toFixed(parseInt(this.tradep));
+    return (parseFloat(s.stopLossPrice)).toFixed(parseInt(this.tradep));
   }
   getStoplossTriggerPrice(s) {
     return (parseFloat(s.triggerPrice)).toFixed(parseInt(this.tradep));
@@ -816,21 +844,22 @@ export class DerivativeTradeComponent implements OnInit {
     return (parseFloat(s.quantity)).toFixed(parseInt(this.tradem));
   }
 
-  modifyStoploss(content, id, q, p, t, flag) {
+  modifyStoploss(content, id, q, p, t, flag,assetPair) {
     this.modalService.open(content, { centered: true });
     this.modifySlAmount = q;
     this.modifySlPrice = p;
     this.modifySlTrigger = t;
     this.modifySlOffer = id;
     this.flag = flag;
+    this.assetPairForStopLossModifyDelete = assetPair;
   }
 
   manageStoploss() {
     this.data.alert('Loading...', 'dark');
     if (this.flag == 'Buy') {
-      var marketOrderUrl = this.data.TRADESERVICE + '?symbol=' + this.data.selectedBuyingAssetText.toUpperCase() + this.data.selectedSellingAssetText.toUpperCase() + '&side=BID' + '&amount=' + this.modifySlAmount;
+      var marketOrderUrl = this.data.FUTURESOCKETSTREAMURL+ '/marketPrice?symbol=' + localStorage.getItem('selected_derivative_asset_pair') + '&side=BID&amount=' + this.modifySlAmount
     } else {
-      var marketOrderUrl = this.data.TRADESERVICE + '?symbol=' + this.data.selectedBuyingAssetText.toUpperCase() + this.data.selectedSellingAssetText.toUpperCase() + '&side=ASK' + '&amount=' + this.modifySlAmount;
+      var marketOrderUrl = this.data.FUTURESOCKETSTREAMURL+ '/marketPrice?symbol=' + localStorage.getItem('selected_derivative_asset_pair') + '&side=ASK&amount=' + this.modifySlAmount
     }
 
     this.getamntapi = this.http.get<any>(marketOrderUrl)
@@ -840,7 +869,10 @@ export class DerivativeTradeComponent implements OnInit {
         var result = data;
         if (result.statuscode != '0') {
           this.marketOrderPrice = parseFloat(result.price);
-          if (this.flag == 'Buy') {
+          if (this.flag == '1') {
+            console.log( 'Market order < trigger ',this.marketOrderPrice,this.modifySlTrigger)
+            console.log( 'Market order < stop loss',this.marketOrderPrice,this.modifySlPrice)
+            console.log( 'trigger < stoploss',this.modifySlTrigger,this.modifySlPrice)
             if (
               this.marketOrderPrice < this.modifySlTrigger &&
               this.marketOrderPrice < this.modifySlPrice &&
@@ -850,17 +882,17 @@ export class DerivativeTradeComponent implements OnInit {
               var inputObj = {};
               inputObj['selling_asset_code'] = localStorage.getItem('selling_crypto_asset').toUpperCase();
               inputObj['buying_asset_code'] = localStorage.getItem('buying_crypto_asset').toUpperCase();
-              inputObj['userId'] = localStorage.getItem('user_id');
+              // inputObj['userId'] = localStorage.getItem('user_id');
               inputObj['modify_type'] = 'edit';
               inputObj['stoploss_id'] = this.modifySlOffer;
               inputObj['stop_loss_price'] = this.modifySlPrice;
               inputObj['trigger_price'] = this.modifySlTrigger;
               inputObj['quantity'] = this.modifySlAmount;
-              inputObj['txn_type'] = '1';
+              //inputObj['txn_type'] = '1';
               inputObj['uuid'] = localStorage.getItem('uuid');
 
               var jsonString = JSON.stringify(inputObj);
-              this.modifystoplossapi = this.http.post<any>(this.data.WEBSERVICE + '/userTrade/ModifyStopLossBuySell', jsonString, { headers: { "Content-Type": "application/json" } })
+              this.modifystoplossapi = this.http.post<any>(this.data.WEBSERVICE + '/fTrade/ModifyStopLossBuySell', jsonString, { headers: { "Content-Type": "application/json","authorization": "BEARER " + localStorage.getItem("access_token") } })
                 .subscribe(data => {
                   this.data.loader = false;
                   var result = data;
@@ -868,7 +900,7 @@ export class DerivativeTradeComponent implements OnInit {
                     this.data.alert(result.error.error_msg, 'danger');
                   } else {
                     this.data.alert(result.error.error_msg, 'success');
-                    this.getStopLossOfferForBuy();
+                    this.callAllStopLimitOffers();
                   }
 
                 });
@@ -884,17 +916,17 @@ export class DerivativeTradeComponent implements OnInit {
               var inputObj = {};
               inputObj['selling_asset_code'] = localStorage.getItem('buying_crypto_asset').toUpperCase();
               inputObj['buying_asset_code'] = localStorage.getItem('selling_crypto_asset').toUpperCase();
-              inputObj['userId'] = localStorage.getItem('user_id');
+              // inputObj['userId'] = localStorage.getItem('user_id');
               inputObj['modify_type'] = 'edit';
               inputObj['stoploss_id'] = this.modifySlOffer;
               inputObj['stop_loss_price'] = this.modifySlPrice;
               inputObj['trigger_price'] = this.modifySlTrigger;
               inputObj['quantity'] = this.modifySlAmount;
-              inputObj['txn_type'] = '2';
+              //inputObj['txn_type'] = '2';
               inputObj['uuid'] = localStorage.getItem('uuid');
 
               var jsonString = JSON.stringify(inputObj);
-              this.stoploss2api = this.http.post<any>(this.data.WEBSERVICE + '/userTrade/ModifyStopLossBuySell', jsonString, { headers: { "Content-Type": "application/json" } })
+              this.stoploss2api = this.http.post<any>(this.data.WEBSERVICE + '/fTrade/ModifyStopLossBuySell', jsonString, { headers: { "Content-Type": "application/json","authorization": "BEARER " + localStorage.getItem("access_token") } })
                 .subscribe(data => {
                   this.data.loader = false;
                   var result = data;
@@ -902,7 +934,7 @@ export class DerivativeTradeComponent implements OnInit {
                     this.data.alert(result.error.error_msg, 'danger');
                   } else {
                     this.data.alert(result.error.error_msg, 'success');
-                    $('#trade').click();
+                    this.callAllStopLimitOffers();
                   }
                 });
             } else {
@@ -915,13 +947,15 @@ export class DerivativeTradeComponent implements OnInit {
       });
   }
 
-  delStoploss(content, id, q, p, t, flag) {
+  delStoploss(content, id, q, p, t, flag,assetPair) {
     this.modalService.open(content, { centered: true });
     this.modifySlAmount = q;
     this.modifySlPrice = p;
     this.modifySlTrigger = t;
     this.modifySlOffer = id;
     this.flag = flag;
+    this.assetPairForStopLossModifyDelete = assetPair;
+    console.log(q,p,t,id,flag,assetPair)
   }
 
   removeStoploss() {
@@ -931,7 +965,7 @@ export class DerivativeTradeComponent implements OnInit {
     var inputObj = {};
     inputObj['selling_asset_code'] = (this.stopLossSellingAsset).toUpperCase();
     inputObj['buying_asset_code'] = (this.stopLossBuyingAsset).toUpperCase();
-    inputObj['userId'] = localStorage.getItem('user_id');
+    // inputObj['userId'] = localStorage.getItem('user_id');
     inputObj['modify_type'] = 'delete';
     inputObj['stoploss_id'] = this.modifySlOffer;
     inputObj['stop_loss_price'] = this.modifySlPrice;
@@ -939,16 +973,13 @@ export class DerivativeTradeComponent implements OnInit {
     inputObj['quantity'] = this.modifySlAmount;
     inputObj['uuid'] = localStorage.getItem('uuid');
 
-    if (this.flag == 'buy') {
-      inputObj['txn_type'] = '1';
-    } else {
-      inputObj['txn_type'] = '2';
-    }
+    inputObj['txn_type'] = this.flag;
 
     var jsonString = JSON.stringify(inputObj);
-    this.stoplossdelapi = this.http.post<any>(this.data.WEBSERVICE + '/userTrade/ModifyStopLossBuySell', jsonString, {
+    this.stoplossdelapi = this.http.post<any>(this.data.WEBSERVICE + '/fTrade/ModifyStopLossBuySell', jsonString, {
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        "authorization": "BEARER " + localStorage.getItem("access_token")
       }
     })
       .subscribe(data => {
@@ -958,12 +989,110 @@ export class DerivativeTradeComponent implements OnInit {
           this.data.alert(result.error.error_msg, 'danger');
         } else {
           this.data.alert(result.error.error_msg, 'success');
-          $('#trade').click();
+          this.callAllStopLimitOffers();
         }
 
       });
   }
 
+  checkValueStopLimit(isChecked) {
+    console.log('check checkbox', isChecked.target.checked)
+    this.myStopLimitAllPairs = isChecked.target.checked;
+    if (this.myStopLimitAllPairs == true) {
+      this.callStopLimitAllPairsAPI();
+    }else{
+      this.callAllStopLimitOffers();
+    }
+  }
+
+  handleStopLimitAllButton = () => {
+    if (this.myStopLimitAllPairs == true) {
+      this.callStopLimitAllPairsAPI();
+    }else{
+      this.callAllStopLimitOffers();
+    }
+  }
+
+  callAllStopLimitOffers() {
+    //console.log('my tstr')
+    //this.allStoplimitButtonStatus = true;
+
+    let payload = {
+      uuid : localStorage.getItem('uuid'),
+      assetPair : localStorage.getItem("selected_derivative_asset_pair")
+    }
+    this.stoplossdelapi = this.http.post<any>(this.data.WEBSERVICE + "/fTrade/GetStopLossBuySell",JSON.stringify(payload), {
+      headers: {
+        'Content-Type': 'application/json',
+        'authorization': 'BEARER ' + localStorage.getItem('access_token'),
+      }
+    })
+      .subscribe(data => {
+       // console.log('getall buy sell data', data)
+        let apiResponse = JSON.parse(data.apiResponse);
+        console.log('Iteration for stop loss data',apiResponse);
+        this.buyselldata = apiResponse.stopLossList;
+
+      
+
+        this.buydata = this.buyselldata.filter(function (el) {
+          return el.action == 'buy'
+
+        });
+
+        this.selldata = this.buyselldata.filter(function (el) {
+          return el.action == 'sell'
+
+        });
+
+      })
+
+
+  }
+
+
+  callStopLimitAllPairsAPI() {
+    this.stoplossdelapi = this.http.get<any>('https://stream.paybito.com/StreamingApi/rest/getStopLimitByAccountIDAll?userID=' + localStorage.getItem('user_id'), {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .subscribe(data => {
+
+        this.buydataNew = data.tradeListResult;
+        console.log(this.buydataNew.length,typeof(this.buydataNew.length))
+        //this.clickAllButton();
+
+        //  console.log('ttttt', data)
+        this.handleClickAllButton('spotStopLimitAllButton')
+        
+
+      });
+  }
+
+/* method for establishing click event and perform programiticcaly click on all filter button*/
+
+handleClickAllButton = (param) => {
+  let elem = document.getElementById(param)
+   //console.log(elem);
+   var evt = document.createEvent('MouseEvents');
+   evt.initMouseEvent('mousedown', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+   if(elem != null && elem != undefined){
+     elem.dispatchEvent(evt);
+
+     elem.click();
+     elem.click();
+     
+   }
+}
+clickAllButton() {
+  //let el: HTMLElement = this.allButtonClick.nativeElement;
+  //console.log(el)
+  this.callAllStopLimitOffers();
+  //el.click();
+  // $('#allButtonClick').click();
+
+}
   /* Method defination to handle close button in my trade */
   handleCloseButton = (param,content) => {
     console.log('*********** CLOSED BUTTON CLICKED  **************')
@@ -993,7 +1122,7 @@ export class DerivativeTradeComponent implements OnInit {
     }else if(param.offer_type == 6){
       marginType = '2';
     }
-    // this.http.get<any>("https://futures-stream.paybito.com/fSocketStream/api/marketPrice" + '?symbol=' + param.asset_pair + '&side=' + txnSide + '&amount=' + parseFloat(param.amount).toFixed(6), {
+    // this.http.get<any>(this.data.FUTURESOCKETSTREAMURL+ "/marketPrice" + '?symbol=' + param.asset_pair + '&side=' + txnSide + '&amount=' + parseFloat(param.amount).toFixed(6), {
     //   headers: {
     //     'Content-Type': 'application/json',
     //     //'authorization': 'BEARER ' + localStorage.getItem('access_token'),
@@ -1004,7 +1133,7 @@ export class DerivativeTradeComponent implements OnInit {
     //     if (result.statuscode != '0') {
 
           var inputObj = {};
-          inputObj['userId'] = localStorage.getItem('user_id');
+          // inputObj['userId'] = localStorage.getItem('user_id');
           inputObj['selling_asset_code'] = (param.buying_asset_code).toUpperCase();
           inputObj['buying_asset_code'] = (param.selling_asset_code).toUpperCase();
           inputObj['amount'] = parseFloat(param.amount);

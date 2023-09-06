@@ -10,7 +10,7 @@ import { BodyService } from '../body.service';
 })
 export class SupportComponent implements OnInit {
 
-  constructor(private http:HttpClient, private data:CoreDataService, private main:BodyService) { }
+  constructor(private http:HttpClient, public data:CoreDataService, private main:BodyService) { }
 
   ngOnInit() {
     this.main.getDashBoardInfo();

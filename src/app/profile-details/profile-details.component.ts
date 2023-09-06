@@ -4,7 +4,6 @@ import { HttpClient } from '@angular/common/http';
 import * as $ from 'jquery';
 import { CoreDataService } from '../core-data.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Router } from '@angular/router';
 
 
 @Component({
@@ -21,7 +20,7 @@ export class ProfileDetailsComponent implements OnInit {
   public totalcount: any;
   pgn: any = [];
   Themecolor: string;
-  constructor(public main: BodyService, private http: HttpClient, public data: CoreDataService, private modalService: NgbModal, private route: Router) { }
+  constructor(public main: BodyService, private http: HttpClient, public data: CoreDataService, private modalService: NgbModal) { }
 
   ngOnInit() {
     this.main.getDashBoardInfo();
@@ -34,8 +33,6 @@ export class ProfileDetailsComponent implements OnInit {
     this.modalService.open(content, { centered: true });
     var otpObj = {};
     otpObj['email'] = localStorage.getItem('email');
-    otpObj["uuid"] = localStorage.getItem('uuid');
-
     var jsonString = JSON.stringify(otpObj);
     this.http.post<any>(this.data.WEBSERVICE + '/user/ResendOTP', jsonString, {
       headers: {
@@ -62,10 +59,9 @@ export class ProfileDetailsComponent implements OnInit {
     this.loghistory = null;
     var loghistoryInfoObj = {};
     //loghistoryInfoObj['userId'] = localStorage.getItem('user_id');
+    loghistoryInfoObj['uuid'] = localStorage.getItem('uuid');
     loghistoryInfoObj['noOfItemsPerPage'] = 20;
     loghistoryInfoObj['pageNo'] = pageno;
-    loghistoryInfoObj['uuid'] = localStorage.getItem('uuid');
-
     var jsonString = JSON.stringify(loghistoryInfoObj);
     this.http.post<any>(this.data.WEBSERVICE + '/user/GetLoginHistory', jsonString, {
       headers: {
@@ -101,14 +97,8 @@ export class ProfileDetailsComponent implements OnInit {
 
   ngDoCheck() {
 
-    var theme = localStorage.getItem('themecolor');
-    if(theme == null || theme == undefined){
-    this.Themecolor = 'Dark'
-   }
-  else{
     this.Themecolor = localStorage.getItem('themecolor');
-
-  }
+    //console.log('saved theme', this.Themecolor)
   }
 
   themeChangedHandler(val){

@@ -173,8 +173,9 @@
 
             </div>
             <div class="row">
-              <p class="col-lg-6 col-md-6 col-sm-12 col-xs-12 text-white">You can enable Multi-Factor Authentication (MFA) to protect your account. If you do, Paybito [company name: Hashcash Consultants LLC] will send you a unique password each time you sign in. Do you want to enable this feature?</p>
-            </div>
+              <p class="col-lg-6 col-md-6 col-sm-12 col-xs-12 text-white">You can enable Multi-Factor Authentication (MFA) to protect your account. If you do, {{data.exchange}} [company name: {{data.companyName}}] will send you a unique password each time you sign in. Do you want to enable this feature?</p>
+
+              </div>
             <div class="row d-flex align-items-center twofactorbutton">
               <div class="col-6 col-lg-6 mb-alighnment settings-alighnment text-theme-dark-blue"
                 [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'bg-light-bankDetils text-black'">Activate phone
@@ -658,9 +659,10 @@
                     <h6 [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">API restrictions</h6>
                     <div *ngFor="let type of apitype;" class="form-check-inline apikeycheckbox">
                       <input type="checkbox" name="keyapicheck" class="form-check-input keyapicheck" 
-                        value="{{type.apiTypeId}}" (change)="chnageapikeyfunc($event,apilist,type)"
-                        [checked]="functionname(apilist,type)" disabled><span [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"> {{type.apiTypeName}} </span>
+                        value="{{type.apiTypeId}}" style="pointer-events: none;" (change)="chnageapikeyfunc($event,apilist,type)"
+                        [checked]="functionname(apilist,type)" ><span [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"> {{type.apiTypeName}} </span>
                     </div>
+                    
                   </div>
                   <div class="apilistcls text-white" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">
                     <h6 [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">IP access restrictions</h6>
@@ -698,7 +700,7 @@
   <!-- qr modal -->
   <ng-template #authCode let-modal>
     <div class="modal-header google-auth-close-btn">
-      <img style="width: 17%;" src="./assets/img/authenticator.png" alt="">
+      <img style="width: 17%;" src="../../assets/img/authenticator.png" alt="">
       <h4 class="modal-title" id="modal-basic-title">Google Authentication</h4>
       <!-- <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
         <span aria-hidden="true">&times;</span>
@@ -800,7 +802,7 @@
           <div class="row">
             <div class="col-md-8 mb-5">
               <label for="orangeForm-phoneOtp">Phone verification code</label>
-              <input type="password" id="orangeForm-phoneOtp" class="form-control validate" [(ngModel)]="phoneOtpForSaveApi" autocomplete="new-password">
+              <input type="text" id="orangeForm-phoneOtp" class="form-control validate" [(ngModel)]="phoneOtpForSaveApi" autocomplete="new-password">
               <!-- <span>{{messageotp}}</span> -->
             </div>
             <div class="col-md-2 ">
@@ -879,11 +881,11 @@
   </ng-template>
 
   <ng-template #twoFactorAuth let-modal>
-    <div class="modal-header test proper-alighnment-header">
+    <div class="modal-header test proper-alighnment-header" [ngClass]="Themecolor == 'Dark' ? '' : 'lightTheme'">
       <div class="row">
         <div class="col-md-3"></div>
         <div class="col-md-6">
-          <h4 class="modal-title" id="modal-basic-title" style="color: brgb(248, 240, 240);">Security Authentication</h4>
+          <h4 class="modal-title" id="modal-basic-title" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Security Authentication</h4>
 
         </div>
         <div class="col-md-3">
@@ -891,14 +893,14 @@
         </div>
       </div>
 
-      <div class="modal-body">
-        <p class="text-left" style="color: rgb(248, 240, 240);">Input otp from your google authenticator</p>
+      <div class="modal-body" [ngClass]="Themecolor == 'Dark' ? '' : 'lightThemeModalBody'">
+        <p class="text-left" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Input otp from your google authenticator</p>
         <!-- <p class="text-left" style="margin-top: -21px; color: black;">{{hiddenEmail}}</p> -->
 
 
         <form>
           <div class="form-group">
-            <input class="form-control" name="emailVerificationCode" id="twoFactorOtp" type="password"
+            <input class="form-control" [ngClass]="Themecolor == 'Dark' ? 'form-control' : 'form-control-light'" name="emailVerificationCode" id="twoFactorOtp" type="password"
               [(ngModel)]="twoFactorOtp" placeholder="Two-Factor Authenticator code" autofocus>
 
 
@@ -928,11 +930,11 @@
   </ng-template>
 
   <ng-template #twoFactorAuthSpecific let-modal>
-    <div class="modal-header test proper-alighnment-header">
+    <div class="modal-header test proper-alighnment-header" [ngClass]="Themecolor == 'Dark' ? '' : 'lightTheme'">
       <div class="row">
         <div class="col-md-3"></div>
         <div class="col-md-6">
-          <h4 class="modal-title" id="modal-basic-title" style="color: brgb(248, 240, 240);">Security Authentication</h4>
+          <h4 class="modal-title" id="modal-basic-title" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Security Authentication</h4>
 
         </div>
         <div class="col-md-3">
@@ -940,17 +942,17 @@
         </div>
       </div>
 
-      <div class="modal-body">
+      <div class="modal-body" [ngClass]="Themecolor == 'Dark' ? '' : 'lightThemeModalBody'">
 
         <!-- <p class="text-left" style="margin-top: -21px; color: black;">{{hiddenEmail}}</p> -->
 
 
         <form>
           <div class="form-group">
-            <p class="text-left" style="color: rgb(248, 240, 240);">Input otp from your registered email address</p>
+            <p class="text-left" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Input otp from your registered email address</p>
             <div class="row">
               <div class="col-md-8">
-                <input class="form-control " numbersOnly name="emailVerificationCode" id="emailOtpSpecific" type="password"
+                <input class="form-control " [ngClass]="Themecolor == 'Dark' ? 'form-control' : 'form-control-light'" numbersOnly name="emailVerificationCode" id="emailOtpSpecific" type="password"
                   [(ngModel)]="emailOtpSpecific" placeholder="OTP" autocomplete="name">
 
               </div>
@@ -963,8 +965,8 @@
             <span id="messageotpSpecific">{{messageotpSpecific}}</span>
           </div>
           <div class="form-group" *ngIf="exist2FaKey == '1' || specificModalStatus == 'post'">
-            <p class="text-left" style="color: rgb(248, 240, 240);">Input otp from your google authenticator</p>
-            <input class="form-control" name="emailVerificationCode" id="twoFactorOtpSpecific" type="password"
+            <p class="text-left" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Input otp from your google authenticator</p>
+            <input class="form-control" [ngClass]="Themecolor == 'Dark' ? 'form-control' : 'form-control-light'" name="emailVerificationCode" id="twoFactorOtpSpecific" type="password"
               [(ngModel)]="twoFactorOtpSpecific" placeholder="Two-Factor Authenticator code" autocomplete="ga">
 
 
@@ -1096,7 +1098,7 @@
 
         </div>
         <div class="col-md-3">
-          <i class="fa fa-times" aria-hidden="true"  (click)="modal.dismiss()" style="margin: 6px 0px 0px 32px;cursor: pointer;"></i>
+          <i class="fa fa-times" aria-hidden="true"  (click)="modal.dismiss();resetPhoneOtpTimer()" style="margin: 6px 0px 0px 32px;cursor: pointer;"></i>
         </div>
       </div>
       
@@ -1108,54 +1110,50 @@
 
         <form>
 
-          <div class="form-group" *ngIf="!isSmsOtpProceedClicked">
+          <div class="form-group" >
             <p class="text-left" style="color: rgb(248, 240, 240);">Input otp from your <b>registered phone number</b></p>
             <p class="text-white">We sent a text message to you at {{registeredPhone}}. Enter the eight digit code in that message to confirm your phone number.</p>
             <div class="row">
-              <div class="col-md-8">
+              <div class="col-md-12">
                 <input class="form-control " name="emailVerificationCode" id="smsOtpForRegisteredNo" type="password"
-                  [(ngModel)]="smsOtpForRegisteredNo" placeholder="OTP" autofocus>
+                  [(ngModel)]="smsOtpForRegisteredNo" placeholder="Enter OTP from registered phone" autofocus>
 
               </div>
-              <button (click)="handleSendOtpForPhoneVerification()" class="btn getbtn btn-primary"
-                [disabled]="isDisableSendOtpButtonForRegisteredPhone">Send OTP</button>
+            <!--   <button (click)="handleSendOtpForPhoneVerification()" class="btn getbtn btn-primary"
+                [disabled]="isDisableSendOtpButtonForRegisteredPhone">Send OTP</button> -->
             </div>
 
           </div>
-          <div class="form-group" *ngIf="!isSmsOtpProceedClicked">
+         <!--  <div class="form-group">
             <span id="messageotpSpecific">{{phoneVerificationcountdownmessage}}</span>
-          </div>
-          <div class="form-group" *ngIf="isSmsOtpProceedClicked">
+          </div> -->
+          <div class="form-group" >
             <p class="text-left" style="color: rgb(248, 240, 240);">Input otp from your <b>new phone number</b></p>
             <p class="text-white">We sent a text message to you at {{this.selectedCountryPhone + this.editablePhone}}. Enter the eight digit code in that message to confirm your phone number.</p>
             <div class="row">
-              <div class="col-md-8">
+              <div class="col-md-12">
                 <input class="form-control " name="emailVerificationCode" id="smsOtpForNewNo" type="password"
-                  [(ngModel)]="smsOtpForNewNo" placeholder="OTP" autofocus>
+                  [(ngModel)]="smsOtpForNewNo" placeholder="Enter OTP from new phone" autofocus>
 
               </div>
-              <button (click)="handleSendOtpForNewPhone()" class="btn getbtn btn-primary"
-                [disabled]="isDisableSendOtpButtonForNewPhone">Send OTP</button>
+              
             </div>
 
           </div>
-          <div class="form-group" *ngIf="isSmsOtpProceedClicked">
-            <span id="messageotpSpecific">{{phoneVerificationcountdownmessage}}</span>
-          </div>
+          
 
         </form>
         <p class="text-left">
 
         </p>
 
-        <div *ngIf="!isSmsOtpProceedClicked">
-          <button type="submit" class="btn btn-primary btn-block"
-            [disabled]="smsOtpForRegisteredNo == '' || smsOtpForRegisteredNo == undefined "
-            (click)="handleProceedButtonClick()" style="margin-top: 28px;">
-            Proceed
-          </button>
+       
+        <div class="form-group" >
+          <span id="messageotpSpecific">{{phoneVerificationcountdownmessage}}</span>
         </div>
-        <div *ngIf="isSmsOtpProceedClicked">
+        <button (click)="handleSendOtpForNewPhone()" class="btn getbtn btn-primary"
+                [disabled]="isDisableSendOtpButtonForNewPhone">Send OTP</button>
+        <div >
           <button type="submit" class="btn btn-primary btn-block"
             [disabled]="smsOtpForNewNo == '' || smsOtpForNewNo == undefined "
             (click)="handleConfirmButton();modal.dismiss();" style="margin-top: 28px;">
@@ -1240,7 +1238,7 @@
         </div>
         <div class="row" *ngIf="ipRestrictStatus == 1">
           <div class="col-md-12">
-            <input type="text" class="form-control" (keyup)="handleAddIpAddress($event)"/><small class="text-white">Press "Enter" add new ip address</small>
+            <input type="text" class="form-control" (keyup)="handleAddIpAddress($event)"/><small style="font-size: 14px;color: #007bff;">Press "Enter" to add new ip address</small>
           </div>
           <div class="col-md-12 mt-3">
             <ul class="ip">
@@ -1369,7 +1367,7 @@
         <div class="row">
           <div class="col-md-8 mb-5">
             <label for="orangeForm-phoneOtp-edit">Phone verification code</label>
-            <input type="password" id="orangeForm-phoneOtp-edit" class="form-control validate" [(ngModel)]="phoneOtpForEdit">
+            <input type="text" id="orangeForm-phoneOtp-edit" class="form-control validate" [(ngModel)]="phoneOtpForEdit">
             <!-- <span>{{messageotp}}</span> -->
           </div>
           <div class="col-md-2 ">
@@ -1382,7 +1380,7 @@
         <div class="row">
           <div class="mb-4 col-md-12">
             <label for="orangeForm-pass-edit">Google verification code</label>
-            <input type="number" id="orangeForm-passkey-edit" class="form-control validate vfygoogleauth" [(ngModel)]="gaOtpForEdit">
+            <input type="text" id="orangeForm-passkey-edit" class="form-control validate vfygoogleauth" [(ngModel)]="gaOtpForEdit">
             <span>Enter the 6 digit code from Google Authenticator</span>
           </div>
         </div>
@@ -1421,7 +1419,7 @@
         <div class="row">
           <div class="col-md-8 mb-5">
             <label for="orangeForm-phoneOtp-delete">Phone verification code</label>
-            <input type="password" id="orangeForm-phoneOtp-delete" class="form-control validate"[(ngModel)]="phoneOtpForDelete">
+            <input type="text" id="orangeForm-phoneOtp-delete" class="form-control validate"[(ngModel)]="phoneOtpForDelete">
             <!-- <span>{{messageotp}}</span> -->
           </div>
           <div class="col-md-2 ">

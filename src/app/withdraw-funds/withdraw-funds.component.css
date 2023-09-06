@@ -44,6 +44,7 @@ border:0px;
 .topBorder{
   border-top: 7px solid #24262d;
 }
+
 .newPosition{
   display: inline-grid;
   padding-left: 6px;
@@ -93,7 +94,16 @@ border:0px;
   .upperInfo{
     position: absolute;
     top: 8px;
-    left: 632px;
+    left: 600px;
+  
+  }
+
+}
+@media (min-width: 1700px) {
+  .upperInfo{
+    position: absolute;
+    top: 8px;
+    left: 613px;
   
   }
 

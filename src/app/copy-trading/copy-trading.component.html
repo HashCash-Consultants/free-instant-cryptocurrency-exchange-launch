@@ -1,0 +1,142 @@
+<!-- <app-navbar></app-navbar> -->
+<app-navbar (themeChanged)="themeChangedHandler($event)"></app-navbar>
+
+<div class="content-wrapper pt-0 pl-3" [ngClass]="Themecolor == 'Dark' ? '' : 'content-wrapper-light'">
+
+  <div class="container-fluid" data-ng-controller="profileCtrl" data-ng-init="loginDuration();">
+    <div class="row d-flex">
+
+      <div class="col-md-6 col-sm-12 cardCustom" [ngClass]="Themecolor == 'Dark' ? '' : 'cardCustomLight'">
+        <!-- <p>test</p> -->
+        <div class="col-md-4 mt-3 align-self-stretch"><button type="button" class="" [ngClass]="Themecolor == 'Dark' ? 'sideButton' : 'sideButtonLight'"  (click)="gotoAddApiKey()"><i class="fas fa-key"></i>&nbsp;&nbsp;Add API Key</button></div>
+        <div class="" style="padding-left: 16px;">
+          <div class="row">
+            <div class="col-sm">
+          <button type="button" class="" [ngClass]="Themecolor == 'Dark' ? 'sideButton' : 'sideButtonLight'" style="margin-top: 26px; cursor: text !important;" ><i class="fas fa-user-cog"></i>&nbsp; &nbsp;Choose My Role</button>
+
+              <!-- <span>Choose My Role</span> -->
+
+            </div>
+            <div class="col-sm">
+              <div class="" [ngClass]="Themecolor == 'Dark' ? 'wrapper' : 'wrapperLight'">
+  
+           
+                <input type="radio" name="select" id="option-1" checked (click)="selectTrader()">
+                <input type="radio" name="select" id="option-2" (click)="selectCopyTrader()">
+                  <label for="option-1" class="option option-1">
+                    <div class="dot"></div>
+                     <span>Trader</span>
+                     </label>
+                  <label for="option-2" class="option option-2">
+                    <div class="dot"></div>
+                     <span>Copy Trader</span>
+                  </label>
+               </div>
+            </div>
+
+          </div>
+        
+        </div>
+
+        <ng-container *ngIf="traderStatus">
+
+          <div class="row leftPadding">
+            <!-- <i class="fa-duotone fa-robot"></i> -->
+            <!-- <i class="fas fa-duotone"></i> -->
+            
+
+            <div class="col-md-4 mt-3 align-self-stretch"><button type="button" class="" [ngClass]="Themecolor == 'Dark' ? 'sideButton' : 'sideButtonLight'" (click)="goToMyBots()"><i class="fas fa-robot"></i>&nbsp; &nbsp;My Bots</button></div>
+            
+  
+          </div>
+          <div class="row leftPadding">
+            <div class="col-md-4 mt-3 align-self-stretch"><button type="button" class="="  [ngClass]="Themecolor == 'Dark' ? 'sideButton' : 'sideButtonLight'" (click)="goToMarketplace()"><i class="fas fa-university"></i> &nbsp;&nbsp;Marketplace</button></div>
+            
+  
+          </div> 
+          <div class="row leftPadding">
+            <div class="col-md-4 mt-3 align-self-stretch"><button type="button" class="" [ngClass]="Themecolor == 'Dark' ? 'sideButton' : 'sideButtonLight'" (click)="goToMyFollowers()"><i class="fas fa-users"></i> &nbsp;&nbsp;My Followers</button></div>
+            
+  
+          </div>
+          <div class="row leftPadding">
+            <div class="col-md-4 mt-3" style="margin-top: 12px;">
+              <div ngbDropdown class="d-inline-block">
+                <button type="button" class="" [ngClass]="Themecolor == 'Dark' ? 'sideButton' : 'sideButtonLight'" (click)="dropdownBasic1 = !dropdownBasic1"> <i class="fas fa-wrench"></i>&nbsp;&nbsp;&nbsp;Manage Copy-Trading</button>
+                <div  aria-labelledby="dropdownBasic1" *ngIf="dropdownBasic1">
+                  <button class=" extramargin" [ngClass]="Themecolor == 'Dark' ? 'sideButton' : 'sideButtonLight'" style="cursor: pointer;" (click)="goToMyPayouts()"><i class="fas fa-money-bill-wave"></i>&nbsp;&nbsp;Payments Received</button>
+                  <button class=" extramargin" [ngClass]="Themecolor == 'Dark' ? 'sideButton' : 'sideButtonLight'" (click)="goToManageCopyTradng()" style="cursor: pointer;margin-top: 5px;"><i class="fas fa-key"></i>&nbsp;&nbsp;API Keys and Bots</button>
+                </div>
+              </div>
+            </div>
+  
+          </div>
+          <div class="row leftPadding">
+            <div class="col-md-4 mt-3 align-self-stretch"><button type="button" class="" [ngClass]="Themecolor == 'Dark' ? 'sideButton' : 'sideButtonLight'" (click)="goToMyHistory()"><i class="fas fa-book-open"></i> &nbsp;&nbsp;Copy-Trading History</button></div>
+            
+  
+          </div>
+
+        </ng-container>
+
+        <ng-container *ngIf="copyTraderStatus">
+
+          <div class="row leftPadding">
+            <div class="col-md-4 mt-3 align-self-stretch"><button type="button" class="" [ngClass]="Themecolor == 'Dark' ? 'sideButton' : 'sideButtonLight'" (click)="goToMarketplace()"><i class="fas fa-university"></i> &nbsp;&nbsp;Marketplace</button></div>
+            
+  
+          </div> 
+          <div class="row leftPadding">
+            <div class="col-md-4 mt-3 align-self-stretch"><button type="button" class="" [ngClass]="Themecolor == 'Dark' ? 'sideButton' : 'sideButtonLight'" (click)="goToWhomIFollow()"><i class="fas fa-users"></i> &nbsp;&nbsp;Whom I follow</button></div>
+            
+  
+          </div>
+
+          <div class="row leftPadding">
+            <div class="col-md-4 mt-3 align-self-stretch"><button type="button" class="" [ngClass]="Themecolor == 'Dark' ? 'sideButton' : 'sideButtonLight'" (click)="goToMyHistory()"><i class="fas fa-book-open"></i> &nbsp;&nbsp;Copy-Trading History</button></div>
+            
+  
+          </div>
+
+        </ng-container>
+
+        
+</div>
+
+
+
+         
+      <div class="col-md-6 col-sm-12 cardCustomRight">
+        <div style="display: flex; justify-content:center">
+          <img class="loadImg center" [src]="data.logo" width="190px" height="90px" alt="" sstyle="text-align:center;">
+
+        </div>
+        <p>Automated crypto trading bot</p>
+
+
+          <p>{{data.exchange}} Copy Trading is an automated Crypto trading platform that allows you to start trading and investing in cryptocurrency seamlessly.
+          Copy trade the best crypto traders with transparent track record, trade yourself using the advanced trading terminal or create fully automated trading bot.</p>
+         
+          
+          <!-- <div class="wrappering">
+          <div class="link_wrapper">
+            <a href="https://paybito.com/pdf/copy-trading-feature.pdf" target="_blank">How Copy Trading works</a>
+            <div class="icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 268.832 268.832">
+                <path d="M265.17 125.577l-80-80c-4.88-4.88-12.796-4.88-17.677 0-4.882 4.882-4.882 12.796 0 17.678l58.66 58.66H12.5c-6.903 0-12.5 5.598-12.5 12.5 0 6.903 5.597 12.5 12.5 12.5h213.654l-58.66 58.662c-4.88 4.882-4.88 12.796 0 17.678 2.44 2.44 5.64 3.66 8.84 3.66s6.398-1.22 8.84-3.66l79.997-80c4.883-4.882 4.883-12.796 0-17.678z"/>
+              </svg>
+            </div>
+          </div>
+          </div> -->
+      
+        </div>
+      
+    </div>
+  </div>
+  <footer class="sticky-footer">
+    <div class="container">
+      <div class="text-center"> <small>Copyright © Paybito 2019</small> </div>
+    </div>
+  </footer>
+  <a class="scroll-to-top rounded" href="#page-top"> <i class="fa fa-angle-up"></i> </a>
+</div>

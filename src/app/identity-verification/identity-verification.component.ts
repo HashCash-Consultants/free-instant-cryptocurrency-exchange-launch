@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { BodyService } from "../body.service";
 import { HttpClient } from "@angular/common/http";
 import { CoreDataService } from "../core-data.service";
@@ -47,8 +47,6 @@ export class IdentityVerificationComponent implements OnInit {
   bankFileStatusT2: boolean;
   TaxFileStatusT2: boolean;
 
-  @ViewChild('myModal') myModal : any;
-
   constructor(public main: BodyService, private http: HttpClient, public data:CoreDataService, private modalService: NgbModal, private route: Router) { }
 
   ngOnInit() {
@@ -56,12 +54,9 @@ export class IdentityVerificationComponent implements OnInit {
     this.main.getDashBoardInfo();
     this.getIdentityDetails();
     this.getLoc();
-    this.checkAndShowPaymentRenewPopup()
-
     // this.main.getUserDetails();
     // this.main.indentificationStatustwo = true;
   }
-
   panCardPic: any;
   aadharCardFront: any;
   aadharCardBack: any;
@@ -76,27 +71,6 @@ export class IdentityVerificationComponent implements OnInit {
   public preliminaryFormDataPayloadForTier3: any = new FormData();
   public tier3UserType: any;
   public isTier3PreStageEnable : boolean =  true;
-
-  checkAndShowPaymentRenewPopup(){
-
-    this.http
-      .get<any>(this.data.WEBSERVICE + "/home/brokerSubscriptionStatus?brokerId=" + this.data.BROKERID, {
-        headers: {
-          Authorization: "BEARER " + localStorage.getItem("access_token"),
-        },
-      })
-      .subscribe(
-
-        (result) => {
-          if(result.paymentStatus == 2){
-            this.modalService.open(this.myModal, { centered: true,backdrop: 'static',
-               keyboard: false });
-          }
-        }
-        
-
-      )
-  }
 
   ngDoCheck() {
 
@@ -252,7 +226,7 @@ export class IdentityVerificationComponent implements OnInit {
                 // this.lastButtonSubmitStatus = false;
 
                 setTimeout(() => {
-                  this.data.reloadPage(this.route.url);
+                  location.reload();
                 }, 3000);
               }
             },
@@ -316,7 +290,7 @@ export class IdentityVerificationComponent implements OnInit {
             // this.reset();
 
             setTimeout(() => {
-            this.data.reloadPage(this.route.url);
+            location.reload();
             }, 3000);
           }
         });
@@ -585,7 +559,7 @@ export class IdentityVerificationComponent implements OnInit {
             // this.reset();
 
             // setTimeout(() => {
-            // this.data.reloadPage(this.route.url);
+            // location.reload();
             // }, 1500);
           }
         });
@@ -636,7 +610,7 @@ export class IdentityVerificationComponent implements OnInit {
       fd.append("ssn", this.social_no.replace(/-/g, ""));
     }
     if ($(".profile_pic")[0].files[0] != undefined) {
-      fd.append("profile_pic", $(".profile_pic")[0].files[0]);
+      fd.append("profilePic", $(".profile_pic")[0].files[0]);
     } else {
       //fd.append("profile_pic", "");
     }
@@ -693,7 +667,7 @@ export class IdentityVerificationComponent implements OnInit {
             this.main.getUserDetails();
             //this.getIdentityDetails();
             setTimeout(() => {
-              this.data.reloadPage(this.route.url);
+              location.reload();
             }, 1500);
           }
         },
@@ -728,7 +702,9 @@ export class IdentityVerificationComponent implements OnInit {
         $("#" + content).val("");
       }
     } else {
-      this.data.alert("File should be in JPG ,JPEG, DOC,PNG or PDF . " + sz.type.split("/")[1].toUpperCase() + " is not allowed", "warning");
+      this.data.alert("File should be in JPG ,JPEG, DOC,PNG or PDF", "warning");
+      // this.data.alert("File should be in JPG ,JPEG, DOC,PNG or PDF . " + sz.type.split("/")[1].toUpperCase() + " is not allowed", "warning");
+
       $("#" + content).val("");
     }
   }
@@ -740,14 +716,20 @@ export class IdentityVerificationComponent implements OnInit {
         $("#" + content).val("");
       }
     } else {
-      this.data.alert("File should be in DOC or PDF. " + sz.type.split("/")[1].toUpperCase() + " is not allowed", "warning");
+      this.data.alert("File should be in JPG ,JPEG, DOC,PNG or PDF", "warning");
+
+      // this.data.alert("File should be in DOC or PDF. " + sz.type.split("/")[1].toUpperCase() + " is not allowed", "warning");
       $("#" + content).val("");
     }
   }
+
   getSizeforT2StatusChangeBank(content){
     this.bankFileStatusT2 = true;
     var sz = $("#" + content)[0].files[0];
-    if (sz.type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document" || sz.type == "application/pdf") {
+    if (
+  sz.type == "image/jpeg" || sz.type == "image/png" || sz.type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document" || sz.type == "application/pdf"
+
+    ) {
       if (sz.size > 6000000) {
         this.data.alert("File size should be less than 6MB", "warning");
         $("#" + content).val("");
@@ -755,7 +737,9 @@ export class IdentityVerificationComponent implements OnInit {
 
       }
     } else {
-      this.data.alert("File should be in DOC or PDF. " + sz.type.split("/")[1].toUpperCase() + " is not allowed", "warning");
+      this.data.alert("File should be in JPG ,JPEG, DOC,PNG or PDF", "warning");
+
+      // this.data.alert("File should be in DOC or PDF. " + sz.type.split("/")[1].toUpperCase() + " is not allowed", "warning");
       $("#" + content).val("");
       this.bankFileStatusT2 = false;
 
@@ -765,7 +749,10 @@ export class IdentityVerificationComponent implements OnInit {
   getSizeforT2StatusChangeTax(content){
     this.TaxFileStatusT2 = true;
     var sz = $("#" + content)[0].files[0];
-    if (sz.type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document" || sz.type == "application/pdf") {
+    if (
+  sz.type == "image/jpeg" || sz.type == "image/png" || sz.type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document" || sz.type == "application/pdf"
+
+    ) {
       if (sz.size > 6000000) {
         this.data.alert("File size should be less than 6MB", "warning");
         $("#" + content).val("");
@@ -773,7 +760,9 @@ export class IdentityVerificationComponent implements OnInit {
 
       }
     } else {
-      this.data.alert("File should be in DOC or PDF. " + sz.type.split("/")[1].toUpperCase() + " is not allowed", "warning");
+      this.data.alert("File should be in JPG ,JPEG, DOC,PNG or PDF", "warning");
+
+      // this.data.alert("File should be in DOC or PDF. " + sz.type.split("/")[1].toUpperCase() + " is not allowed", "warning");
       $("#" + content).val("");
       this.TaxFileStatusT2 = false;
 

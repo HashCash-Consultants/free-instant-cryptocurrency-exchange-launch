@@ -31,8 +31,8 @@ width: 600px;
 }
 .fee_btn{
   position: absolute;
-  right: 21px;
-  top: 14px;
+  right: 32px;
+  top: 10px;
   cursor: pointer;
 }
 #myTradeBody{
@@ -127,5 +127,7 @@ th,thead{
 }
 
 }
+
+
 
 

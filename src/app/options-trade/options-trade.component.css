@@ -81,3 +81,13 @@ th,thead{
   /* background-color: #14223d !important;
   border: none; */
 }
+
+.tradeHeader{
+  background-color: #273338 !important;
+  
+}
+
+.tradeHeaderlight{
+  background-color: #d3dddd !important;
+
+}

@@ -14,15 +14,13 @@ import {
 
 
 import { HttpClient } from '@angular/common/http';
+import { CoreDataService } from "../core-data.service";
+
 
 import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import { DerivativeTvChartWebSocketAPI } from './DerivativeTvChartWebSocketAPI';
-import { CoreDataService } from '../core-data.service';
-
-import { interval, timer } from 'rxjs';
-
 
 @Component({
     selector: 'app-derivative-tvchartcontainer',
@@ -35,7 +33,7 @@ export class DerivativeTvchartcontainerComponent implements OnInit {
     private _interval: ChartingLibraryWidgetOptions['interval'] = 'D';
     //private _datafeedUrl= 'http://13.52.20.196:8080/api/public';
     private _datafeedUrl = 'https://accounts.paybito.com/ChartApi/futures';
-    private _libraryPath: ChartingLibraryWidgetOptions['library_path'] = './assets/charting_library/';
+    private _libraryPath: ChartingLibraryWidgetOptions['library_path'] = '/assets/charting_library/';
     private _chartsStorageUrl: ChartingLibraryWidgetOptions['charts_storage_url'] = '';
     private _chartsStorageApiVersion: ChartingLibraryWidgetOptions['charts_storage_api_version'] = '1.1';
     private _clientId: ChartingLibraryWidgetOptions['client_id'] = 'tradingview.com';
@@ -51,7 +49,7 @@ export class DerivativeTvchartcontainerComponent implements OnInit {
 
     Datafeed:IBasicDataFeed;
     timezone:Timezone='Etc/UTC';
-    supportedResolutions:string[] = ["1", "15", "30", "60", "240", "1D", "2D", "3D", "1W", "3W", "1M", "6M"]
+    supportedResolutions:string[] = ["1", "3","5", "15", "30", "60", "240", "1D", "2D", "3D", "1W", "3W", "1M", "6M"]
     historyDepthReturn:HistoryDepth;
     config = {
         supported_resolutions: this.supportedResolutions
@@ -121,8 +119,8 @@ export class DerivativeTvchartcontainerComponent implements OnInit {
 
     changeThemeColor(theme){
         this.Themecolor = theme;
-        //console.log('colour changed to ',this.Themecolor);
-        this.loadTradingViewData()
+        console.log('colour changed to ',this.Themecolor);
+        this.loadTradingViewData();
         
 
         if(theme == 'Dark'){
@@ -135,8 +133,8 @@ export class DerivativeTvchartcontainerComponent implements OnInit {
                 container_id: this._containerId,
                 library_path: this._libraryPath,
                 locale: 'en',
-                disabled_features: ['use_localstorage_for_settings', 'header_saveload', 'header_settings', 'header_compare', 'header_symbol_search', 'header_chart_type','widget_logo'],
-                enabled_features: ['hide_left_toolbar_by_default', 'header_indicators'],
+                disabled_features: ['use_localstorage_for_settings', 'header_saveload', 'header_settings', 'header_compare', 'header_symbol_search', 'widget_logo'],
+                enabled_features: ['hide_left_toolbar_by_default', 'header_indicators','header_chart_type'],
                 charts_storage_url: this._chartsStorageUrl,
                 charts_storage_api_version: this._chartsStorageApiVersion,
                 client_id: this._clientId,
@@ -170,8 +168,8 @@ export class DerivativeTvchartcontainerComponent implements OnInit {
                 container_id: this._containerId,
                 library_path: this._libraryPath,
                 locale: 'en',
-                disabled_features: ['use_localstorage_for_settings', 'header_saveload', 'header_settings', 'header_compare', 'header_symbol_search', 'header_chart_type','widget_logo'],
-                enabled_features: ['hide_left_toolbar_by_default', 'header_indicators'],
+                disabled_features: ['use_localstorage_for_settings', 'header_saveload', 'header_settings', 'header_compare', 'header_symbol_search', 'widget_logo'],
+                enabled_features: ['hide_left_toolbar_by_default', 'header_indicators','header_chart_type'],
                 charts_storage_url: this._chartsStorageUrl,
                 charts_storage_api_version: this._chartsStorageApiVersion,
                 client_id: this._clientId,
@@ -196,7 +194,7 @@ export class DerivativeTvchartcontainerComponent implements OnInit {
             const tvWidget = new widget(widgetOptions);
             this._tvWidget = tvWidget;
         }
-        // //console.log('now theme is ', theme);
+        // console.log('now theme is ', theme);
         
     }
 
@@ -242,7 +240,7 @@ export class DerivativeTvchartcontainerComponent implements OnInit {
 
     tvChartInitialize(){
     var themecolor = localStorage.getItem('themecolor');
-    ////console.log('saved theme', themecolor)
+    //console.log('saved theme', themecolor)
     if(themecolor == null || themecolor == undefined){
 
         const widgetOptions: ChartingLibraryWidgetOptions = {
@@ -254,8 +252,8 @@ export class DerivativeTvchartcontainerComponent implements OnInit {
             container_id: this._containerId,
             library_path: this._libraryPath,
             locale: 'en',
-            disabled_features: ['use_localstorage_for_settings', 'header_saveload', 'header_settings', 'header_compare', 'header_symbol_search', 'header_chart_type','widget_logo'],
-            enabled_features: ['hide_left_toolbar_by_default', 'header_indicators'],
+            disabled_features: ['use_localstorage_for_settings', 'header_saveload', 'header_settings', 'header_compare', 'header_symbol_search', 'widget_logo'],
+            enabled_features: ['hide_left_toolbar_by_default', 'header_indicators','header_chart_type'],
             charts_storage_url: this._chartsStorageUrl,
             charts_storage_api_version: this._chartsStorageApiVersion,
             client_id: this._clientId,
@@ -303,8 +301,8 @@ export class DerivativeTvchartcontainerComponent implements OnInit {
                 container_id: this._containerId,
                 library_path: this._libraryPath,
                 locale: 'en',
-                disabled_features: ['use_localstorage_for_settings', 'header_saveload', 'header_settings', 'header_compare', 'header_symbol_search', 'header_chart_type','widget_logo'],
-                enabled_features: ['hide_left_toolbar_by_default', 'header_indicators'],
+                disabled_features: ['use_localstorage_for_settings', 'header_saveload', 'header_settings', 'header_compare', 'header_symbol_search', 'widget_logo'],
+                enabled_features: ['hide_left_toolbar_by_default', 'header_indicators','header_chart_type'],
                 charts_storage_url: this._chartsStorageUrl,
                 charts_storage_api_version: this._chartsStorageApiVersion,
                 client_id: this._clientId,
@@ -350,8 +348,8 @@ export class DerivativeTvchartcontainerComponent implements OnInit {
                 container_id: this._containerId,
                 library_path: this._libraryPath,
                 locale: 'en',
-                disabled_features: ['use_localstorage_for_settings', 'header_saveload', 'header_settings', 'header_compare', 'header_symbol_search', 'header_chart_type','widget_logo'],
-                enabled_features: ['hide_left_toolbar_by_default', 'header_indicators'],
+                disabled_features: ['use_localstorage_for_settings', 'header_saveload', 'header_settings', 'header_compare', 'header_symbol_search', 'widget_logo'],
+                enabled_features: ['hide_left_toolbar_by_default', 'header_indicators','header_chart_type'],
                 charts_storage_url: this._chartsStorageUrl,
                 charts_storage_api_version: this._chartsStorageApiVersion,
                 client_id: this._clientId,
@@ -459,9 +457,9 @@ export class DerivativeTvchartcontainerComponent implements OnInit {
 
         if (this.chartSocket.stompClient != null) {
             this.chartSocket.unsubscribe();
-            // timer(5000).subscribe(()=>{
+            // setTimeout(() => {
                 this.chartSocket._disconnect();  
-            // });
+            // }, 3000);
           }
     }
 
@@ -472,16 +470,16 @@ export class DerivativeTvchartcontainerComponent implements OnInit {
         {
           
           onReady: cb => {
-            // //console.log('Inside on ready');
+            // console.log('Inside on ready');
               setTimeout(() => cb(this.config), 0);
               
             },
             searchSymbols: (userInput, exchange, symbolType, onResultReadyCallback) => {
-              // //console.log('Search Symbols running');
+              // console.log('Search Symbols running');
             },
             resolveSymbol: (symbolName, onSymbolResolvedCallback, onResolveErrorCallback) => {
               
-              // //console.log('ResolveSymbol running');
+              // console.log('ResolveSymbol running');
               
             //   var split_data = symbolName.split(/[:/]/);
               
@@ -506,7 +504,7 @@ export class DerivativeTvchartcontainerComponent implements OnInit {
               symbol_stub.pricescale = 100;
               setTimeout(function() {
                 onSymbolResolvedCallback(symbol_stub)
-                // //console.log('Resolved Symbol ', JSON.stringify(symbol_stub));
+                // console.log('Resolved Symbol ', JSON.stringify(symbol_stub));
               }, 0)
               
           
@@ -516,14 +514,14 @@ export class DerivativeTvchartcontainerComponent implements OnInit {
                 try{
 
                      
-                  //console.log('resolution' + resolution)
+                  console.log('resolution' + resolution)
                 let toTimestamp = Math.floor(Date.now() / 1000)
               let oneYearFromNow : any = new Date();
               oneYearFromNow.setFullYear(oneYearFromNow.getFullYear() - 1);
               let fromTimestamp = (Math.floor(oneYearFromNow / 1000))
   
             this.http.get<any>(this._datafeedUrl + '/history?symbol=' + localStorage.getItem("selected_derivative_asset_pair") + '&resolution='+resolution+'&from='+from+'&to=' + toTimestamp).subscribe((data:any=[]) => {
-                    // //console.log('history of paybito', data)
+                    // console.log('history of paybito', data)
                     var bars = [];
 
                     try{
@@ -540,16 +538,16 @@ export class DerivativeTvchartcontainerComponent implements OnInit {
                             }]
                               }
                               
-                        //console.log('inside get bars',bars.length)
+                        console.log('inside get bars',bars.length)
     
     
                         if(bars.length >= 1){
-                            //console.log('if block inside get bars')
+                            console.log('if block inside get bars')
     
                             onHistoryCallback(bars, { noData: false });
     
                           } else {
-                            //console.log('else block inside get bars')
+                            console.log('else block inside get bars')
     
                             onHistoryCallback([], { noData: true });
     
@@ -560,7 +558,7 @@ export class DerivativeTvchartcontainerComponent implements OnInit {
                       }
                   catch{
 
-                    //console.log('error in data length', data)
+                    console.log('error in data length', data)
 
 
                   }
@@ -580,7 +578,7 @@ export class DerivativeTvchartcontainerComponent implements OnInit {
           
             },
             subscribeBars: (symbolInfo, resolution, onRealtimeCallback, subscribeUID, onResetCacheNeededCallback) => {
-               //console.log('subscribeBars Runnning', resolution)
+               console.log('subscribeBars Runnning', resolution)
                 this.chartSocket.currentMessage.subscribe((message:string = '') => {
                     try {
                         let mes = JSON.parse(message)
@@ -598,7 +596,7 @@ export class DerivativeTvchartcontainerComponent implements OnInit {
     
     
                     } catch(e) {
-                        // //console.log('not parsing')
+                        // console.log('not parsing')
                         // error in the above string (in this case, yes)!
                     }
                     
@@ -610,14 +608,14 @@ export class DerivativeTvchartcontainerComponent implements OnInit {
                 
             },
             unsubscribeBars: subscriberUID => {
-             //console.log('unsubscribeBars Running')
+             console.log('unsubscribeBars Running')
               this.chartSocket.unsubscribe();
           
             //   this.socketService.unsubscribeBars(subscriberUID)
             },
             calculateHistoryDepth:(resolution: ResolutionString, resolutionBack: ResolutionBackValues, intervalBack: number): HistoryDepth | undefined =>{
-                //console.log('calculate History depth is running ');
-                //console.log('resolution '+ resolution);
+                console.log('calculate History depth is running ');
+                console.log('resolution '+ resolution);
                 localStorage.setItem('resolutionDataSocket', resolution)
 
                 if (resolution === "1D") {
@@ -644,14 +642,14 @@ export class DerivativeTvchartcontainerComponent implements OnInit {
             
             getMarks: (symbolInfo, startDate, endDate, onDataCallback, resolution) => {
               //optional
-              // //console.log('getMarks Running')
+              // console.log('getMarks Running')
             },
             getTimescaleMarks: (symbolInfo, startDate, endDate, onDataCallback, resolution) => {
               //optional
-              // //console.log('getTimeScaleMarks Running')
+              // console.log('getTimeScaleMarks Running')
             },
             getServerTime: cb => {
-              // //console.log('getServerTime Running')
+              // console.log('getServerTime Running')
             }
         }
       }

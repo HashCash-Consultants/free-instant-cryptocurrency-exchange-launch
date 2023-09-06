@@ -71,7 +71,7 @@ export class OtpComponent implements OnInit {
       var otpObj = {};
       otpObj['userId'] = userId;
       otpObj['otp'] = otp;
-      otpObj['mobileOtp'] = this.otpMobile;
+      otpObj['phoneOtp'] = this.otpMobile;
       var jsonString = JSON.stringify(otpObj);
       this.http.post<any>(this.data.WEBSERVICE + '/user/CheckOTP', jsonString, { headers: { 'Content-Type': 'application/json' } })
         .subscribe(response => {
@@ -80,7 +80,7 @@ export class OtpComponent implements OnInit {
             this.data.loader = false;
             this.route.navigateByUrl('/login');
             this.data.alert(result.error.error_msg, 'info');
-            // this.data.handlePageReloadForecibily(100)
+            this.data.handlePageReloadForecibily(100)
           }
           if (result.error.error_data == '1') {
             this.data.loader = false;
@@ -93,7 +93,7 @@ export class OtpComponent implements OnInit {
             this.data.loader = false;
             this.data.alert('OTP Verified', 'success');
             this.route.navigateByUrl('/login');
-            // this.data.handlePageReloadForecibily(100)
+            this.data.handlePageReloadForecibily(100)
 
           }
         }, reason => {
@@ -147,33 +147,35 @@ export class OtpComponent implements OnInit {
   }
 
 
-  /* Method defination for resend OTP for mobile  */
-  async resendOtpForMobile() {
-    $('#otpbtnverfymobile').css('display', 'none');
-    let payload = {
-      phone: localStorage.getItem('phoneUsedForRegistration')
+    /* Method defination for resend OTP for mobile  */
+    async resendOtpForMobile() {
+      $('#otpbtnverfymobile').css('display', 'none');
+      let payload = {
+        phone: localStorage.getItem('phoneUsedForRegistration'),
+        countryCode: localStorage.getItem('phoneCountryUsedForRegistration'),
+  
+      }
+      payload['userId'] = localStorage.getItem('signup_user_id')
+      let isOtpSend = await this.data.handleSendOtpInSms(payload, 'registrationmobileotp');
+      if (isOtpSend) {
+        $('#countermsgmobile').css('display', 'block');
+  
+        var timeleft = this.data.timeIntervalForSms;
+        this.intervalForSms;
+        var s = timer(1000, 1000);
+        this.abcForSms = s.subscribe(val => {
+          this.intervalForSms = timeleft - val;
+          $('#countermsgmobile').html("<div class='text-center'>" + 'Resend in ' + this.intervalForSms + ' seconds' + "</div>");
+          if (this.intervalForSms == 0) {
+            $('#countermsgmobile').css('display', 'none');
+            $('#otpbtnverfymobile').css('display', 'block');
+            this.abcForSms.unsubscribe();
+          }
+  
+        });
+      } else {
+  
+      }
     }
-    payload['userId'] = localStorage.getItem('signup_user_id')
-    let isOtpSend = await this.data.handleSendOtpInSms(payload, 'registrationmobileotp');
-    if (isOtpSend) {
-      $('#countermsgmobile').css('display', 'block');
-
-      var timeleft = this.data.timeIntervalForSms;
-      this.intervalForSms;
-      var s = timer(1000, 1000);
-      this.abcForSms = s.subscribe(val => {
-        this.intervalForSms = timeleft - val;
-        $('#countermsgmobile').html("<div class='text-center'>" + 'Resend in ' + this.intervalForSms + ' seconds' + "</div>");
-        if (this.intervalForSms == 0) {
-          $('#countermsgmobile').css('display', 'none');
-          $('#otpbtnverfymobile').css('display', 'block');
-          this.abcForSms.unsubscribe();
-        }
-
-      });
-    } else {
-
-    }
-  }
 
 }

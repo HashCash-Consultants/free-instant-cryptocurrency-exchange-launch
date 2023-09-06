@@ -5,7 +5,7 @@
 
   <ngb-tabset justify="fill" [ngClass]="Themecolor == 'Dark' ? 'tab-dark' : 'tab-light'" [activeId]="activeIdString">
 
-    <ngb-tab id="spot" >
+    <ngb-tab id="spot" *ngIf="data.isSpot == 1 || data.isOtc == 1 || data.isConvert == 1">
       <ng-template ngbTabTitle>
         <!-- <h5 class="market-reset" (click)="main.transactionHistory(1)"> SPOT</h5> -->
         <h5 class="market-reset" (click)="transactionHistory(1); saveHistoryCompNavHist('spot')"> SPOT</h5>
@@ -53,7 +53,7 @@
                   <thead>
                     <tr  [ngClass]="Themecolor == 'Dark' ? 'bg-black text-white' : 'tableHeader-bg-light text-black'">
                       <th style="width: 20%;" scope="col" class="tablefirstRow">Date - Time</th>
-                      <th style="width: 20%;" scope="col">Transaction ID</th>
+                      <th style="width: 20%;" scope="col">TXN ID</th>
                       <th style="width: 20%;" scope="col">Type</th>
                       <th style="width: 20%;" scope="col">Asset</th>
                       <th style="width: 10%;" scope="col">Status</th>
@@ -262,7 +262,7 @@
       </ng-template>
     </ngb-tab> -->
 <!-- future transaction history -->
-    <ngb-tab id="future">
+    <ngb-tab id="future" *ngIf="data.isFutures == 1">
       <ng-template ngbTabTitle>
         <h5 class="market-reset" (click)="saveHistoryCompNavHist('future')"> FUTURES</h5>
       </ng-template>
@@ -379,7 +379,7 @@
       </ng-template>
     </ngb-tab>
     <!-- option transaction history -->
-    <ngb-tab id="option">
+    <ngb-tab id="option" *ngIf="data.isOptions == 1">
       <ng-template ngbTabTitle>
         <h5 class="market-reset" (click)="saveHistoryCompNavHist('option')"> OPTIONS</h5>
       </ng-template>
@@ -390,7 +390,7 @@
               <div class="d-flex">
                 <div class="p-2 mr-auto">
                   <span class="font-md  mr-2" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">
-                    Option Transactions History
+                    Options Transactions History
                     <span style="cursor: pointer;margin-left:10px;">
                       <i class="fa fa-info-circle" aria-hidden="true" (click)="data.handleInfoSection('optionTranscationInfo')" style="font-size: 14px;"></i>
                     </span>
@@ -398,7 +398,7 @@
                       <div class="info-header">
                         <div class="info-title">Options Transaction History</div>
                         <div class="info-close">
-                          <i class="fa fa-times" aria-hidden="true" (click)="data.handleInfoSection('optionTranscationInfo')"></i>
+                          <i class="fa fa-times" style="font-size: 15px;font-weight:100;" aria-hidden="true" (click)="data.handleInfoSection('optionTranscationInfo')"></i>
                         </div>
                       </div>
                       <div class="info-body">

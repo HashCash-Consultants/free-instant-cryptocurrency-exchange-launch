@@ -1,8 +1,8 @@
-<app-navbar (themeChanged)="themeChangedHandler($event)"></app-navbar>
+<app-navbar (themeChanged)="themeChangedHandler($event)" (connectionData)="connectionChangedHandler($event)"></app-navbar>
 
 <!-- <app-loader></app-loader> -->
 
-<div class="content-wrapper extrapaddingDashboard pt-0 dashboardContent"  id="dashboardContent">
+<div class="content-wrapper pt-0 dashboardContent"  id="dashboardContent">
   <div class="container-fluid left-container_fluid">
     <div class="row">
       <!-- <div class="col btnwrapper">
@@ -56,7 +56,7 @@
       
     </div>
 
-    <div class="row d-flex order_row_ml">
+    <!-- <div class="row d-flex order_row_ml">
       <div class="col-md-7 col_md_7_new chart-align">
         <div class="row">
           <div class="col-xl-12 col-lg-12 col-12 pr-xl-0 mt-1 align-self-stretch dchart" [class.drg]="drag"
@@ -90,6 +90,75 @@
           </div>
         </div>
       </div>
+    </div> -->
+
+
+    <div style="min-height: 600px;height:700px; width: 100%;">
+      <div class="row d-flex order_row_ml">
+        <div class="col-md-2 col_md_7_new order-align">
+          <div class="row">
+            <div class="col-xl-12 col-lg-12 col-12 pr-xl-0 mt-1 align-self-stretch dchart" [class.drg]="drag"
+            [ngDraggable]="drag" *ngIf="chart" style="z-index: 21;height: 856px;">
+
+            <app-options-orderbook [Themecolor]="Themecolor" (tradeBookData)="tradeBookDataHandler($event)"></app-options-orderbook>
+              
+            <!-- <app-derivative-orderbook [Themecolor]="Themecolor" (tradeBookData)="tradeBookDataHandler($event)"></app-derivative-orderbook> -->
+            </div>
+          </div>
+        </div>
+        <div class="col-md-8 ordercol-md-5  chart-align">
+          <div class="row">
+            <div class="col-xl-12 col-lg-12 col-12 mt-1 chartDiv" [class.drg]="drag" [ngDraggable]="drag" *ngIf="orderbook" style="" >
+              
+              <div class="d-flex flex-row bd-highlight mb-3" [ngClass]="Themecolor == 'Dark' ? 'toggleButon' : 'toggleButtonLite'">
+                <div class="p-2 bd-highlight">
+                  <div class="btn-group" role="group" aria-label="Basic example">
+                  <button type="button" class="btn btn-dark" [ngClass]="chartselector == true ? 'activeButton' : ''"  (click)="toggleChart(true)" >Price</button>
+                  <button type="button" class="btn btn-dark" [ngClass]="chartselector == false ? 'activeButton' : ''" (click)="toggleChart(false)">Depth</button>
+                </div>
+              </div>
+              </div>
+              <!-- [Themecolor]="Themecolor"   [askBidDataInputstrm]="bidDataInput" -->
+              <app-options-tvchartcontainer [Themecolor]="Themecolor" [ngClass]="chartselector == true ? 'chartoff' : 'charton'"></app-options-tvchartcontainer>
+              <app-options-depth-chart [Themecolor]="Themecolor"   [askBidDataInputstrm]="bidDataInput"   [ngClass]="chartselector == false ? 'chartoff' : 'charton'"></app-options-depth-chart>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xl-12 col-lg-12 col-12" [class.drg]="drag" id="stp" [ngDraggable]="drag"
+              *ngIf="stoploss">
+              <app-options-stoploss [Themecolor]="Themecolor"></app-options-stoploss>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-2 ordercol-md-5 order-align">
+          <div class="row">
+            <div class="col-xl-12 col-lg-12 col-12 mt-1" [class.drg]="drag" [ngDraggable]="drag" *ngIf="orderbook">
+              <app-options-trade-book [Themecolor]="Themecolor" [marketTradeRecords]="tradeBookDataInput"></app-options-trade-book>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row d-flex order_row_ml">
+      <div class="col-md-12 col_md_7_new chart-align" style="margin-top: 207px;">
+        <div class="row">
+          <div class="col-xl-12 col-lg-12 col-12 pr-xl-0" [class.drg]="drag" id="trd" [ngDraggable]="drag" *ngIf="trade"> 
+            <!-- <app-derivative-trade [Themecolor]="Themecolor"></app-derivative-trade> -->
+            <app-options-trade [Themecolor]="Themecolor"></app-options-trade>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+    <br/>
+    <br/>
+
+    <div class="row footerRow">
+      <span style="color: #21CB80;" *ngIf="!stableConnectionData"><i class="fa fa-signal" aria-hidden="true"></i>   Stable Connection</span>
+      <span style="color: #F5475D;" *ngIf="stableConnectionData"><i class="fa fa-signal" aria-hidden="true"></i>   Not Connected</span>
+
+
+
     </div>
   </div>
 </div>

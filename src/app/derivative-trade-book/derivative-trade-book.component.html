@@ -1,0 +1,66 @@
+<div  style="height: 812px;overflow: hidden;">
+
+  <div>
+
+  </div>
+ 
+
+  <div class="tab-pane fade show active" id="orderbook" role="tabpanel" aria-labelledby="orderbook-tab">
+    <div class="row">
+    
+      <div class="col-md-12" id="trade-details-tableContent" style="margin-top: 10px;">
+        <div [ngClass]="Themecolor == 'Dark' ? 'table-responsive tabe-responsive_right' : 'table-responsive tabe-responsive_right_light'">
+          <table class="table table-sm cust">
+            <thead>
+              <tr class="bg-black text-blue">
+                <!-- <th style="text-align: left;" scope="col"> Time</th>
+                <th align="center" style="text-align: right;" scope="col">Amount</th>
+                <th align="center" style="text-align: center;padding-left: 35px;" scope="col">Price</th> -->
+                <th align="center" style="text-align: left;font-size: 15px; padding-left: 32px;" scope="col"> Time</th>
+                <th align="center" style="text-align: center;font-size: 15px;" scope="col">Amount</th>
+                <th align="center" style="text-align: center;font-size: 15px;" scope="col">Price</th>
+              </tr>
+            </thead>
+            <tbody *ngIf="marketTradeRecords !=''">
+              <tr class="" *ngFor="let m of marketTradeRecords;let i = index;">
+                <td *ngIf="m.side == 'BID';else tradegreenprice" [ngClass]="Themecolor == 'Dark' ? '' : 'ticker-light'" [ngClass]="m.newbid==true?'bg-flash-green':''"
+                  style="font-family:'Montserrat',sans-serif;text-align: left !important; padding-left: 25px;"  class="askBidTd text-center">{{m.timestamp | date:'h:mm:ss '}}
+                </td>
+                <ng-template #tradegreenprice>
+                  <td [ngClass]="Themecolor == 'Dark' ? '' : 'ticker-light'" [ngClass]="m.newask==true?'bg-flash-red':''" style="font-family:'Montserrat',sans-serif; text-align: left !important;padding-left: 25px;"
+                    class="askBidTd text-center">{{m.timestamp | date:'h:mm:ss '}}</td>
+                </ng-template>
+
+                <td *ngIf="m.side == 'BID';else tradegreenamount" [ngClass]="Themecolor == 'Dark' ? '' : 'ticker-light'" [ngClass]="m.newbid==true?'bg-flash-green':''"
+                  style="font-family:'Montserrat',sans-serif;" class="askBidTd text-center">{{getTradeAmount(m)}}</td>
+                <ng-template #tradegreenamount>
+                  <td [ngClass]="Themecolor == 'Dark' ? '' : 'ticker-light'" [ngClass]="m.newask==true?'bg-flash-red':''" style="font-family:'Montserrat',sans-serif;"
+                    class="askBidTd text-center">{{getTradeAmount(m)}}</td>
+                </ng-template>
+
+                <td  [ngClass]="m.newbid==true?'bg-flash-green':''"
+                  *ngIf="m.side == 'BID'; else true_price" class="askBidTd text-center" style="color:#21CB80;font-family:'Montserrat',sans-serif;">
+                  {{getTradePrice(m)}}</td>
+                <ng-template #true_price>
+                  <td [ngClass]="m.newask==true?'bg-flash-red':''" 
+                    class="text-center askBidTd" style="color:#f5475d;font-family:'Montserrat',sans-serif;">
+                    {{getTradePrice(m)}}
+                  </td>
+                </ng-template>
+
+              </tr>
+            </tbody>
+            <tbody id="marketTrade" *ngIf="marketTradeRecords ==''">
+              <tr>
+                <td>
+                  No Data
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="w-100 mt-2"></div>

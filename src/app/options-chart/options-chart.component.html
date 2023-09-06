@@ -1,4 +1,4 @@
-<div [ngResizable]="data.resize" class="" id="chartHolder">
+<div   class="" id="chartHolder">
   <div>
     <div class="row no-gutters">
       <div class="col-12 col-sm-12 col-md-5">
@@ -6,38 +6,38 @@
           <div  class="col-12 col-sm-12 col-md-12 font-sm text-green"
           style="border: 0px solid #F5475D; height:30px;">
           <div>
-            <span class="float-left mt-2 ml-2 pl-2 plist" style="font-size:11px;color:rgb(153, 152, 152)">Last Price:
+            <span class="float-left mt-2 ml-2 pl-2 plist" style="font-size:14px;color:rgb(153, 152, 152)">Last Price:
 
               <span *ngIf="data.ACTION == 'buy'; else buy_value">
-                <!-- <ng2-odometer style="color:red;" else style="color:rgb(4, 146, 28);" [number]="data.ltpdata" [config]="{ format: '(,ddd).dddddd' }"></ng2-odometer> --> <span style="color:#F5475D;" else style="color:#21CB80;">{{data.ltpdata}}</span> / <span [ngStyle]="{color : Themecolor == 'Dark' ? '#f1b900' : '#2b2a2a'}" *ngIf="this.data.selectedSellingAssetText=='INR'"> ₹ </span><span  [ngStyle]="{color : Themecolor == 'Dark' ? '#f1b900' : '#2b2a2a'}" *ngIf="this.data.selectedSellingAssetText =='USD' || this.data.selectedSellingAssetText=='USDT'"> $ </span>
-                <!-- <ng2-odometer class="ctpdata-value" style="color:red;" else style="color:rgb(251, 255, 2);" [number]="data.ctpdata" [config]="{ format: '(,ddd).ddddd' }"></ng2-odometer> --><span  [ngStyle]="{color : Themecolor == 'Dark' ? '#f1b900' : '#2b2a2a'}">{{data.ltpdata}}</span><span  [ngStyle]="{color : Themecolor == 'Dark' ? '#f1b900' : '#2b2a2a'}" *ngIf="this.data.selectedSellingAssetText=='AED'"> د.إ</span>
+                <!-- <ng2-odometer style="color:red;" else style="color:rgb(4, 146, 28);" [number]="data.ltpdata" [config]="{ format: '(,ddd).dddddd' }"></ng2-odometer> --> <span style="color:#F5475D;" else style="color:#21CB80;">{{data.ltpdata}}</span> <!-- / <span [ngStyle]="{color : Themecolor == 'Dark' ? '#f1b900' : '#2b2a2a'}" *ngIf="this.data.selectedSellingAssetText=='INR'"> ₹ </span><span  [ngStyle]="{color : Themecolor == 'Dark' ? '#f1b900' : '#2b2a2a'}" *ngIf="this.data.selectedSellingAssetText =='USD' || this.data.selectedSellingAssetText=='USDT'"> $ </span>
+                <span  [ngStyle]="{color : Themecolor == 'Dark' ? '#f1b900' : '#2b2a2a'}">{{data.ltpdata}}</span><span  [ngStyle]="{color : Themecolor == 'Dark' ? '#f1b900' : '#2b2a2a'}" *ngIf="this.data.selectedSellingAssetText=='AED'"> د.إ</span> -->
              </span>
  
              <ng-template #buy_value>
-              <!--  <ng2-odometer style="color:rgb(4, 146, 28);" else style="color:red;" [number]="data.ltpdata" [config]="{ format: '(,ddd).dddddd' }"></ng2-odometer> --><span  style="color:#21CB80;" else style="color:#F5475D;">{{data.ltpdata}}</span> / <span  [ngStyle]="{color : Themecolor == 'Dark' ? '#f1b900' : '#2b2a2a'}" *ngIf="this.data.selectedSellingAssetText=='INR'"> ₹ </span><span  [ngStyle]="{color : Themecolor == 'Dark' ? '#f1b900' : '#2b2a2a'}" *ngIf="this.data.selectedSellingAssetText =='USD' || this.data.selectedSellingAssetText=='USDT'"> $ </span>
-              <!--  <ng2-odometer class="ctpdata-value" style="color:red;" else style="color:rgb(251, 255, 2);" [number]="data.ctpdata" [config]="{ format: '(,ddd).ddddd' }"></ng2-odometer> --><span   [ngStyle]="{color : Themecolor == 'Dark' ? '#f1b900' : '#2b2a2a'}">{{data.ltpdata}}</span><span  [ngStyle]="{color : Themecolor == 'Dark' ? '#f1b900' : '#2b2a2a'}" *ngIf="this.data.selectedSellingAssetText=='AED'"> د.إ</span>
+              <!--  <ng2-odometer style="color:rgb(4, 146, 28);" else style="color:red;" [number]="data.ltpdata" [config]="{ format: '(,ddd).dddddd' }"></ng2-odometer> --><span  style="color:#21CB80;" else style="color:#F5475D;">{{data.ltpdata}}</span> <!-- / <span  [ngStyle]="{color : Themecolor == 'Dark' ? '#f1b900' : '#2b2a2a'}" *ngIf="this.data.selectedSellingAssetText=='INR'"> ₹ </span><span  [ngStyle]="{color : Themecolor == 'Dark' ? '#f1b900' : '#2b2a2a'}" *ngIf="this.data.selectedSellingAssetText =='USD' || this.data.selectedSellingAssetText=='USDT'"> $ </span>
+             <span   [ngStyle]="{color : Themecolor == 'Dark' ? '#f1b900' : '#2b2a2a'}">{{data.ltpdata}}</span><span  [ngStyle]="{color : Themecolor == 'Dark' ? '#f1b900' : '#2b2a2a'}" *ngIf="this.data.selectedSellingAssetText=='AED'"> د.إ</span> -->
              </ng-template>
-             <span style="font-size: 11px;color:rgb(153, 152, 152)">&nbsp;&nbsp;MTM :{{mtmValue}}</span>
+             <span style="font-size: 14px;color: white">&nbsp;&nbsp;MTM :{{mtmValue | currency:'':''}}</span>
             <!--  <small class="font-sm" *ngIf="data.isMarkPricePositive"
              style="color:rgb(4, 146, 28); font-size: 11px;">{{data.markprice}}</small> -->
              <small class="font-sm" 
-             style="font-size: 11px;" [ngStyle]="{color : Themecolor == 'Dark' ? 'white' : '#2b2a2a'}">{{data.markprice}}</small>
-             <span  style="font-size: 11px;color:rgb(153, 152, 152)">&nbsp;&nbsp;Index :{{indexValue}}</span>
+             style="font-size: 14px;" [ngStyle]="{color : Themecolor == 'Dark' ? 'white' : '#2b2a2a'}">{{data.markprice}}</small>
+             <span  style="font-size: 14px;color: white">&nbsp;&nbsp;Index :{{indexValue | currency:'':''}}</span>
             <!--  <small class="font-sm" *ngIf="data.isIndexPricePositive"
              style="color:rgb(4, 146, 28); font-size: 11px;">{{data.indexprice}}</small> -->
              <small class="font-sm" 
-             style="color:white; font-size: 11px;" [ngStyle]="{color : Themecolor == 'Dark' ? 'white' : '#2b2a2a'}">{{data.indexprice}}</small>
-              <span style="margin-left: 2%" style="font-size: 11px;color:rgb(153, 152, 152)">&nbsp;&nbsp;ROC % :</span>
+             style="color:white; font-size: 14px;" [ngStyle]="{color : Themecolor == 'Dark' ? 'white' : '#2b2a2a'}">{{data.indexprice | currency:'':''}}</small>
+              <span style="margin-left: 2%" style="font-size: 14px;color:white">&nbsp;&nbsp;24H ROC :</span>
               <small class="font-sm" *ngIf="data.negetive != true"
-              style="color:#21CB80; font-size: 11px;">{{data.rocdata}}</small>
-              <small class="font-sm ml-2" *ngIf="data.negetive  == true" style="color:#F5475D; font-size: 11px;">{{data.rocdata}}</small>
+              style="color:#21CB80; font-size: 14px;">{{data.rocdata | currency:'':''}}%</small>
+              <small class="font-sm ml-2" *ngIf="data.negetive  == true" style="color:#F5475D; font-size: 14px;">{{data.rocdata| currency:'':''}}%</small>
              
 <!--               <small class="font-sm ml-2" *ngIf="data.negetive  == true" style="color:red; font-size: 2;">{{data.rocdata}}</small>
  -->            </span>
           </div>
-          <p class="vasset-24h vasset" style="line-height: 29px;margin-left:40px; border: 0px solid blue">
-            <span style="margin-left: 2%" style="font-size: 11px;color:rgb(153, 152, 152)">24H Volume:</span>
-            <small class="font-sm ml-2" style="font-size: 11px;" [ngStyle]="{color : Themecolor == 'Dark' ? 'white' : '#2b2a2a'}">{{data.volumndata}}</small>
+          <p class="vasset-24h vasset" style="line-height: 33px;margin-left:40px; border: 0px solid blue">
+            <span style="margin-left: 2%" style="font-size: 14px;color:white">24H Volume:</span>
+            <small class="font-sm ml-2" style="font-size: 14px;" [ngStyle]="{color : Themecolor == 'Dark' ? 'white' : '#2b2a2a'}">{{data.volumndata | currency:'':''}}</small>
           </p>
         </div>
         </div>

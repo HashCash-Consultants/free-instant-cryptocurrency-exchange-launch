@@ -62,6 +62,8 @@ td.text-white {
   padding: 5px 2px;
   margin-right: 8px;
   border-radius: 2px;
+  width:100%;
+
 }
 .sp-highlow small.font-sm.ml-3 {
   display: block;
@@ -78,10 +80,13 @@ td.text-white {
   padding: 5px 2px;
   margin-right: 8px;
   border-radius: 2px;
+  width:100%;
+
 }
 .tabe-responsive_right {
   overflow-y: scroll;
 }
+
 .tabe-responsive_right_light {
   overflow-y: scroll;
 }
@@ -136,14 +141,14 @@ th.mount-orderbook {
   background-color: rgb(211, 221, 221);
   /* background-color: #ececec; */
   color: rgb(39, 51, 56);
-  width: 96%;
+  width: 100%;
 }
 .order-id {
   display: flex;
   justify-content: space-between;
   background-color: #273338;
   color: rgb(211, 221, 221);
-  width: 96%;
+  width: 100%;
 }
 .table-hight {
   padding-left: 15px;
@@ -167,15 +172,18 @@ th.mount-orderbook {
 }
 .navbar-nav .dropdown-menu-light {
   padding-top: 2px;
-  width: 103% !important;
+  width: 250% !important;
+  left:20px
+
 }
 .asset-dtl-font {
   font-size: 11px;
 }
 .navbar-nav .dropdown-menu {
   position: absolute;
-  width: 103%;
+  width: 250%;
   background-color: #22252e !important;
+  left:20px
 }
 .header-fnt {
   font-size: 3px !important;
@@ -376,8 +384,8 @@ th,thead{
   width: 94%;
   padding-left: 20px;
   padding-right: 20px;
-  right: 50px;
-  top:-40px
+  right: 42px;
+  top:-31px
   /* margin-bottom: 25px; */
 }
 ul#myDropdown {
@@ -385,14 +393,33 @@ ul#myDropdown {
   margin-left: -14px;
 }
 .infoOrderBook{
-  top: 41px;
-  left:113px;
+  top: 28px;
+  left:119px;
   position: absolute;
   z-index: 99;
 
 }
 
-@media only screen and (max-width: 600px) {
+
+
+
+@media (max-width:480px){
+  .table-ht {
+    height: 250px;
+    overflow-y: auto;
+    margin-top: 0px;
+  }
+  .table-chart{
+    width: 37%;
+  }
+}
+.dashboardContent{
+  padding-left: 7px;
+  zoom: 80%;
+
+}
+
+@media (max-width: 600px) {
   .orderBookDropdown{
     position: absolute;
     width: 94%;
@@ -441,12 +468,7 @@ ul#myDropdown {
   box-shadow: 0 0 60px 30px #fff, 0 0 100px 60px #f0f, 0 0 140px 90px #0ff;
 }
 
-.table-ht {
-  height: 250px;
-  overflow-y: auto;
-  margin-top: 0px;
-  display: inline-flex;
-}
+
 
 ul#myDropdown {
   margin-top: -2px;
@@ -681,6 +703,12 @@ ul#myDropdown {
   .extrapadd{
     /* width: 105px !important; */
     min-width: 0px !important
+  }
+  .downSearchbar{
+    display: none !important;
+  }
+  .upSearchbar{
+    display: block !important;
   }
   
 }

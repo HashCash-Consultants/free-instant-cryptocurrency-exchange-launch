@@ -4,6 +4,7 @@ import { ChartComponent } from './chart/chart.component';
 import { BehaviorSubject } from 'rxjs';
 import { OrderBookComponent } from './order-book/order-book.component';
 import { Router } from '@angular/router';
+import { interval, timer } from 'rxjs';
 
 
 
@@ -23,7 +24,7 @@ export class WebSocketAPI {
   webSocketEndPoint: string = 'https://stream.paybito.com:5443/SocketStream/ws';
   //webSocketEndPoint: string = 'wss://ws.sandbox.paxos.com/marketdata/BTCUSD';
   topic: string = "/user/topic/stream";
-  topicForBtcUsd : string = "/topic/stream/BTCUSD"
+  topicForBtcUsd: string = "/topic/stream/BTCUSD"
 
   stompClient: any;
   chartComponent;
@@ -46,53 +47,47 @@ export class WebSocketAPI {
       _this.stompClient.connect({}, function (frame) {
         //console.log('here in connect')
         let topic = '';
-        //alert('in connect  : '+localStorage.getItem('buying_crypto_asset').toUpperCase() + localStorage.getItem('selling_crypto_asset').toUpperCase())
-        if(localStorage.getItem('buying_crypto_asset').toUpperCase() == 'BTC' && localStorage.getItem('selling_crypto_asset').toUpperCase() == 'USD'){
-         // alert('in if')
-          topic = _this.topicForBtcUsd
-        }else{
-         // alert('in else')
-          topic = _this.topic
-        }
-        _this.stompClient.subscribe(topic, function (sdkEvent) {
-          // //console.log('in subscribe')
-          _this.onMessageReceived(sdkEvent);
-        });
-      }, this.errorCallBack);
-    this.stompClient.debug = null
+        if (
+          localStorage.getItem('buying_crypto_asset') != undefined && localStorage.getItem('buying_crypto_asset') != '' && localStorage.getItem('buying_crypto_asset') != 'undefined' && localStorage.getItem('selling_crypto_asset') != undefined && localStorage.getItem('selling_crypto_asset') != '' && localStorage.getItem('selling_crypto_asset') != 'undefined'
+        ) {
+          if (localStorage.getItem('buying_crypto_asset').toUpperCase() == 'BTC' && localStorage.getItem('selling_crypto_asset').toUpperCase() == 'USD') {
+            // alert('in if')
+            topic = _this.topicForBtcUsd
+          } else {
+            // alert('in else')
+            topic = _this.topic
+          }
+          _this.stompClient.subscribe(topic, function (sdkEvent) {
+            //console.log('in subscribe')
+            _this.onMessageReceived(sdkEvent);
+          });
 
-    }else{
+        }
+      }, this.errorCallBack);
+      this.stompClient.debug = null
+
+    } else {
       //console.log('else')
-      // location.href = "https://trade.paybito.com/";
+      // location.href = this.data.brokerDomain;
     }
   };
 
   _disconnect() {
-   
-
-    try{
-      if (this.stompClient !== null) {
-        this.stompClient.disconnect();
-    }
-
-    }
-    catch{
-
-      console.log('connection not established yet')
-
+    if (this.stompClient !== null) {
+      this.stompClient.disconnect();
     }
   }
 
   // on error, schedule a reconnection attempt
   errorCallBack(error) {
     //console.log("errorCallBack -> " + error)
-    // //console.log('Access Token : ',localStorage.getItem('access_token'))
+    // console.log('Access Token : ',localStorage.getItem('access_token'))
     if (localStorage.getItem('access_token') !== null && localStorage.getItem('access_token') !== undefined) {
       setTimeout(() => {
         this._connect();
       }, 5000);
-    }else{
-      // location.href = "https://trade.paybito.com/";
+    } else {
+      // location.href = this.data.brokerDomain;
     }
   }
 
@@ -102,18 +97,23 @@ export class WebSocketAPI {
    */
   _send(message) {
     let send = ''
-    if(localStorage.getItem('buying_crypto_asset').toUpperCase() == 'BTC' && localStorage.getItem('selling_crypto_asset').toUpperCase() == 'USD'){
-      send = "/app/sendRequest/BTCUSD"
-    }else{
-      send = "/app/sendRequest"
+    if (
+      localStorage.getItem('buying_crypto_asset') != undefined && localStorage.getItem('buying_crypto_asset') != '' && localStorage.getItem('buying_crypto_asset') != 'undefined' && localStorage.getItem('selling_crypto_asset') != undefined && localStorage.getItem('selling_crypto_asset') != '' && localStorage.getItem('selling_crypto_asset') != 'undefined'
+    ) {
+
+      if (localStorage.getItem('buying_crypto_asset').toUpperCase() == 'BTC' && localStorage.getItem('selling_crypto_asset').toUpperCase() == 'USD') {
+        send = "/app/sendRequest/BTCUSD"
+      } else {
+        send = "/app/sendRequest"
+      }
+      this.stompClient.send(send, {}, JSON.stringify(message));
     }
-    this.stompClient.send(send, {}, JSON.stringify(message));
   }
 
   onMessageReceived(message) {
-    var str = JSON.stringify(message.body);
-    var obj = JSON.parse(str);
-    this.changeMessage(obj);
+    //let str = JSON.stringify(message.body);
+    //let obj = JSON.parse(str);
+    this.changeMessage(JSON.parse(JSON.stringify(message.body)));
   }
 
   changeMessage(obj) {
@@ -144,8 +144,12 @@ export class WebSocketAPI {
         ],
         "id": this.reqNo
       };
-      this._send(req);
-      localStorage.setItem('isUnsubscribeOccured','false')
+      timer(10000).subscribe(() => {
+
+        this._send(req);
+
+      })
+      localStorage.setItem('isUnsubscribeOccured', 'false')
 
     }
   }
@@ -167,17 +171,21 @@ export class WebSocketAPI {
           ],
           "id": this.reqNo
         };
-        this._send(req);
-        localStorage.setItem('isUnsubscribeOccured','true')
+        timer(10000).subscribe(() => {
+
+          this._send(req);
+
+        })
+        localStorage.setItem('isUnsubscribeOccured', 'true')
 
       }
       else {
-       // window.location.href = "https://trade.paybito.com/";
+        // window.location.href = this.data.brokerDomain;
       }
     }
     catch (e) {
-     // window.location.href = "https://trade.paybito.com/";
-    //  location.reload();
+      // window.location.href = this.data.brokerDomain;
+      location.reload();
     }
 
 

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import * as $ from "jquery";
 import { CoreDataService } from "../core-data.service";
 import { Router } from "@angular/router";
@@ -88,6 +88,10 @@ export class DerivativeOrderbookComponent implements OnInit {
   // Themecolor: any;
   allAssetPairList: any = []
   @Input() Themecolor = 'Dark';
+  @Output() tradeBookData: EventEmitter<any> = new EventEmitter();
+  @Output() bidDataOutput: EventEmitter<any> =   new EventEmitter();
+  askdataFinal: any;
+  biddataFinal: any;
 
 
 
@@ -97,8 +101,7 @@ export class DerivativeOrderbookComponent implements OnInit {
     private http: HttpClient,
     private trade: DerivativeTradeComponent,
     public websocket: DerivativeWebSocketAPI,
-    public stoploss: DerivativeStoplossComponent,
-    public route: Router) { }
+    public stoploss: DerivativeStoplossComponent) { }
 
   public setTitle(newTitle: string) {
     this.titleService.setTitle(newTitle);
@@ -150,6 +153,7 @@ export class DerivativeOrderbookComponent implements OnInit {
       $(".asset-dtl-font").attr('disabled', false);
       $(this).attr('disabled', true);
     });
+    this.changemode();
 
     this.tickerResponse();
     this.serverSentEventForOrderbookAsk();
@@ -182,6 +186,31 @@ export class DerivativeOrderbookComponent implements OnInit {
       }, 3000);
     }, 6000)
 
+    this.getPrecission();
+
+  }
+
+
+  getPrecission(){
+
+    this.tradep = localStorage.getItem('priceprc')
+    console.log('buying asset',localStorage.getItem('buying_crypto_asset'))
+
+
+    if(this.tradep == null || this.tradep == 'null' || this.tradep == undefined || this.tradep == 'undefined'){
+      this.tradep = 6;
+      console.log('5',this.tradep)
+
+
+      localStorage.setItem('priceprc',this.tradep)
+    }
+    else if(localStorage.getItem('buying_crypto_asset') == 'BTC' || localStorage.getItem('buying_crypto_asset') == 'btc' ){
+      this.tradep = 6;
+
+    }
+    else{
+      console.log('6',this.tradep)
+    }
   }
 
 
@@ -221,7 +250,7 @@ export class DerivativeOrderbookComponent implements OnInit {
   ngDoCheck() {
     //this.Themecolor = this.dash.Themecolor
 
-    this.changemode();
+    // this.changemode();
     var randomNoForFlashArr = [];
     var arraylength = 2;
     var valcurrency = this.data.ctpdata;
@@ -254,8 +283,8 @@ export class DerivativeOrderbookComponent implements OnInit {
       document.body.classList.add("overlay")
       localStorage.setItem('assetChangeCounterForFutures', '1');
       // location.reload();
-      this.data.reloadPage(this.route.url)
     }
+    this.tradep = 6;
 
   }
 
@@ -466,7 +495,7 @@ export class DerivativeOrderbookComponent implements OnInit {
     }, 3000);
     this.serverSentEventForOrderbookAsk();
     this.tardebookHistory();
-    this.trade.reload();
+    // this.trade.reload();
     this.trade.myTradeDisplay(0);
     $('#trade').click();
     $('#dropHolder').css('overflow', 'scroll');
@@ -653,13 +682,13 @@ export class DerivativeOrderbookComponent implements OnInit {
   }
 
   getPrice(m) {
-    this.p = localStorage.getItem('priceprc');
-    return (parseFloat(m.price)).toFixed(parseInt(this.p));
+    // this.p = localStorage.getItem('priceprc');
+    return (parseFloat(m.price)).toFixed(parseInt(this.tradep));
   }
 
   getAmount(m) {
-    this.s = localStorage.getItem('amountprc');
-    return (parseFloat(m.amount)).toFixed(parseInt(this.s));
+    // this.s = localStorage.getItem('amountprc');
+    return (parseFloat(m.amount)).toFixed(parseInt(this.tradep));
   }
 
   serverSentEventForOrderbookAsk() {
@@ -679,6 +708,13 @@ export class DerivativeOrderbookComponent implements OnInit {
         var askSideData = result.ask;
         this.askdata = askSideData.sort((a, b) => b.price - a.price);
         this.biddata = result.bid;
+
+        this.biddataFinal = this.biddata
+        this.askdataFinal = this.askdata
+
+        var a = {'ask':this.askdataFinal, 'bid':this.biddataFinal}
+
+        this.bidDataOutput.emit(a);
       });
 
     this.subscription = this.websocket.currentMessage.subscribe(message => {
@@ -781,6 +817,15 @@ export class DerivativeOrderbookComponent implements OnInit {
             this.biddata = this.biddata.slice(0, 50);
           }
 
+
+
+          this.askdataFinal = this.askdata
+          this.biddataFinal = this.biddata
+
+          var a = {'ask':this.askdataFinal, 'bid':this.biddataFinal}
+
+          this.bidDataOutput.emit(a);
+
         }
       }
 
@@ -792,6 +837,8 @@ export class DerivativeOrderbookComponent implements OnInit {
 
 
   tardebookHistory() {
+    this.marketTradeRecords = [];
+    this.tradeBookData.emit(this.marketTradeRecords);
     this.http.get<any>("https://futures-stream.paybito.com/fSocketStream/api/tradeHistory?symbol=" + localStorage.getItem("selected_derivative_asset_pair") + "&limit=50", {
       headers: {
         'Content-Type': 'application/json',
@@ -802,6 +849,8 @@ export class DerivativeOrderbookComponent implements OnInit {
         var result = data;
         console.log(data)
         this.marketTradeRecords = result;
+        this.tradeBookData.emit(this.marketTradeRecords);
+
       });
 
     this.subscription1 = this.websocket.currentMessage.subscribe(message => {
@@ -845,6 +894,8 @@ export class DerivativeOrderbookComponent implements OnInit {
 
           if (this.marketTradeRecords.length > 100) {
             this.marketTradeRecords = this.marketTradeRecords.slice(0, 100);
+            this.tradeBookData.emit(this.marketTradeRecords);
+
 
           }
         }

@@ -4,7 +4,7 @@
 .app-tv-chart-container{
     height: calc(100vh - 185px);
 }
-.app-tv-chart-container{height:520px;}
+.app-tv-chart-container{height:450px;}
 
 .loading-paybito {
     height: 100px;
@@ -74,9 +74,9 @@
     animation-delay: .5s;
   }
   .infoChart{
-    top: 15px;
+    top: 90px;
     position: absolute;
-    left: 310px;
+    left: 358px;
   }
   @media only screen and (max-width: 600px) {
     .info-section {
@@ -96,15 +96,15 @@
 
   @media (min-width: 1500px) {
     .infoChart{
-      top: 15px;
+      top: 90px;
       position: absolute;
-      left: 310px;
+      left: 358px;
     }
   }
 
   @media (min-width: 1900px) {
     .infoChart{
-      top: 9px;
+      top: 90px;
       position: absolute;
       left: 263px;
     }
@@ -112,7 +112,7 @@
 
   @media (min-width: 2100px) {
     .infoChart{
-      top: 9px;
+      top: 90px;
       position: absolute;
       left: 250px;
     }

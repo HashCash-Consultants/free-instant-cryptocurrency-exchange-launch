@@ -1,0 +1,17 @@
+.addressInputField{
+    width: 232px;
+    height: 52px;
+}
+.addressInputFieldbtn{
+    height: 52px;
+
+}
+.extramargin{
+    margin-left: 6px !important;
+}
+
+@media (max-width:480px){
+    .addressInputField{
+        width: 243px;
+    }
+  }

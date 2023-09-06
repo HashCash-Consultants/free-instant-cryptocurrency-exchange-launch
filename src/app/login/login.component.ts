@@ -95,7 +95,9 @@ export class LoginComponent implements OnInit {
   appLink: any;
   disableSecStatus: boolean = true;
   currentVerson: any;
-
+  isPhoneVerificationEnable : boolean = false;
+  isGoogleAuthEnable : boolean = false;
+  userPhoneCountryCodeUsingForSendingSms: any;
 
   constructor(
     private http: HttpClient,
@@ -145,7 +147,7 @@ export class LoginComponent implements OnInit {
     this.generateUUID();
     this.epicFunction();
     this.getmaintenanceSetting();
-    //this.checkAppVesion();
+    // this.checkAppVesion();
     if (firstParam != null && secondParam != null && thirdParam != null) {
       var deviceinfoObj = {};
       deviceinfoObj['userId'] = firstParam;
@@ -284,10 +286,11 @@ export class LoginComponent implements OnInit {
           loginObj['longitude'] = this.longitude;
           loginObj['ipAddress'] = this.ipaddress;
           loginObj['location'] = this.location;
-          loginObj['callFrom'] = 'Desktop';
 
           loginObj['otp'] = this.emailVerificationCode;
-          loginObj['gRecaptchaResponse'] = this.token;
+          loginObj['callFrom'] = 'Desktop';
+
+          //loginObj['gRecaptchaResponse'] = this.token;
 
           loginObj['browser'] = this.Browser + '' + this.Browserversion;
           var deviceID = this.cookie.get('deviceID');
@@ -309,6 +312,13 @@ export class LoginComponent implements OnInit {
           else if (this.Isdesktop == true) {
             loginObj['deviceType'] = 'Desktop browser';
           }
+          if(this.isPhoneVerificationEnable){
+            loginObj['phoneOtp'] = this.smsOtp
+          }
+          if(this.isGoogleAuthEnable){
+            loginObj['securityCode'] = this.twoFactorOtp
+          }
+
           var jsonString = JSON.stringify(loginObj);
           this.loginapi = this.http.post<any>(this.data.WEBSERVICE + '/user/LoginWithUsernamePassword', jsonString, { headers: { 'content-Type': 'application/json' } })
             .subscribe(data => {
@@ -379,12 +389,15 @@ export class LoginComponent implements OnInit {
                         alert(result.error.error_msg);
                         $('#countermsg').css('display', 'block');
 
-                        var timeleft = this.data.timeIntervalForEmail;
+                        var timeleft = 120;
                         this.interval;
                         var s = timer(1000, 1000);
                         this.isLoginButtonEnabled = true
                         this.abc = s.subscribe(val => {
+
                           this.interval = timeleft - val;
+                          console.log('subscribe val', timeleft, val, this.interval);
+
                           $('#countermsg').html("<div class='text-center'>" + 'Resend in ' + this.interval + ' seconds' + "</div>");
 
                           if (this.interval == 0) {
@@ -401,46 +414,19 @@ export class LoginComponent implements OnInit {
 
 
               if (data.error.error_data == '0') {
-                this.loader = false;
-
                 this.error = false;
                 localStorage.setItem('secondStatusCheck', 'false');
                 localStorage.setItem('countdownSec', '0')
-                localStorage.setItem('twoFactorAuth', data.userResult.twoFactorAuth)
-                this.userSmsAuthStatus = data.userResult.phoneValidation
-                localStorage.setItem('userSmsAuthStatus', this.userSmsAuthStatus)
-                this.userPhoneUsingForSendingSms = data.userResult.phone;
+               
                 this.loginResponse = data;
-                if (data.userResult.phoneValidation == '1') {
-                  this.accessTokenWillBeComingAfterVerifing = 'phone'
-                } else if (data.userResult.twoFactorAuth == '1') {
-                  this.accessTokenWillBeComingAfterVerifing = '2fa'
-                } else if (data.userResult.phoneValidation == '1' && data.userResult.twoFactorAuth == '1') {
-                  this.accessTokenWillBeComingAfterVerifing = '2fa'
-                } else {
-                  this.accessTokenWillBeComingAfterVerifing = 'none'
-                }
-                if (this.userSmsAuthStatus == 1) {
-                  this.handleOpenSmsOtp();
-                } else if (localStorage.getItem('twoFactorAuth') == '1') {
-                  this.loader = false;
-                  //this.otpBlock = true;
-                  this.modalService.dismissAll()
-
-                  this.modalService.open(this.twoFactorAuth, { centered: true, backdrop: false, keyboard: false });
-
-                  this.isLoginButtonEnabled = true
-                  $('.otp_segment').show();
-                  $('.otp_btn').show();
-                  $('.login_btn').hide();
-                  $('#loginInputOTP').focus();
-                } else {
+               
+                
                   this.setLoginData(this.loginResponse);
-                }
+                
 
               }
             }, error => {
-              this.loader = false;
+              this.loader = true;
               this.isLoginButtonEnabled = true
             })
         }, error => {
@@ -475,7 +461,7 @@ export class LoginComponent implements OnInit {
 
   /* Method defination for calling API for sms auth   */
   async handleSmsAuthSubmit() {
-    let isOtpValidated = await this.data.handleConfirmOtpInSmsForLogin('loginverifymobileotp', this.userPhoneUsingForSendingSms, this.smsOtp, this.password,'');
+    let isOtpValidated = await this.data.handleConfirmOtpInSmsForLogin('loginverifymobileotp', this.userPhoneUsingForSendingSms, this.userPhoneCountryCodeUsingForSendingSms, this.smsOtp, this.password,'');
 
     if (isOtpValidated) {
 
@@ -506,7 +492,9 @@ export class LoginComponent implements OnInit {
   async handleSendOtpThroughSms() {
     this.disabledSpan = true;
     let payload = {
-      phone : this.userPhoneUsingForSendingSms
+      phone : this.userPhoneUsingForSendingSms,
+      countryCode: this.userPhoneCountryCodeUsingForSendingSms
+
     }
     let isOtpSendToPhone = await this.data.handleSendOtpInSms(payload, 'loginmobileotp');
     if (isOtpSendToPhone) {
@@ -621,7 +609,7 @@ export class LoginComponent implements OnInit {
           localStorage.setItem('BROKERID', dataRecheck.userResult.brokerId);
               this.data.BROKERID = dataRecheck.userResult.brokerId;
 
-              this.data.getAllBrokerDetails();
+              this.data.getBrokerWhitelabelDetails();
               this.data.getAllBrokerMarkets();
 
           this.cookie.set('access_token', localStorage.getItem('access_token'), 60);
@@ -636,18 +624,15 @@ export class LoginComponent implements OnInit {
           else if (sessionStorage.getItem('proDashboard') == 'pro') {
             // this.route.navigate(['/dashboard']);
             this.routeTolocation();
+
           }
           else {
             if (dataRecheck.userResult.userTierType == 2 || dataRecheck.userResult.userTierType == 3) {
               // this.route.navigateByUrl('/dashboard');
-            this.routeTolocation();
-
+              this.routeTolocation();
             }
             else {
-
-            this.routeTolocation();
-
-              // this.route.navigateByUrl('/identity-verification');
+              this.route.navigateByUrl('/identity-verification');
             }
           }
           this.modalService.dismissAll()
@@ -666,7 +651,6 @@ export class LoginComponent implements OnInit {
       this.isLoginButtonEnabled = true
     }); */
   }
-
 
   async routeTolocation(){
 
@@ -783,34 +767,89 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  redirectToAuthentication() {
-    this.modalService.dismissAll()
+  redirectToAuthentication(status) {
+      //console.log('logiiiii', status);
 
 
-    if (this.email == 'demo@hashcashconsultants.org') {
-      this.loginData(true)
+      if (status == false) {
 
-    }
-    else {
-      this.emailVerificationCode = '';
-      if (localStorage.getItem('secondStatusCheck') == 'true') {
-        this.secondStatusCheck = true;
-        console.log(localStorage.getItem('secondStatusCheck'), this.secondStatusCheck);
-        //this.showCountdown(parseInt(localStorage.getItem('countdownSec')))
-      } else {
-        this.secondStatusCheck = false;
-        localStorage.setItem('secondStatusCheck', 'false');
-        clearInterval(this.showCountdownVar);
-        this.countdownSec = this.data.timeIntervalForEmail;
-        localStorage.setItem('countdownSec', this.countdownSec)
-        // this.showCountdown(this.countdownSec);
+        alert('Please verify first')
+  
       }
+      else {
+  
+        this.modalService.dismissAll()
+  
+  
+        if (this.email == 'demo@hashcashconsultants.org') {
+          this.loginData(true)
+  
+        }
+        else {
+          this.emailVerificationCode = '';
+          // if (localStorage.getItem('secondStatusCheck') == 'true') {
+          //   this.secondStatusCheck = true;
+          //   console.log(localStorage.getItem('secondStatusCheck'), this.secondStatusCheck);
+          //   //this.showCountdown(parseInt(localStorage.getItem('countdownSec')))
+          // } else {
+          //   this.secondStatusCheck = false;
+          //   localStorage.setItem('secondStatusCheck', 'false');
+          //   clearInterval(this.showCountdownVar);
+          //   this.countdownSec = this.data.timeIntervalForEmail;
+          //   localStorage.setItem('countdownSec', this.countdownSec)
+          //   // this.showCountdown(this.countdownSec);
+          // }
+  
+          //this.modalService.open(this.myModalAuth, { centered: true, backdrop: false, keyboard: false });
+  
+  
+  
+          let payload = {
+            email: this.email,
+            password: this.password,
+            gRecaptchaResponse: this.token
+          }
+          this.http.post<any>(this.data.WEBSERVICE + '/user/checkMfaStatus', JSON.stringify(payload), { headers: { 'content-Type': 'application/json' } }).subscribe(data => {
+            this.modalService.dismissAll();
+            if (data.error.error_data == '1') {
+              this.data.alert(data.error.error_msg,'danger')
+            }else if(data.error.error_data == '2'){
+              this.data.alert(data.error.error_msg,'danger')
+            }else{
+              this.userPhoneUsingForSendingSms = data.userResult.phone;
+              this.userPhoneCountryCodeUsingForSendingSms = data.userResult.countryCode;
 
-      this.modalService.open(this.myModalAuth, { centered: true, backdrop: false, keyboard: false });
 
 
-    }
+              localStorage.setItem('twoFactorAuth', data.userResult.twoFactorAuth)
+            localStorage.setItem('userSmsAuthStatus', data.userResult.phoneValidation)
+              //Show hide GA field in popup
+              if(data.userResult.twoFactorAuth == 1){
+                this.isGoogleAuthEnable = true
+              }else{
+                this.isGoogleAuthEnable = false
+              }
+              //Show hide phone verification field in popup
+              if(data.userResult.phoneValidation == 1){
+                this.isPhoneVerificationEnable = true
+              }else{
+                this.isPhoneVerificationEnable = false
+              }
+           this.modalService.open(this.myModalAuth, { centered: true, backdrop: false, keyboard: false });
 
+            }
+          }, error => {
+            this.loader = true;
+            this.isLoginButtonEnabled = true
+          })
+  
+  
+  
+        }
+  
+      }
+  
+  
 
   }
 
@@ -866,7 +905,7 @@ export class LoginComponent implements OnInit {
       this.countdownSec = i;
       localStorage.setItem('countdownSec', this.countdownSec)
       i-- || clearInterval(this.showCountdownVar) || this.newF();  //if i is 0, then stop the interval
-      console.log(i)
+      // console.log(i)
 
     }.bind(this), 1000)
 
@@ -879,27 +918,27 @@ export class LoginComponent implements OnInit {
   }
 
 
-  checkAppVesion(){
+  // checkAppVesion(){
 
-    this.http.get<any>(this.data.WEBSERVICE + '/home/checkAppVersion?appVersion='+this.data.appVersion)
-      .subscribe(response => {
+  //   this.http.get<any>(this.data.WEBSERVICE + '/home/checkAppVersion?appVersion='+this.data.appVersion)
+  //     .subscribe(response => {
 
-        if(this.data.appVersion < response.currentVersion){
+  //       if(this.data.appVersion < response.currentVersion){
 
-          this.modalService.open(this.versionModal, { centered: true});
-          this.appLink = response.link
-          this.currentVerson = response.currentVersion
-
-
-        }
+  //         this.modalService.open(this.versionModal, { centered: true});
+  //         this.appLink = response.link
+  //         this.currentVerson = response.currentVersion
 
 
-        // console.log('version',response);
+  //       }
+
+
+  //       // console.log('version',response);
         
         
 
-      })
+  //     })
 
-  }
+  // }
 
 }
