@@ -35,7 +35,7 @@
                       <div class="col-md-8">
 
                         <div class="form-group">
-                          <label class="buylabel" for="inputOnlyBuyAmount">Buy</label>
+                          <label class="buylabel" for="inputOnlyBuyAmount" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Buy</label>
                           <input numeric numericType="decimal" class="" [ngClass]="Themecolor == 'Dark' ? 'form-control' : 'form-control-light'"
                           id="inputOnlyBuyAmount" placeholder="0" [(ngModel)]="onlyBuyAmount" (keyup)="getBuyVal($event.target.value);"
                           #bam="ngModel" [class.is-invalid]="bam.dirty&&bam.invalid" disabled style="margin-left: 8px;">
@@ -58,7 +58,7 @@
 
                     <div class="row">
                       <div class="form-group lastdropdiv">
-                        <label class="spendlabel" for="base-cur">Spend</label>
+                        <label class="spendlabel" for="base-cur" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Spend</label>
                         <select disabled  [ngClass]="Themecolor == 'Dark' ? 'form-control lastDrop' : 'form-control-light lastDrop-light'" id="base-cur" (change)="getBaseCurrency($event.target.value)">
                           <option  [value]="">Select</option>
                           <option *ngFor="let item of basecurrency" [value]="item">{{item}}</option>
@@ -144,7 +144,7 @@
             </span>
             <div class="row" *ngIf="showQuoteAreaForBuy">
                 <div class="col-12 col-md-4 text-left">
-                  <label for="inputBuyUSD" class="col-form-label">Spend</label>
+                  <label for="inputBuyUSD" class="col-form-label" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Spend</label>
                 </div>
                 <div class="col-12 col-md-8">
                   <div class="input-group mb-2">
@@ -154,7 +154,7 @@
                   </div>
                 </div>
                 <div class="col-12 col-md-4 text-left">
-                  <label for="inputBuyUSD" class="col-form-label">Unit Price</label>
+                  <label for="inputBuyUSD" class="col-form-label" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Unit Price</label>
                 </div>
                 <div class="col-12 col-md-8">
                   <div class="input-group">
@@ -195,7 +195,7 @@
                   <div class="row">
                     <div class="col-md-8">
                       <div class="form-group">
-                        <label class="buylabel" for="inputOnlyBuyAmount">Sell</label>
+                        <label class="buylabel" for="inputOnlyBuyAmount" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Sell</label>
                         <input numeric numericType="decimal" [ngClass]="Themecolor == 'Dark' ? 'form-control' : 'form-control-light'"
                         id="inputOnlySellAmount" placeholder="0" [(ngModel)]="onlySellAmount"
                         (keyup)="getSellVal($event.target.value)" #sam="ngModel" [class.is-invalid]="sam.dirty&&sam.invalid" disabled style="margin-left: 8px;">
@@ -214,7 +214,7 @@
                 </div>
                 <div class="col-md-2">
                   <div class="form-group lastdropdivrcv">
-                    <label class="spendlabel" for="inputOnlyBuyAmount">Receive</label>
+                    <label class="spendlabel" for="inputOnlyBuyAmount" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Receive</label>
                     <select disabled  [ngClass]="Themecolor == 'Dark' ? 'form-control lastDrop' : 'form-control-light lastDrop-light'" id="base-cur" (change)="getBaseCurrency($event.target.value)" style="margin-top: -3px;">
                       <option  [value]="">Select</option>
                       <option *ngFor="let item of basecurrency" [value]="item">{{item}}</option>
@@ -295,7 +295,7 @@
             </span>
             <div class="row" *ngIf="showQuoteAreaForSell">
               <div class="col-12 col-md-4 text-left">
-                <label for="inputBuyUSD" class="col-form-label">Receive</label>
+                <label for="inputBuyUSD" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'" class="col-form-label">Receive</label>
               </div>
               <div class="col-12 col-md-8">
                 <div class="input-group mb-2">
@@ -305,7 +305,7 @@
                 </div>
               </div>
               <div class="col-12 col-md-4 text-left">
-                <label for="inputBuyUSD" class="col-form-label">Unit Price</label>
+                <label for="inputBuyUSD" class="col-form-label" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Unit Price</label>
               </div>
               <div class="col-12 col-md-8">
                 <div class="input-group">
@@ -333,13 +333,13 @@
 </div>
 </div>
 <ng-template #feeModal let-modal>
-  <div class="modal-header" style="background: #3d3e42; color: #fff;">
+  <div class="modal-header" [ngClass]="Themecolor == 'Dark' ? '' : 'lightTheme'">
     <h4 class="modal-title" id="modal-basic-title">Fees </h4>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <div class="modal-body" style="background: #3d3e42; color: #fff; font-family: system-ui;">
+  <div class="modal-body" [ngClass]="Themecolor == 'Dark' ? '' : 'lightTheme'">
     <h5 style="font-family: -webkit-pictograph;">Summary - 30 Days</h5>
     <table class="table table-borderless">
       <thead>
@@ -379,7 +379,7 @@
         
       </tbody>
     </table>
-    <p style="font-size: 14px;">PayBito uses a maker-taker fee model for determining its trading fees. Orders that provide liquidity (maker orders) are charged different fees than orders that take liquidity (taker orders).
+    <p style="font-size: 14px;">{{data.exchange}} uses a maker-taker fee model for determining its trading fees. Orders that provide liquidity (maker orders) are charged different fees than orders that take liquidity (taker orders).
       <b>Fees are calculated based on the current pricing tier you are in when the order is placed, and not on the tier you would be in after a trade is completed.</b> When you place an order at the market price that gets filled immediately, you are considered a taker.
       When you place an order which is not immediately matched by an existing order, that order is placed on the order book. If another customer places an order that matches yours, you are considered the maker.
       When you place an order that gets partially matched immediately, you pay a taker fee for that portion. The remainder of the order is placed on the order book and, when matched, is considered a maker order.</p>

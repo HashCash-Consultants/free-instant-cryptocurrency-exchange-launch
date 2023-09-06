@@ -148,8 +148,6 @@ export class WithdrawFundsComponent implements OnInit {
   getCodeFromEmail() {
     var getotpObj = {};
     getotpObj["email"] = localStorage.getItem("email");
-    getotpObj["uuid"] = localStorage.getItem('uuid');
-
     var jsonString = JSON.stringify(getotpObj);
     this.isGetCodeButtonDisabled = true;
     this.http
@@ -201,7 +199,9 @@ validateWithdrawAmount = () => {
 
 async getCodeFromSmsForExternalWallet(){
   let payload = {
-    phone : localStorage.getItem('phone')
+    phone : localStorage.getItem('phone'),
+    countryCode : localStorage.getItem('phoneCountryCode')
+
   }
   let isOtpSend = await this.data.handleSendOtpInSms(payload, 'withdrawmobileotp');
   if(isOtpSend){
@@ -227,7 +227,7 @@ async getCodeFromSmsForExternalWallet(){
 
   getWithdrawalTradeHistory() {
     var withdrawtradehistoryObj = {};
-    // withdrawtradehistoryObj['userId'] = localStorage.getItem('user_id');
+   // withdrawtradehistoryObj['userId'] = localStorage.getItem('user_id');
     withdrawtradehistoryObj['uuid'] = localStorage.getItem('uuid');
     withdrawtradehistoryObj['pageNo'] = this.page.toString();
     withdrawtradehistoryObj['noOfItemsPerPage'] = this.noOfItemPerPage;
@@ -253,7 +253,7 @@ async getCodeFromSmsForExternalWallet(){
 
   appsettingscall() {
     var infoObj = {};
-    // infoObj['userId'] = localStorage.getItem('user_id');
+    //infoObj['userId'] = localStorage.getItem('user_id');
     infoObj['uuid'] = localStorage.getItem('uuid');
     var jsonString = JSON.stringify(infoObj);
     this.http.post<any>(this.data.WEBSERVICE + '/user/GetUserAppSettings', jsonString, {
@@ -326,7 +326,7 @@ async getCodeFromSmsForExternalWallet(){
   getBankDetails() {
 
     var bankDetailsObj = {};
-    // bankDetailsObj["userId"] = localStorage.getItem("user_id");
+    //bankDetailsObj["userId"] = localStorage.getItem("user_id");
     bankDetailsObj["uuid"] = localStorage.getItem("uuid");
     var jsonString = JSON.stringify(bankDetailsObj);
     this.http
@@ -377,11 +377,12 @@ async getCodeFromSmsForExternalWallet(){
         this.twoFactorOtp = ''
         this.smsOtp = ''
         this.emailOtp = ''
-        if(twoFactorAuth == '1' &&  smsAuth == '1'){
+        if(twoFactorAuth == '1'){
 
             this.modalService.open(template, { centered: true });
         }else{
-            this.data.alert('Please turn on Two Factor Authentication and Phone Verification from Settings first', 'danger');
+            //this.data.alert('Please turn on Two Factor Authentication and Phone Verification from Settings first', 'danger');
+            this.data.alert('Please turn on Two Factor Authentication  from Settings first', 'danger');
         }
     
 }
@@ -418,7 +419,7 @@ async getCodeFromSmsForExternalWallet(){
             } */
             withdawObj["otp"] = this.emailOtp;
             withdawObj["securityCode"] = this.twoFactorOtp;
-            withdawObj["mobileOtp"] = this.smsOtp;
+            withdawObj["phoneOtp"] = this.smsOtp;
             var jsonString = JSON.stringify(withdawObj);
             this.http
               .post<any>(
@@ -482,7 +483,7 @@ async getCodeFromSmsForExternalWallet(){
             } */
             withdawObj["otp"] = this.emailOtp;
             withdawObj["securityCode"] = this.twoFactorOtp;
-            withdawObj["mobileOtp"] = this.smsOtp;
+            withdawObj["phoneOtp"] = this.smsOtp;
 
             var jsonString = JSON.stringify(withdawObj);
             this.http
@@ -550,7 +551,7 @@ async getCodeFromSmsForExternalWallet(){
             } */
             withdawObj["otp"] = this.emailOtp;
             withdawObj["securityCode"] = this.twoFactorOtp;
-            withdawObj["mobileOtp"] = this.smsOtp;
+            withdawObj["phoneOtp"] = this.smsOtp;
 
             var jsonString = JSON.stringify(withdawObj);
             this.http
@@ -618,7 +619,7 @@ async getCodeFromSmsForExternalWallet(){
             } */
             withdawObj["otp"] = this.emailOtp;
             withdawObj["securityCode"] = this.twoFactorOtp;
-            withdawObj["mobileOtp"] = this.smsOtp;
+            withdawObj["phoneOtp"] = this.smsOtp;
 
             var jsonString = JSON.stringify(withdawObj);
             this.http
@@ -687,7 +688,7 @@ async getCodeFromSmsForExternalWallet(){
             } */
             withdawObj["otp"] = this.emailOtp;
             withdawObj["securityCode"] = this.twoFactorOtp;
-            withdawObj["mobileOtp"] = this.smsOtp;
+            withdawObj["phoneOtp"] = this.smsOtp;
 
             var jsonString = JSON.stringify(withdawObj);
             // wip(1);
@@ -926,8 +927,6 @@ async getCodeFromSmsForExternalWallet(){
   resendOtpForOutgoing() {
     var otpObj = {};
     otpObj["email"] = localStorage.getItem("email");
-    otpObj["uuid"] = localStorage.getItem('uuid');
-
     var jsonString = JSON.stringify(otpObj);
     this.http
       .post<any>(this.data.WEBSERVICE + "/user/ResendOTP/withdraw", jsonString, {

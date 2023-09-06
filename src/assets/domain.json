@@ -1,0 +1,38 @@
+{
+    "domains": [
+      {
+        "id": 1,
+        "exchange": "Bowo",
+        "brokerId": "BOWO28072023000533",
+        "exchangeLogo": "https://brokersexchange.s3.us-west-1.amazonaws.com/BOWO28072023000533/exchange_logo.png",
+        "exchangeLoaderIcon": "https://brokersexchange.s3.us-west-1.amazonaws.com/BOWO28072023000533/exchange_loader_icon.png",
+        "domain": "https://trade.bowo.exchange"
+      },
+      {
+        "id": 2,
+        "exchange": "Brokerzzz",
+        "brokerId": "ARNA06022023114437",
+        "exchangeLogo": "https://brokersexchange.s3.us-west-1.amazonaws.com/ARNA06022023114437/exchange_logo.png",
+        "exchangeLoaderIcon": "https://brokersexchange.s3.us-west-1.amazonaws.com/ARNA06022023114437/exchange_loader_icon.png",
+        "domain": "http://localhost:4201"
+      },
+      {
+        "id": 3,
+        "exchange": "sikkax",
+        "brokerId": "JJ23022023111803",
+        "exchangeLogo": "https://brokersexchange.s3.us-west-1.amazonaws.com/ARNA06022023114437/exchange_logo.png",
+        "exchangeLoaderIcon": "https://brokersexchange.s3.us-west-1.amazonaws.com/ARNA06022023114437/exchange_loader_icon.png",
+        "domain": "https://trade.sikkax.com"
+      }
+      ,
+      {
+        "id": 4,
+        "exchange": "Brics",
+        "brokerId": "DEFI20072023194041",
+        "exchangeLogo": "https://brokersexchange.s3.us-west-1.amazonaws.com/DEFI20072023194041/exchange_logo.png",
+        "exchangeLoaderIcon": "https://brokersexchange.s3.us-west-1.amazonaws.com/DEFI20072023194041/exchange_loader_icon.png",
+        "domain": "https://trade.bricsprime.com"
+      }
+    ]
+ }
+

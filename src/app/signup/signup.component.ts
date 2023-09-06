@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { CoreDataService } from '../core-data.service';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -10,6 +10,8 @@ import { DeviceDetectorService } from 'ngx-device-detector';
 import { UUID } from 'angular2-uuid';
 import { CookieService } from 'ngx-cookie-service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Meta, Title } from '@angular/platform-browser';
+
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.component.html',
@@ -37,6 +39,8 @@ export class SignupComponent implements OnInit {
   referralCode;
   referCode;
   passwordMatch:boolean = false;
+  isBrokerIdComingFromUrl : boolean = false;
+  isReferalComingFromUrl : boolean = false;
   public Browser: any;
   public Browserversion: any;
   public DeviceId: any;
@@ -66,11 +70,24 @@ export class SignupComponent implements OnInit {
   uuidValue: string;
   selectedCountryPhone = '1';
   captchaNextButton: boolean;
-  @ViewChild('versionModal') versionModal : any;
   showPhoneDisclaimer: boolean = false;
-  
-
-  constructor(private http: HttpClient, public data: CoreDataService, private route: Router, private activeRoute: ActivatedRoute, private deviceService: DeviceDetectorService, private cookie: CookieService,private modalService: NgbModal,) { }
+  constructor(private http: HttpClient, 
+    public data: CoreDataService, 
+    private route: Router, 
+    private activeRoute: ActivatedRoute, 
+    private deviceService: DeviceDetectorService, 
+    private cookie: CookieService,
+    private modalService:NgbModal,
+    private meta: Meta,
+    public titleService: Title
+    ) {
+      this.titleService.setTitle('Broker Exchange SignUp | Broker')
+      this.meta.addTags
+      ([
+      { name: 'description', content: 'Signup to the Broker crypto trading platform and explore the opportunities in trading, brokerage, payments, tokenization, ICOs & Banking' },
+        {name: 'title',content:'Broker Exchange SignUp | Broker'}
+      ]);
+     }
 
   signupObj: any = {
     country: '',
@@ -78,15 +95,34 @@ export class SignupComponent implements OnInit {
     longitude: '',
     ipAddress: '',
     location: '',
-    referredBy: '',
-    
+    referredBy: ''
   };
   signupObj1: any = {};
   ngOnInit() {
-    this.signupObj.brokerId = this.data.BROKERID
     const firstParam: string = this.activeRoute.snapshot.queryParamMap.get('franchise_code');
+    const secondParam: string = this.activeRoute.snapshot.queryParamMap.get('referal_code');
+    const thirdParam: string = this.activeRoute.snapshot.queryParamMap.get('broker_id');
+    const fourthParam: string = this.activeRoute.snapshot.queryParamMap.get('email');
     this.franchiseCode = firstParam;
-    // this.testAppVersion()
+    if(secondParam != null && secondParam != ''  && secondParam != undefined){
+      this.signupObj1.referralCode = secondParam;
+      this.isReferalComingFromUrl = true
+      localStorage.setItem('referralCodeFromUrl',secondParam)
+      this.checkReferralCode();
+    }
+    if(fourthParam != null && fourthParam != ''  && fourthParam != undefined){
+      this.signupObj.email = fourthParam;
+      this.checkEmail();
+    }
+    if(thirdParam != null && thirdParam != ''  && thirdParam != undefined){
+      this.signupObj.brokerId = thirdParam;
+      this.isBrokerIdComingFromUrl = true
+      localStorage.setItem('brokerIdFromUrl',thirdParam)
+      this.handleBrokerIdCheck();
+    }else{
+      this.signupObj.brokerId = this.data.BROKERID;
+    }
+    //console.log('query param',secondParam,thirdParam);
      this.getLoc();
     this.checkurlemail(this.loadmail);
     this.generateUUID();
@@ -169,7 +205,9 @@ export class SignupComponent implements OnInit {
           this.signupObj.ipAddress = this.ipaddress
           this.signupObj.location = this.location;
           var promoCode = this.referCode;
-          this.signupObj.phone = this.selectedCountryPhone+this.signupObj.phone;
+          this.signupObj.countryCode = this.selectedCountryPhone;
+
+          this.signupObj.phone = this.signupObj.phone;
 
           if(this.franchiseCode!=null){
             this.signupObj['referredBy'] = this.franchiseCode;
@@ -210,6 +248,8 @@ export class SignupComponent implements OnInit {
 
           console.log('payload data', jsonString);
           localStorage.setItem('phoneUsedForRegistration',this.signupObj.phone);
+          localStorage.setItem('phoneCountryUsedForRegistration',this.signupObj.countryCode);
+
           this.signupObj.phone = this.signupObj.phone.replace(this.selectedCountryPhone,'');
           // if (this.captcha != '') {
 
@@ -274,6 +314,10 @@ export class SignupComponent implements OnInit {
       this.data.alert('Please fill up all the fields properly', 'warning');
     }
   }
+
+  handleShowPhoneDisclaimer = (param : boolean) => {
+    this.showPhoneDisclaimer = param
+  }
   getSize(content) {
     var sz = $('#' + content)[0].files[0];
     if (sz.type == "image/jpeg") {
@@ -308,6 +352,10 @@ export class SignupComponent implements OnInit {
       this.passwordMatch = false;
     }
 
+  }
+
+  handleInfoModal = (elem) => {
+    this.modalService.open(elem,{centered:true});
   }
 
   checkEmail() {
@@ -350,9 +398,19 @@ export class SignupComponent implements OnInit {
   checkPhone() {
     if (this.signupObj.phone != '' && this.signupObj.phone != undefined) {
       // wip(1);
-      var phoneValue = this.selectedCountryPhone+this.signupObj.phone;
+      console.log('country code',this.selectedCountryPhone);
+      console.log('country phone',this.signupObj.phone);
+
+      
+      var phoneValue = this.signupObj.phone;
       var phoneObj = {};
+
+      // phoneObj['phone'] = this.editablePhone;
+      //       phoneObj['countryCode'] = this.selectedCountryPhone;
+
       phoneObj['phone'] = phoneValue;
+      phoneObj['countryCode'] = this.selectedCountryPhone;
+
       var jsonString = JSON.stringify(phoneObj);
 
       this.checkphoneApi = this.http.post<any>(this.data.WEBSERVICE + '/user/CheckPhone', jsonString, {
@@ -383,6 +441,39 @@ export class SignupComponent implements OnInit {
       this.data.alert('Please Provide Phone No.', 'warning')
     }
 
+  }
+
+  handleBrokerIdCheck = () => {
+    
+      let value  = this.signupObj.brokerId;
+      if(value != ''){
+  
+        let payload = {
+          brokerId : value
+        }
+  
+        this.http.post<any>(this.data.WEBSERVICE + '/user/CheckBroker', JSON.stringify(payload), {
+          headers: {
+  
+            'Content-Type': 'application/json'
+          }
+        })
+          .subscribe(response => {
+            // wip(0);
+            var result = response;
+            if (result.error.error_data != '0') {
+              this.data.alert(result.error.error_msg, 'danger');
+              this.signupObj.brokerId = ''
+              $('#submit_btn').attr('disabled','disabled');
+            } else {
+              
+            }
+          }, reason => {
+            // wip(0);
+            this.data.alert('Internal Server Error', 'danger')
+  
+          });
+      }
   }
 
   checkReferralCode() {
@@ -439,12 +530,12 @@ export class SignupComponent implements OnInit {
       }
     }
     else {
-      this.data.alert('Password should be minimum 8 Charecter', 'warning');
+      this.data.alert('Password should be minimum 8 characters', 'warning');
     }
   }
 
   checkAlphaNumeric(string) {
-    if (string.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$!@.])[a-zA-Z0-9$!@.]{8,35}$/)){
+      if (string.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$!@.])[a-zA-Z0-9$!.@]{8,35}$/)){
       return true;
     } else {
       return false;
@@ -497,67 +588,21 @@ export class SignupComponent implements OnInit {
     
   }
 
-  testAppVersion(){
-    // this.http
-    // .get<any>(this.data.WEBSERVICE + "/home/brokerSubscriptionStatus?brokerId=" + this.data.BROKERID, {
-    //   headers: {
-    //     Authorization: "BEARER " + localStorage.getItem("access_token"),
-    //   },
-    // })
-    // .subscribe(
+  /* Method defination for copy broker id */
+  copyBrokerId = () => {
+    let copyText = document.getElementById("brokerIdField") as HTMLInputElement;
 
-    //   (result) => {
-    //     console.log('broker sub', result.paymentStatus )
-    //     if(result.paymentStatus == 2){
-         
-    //     }
-    //   }
-      
+        // Select the text field
+        copyText.select();
+        copyText.setSelectionRange(0, 99999); // For mobile devices
 
-    // )
-
-    this.modalService.open(this.versionModal, { centered: true,
-     });
+        // Copy the text inside the text field
+        // navigator.clipboard.writeText(copyText.value);
+        window.navigator['clipboard'].writeText(copyText.value);
+        this.data.alert('Broker Id Copied','success');
   }
 
-  handleBrokerIdCheck = () => {
-    
-    let value  = this.signupObj.brokerId;
-    if(value != ''){
+ 
 
-      let payload = {
-        brokerId : value
-      }
-
-      this.http.post<any>(this.data.WEBSERVICE + '/user/CheckBroker', JSON.stringify(payload), {
-        headers: {
-
-          'Content-Type': 'application/json'
-        }
-      })
-        .subscribe(response => {
-          // wip(0);
-          var result = response;
-          if (result.error.error_data != '0') {
-            this.data.alert(result.error.error_msg, 'danger');
-            this.signupObj.brokerId = ''
-            $('#submit_btn').attr('disabled','disabled');
-          } else {
-            
-          }
-        }, reason => {
-          // wip(0);
-          this.data.alert('Internal Server Error', 'danger')
-
-        });
-    }
-
-    
-}
-
-
-handleShowPhoneDisclaimer = (param : boolean) => {
-  this.showPhoneDisclaimer = param
-}
 
 }

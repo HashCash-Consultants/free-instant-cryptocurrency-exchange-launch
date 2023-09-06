@@ -16,7 +16,7 @@
   </div>
 </div>
 
-<div [ngResizable]="data.resize" class="trade-component p-2 pl-3 pr-3 rounded h-100 resizable-widget">
+<div   class="trade-component p-2 pl-3 pr-3 rounded h-100 resizable-widget">
   <ngb-tabset [ngClass]="Themecolor == 'Dark' ? 'tab-dark' : 'tab-light'" [activeId]="activeIdString">
     <ngb-tab id="trades">
       <ng-template ngbTabTitle>
@@ -71,7 +71,7 @@
             <div [ngClass]="Themecolor == 'Dark' ? 'table-responsive scrollable' : 'table-responsive scrollable_light'">
               <table class="table table-sm trade-table">
                 <thead>
-                 <tr class="bg-header">
+                 <tr class="bg-header" [ngClass]="Themecolor == 'Dark' ? 'tradeHeader text-white' : ' tradeHeaderlight text-black'">
                     <th scope="col">Time</th>
                     <th scope="col">Contract</th>
                     <th scope="col">Offer Type</th>
@@ -119,7 +119,7 @@
             <div [ngClass]="Themecolor == 'Dark' ? 'table-responsive scrollable' : 'table-responsive scrollable_light'">
               <table class="table table-sm trade-table">
                 <thead>
-                 <tr class="bg-header">
+                 <tr [ngClass]="Themecolor == 'Dark' ? 'tradeHeader text-white' : ' tradeHeaderlight text-black'">
                   <th scope="col">Time</th>
                   <th scope="col">Contract</th>
                   <th scope="col">Offer Type</th>
@@ -217,7 +217,7 @@
             <div [ngClass]="Themecolor == 'Dark' ? 'table-responsive scrollable' : 'table-responsive scrollable_light'">
               <table class="table table-sm my-offer-table">
                 <thead>
-                 <tr class="bg-header">
+                 <tr [ngClass]="Themecolor == 'Dark' ? 'tradeHeader text-white' : ' tradeHeaderlight text-black'">
                     <th scope="col">Time</th>
                     <th scope="col">Offer Id</th>
                     <th scope="col">Amount</th>
@@ -327,7 +327,7 @@
             <div [ngClass]="Themecolor == 'Dark' ? 'table-responsive scrollable' : 'table-responsive scrollable_light'">
               <table class="table table-sm my-offer-table">
                 <thead>
-                 <tr class="bg-header">
+                 <tr [ngClass]="Themecolor == 'Dark' ? 'tradeHeader text-white' : ' tradeHeaderlight text-black'">
                     <th scope="col">Time</th>
                     <th scope="col">Offer Id</th>
                     <th scope="col">Amount</th>
@@ -378,7 +378,330 @@
         </div>
       </ng-template>
     </ngb-tab>
-    <ngb-tab>
+    <ngb-tab id="stop">
+      <ng-template ngbTabTitle>
+        <h6 (click)="callAllStopLimitOffers();saveLastTabTradeComp('stop');clickAllButton()" style="padding: 8px 10px -2px 10px;">STOP ORDERS</h6>
+      </ng-template>
+      <ng-template ngbTabContent>
+        <div style="top: 70px;left: 128px;position: absolute;">
+          
+          <div class="info-section-trade" id="stopLimitTradeInfo" style="display: none;left: 10px;top: 10px;" >
+            <div class="info-header">
+              <div class="info-title"> Stop-Limit</div>
+              <div class="info-close">
+                <i class="fa fa-times" aria-hidden="true" (click)="data.handleInfoSection('stopLimitTradeInfo')"></i>
+              </div>
+            </div>
+            <div class="info-body">
+              Stop Orders shows all BUY and SELL offers created using STOP LIMIT
+            </div>
+          </div>
+        </div>
+        <div [ngClass]="Themecolors == 'Dark' ? 'tab-pane active scrollable' : 'tab-pane active scrollable_light'" id="my-trades" role="tabpanel" aria-labelledby="my-trades-tab">
+        <div class="btn-group btn-group-sm" role="group" aria-label="my-trades-filter" style="margin-top:1px;float: left !important;">
+          <button type="button"
+              class="btn btn-dark font-xs filter-button {{(buySellDivStatus=='all')?'btn_active':''}}"
+              data-filter="all" id="spotStopLimitAllButton" (click)="buySellDivChangeStatus('all');handleStopLimitAllButton()">ALL</button>
+          <button type="button"
+            class="btn btn-dark font-xs text-green filter-button {{(buySellDivStatus=='buy')?'btn_active':''}}"
+            data-filter="buy" (click)="getStopLossOfferForBuy(); buySellDivChangeStatus('buy');callAllStopLimitOffers()">BUY</button>
+          <button type="button"
+            class="btn btn-dark font-xs text-red filter-button {{(buySellDivStatus=='sell')?'btn_active':''}}"
+            data-filter="sell" (click)="getStopLossOfferForSell(); buySellDivChangeStatus('sell');callAllStopLimitOffers()">SELL</button>
+            <div class="icon-section pull-left" style="padding-left: 8px;">
+              <i class="fa fa-info-circle" aria-hidden="true" (click)="data.handleInfoSection('stopLimitTradeInfo')"></i>
+            </div>
+        </div>
+        <div style="float: right !important;margin-right: 5px;">
+          <!-- <div class="form-check" style="padding-top: 8px;">
+            <input class="form-check-input" type="checkbox" value="" [checked]="myStopLimitAllPairs" id="flexCheckDefault" (change)="checkValueStopLimit($event)">
+            <label class="form-check-label" for="flexCheckDefault">
+              Show all pairs
+            </label>
+          </div> -->
+         </div>
+         <br/>
+         <br/>
+         <div *ngIf="myStopLimitAllPairs == false">
+
+          <div class="table-responsive-sm " *ngIf="buySellDivStatus == 'all'">
+            <table class="table table-sm my-offer-table">
+              <thead>
+                <tr class="bg-black text-blue">
+                  <th scope="col">Time stamp</th>
+                  <th scope="col">Order ID</th>
+                  <th scope="col">Asset pair</th>
+                  <th scope="col">Quantity</th>
+                  <th scope="col">Limit price</th>
+                  <th scope="col">stop price</th>
+                  <th scope="col">Action</th>
+                  <th scope="col">Edit</th>
+                  <th scope="col">Delete</th>
+                </tr>
+                <td colspan="8" *ngIf="flag3" class="text-center">
+                  <img src="./assets/svg-loaders/three-dots.svg" alt="" width="50">
+                </td>
+              </thead>
+              <tbody id="stopLossBodyw" *ngIf="buyselldata">
+  
+                <tr *ngFor="let s of buyselldata">
+                  <td>{{s.timeStamp  }}</td>
+                  <td>{{s.stopLossId }}</td>
+                  <td>{{s.assetPair}}</td>
+                  <td>{{s.quantity}}</td>
+                  <td>{{getStoplossPrice(s)}}</td>
+                  <td>{{getStoplossTriggerPrice(s)}}</td>
+                  <td class="text-success" *ngIf="s.action
+                  == 1">Buy</td>
+                  <td class="text-danger" *ngIf="s.action
+                  == 2">Sell</td>
+                  <!-- <td class="text-success">{{s.action}}</td> -->
+
+                 <td *ngIf="s.stoplossType=='M'"><button (click)="marginModifyStoploss(marginmstoploss,s.stopLossId,s.quantity,s.stopLossPrice,s.triggerPrice,s.tradePrice,s.action)" class="btn btn-dark btn-ex-sm">Modify</button></td>
+                  <td *ngIf="s.stoplossType!='M'"><button (click)="modifyStoploss(modifystoploss,s.stopLossId,s.quantity,s.stopLossPrice,s.triggerPrice,s.action,s.assetPair)" class="btn btn-dark btn-ex-sm">Modify</button></td>
+                  <td *ngIf="s.stoplossType!='M'"><button class="btn btn-dark btn-ex-sm" (click)="delStoploss(delstoploss,s.stopLossId,s.quantity,s.stopLossPrice,s.triggerPrice,s.action,s.assetPair)">Delete</button></td>
+                  <td *ngIf="s.stoplossType=='M'">-</td>
+                </tr>
+                <tr>
+                  <td colspan="8" class="text-center text-danger" *ngIf="buyselldata.length==0">No Data Available</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="table-responsive-sm " *ngIf="buySellDivStatus == 'buy'">
+            <table class="table table-sm my-offer-table">
+              <thead>
+                <tr class="bg-black text-blue">
+                  <th scope="col">Time stamp</th>
+                  <th scope="col">Order ID</th>
+                  <th scope="col">Asset pair</th>
+                  <th scope="col">Quantity</th>
+                  <th scope="col">Limit price</th>
+                  <th scope="col">Stop price</th>
+                  <th scope="col">Action</th>
+                  <th scope="col">Edit</th>
+                  <th scope="col">Delete</th>
+                </tr>
+                <td colspan="8" *ngIf="flag3" class="text-center">
+                  <!-- <img src="./assets/svg-loaders/three-dots.svg" alt="" width="50"> -->
+                </td>
+              </thead>
+              <tbody id="stopLossBodyw">
+  
+                <tr *ngFor="let s of buydata">
+                  <td>{{s.timeStamp  }}</td>
+                  <td>{{s.stopLossId }}</td>
+                  <td>{{s.assetPair}}</td>
+                  <td>{{s.quantity}}</td>
+                  <td>{{getStoplossPrice(s)}}</td>
+                  <td>{{getStoplossTriggerPrice(s)}}</td>
+                  <td class="text-success">Buy</td>
+                 <!--  <td  *ngIf="s.stoplossType !='M'">Spot</td>
+                  <td  *ngIf="s.stoplossType =='M'">Margin</td> -->
+                  <td *ngIf="s.stoplossType=='M'"><button (click)="marginModifyStoploss(marginmstoploss,s.stopLossId,s.quantity,s.stopLossPrice,s.triggerPrice,s.tradePrice,'Buy')" class="btn btn-dark btn-ex-sm">Modify</button></td>
+                  <td *ngIf="s.stoplossType!='M'"><button (click)="modifyStoploss(modifystoploss,s.stopLossId,s.quantity,s.stopLossPrice,s.triggerPrice,'Buy',s.assetPair)" class="btn btn-dark btn-ex-sm">Modify</button></td>
+                  <td *ngIf="s.stoplossType!='M'"><button class="btn btn-dark btn-ex-sm" (click)="delStoploss(delstoploss,s.stopLossId,s.quantity,s.stopLossPrice,s.triggerPrice,'Buy',s.assetPair)">Delete</button></td>
+                  <td *ngIf="s.stoplossType=='M'">-</td>
+                </tr>
+                <tr>
+                  <td colspan="8" class="text-center text-danger" *ngIf="buydata.length==0">No Data Available</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+  
+          <div class="table-responsive-sm" *ngIf="buySellDivStatus == 'sell'">
+            <table class="table table-sm my-offer-table">
+              <thead>
+                <tr class="bg-black text-blue">
+                  <th scope="col">Time stamp2</th>
+                  <th scope="col">Order ID</th>
+                  <th scope="col">Asset pair</th>
+                  <th scope="col">Quantity</th>
+                  <th scope="col">Trigger price</th>
+                  <th scope="col">Action</th>
+                  <th scope="col">Edit</th>
+                  <th scope="col">Delete</th>
+                </tr>
+                <tr>
+                  <td colspan="8" *ngIf="flag4" class="text-center">
+                    <!-- <img src="./assets/svg-loaders/three-dots.svg" alt="" width="50"> -->
+                  </td>
+                </tr>
+              </thead>
+              <tbody id="stopLossBodyw">
+  
+                <tr *ngFor="let s of selldata">
+                  <td>{{s.timeStamp  }}</td>
+                  <td>{{s.stopLossId }}</td>
+                  <td>{{s.assetPair}}</td>
+                  <td>{{s.quantity}}</td>
+                  <td>{{getStoplossPrice(s)}}</td>
+                  <td>{{getStoplossTriggerPrice(s)}}</td>
+                  <td class="text-danger">Sell</td>
+                  <td *ngIf="s.stoplossType=='M'"><button (click)="marginModifyStoploss(marginModifystoploss,s.stopLossId,s.quantity,s.stopLossPrice,s.triggerPrice,s.tradePrice,'Sell')" class="btn btn-dark  btn-ex-sm">Modify</button></td>
+                  <td *ngIf="s.stoplossType!='M'"><button (click)="modifyStoploss(modifystoploss,s.stopLossId,s.quantity,s.stopLossPrice,s.triggerPrice,'Sell',s.assetPair)" class="btn btn-dark  btn-ex-sm">Modify</button></td>
+                  <td *ngIf="s.stoplossType!='M'"><button class="btn btn-dark  btn-ex-sm" (click)="delStoploss(delstoploss,s.stopLossId,s.quantity,s.stopLossPrice,s.triggerPrice,'Sell',s.assetPair)">Delete</button></td>
+                  <td *ngIf="s.stoplossType=='M'">-</td>
+                </tr>
+                <tr>
+                  <td colspan="8" class="text-center text-danger" *ngIf="selldata.length==0">No Data Available</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+         </div>
+
+         <div class="table-responsive-sm" *ngIf="myStopLimitAllPairs == true">
+          <table class="table table-sm my-offer-table">
+            <thead>
+             <tr class="bg-header">
+              <th scope="col">Time stamp</th>
+              <th scope="col">Order ID</th>
+              <th scope="col">Asset pair</th>
+              <th scope="col">Quantity</th>
+              <th scope="col">Limit price</th>
+              <th scope="col">Action</th>
+              <th scope="col">Edit</th>
+              <th scope="col">Delete</th>
+              </tr>
+              <!-- <tr>
+                <td colspan="8" *ngIf="buydataNew.length == 0" class="text-center">
+                  <img src="./assets/svg-loaders/three-dots.svg" alt="" width="50">
+                </td>
+              </tr> -->
+            </thead>
+            <tbody id="stopLossBodyw">
+
+              <tr *ngFor="let data of buydataNew" class="{{'stoploss filter'+data.type|lowercase }}">
+                <td>{{data.transactionTimeStamp}}</td>
+                <td>{{data.offer_id }}</td>
+                <td *ngIf="data.type=='Buy'">{{data.buying_asset_code }}{{data.selling_asset_code }}</td>
+                <td *ngIf="data.type=='Sell'">{{data.selling_asset_code }}{{data.buying_asset_code }}</td>
+
+                <td>{{getStoplossAmount(data)}}</td>
+                <td>{{getStoplossPriceNew(data)}}</td>
+                <td>{{getStoplossTriggerPriceNew(data)}}</td>
+                <td class="text-success" *ngIf="data.type=='Buy'">{{data.type}}</td>
+                <td class="text-danger" *ngIf="data.type=='Sell'">{{data.type}}</td>
+
+                <td ><button (click)="modifyStoploss(modifystoploss,data.offer_id,data.quantity,data.stop_loss_price,data.trigger_price,data.type,s.assetPair)" class="btn btn-dark  btn-ex-sm">Modify</button></td>
+                <td ><button class="btn btn-dark  btn-ex-sm" (click)="delStoploss(delstoploss,data.offer_id,data.quantity,data.stop_loss_price,data.trigger_price,data.type,s.assetPair)">Delete</button></td>
+                
+              </tr>
+              </tbody>
+              <tbody id="stopLossBodyw"  *ngIf="2==0">
+                <tr>
+                  <td colspan="9" class="text-center text-danger">No Data Available</td>
+                </tr>
+            </tbody>
+          </table>
+        </div>
+
+
+
+        
+      </div>
+
+        <!-- <ngb-tabset type="pills">
+          <ngb-tab>
+            <ng-template ngbTabTitle><span class="text-left" (click)="data.renderDataForStopLimitSpot('buy');getStopLossOfferForBuy()">Buy</span></ng-template>
+            <ng-template ngbTabContent>
+              <div class="table-responsive-sm ">
+                <table class="table table-sm my-offer-table">
+                  <thead>
+                    <tr class="bg-black text-blue">
+                      <th scope="col">Time</th>
+                      <th scope="col">Offer Id</th>
+                      <th scope="col">Amount</th>
+                      <th scope="col">Stop-limit Price</th>
+                      <th scope="col">Trigger Price</th>
+                      <th scope="col">Buy-Sell</th>
+                      <th scope="col">Type</th>
+                      <th scope="col">Edit</th>
+                      <th scope="col">Delete</th>
+                    </tr>
+                    <td colspan="8" *ngIf="flag3" class="text-center">
+                      <img src="./assets/svg-loaders/three-dots.svg" alt="" width="50">
+                    </td>
+                  </thead>
+                  <tbody id="stopLossBodyw" *ngIf="buydata">
+
+                    <tr *ngFor="let s of buydata">
+                      <td>{{s.timestamp | date:'medium' }}</td>
+                      <td>{{s.offerId }}</td>
+                      <td>{{getStoplossAmount(s)}}</td>
+                      <td>{{getStoplossPrice(s)}}</td>
+                      <td>{{getStoplossTriggerPrice(s)}}</td>
+                      <td class="text-success">Buy</td>
+                      <td  *ngIf="s.stoplossType !='M'">Spot</td>
+                      <td  *ngIf="s.stoplossType =='M'">Margin</td>
+                      <td *ngIf="s.stoplossType=='M'"><button (click)="marginModifyStoploss(marginmstoploss,s.offerId,s.quantity,s.stopPrice,s.triggerPrice,s.tradePrice,'Buy')" class="btn btn-dark btn-ex-sm">Modify</button></td>
+                      <td *ngIf="s.stoplossType!='M'"><button (click)="modifyStoploss(modifystoploss,s.offerId,s.quantity,s.stopPrice,s.triggerPrice,'Buy')" class="btn btn-dark btn-ex-sm">Modify</button></td>
+                      <td *ngIf="s.stoplossType!='M'"><button class="btn btn-dark btn-ex-sm" (click)="delStoploss(delstoploss,s.offerId,s.quantity,s.stopPrice,s.triggerPrice,'Buy')">Delete</button></td>
+                      <td *ngIf="s.stoplossType=='M'">-</td>
+                    </tr>
+                    <tr>
+                      <td colspan="8" class="text-center text-danger" *ngIf="buydata.length==0">No Data Available</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </ng-template>
+          </ngb-tab>
+          <ngb-tab>
+            <ng-template ngbTabTitle><span class="text-left" (click)="data.renderDataForStopLimitSpot('sell');getStopLossOfferForSell()">Sell</span>
+            </ng-template>
+            <ng-template ngbTabContent>
+              <div class="table-responsive-sm">
+                <table class="table table-sm my-offer-table">
+                  <thead>
+                    <tr class="bg-black text-blue">
+                      <th scope="col">Time</th>
+                      <th scope="col">Offer Id</th>
+                      <th scope="col">Amount</th>
+                      <th scope="col">Stop-limit Price</th>
+                      <th scope="col">Trigger Price</th>
+                      <th scope="col">Buy-Sell</th>
+                      <th scope="col">Type</th>
+                      <th scope="col">Edit</th>
+                      <th scope="col">Delete</th>
+                    </tr>
+                    <tr>
+                      <td colspan="8" *ngIf="flag4" class="text-center">
+                        <img src="./assets/svg-loaders/three-dots.svg" alt="" width="50">
+                      </td>
+                    </tr>
+                  </thead>
+                  <tbody id="stopLossBodyw" *ngIf="selldata">
+
+                    <tr *ngFor="let s of selldata">
+                      <td>{{s.timestamp | date:'medium' }}</td>
+                      <td>{{s.offerId }}</td>
+                      <td>{{getStoplossAmount(s)}}</td>
+                      <td>{{getStoplossPrice(s)}}</td>
+                      <td>{{getStoplossTriggerPrice(s)}}</td>
+                      <td class="text-danger">Sell</td>
+                      <td  *ngIf="s.stoplossType !='M'">Spot</td>
+                      <td  *ngIf="s.stoplossType =='M'">Margin</td>
+                      <td *ngIf="s.stoplossType=='M'"><button (click)="marginModifyStoploss(marginModifystoploss,s.offerId,s.quantity,s.stopPrice,s.triggerPrice,s.tradePrice,'Sell')" class="btn btn-dark  btn-ex-sm">Modify</button></td>
+                      <td *ngIf="s.stoplossType!='M'"><button (click)="modifyStoploss(modifystoploss,s.offerId,s.quantity,s.stopPrice,s.triggerPrice,'Sell')" class="btn btn-dark  btn-ex-sm">Modify</button></td>
+                      <td *ngIf="s.stoplossType!='M'"><button class="btn btn-dark  btn-ex-sm" (click)="delStoploss(delstoploss,s.offerId,s.quantity,s.stopPrice,s.triggerPrice,'Sell')">Delete</button></td>
+                      <td *ngIf="s.stoplossType=='M'">-</td>
+                    </tr>
+                    <tr>
+                      <td colspan="8" class="text-center text-danger" *ngIf="selldata.length==0">No Data Available</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </ng-template>
+          </ngb-tab>
+        </ngb-tabset> -->
+      </ng-template>
+    </ngb-tab>
+    <!-- <ngb-tab> -->
     <!--   <ng-template ngbTabTitle>
         <h5 (click)="getStopLossOfferForBuy()">STOP-LIMIT</h5>
       </ng-template> -->
@@ -484,7 +807,7 @@
           </ngb-tab>
         </ngb-tabset>
       </ng-template> -->
-    </ngb-tab>
+    <!-- </ngb-tab> -->
   </ngb-tabset>
 
 </div>

@@ -47,23 +47,15 @@ export class OptionsTvChartWebSocketAPI {
         this.stompClient.debug = null
       }else{
         //// console.log('else')
-        // window.location.href = "https://trade.paybito.com/";
+        // window.location.href = this.data.brokerDomain;
       }
         
     };
 
     _disconnect() {
-      try{
         if (this.stompClient !== null) {
-          this.stompClient.disconnect();
-      }
-  
-      }
-      catch{
-  
-        console.log('connection not established yet')
-  
-      }
+            this.stompClient.disconnect();
+        }
     }
 
     // on error, schedule a reconnection attempt
@@ -218,12 +210,12 @@ export class OptionsTvChartWebSocketAPI {
           }
           else {
             console.log('unsubscribe error block')
-           // window.location.href = "https://trade.paybito.com/";
+           // window.location.href = this.data.brokerDomain;
           }
         }
         catch (e) {
-         // window.location.href = "https://trade.paybito.com/";
-        //  location.reload();
+         // window.location.href = this.data.brokerDomain;
+         location.reload();
         }
     
     

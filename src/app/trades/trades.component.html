@@ -2,13 +2,13 @@
 <span class="btn btn-dark font-xs filter-button btn_active fee_btn" (click)="handleOpenFeeModal(feeModal)">FEES</span>
 
 
-<div [ngResizable]="data.resize" class="trade-component p-2 pl-3 pr-3 rounded h-100 resizable-widget">
-  <ngb-tabset [ngClass]="Themecolors == 'Dark' ? 'tab-dark' : 'tab-light'">
+<div   class="trade-component p-2 pl-3 pr-3 rounded h-100 ">
+  <ngb-tabset [ngClass]="Themecolors == 'Dark' ? 'tab-dark' : 'tab-light'" [activeId]="activeIdString">
   
 
-    <ngb-tab class="darkss">
+    <ngb-tab class="darkss" id="hist">
       <ng-template ngbTabTitle>
-        <h6 (click)="data.renderDataForMyTradeSpot();GetTradeDetail()" id="trade" style="padding: 8px 10px -2px 10px;">TRADE HISTORY</h6>
+        <h6 (click)="handleAllButtonClickForMyTrades();saveLastTabTradeComp('hist')" id="trade" style="padding: 8px 10px -2px 10px;">TRADE HISTORY</h6>
         
       </ng-template>
       <ng-template ngbTabContent>
@@ -22,31 +22,29 @@
               </div>
             </div>
             <div class="info-body">
-              Users can Buy and Sell at the current market price.
-Enter "Buying Amount" and click on BUY to place a BUY Market order.
-Enter "Selling Amount" and click on SELL to place a SELL Market order.
+              Trade History shows all successful BUY and SELL trades
             </div>
           </div>
         </div>
         <div [ngClass]="Themecolors == 'Dark' ? 'tab-pane active scrollable' : 'tab-pane active scrollable_light'" id="my-trades" role="tabpanel" aria-labelledby="my-trades-tab">
 
           <div class="btn-group btn-group-sm" role="group" aria-label="my-trades-filter" style="margin-top:1px;float: left !important;">
+            <button type="button" 
+              class="btn btn-dark font-xs filter-button allbtnmytrade {{(myTradeTableDisplayStatus==0)?'btn_active':''}}"
+              data-filter="all" (click)="handleAllButtonClickForMyTrades();myTradeDisplay(0)" id="allButtonClick">ALL</button>
             <button type="button"
-              class="btn btn-dark font-xs filter-button {{(myTradeTableDisplayStatus==0)?'btn_active':''}}"
-              data-filter="all" (click)="myTradeDisplay(0)">ALL</button>
+              class="btn btn-dark font-xs text-green filter-button buybtnmytrade {{(myTradeTableDisplayStatus==1)?'btn_active':''}}"
+              data-filter="buy" id="buyFilter" (click)="myTradeDisplay(1)">BUY</button>
             <button type="button"
-              class="btn btn-dark font-xs text-green filter-button {{(myTradeTableDisplayStatus==1)?'btn_active':''}}"
-              data-filter="buy" (click)="myTradeDisplay(1)">BUY</button>
-            <button type="button"
-              class="btn btn-dark font-xs text-red filter-button {{(myTradeTableDisplayStatus==2)?'btn_active':''}}"
-              data-filter="sell" (click)="myTradeDisplay(2)">SELL</button>
+              class="btn btn-dark font-xs text-red filter-button sellbtnmytrade {{(myTradeTableDisplayStatus==2)?'btn_active':''}}"
+              data-filter="sell" id="sellFilter" (click)="myTradeDisplay(2)">SELL</button>
 
               <div class="icon-section pull-left" style="padding-left: 18px;">
                 <i class="fa fa-info-circle" aria-hidden="true" (click)="data.handleInfoSection('myTradeInfo')"></i>
               </div>
              
           </div>
-          <div style="float: right !important;margin-right: 5px;">
+          <div style="float: right !important;margin-right: 10px;">
             <div class="form-check" style="padding-top: 8px;">
               <input class="form-check-input" type="checkbox" value="" [checked]="myTradeTableAllPairs" id="flexCheckDefault" (change)="checkValueMyTrade($event)">
               <label class="form-check-label" for="flexCheckDefault">
@@ -56,7 +54,6 @@ Enter "Selling Amount" and click on SELL to place a SELL Market order.
            </div>
           <br/>
           <br/>
-
 
           <div class="table-responsive-sm" *ngIf="!myTradeTableAllPairs">
             <div class="table-responsive">
@@ -73,14 +70,14 @@ Enter "Selling Amount" and click on SELL to place a SELL Market order.
                   </tr>
                 
                 </thead>
-                <tbody id="myTradeBody" *ngIf="tradehistrybyId !=null">
+                <tbody id="myTradeBody" *ngIf="data.spotMyTradeData !=null">
 
                   <tr>
                     <td colspan="8" *ngIf="isloading" class="text-center">
                       <img src="./assets/svg-loaders/three-dots.svg" alt="" width="50">
                     </td>
                   </tr>
-                  <tr class="{{'filter'+' '+m.action|lowercase }}" *ngFor="let m of tradehistrybyId">
+                  <tr class="{{'filter'+' '+m.action|lowercase }}" *ngFor="let m of data.spotMyTradeData">
                     <td class="">{{m.transactionTimeStamp }}</td>
                     <td class="" *ngIf="m.action=='BUY'">{{m.buying_asset_code}}{{m.selling_asset_code}}</td>
                     <td class="" *ngIf="m.action=='SELL'">{{m.selling_asset_code}}{{m.buying_asset_code}}</td>
@@ -88,7 +85,7 @@ Enter "Selling Amount" and click on SELL to place a SELL Market order.
                     <td class="">{{m.amount }}</td>
                     <td class="">{{convertToNumber(m.price)}}</td>
 
-                    <td class="">{{(m.amount  * m.price).toFixed(tradep)}}</td>
+                    <td class="">{{myTradeTotal(m.amount  * m.price)}}</td>
                    <!-- <td class="" *ngIf="m.action=='BUY'">{{getTradeAmount(m)}} {{m.buying_asset_code}}</td>
                     <td class="" *ngIf="m.action=='SELL'">{{getTradeAmount(m)}} {{m.buying_asset_code}}</td>
                     <td class="">{{getTradePrice(m)}}</td> -->
@@ -162,9 +159,9 @@ Enter "Selling Amount" and click on SELL to place a SELL Market order.
         </div>
       </ng-template>
     </ngb-tab>
-    <ngb-tab>
+    <ngb-tab id="open">
       <ng-template ngbTabTitle>
-        <h6 (click)="data.renderDataForMyOfferSpot();getOfferLists()" class="get-offer" style="padding: 8px 10px -2px 10px;">OPEN ORDERS</h6>
+        <h6 (click)="data.renderDataForMyOfferSpot();saveLastTabTradeComp('open'); clickAllButton();" class="get-offer" style="padding: 8px 10px -2px 10px;">OPEN ORDERS</h6>
       </ng-template>
       <ng-template ngbTabContent>
         <div style="top: 83px;right: 28px;position: absolute;">
@@ -177,9 +174,7 @@ Enter "Selling Amount" and click on SELL to place a SELL Market order.
               </div>
             </div>
             <div class="info-body">
-              You can create Buy and Sell limit offers at the price of your choice and the offers will reflect in Order Book and Open Orders.
-              Enter "Amount", and Price and click on the BUY button for the BUY offer.
-              Enter "Amount", and Price and click on the SELL button for the SELL offer.
+              Open Orders shows all BUY and SELL Offers waiting to be executed
             </div>
           </div>
         </div>
@@ -228,8 +223,8 @@ Enter "Selling Amount" and click on SELL to place a SELL Market order.
                   </tr>
                       
                 </thead>
-                <tbody id="myOfferBody" class="myoffer-block" *ngIf="tradeofferbyId !=null && filterMyOfferStatus != 1 && filterMyOfferStatus != 2">
-                  <tr *ngFor="let m of tradeofferbyId">
+                <tbody id="myOfferBody" class="myoffer-block" *ngIf="data.spotMyOfferData !=null && filterMyOfferStatus != 1 && filterMyOfferStatus != 2">
+                  <tr *ngFor="let m of data.spotMyOfferData">
                     <td>{{m.transactionTimeStamp}}</td>
                     <td class="">{{m.offer_id}}</td>
                     <td class="" *ngIf="m.txn_type==1">{{m.buying_asset_code}}{{m.selling_asset_code}}</td>
@@ -289,7 +284,7 @@ Enter "Selling Amount" and click on SELL to place a SELL Market order.
                   </tr>
 
                 </tbody>
-                 <tbody class="myoffer-block" *ngIf="tradeofferbyId==null && filterMyOfferStatus != 1 && filterMyOfferStatus != 2">
+                 <tbody class="myoffer-block" *ngIf="data.spotMyOfferData==null && filterMyOfferStatus != 1 && filterMyOfferStatus != 2">
 
                   <tr>
 
@@ -365,9 +360,9 @@ Enter "Selling Amount" and click on SELL to place a SELL Market order.
         </div>
       </ng-template>
     </ngb-tab>
-    <ngb-tab>
+    <ngb-tab id="stop">
       <ng-template ngbTabTitle>
-        <h6 (click)="callAllStopLimitOffers();getStopLossOfferForBuySell()" style="padding: 8px 10px -2px 10px;">STOP ORDERS</h6>
+        <h6 (click)="callAllStopLimitOffers();getStopLossOfferForBuySell();saveLastTabTradeComp('stop');clickAllButton()" style="padding: 8px 10px -2px 10px;">STOP ORDERS</h6>
       </ng-template>
       <ng-template ngbTabContent>
         <div style="top: 70px;left: 128px;position: absolute;">
@@ -380,9 +375,7 @@ Enter "Selling Amount" and click on SELL to place a SELL Market order.
               </div>
             </div>
             <div class="info-body">
-              You can set an offer range depending on market price for buy or sell trading.
-For BUY - Market order price should be less than stop price and limit price should be greater than stop price
-For SELL - Market order price should be greater than stop price and limit price should be less than stop price
+              Stop Orders shows all BUY and SELL offers created using STOP LIMIT
             </div>
           </div>
         </div>
@@ -390,7 +383,7 @@ For SELL - Market order price should be greater than stop price and limit price 
         <div class="btn-group btn-group-sm" role="group" aria-label="my-trades-filter" style="margin-top:1px;float: left !important;">
           <button type="button"
               class="btn btn-dark font-xs filter-button {{(buySellDivStatus=='all')?'btn_active':''}}"
-              data-filter="all" (click)="getStopLossOfferForBuySell();buySellDivChangeStatus('all');callAllStopLimitOffers()">ALL</button>
+              data-filter="all" id="spotStopLimitAllButton" (click)="getStopLossOfferForBuySell();buySellDivChangeStatus('all');handleStopLimitAllButton()">ALL</button>
           <button type="button"
             class="btn btn-dark font-xs text-green filter-button {{(buySellDivStatus=='buy')?'btn_active':''}}"
             data-filter="buy" (click)="getStopLossOfferForBuy(); buySellDivChangeStatus('buy');callAllStopLimitOffers()">BUY</button>
@@ -421,8 +414,8 @@ For SELL - Market order price should be greater than stop price and limit price 
                   <th scope="col">Order ID</th>
                   <th scope="col">Asset pair</th>
                   <th scope="col">Quantity</th>
-                  <th scope="col">Stop price</th>
                   <th scope="col">Limit price</th>
+                  <th scope="col">Stop price</th>
                   <th scope="col">Action</th>
                   <th scope="col">Edit</th>
                   <th scope="col">Delete</th>
@@ -446,9 +439,9 @@ For SELL - Market order price should be greater than stop price and limit price 
                   <td class="text-danger" *ngIf="s.action == 'sell'">Sell</td>
                   <!-- <td class="text-success">{{s.action}}</td> -->
 
-                 <td *ngIf="s.stoplossType=='M'"><button (click)="marginModifyStoploss(marginmstoploss,s.stopLossId,s.quantity,s.stopLossPrice,s.triggerPrice,s.tradePrice,'Buy')" class="btn btn-dark btn-ex-sm">Modify</button></td>
-                  <td *ngIf="s.stoplossType!='M'"><button (click)="modifyStoploss(modifystoploss,s.stopLossId,s.quantity,s.stopLossPrice,s.triggerPrice,'Buy')" class="btn btn-dark btn-ex-sm">Modify</button></td>
-                  <td *ngIf="s.stoplossType!='M'"><button class="btn btn-dark btn-ex-sm" (click)="delStoploss(delstoploss,s.stopLossId,s.quantity,s.stopLossPrice,s.triggerPrice,'Buy')">Delete</button></td>
+                 <td *ngIf="s.stoplossType=='M'"><button (click)="marginModifyStoploss(marginmstoploss,s.stopLossId,s.quantity,s.stopLossPrice,s.triggerPrice,s.tradePrice,s.action)" class="btn btn-dark btn-ex-sm">Modify</button></td>
+                  <td *ngIf="s.stoplossType!='M'"><button (click)="modifyStoploss(modifystoploss,s.stopLossId,s.quantity,s.stopLossPrice,s.triggerPrice,s.action)" class="btn btn-dark btn-ex-sm">Modify</button></td>
+                  <td *ngIf="s.stoplossType!='M'"><button class="btn btn-dark btn-ex-sm" (click)="delStoploss(delstoploss,s.stopLossId,s.quantity,s.stopLossPrice,s.triggerPrice,s.action)">Delete</button></td>
                   <td *ngIf="s.stoplossType=='M'">-</td>
                 </tr>
                 <tr>
@@ -465,8 +458,8 @@ For SELL - Market order price should be greater than stop price and limit price 
                   <th scope="col">Order ID</th>
                   <th scope="col">Asset pair</th>
                   <th scope="col">Quantity</th>
-                  <th scope="col">Stop price</th>
                   <th scope="col">Limit price</th>
+                  <th scope="col">Stop price</th>
                   <th scope="col">Action</th>
                   <th scope="col">Edit</th>
                   <th scope="col">Delete</th>
@@ -508,8 +501,8 @@ For SELL - Market order price should be greater than stop price and limit price 
                   <th scope="col">Order ID</th>
                   <th scope="col">Asset pair</th>
                   <th scope="col">Quantity</th>
-                  <th scope="col">Stop price</th>
                   <th scope="col">Limit price</th>
+                  <th scope="col">Stop price</th>
                   <th scope="col">Action</th>
                   <th scope="col">Edit</th>
                   <th scope="col">Delete</th>
@@ -553,19 +546,19 @@ For SELL - Market order price should be greater than stop price and limit price 
               <th scope="col">Order ID</th>
               <th scope="col">Asset pair</th>
               <th scope="col">Quantity</th>
-              <th scope="col">Stop price</th>
               <th scope="col">Limit price</th>
+              <th scope="col">Stop price</th>
               <th scope="col">Action</th>
               <th scope="col">Edit</th>
               <th scope="col">Delete</th>
               </tr>
-              <tr>
+              <!-- <tr>
                 <td colspan="8" *ngIf="buydataNew.length == 0" class="text-center">
                   <img src="./assets/svg-loaders/three-dots.svg" alt="" width="50">
                 </td>
-              </tr>
+              </tr> -->
             </thead>
-            <tbody id="stopLossBodyw" *ngIf="buydataNew.length > 0">
+            <tbody id="stopLossBodyw" *ngIf="2 > 0">
 
               <tr *ngFor="let data of buydataNew" class="{{'stoploss filter'+data.type|lowercase }}">
                 <td>{{data.transactionTimeStamp}}</td>
@@ -583,9 +576,11 @@ For SELL - Market order price should be greater than stop price and limit price 
                 <td ><button class="btn btn-dark  btn-ex-sm" (click)="delStoploss(delstoploss,data.offer_id,data.quantity,data.stop_loss_price,data.trigger_price,data.type)">Delete</button></td>
                 
               </tr>
-              <tr>
-                <td colspan="9" class="text-center text-danger" *ngIf="buydataNew.length==0">No Data Available</td>
-              </tr>
+              </tbody>
+              <tbody id="stopLossBodyw"  *ngIf="2==0">
+                <tr>
+                  <td colspan="9" class="text-center text-danger">No Data Available</td>
+                </tr>
             </tbody>
           </table>
         </div>
@@ -877,15 +872,16 @@ For SELL - Market order price should be greater than stop price and limit price 
         #a="ngModel" appBuystoplimitdierctive [limit]="tradem">
     </div>
     <div class="form-group">
-      <label for="">Stop-limit Price</label>
-      <input numeric numericType="decimal" class="form-control form-control-sm rounded right" [ngClass]="Themecolors == 'Dark' ? '' : 'lightThemeForm'" [(ngModel)]="modifySlPrice" name="b"
-        #b="ngModel" appBuystoplimitdierctive [limit]="tradep">
-    </div>
-    <div class="form-group">
-      <label for="">Trigger Price</label>
-      <input numeric numericType="decimal" class="form-control form-control-sm rounded right" [ngClass]="Themecolors == 'Dark' ? '' : 'lightThemeForm'" [(ngModel)]="modifySlTrigger" name="c"
+      <label for="">Stop Price</label>
+      <input numeric numericType="decimal" class="form-control form-control-sm rounded right" [ngClass]="Themecolors == 'Dark' ? '' : 'lightThemeForm'" [(ngModel)]="modifySlTrigger"  name="c"
         #c="ngModel" appBuystoplimitdierctive [limit]="tradep">
     </div>
+    <div class="form-group">
+      <label for="">Limit Price</label>
+      <input numeric numericType="decimal" class="form-control form-control-sm rounded right" [ngClass]="Themecolors == 'Dark' ? '' : 'lightThemeForm'" [(ngModel)]="modifySlPrice"  name="b"
+        #b="ngModel" appBuystoplimitdierctive [limit]="tradep">
+    </div>
+    
   </div>
   <div [ngClass]="Themecolors == 'Dark' ? '' : 'lightTheme'" class="modal-footer">
     <button type="button" class="btn btn-secondary" (click)="modal.close()">Cancel</button>
@@ -908,15 +904,16 @@ For SELL - Market order price should be greater than stop price and limit price 
         #a="ngModel" appBuystoplimitdierctive [limit]="tradem" readonly>
     </div>
     <div class="form-group">
-      <label for="">Stop-limit Price</label>
-      <input numeric numericType="decimal" class="form-control form-control-sm rounded right" [ngClass]="Themecolors == 'Dark' ? '' : 'lightThemeForm'" [(ngModel)]="modifySlPrice" name="b"
-        #b="ngModel" appBuystoplimitdierctive [limit]="tradep"  (keyup)="handleCheckOnlyNumber($event,tradep)">
-    </div>
-    <div class="form-group">
-      <label for="">Trigger Price</label>
+      <label for="">Stop Price</label>
       <input numeric numericType="decimal" class="form-control form-control-sm rounded right" [ngClass]="Themecolors == 'Dark' ? '' : 'lightThemeForm'" [(ngModel)]="modifySlTrigger" name="c"
         #c="ngModel" appBuystoplimitdierctive [limit]="tradep" (keyup)="handleCheckOnlyNumber($event,tradep)">
     </div>
+    <div class="form-group">
+      <label for="">Limit Price</label>
+      <input numeric numericType="decimal" class="form-control form-control-sm rounded right" [ngClass]="Themecolors == 'Dark' ? '' : 'lightThemeForm'" [(ngModel)]="modifySlPrice" name="b"
+        #b="ngModel" appBuystoplimitdierctive [limit]="tradep"  (keyup)="handleCheckOnlyNumber($event,tradep)">
+    </div>
+    
   </div>
   <div [ngClass]="Themecolors == 'Dark' ? '' : 'lightTheme'" class="modal-footer">
     <button type="button" class="btn btn-secondary" (click)="modal.close()">Cancel</button>
@@ -942,15 +939,16 @@ For SELL - Market order price should be greater than stop price and limit price 
         #a="ngModel" appBuystoplimitdierctive [limit]="tradem" readonly>
     </div>
     <div class="form-group">
-      <label for="">Stop-limit Price</label>
-      <input numeric  class="form-control form-control-sm rounded right" [ngClass]="Themecolors == 'Dark' ? '' : 'lightThemeForm'" [(ngModel)]="modifySlPrice" name="b"
-        #b="ngModel" appBuystoplimitdierctive [limit]="tradep" (keyup)="handleCheckOnlyNumber($event,tradep)">
-    </div>
-    <div class="form-group">
-      <label for="">Trigger Price</label>
+      <label for="">Stop Price</label>
       <input numeric  class="form-control form-control-sm rounded right" [ngClass]="Themecolors == 'Dark' ? '' : 'lightThemeForm'" [(ngModel)]="modifySlTrigger" name="c"
         #c="ngModel" appBuystoplimitdierctive [limit]="tradep" (keyup)="handleCheckOnlyNumber($event,tradep)">
     </div>
+    <div class="form-group">
+      <label for="">Limit Price</label>
+      <input numeric  class="form-control form-control-sm rounded right" [ngClass]="Themecolors == 'Dark' ? '' : 'lightThemeForm'" [(ngModel)]="modifySlPrice" name="b"
+        #b="ngModel" appBuystoplimitdierctive [limit]="tradep" (keyup)="handleCheckOnlyNumber($event,tradep)">
+    </div>
+    
   </div>
   <div [ngClass]="Themecolors == 'Dark' ? '' : 'lightTheme'" class="modal-footer">
     <button type="button" class="btn btn-secondary" (click)="modal.close()">Cancel</button>

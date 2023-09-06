@@ -25,11 +25,11 @@ export class AppComponent {
         clearInterval(this.trade.tradeInterval);
       }
       if(this.route.url === '/'){
-        this.titleService.setTitle(this.data.exchange);  
+        this.titleService.setTitle('Broker Exchange');  
       }
       // route path taken for changing color dynamicly in google tnaslate icon
       if (this.route.url === '/' || this.route.url === '/login'|| this.route.url==='/otp'||
-      this.route.url === '/signup' || this.route.url.indexOf('/signup/') >-1
+      this.route.url === '/signup' ||this.route.url === '/social-signup' || this.route.url.indexOf('/signup/') >-1
       )
       {
         changeColor(false);

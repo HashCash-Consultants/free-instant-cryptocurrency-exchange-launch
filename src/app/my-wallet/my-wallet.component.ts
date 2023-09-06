@@ -462,7 +462,7 @@ export class MyWalletComponent implements OnInit {
     ) {
       this.selectedLeverageType = localStorage.getItem('selected_leverage').slice(0, -1)
     } else {
-      this.selectedLeverageType = '3'
+      this.selectedLeverageType = '2'
     }
     // this.getBuyVal(event);
     this.currencyBalance = this.main.balencelist;
@@ -748,7 +748,7 @@ export class MyWalletComponent implements OnInit {
   }
 
   getMainWalletBalanceForFutureMargin = () => {
-    this.http.get<any>(this.data.FUTUREMARGINURL + 'getMainWalletBalance?customerId=' + localStorage.getItem('user_id'), {
+    this.http.get<any>(this.data.FUTUREMARGINURL + 'getMainWalletBalance?uuid=' + localStorage.getItem('uuid'), {
       headers: {
         'Content-Type': 'application/json',
         'authorization': 'BEARER ' + localStorage.getItem('access_token'),
@@ -882,7 +882,7 @@ export class MyWalletComponent implements OnInit {
   }
   faitmargin() {
     this.flag = true;
-    this.http.get<any>(this.data.FUTURELENDINGURL + 'getMarginWalletByCurrency?customerId=' + localStorage.getItem('user_id') + '&currencyName=USD&marginType=' + this.selectedMarginType, {
+    this.http.get<any>(this.data.FUTURELENDINGURL + 'getMarginWalletByCurrency?uuid=' + localStorage.getItem('uuid') + '&currencyName=USD&marginType=' + this.selectedMarginType, {
       headers: {
         'Content-Type': 'application/json',
         'authorization': 'BEARER ' + localStorage.getItem('access_token'),
@@ -907,7 +907,7 @@ export class MyWalletComponent implements OnInit {
   }
   faitmarginForFuture() {
     this.flag = true;
-    this.http.get<any>(this.data.FUTURELENDINGURL + 'getMarginWalletByCurrency?customerId=' + localStorage.getItem('user_id') + '&currencyName=USD&marginType=' + this.selectedMarginType + '&leverage=' + this.selectedLeverageType, {
+    this.http.get<any>(this.data.FUTURELENDINGURL + 'getMarginWalletByCurrency?uuid=' + localStorage.getItem('uuid') + '&currencyName=USD&marginType=' + this.selectedMarginType + '&leverage=' + this.selectedLeverageType, {
       headers: {
         'Content-Type': 'application/json',
         'authorization': 'BEARER ' + localStorage.getItem('access_token'),
@@ -934,7 +934,7 @@ export class MyWalletComponent implements OnInit {
   somethingChanged(event) {
     var bal = event
     this.flag = true;
-    this.http.get<any>(this.data.FUTURELENDINGURL + 'getMarginWalletByCurrency?customerId=' + localStorage.getItem('user_id') + '&currencyName=' + bal + '&marginType=' + this.selectedMarginType, {
+    this.http.get<any>(this.data.FUTURELENDINGURL + 'getMarginWalletByCurrency?uuid=' + localStorage.getItem('uuid') + '&currencyName=' + bal + '&marginType=' + this.selectedMarginType, {
       headers: {
         'Content-Type': 'application/json',
         'authorization': 'BEARER ' + localStorage.getItem('access_token'),
@@ -962,7 +962,7 @@ export class MyWalletComponent implements OnInit {
   somethingChangedForFuture(event) {
     var bal = event
     this.flag = true;
-    this.http.get<any>(this.data.FUTURELENDINGURL + 'getMarginWalletByCurrency?customerId=' + localStorage.getItem('user_id') + '&currencyName=' + bal + '&marginType=' + this.selectedMarginType + '&leverage=' + this.selectedLeverageType, {
+    this.http.get<any>(this.data.FUTURELENDINGURL + 'getMarginWalletByCurrency?uuid=' + localStorage.getItem('uuid') + '&currencyName=' + bal + '&marginType=' + this.selectedMarginType + '&leverage=' + this.selectedLeverageType, {
       headers: {
         'Content-Type': 'application/json',
         'authorization': 'BEARER ' + localStorage.getItem('access_token'),
@@ -1108,6 +1108,8 @@ export class MyWalletComponent implements OnInit {
           if (data.error.error_data != '0') {
             this.data.alert(data.error.error_msg, 'danger');
           } else {
+            console.log('hereeeee');
+            
             this.networkfee = (data.feesListResult[0].totalFees).toFixed(data.feesListResult[0].currencyPrecision);
           }
 
@@ -1168,6 +1170,8 @@ export class MyWalletComponent implements OnInit {
           if (data.error.error_data != '0') {
             this.data.alert(data.error.error_msg, 'danger');
           } else {
+            console.log('hereeeee5');
+
             this.networkfee = (data.feesListResult[0].totalFees).toFixed(data.feesListResult[0].currencyPrecision);
           }
         })
@@ -1297,7 +1301,9 @@ export class MyWalletComponent implements OnInit {
 
   async getCodeFromSmsForExternalWallet() {
     let payload = {
-      phone : localStorage.getItem('phone')
+      phone : localStorage.getItem('phone'),
+      countryCode : localStorage.getItem('phoneCountryCode')
+
     }
 
     let isOtpSend = await this.data.handleSendOtpInSms(payload, 'sendtoothermobileotp');
@@ -2069,6 +2075,8 @@ export class MyWalletComponent implements OnInit {
         }
       })
         .subscribe(data => {
+          console.log('hereeeee1');
+
           this.networkfee = (data.feesListResult[0].totalFees).toFixed(data.feesListResult[0].currencyPrecision);
 
         })
@@ -2099,6 +2107,8 @@ export class MyWalletComponent implements OnInit {
       }
     })
       .subscribe(data => {
+        console.log('hereeeee2');
+
         this.networkfee = (data.feesListResult[0].totalFees).toFixed(data.feesListResult[0].currencyPrecision);
       })
   }
@@ -2214,7 +2224,7 @@ export class MyWalletComponent implements OnInit {
       } */
       sendToPaybitoObj['otp'] = this.emailOtp;
       sendToPaybitoObj['securityCode'] = this.twoFactorOtp;
-      sendToPaybitoObj['mobileOtp'] = this.smsOtp;
+      sendToPaybitoObj['phoneOtp'] = this.smsOtp;
 
       console.log('test pppp', sendToPaybitoObj);
       
@@ -2327,7 +2337,7 @@ export class MyWalletComponent implements OnInit {
     } */
     sendToPaybitoObj['securityCode'] = this.twoFactorOtp;
     sendToPaybitoObj['otp'] = this.emailOtp;
-    sendToPaybitoObj['mobileOtp'] = this.smsOtp;
+    sendToPaybitoObj['phoneOtp'] = this.smsOtp;
     var jsonString = JSON.stringify(sendToPaybitoObj);
     if (this.cryptoCurrency != 'triggers') {
       this.http.post<any>(this.data.WEBSERVICE + '/transaction/sendToOther', jsonString, {
@@ -2477,7 +2487,7 @@ export class MyWalletComponent implements OnInit {
       dt.month = '0' + dt.month
     }
     objdata = {
-      "customerId": localStorage.getItem('user_id'), "amount": this.send_amount, "currencyId": this.marginCurId,
+      "uuid": localStorage.getItem('uuid'), "amount": this.send_amount, "currencyId": this.marginCurId,
       "unitPrice": 50, "returnDate": dt.day + '-' + dt.month + '-' + dt.year,
     };
     objdata['assetPair'] = this.cryptoCurrency.toUpperCase();
@@ -2541,7 +2551,7 @@ export class MyWalletComponent implements OnInit {
 
   lendingPriceForFuture() {
     var objdata = {
-      "customerId": localStorage.getItem('user_id'),
+      "uuid": localStorage.getItem('uuid'),
       "amount": this.send_amount,
       "currencyId": this.marginCurId,
       "baseCurrencyId": this.fiatCurrencyId,
@@ -2599,7 +2609,7 @@ export class MyWalletComponent implements OnInit {
   assetlendingPriceForFuture() {
     this.selectedAssetPairForFutureMargin = this.cryptoCurrency.toUpperCase();
     var objdata = {
-      "customerId": localStorage.getItem('user_id'),
+      "uuid": localStorage.getItem('uuid'),
       "amount": this.send_amount,
       "currencyId": this.fiatCurrencyId,
       "baseCurrencyId": this.fiatCurrencyId,
@@ -2664,7 +2674,7 @@ export class MyWalletComponent implements OnInit {
       dt.month = '0' + dt.month
     }
     objdata = {
-      "customerId": localStorage.getItem('user_id'), "amount": this.send_amount, "currencyId": this.fiatCurrencyId,
+      "uuid": localStorage.getItem('uuid'), "amount": this.send_amount, "currencyId": this.fiatCurrencyId,
       "baseCurrencyId": this.fiatCurrencyId, "unitPrice": 50, "returnDate": dt.day + '-' + dt.month + '-' + dt.year,
     };
     objdata['assetPair'] = this.cryptoCurrency.toUpperCase();
@@ -2700,7 +2710,7 @@ export class MyWalletComponent implements OnInit {
     }
 
     var objdatafund = {
-      "customerId": localStorage.getItem('user_id'),
+      "uuid": localStorage.getItem('uuid'),
       "currencyId": 1,
       "fromDate": `${this.assetfromdate.day}-${this.assetfromdate.month}-${this.assetfromdate.year}`,
       "toDate": `${this.assettodate.day}-${this.assettodate.month}-${this.assettodate.year}`,
@@ -2787,7 +2797,7 @@ export class MyWalletComponent implements OnInit {
       dp.month = '0' + dp.month
     }
     var objdatafund = {
-      "customerId": localStorage.getItem('user_id'),
+      "uuid": localStorage.getItem('uuid'),
       "currencyId": parseInt(this.arrayy),
       "fromDate": `${ds.day}-${ds.month}-${ds.year}`,
       "toDate": `${dp.day}-${dp.month}-${dp.year}`,
@@ -2837,7 +2847,7 @@ export class MyWalletComponent implements OnInit {
       dp.month = '0' + dp.month
     }
     var objdatafund = {
-      "customerId": localStorage.getItem('user_id'),
+      "uuid": localStorage.getItem('uuid'),
       "currencyId": parseInt(this.arrayy),
       "fromDate": `${ds.day}-${ds.month}-${ds.year}`,
       "toDate": `${dp.day}-${dp.month}-${dp.year}`,
@@ -2891,7 +2901,13 @@ export class MyWalletComponent implements OnInit {
 
   assetholdingPrice() {
     var margintowalletObj = {};
-    margintowalletObj['customerId'] = localStorage.getItem('user_id');
+    /* if(this.assetMarginFor == 'options'){
+
+      margintowalletObj['customerId'] = localStorage.getItem('user_id');
+    }else{ */
+      margintowalletObj['uuid'] = localStorage.getItem('uuid');
+
+    //}
     margintowalletObj['marginWalletId'] = this.marginwalletId;
     margintowalletObj['amount'] = this.send_amount;
     margintowalletObj['currencyId'] = this.fiatid;
@@ -2925,6 +2941,7 @@ export class MyWalletComponent implements OnInit {
             this.faitmarginForOptions()
           } else {
             this.faitmarginForFuture();
+            this.getMainWalletBalanceForFutureMargin();
           }
           this.send_amount = ''
         }
@@ -2933,7 +2950,7 @@ export class MyWalletComponent implements OnInit {
 
   fiatholdingPrice() {
     var cryptomargintowalletObj = {};
-    cryptomargintowalletObj['customerId'] = localStorage.getItem('user_id');
+    cryptomargintowalletObj['uuid'] = localStorage.getItem('uuid');
     cryptomargintowalletObj['marginWalletId'] = this.cryptomarginwalletId;
     cryptomargintowalletObj['amount'] = this.send_amount;
     cryptomargintowalletObj['currencyId'] = this.cryptoid;
@@ -2961,10 +2978,10 @@ export class MyWalletComponent implements OnInit {
           this.data.alert(result.message, 'danger');
         } else {
           this.data.alert(result.message, 'success');
-          this.main.getUserTransaction();
-
+          this.getUserTransactionBalanceRest()
+          this.getUserTransactionBalanceForFuture();
           if (this.assetMarginFor == 'margin') {
-            this.faitmargin();
+            this.faitmarginForFuture();
           } else if (this.assetMarginFor == 'options') {
             this.faitmarginForOptions()
           } else {
@@ -3155,12 +3172,12 @@ export class MyWalletComponent implements OnInit {
                       var result = data;
                       if (result.error != '0') {
                         this.data.alert(result.message, 'danger');
-                        //this.data.reloadPage(this.route.url);
+                        //location.reload();
                       } else {
                         this.marginReset();
                         this.data.alert(result.message, 'success');
                         this.handleSelectedTab('margin')
-                        this.data.reloadPage(this.route.url);
+                        location.reload();
                       }
                       //this.marginReset();
                     });
@@ -3185,7 +3202,7 @@ export class MyWalletComponent implements OnInit {
     this.data.selectedBuyingAssetText = localStorage.getItem('buying_crypto_asset')
     this.data.selectedSellingAssetText = localStorage.getItem('selling_crypto_asset')
     var onlyBuyAmount = this.amount;
-    this.http.get<any>("https://futures-stream.paybito.com/fSocketStream/api/marketPrice" + '?symbol=' + this.counterAssetPair + '&side=' + 'BID' + '&amount=' + onlyBuyAmount + '&marginType=' + this.selectedMarginType, {
+    this.http.get<any>(this.data.FUTURESOCKETSTREAMURL+"/marketPrice" + '?symbol=' + this.counterAssetPair + '&side=' + 'BID' + '&amount=' + onlyBuyAmount + '&marginType=' + this.selectedMarginType, {
       headers: {
         'Content-Type': 'application/json',
         //'authorization': 'BEARER ' + localStorage.getItem('access_token'),
@@ -3252,13 +3269,13 @@ export class MyWalletComponent implements OnInit {
                 if (result.error.error_data != '0') {
                   this.data.alert(result.error.error_msg, 'danger');
                   $('#btn' + this.mpTransactionid).prop('disabled', false)
-                  //this.data.reloadPage(this.route.url);
+                  //location.reload();
                 } else {
                   this.marginReset();
                   this.data.alert(result.error.error_msg, 'success');
                   this.handleSelectedTab('margin')
                   $('#btn' + this.mpTransactionid).prop('disabled', false)
-                  this.data.reloadPage(this.route.url);
+                  location.reload();
                 }
                 //this.marginReset();
               });
@@ -3350,12 +3367,12 @@ export class MyWalletComponent implements OnInit {
                       var result = data;
                       if (result.error != '0') {
                         this.data.alert(result.message, 'danger');
-                        // this.data.reloadPage(this.route.url);
+                        // location.reload();
                       } else {
                         this.marginReset();
                         this.data.alert(result.message, 'success');
                         this.handleSelectedTab('margin')
-                        this.data.reloadPage(this.route.url);
+                        location.reload();
                       }
                       //this.marginReset();
                     });
@@ -3382,7 +3399,7 @@ export class MyWalletComponent implements OnInit {
     this.data.selectedSellingAssetText = localStorage.getItem('selling_crypto_asset')
     var onlySellAmount = this.amount;
 
-    this.http.get<any>("https://futures-stream.paybito.com/fSocketStream/api/marketPrice" + '?symbol=' + this.counterAssetPair + '&side=' + 'ASK' + '&amount=' + onlySellAmount + '&marginType=' + this.selectedMarginType, {
+    this.http.get<any>(this.data.FUTURESOCKETSTREAMURL+"/marketPrice" + '?symbol=' + this.counterAssetPair + '&side=' + 'ASK' + '&amount=' + onlySellAmount + '&marginType=' + this.selectedMarginType, {
       headers: {
         'Content-Type': 'application/json',
         //'authorization': 'BEARER ' + localStorage.getItem('access_token'),
@@ -3449,13 +3466,13 @@ export class MyWalletComponent implements OnInit {
                 if (result.error.error_data != '0') {
                   this.data.alert(result.error.error_msg, 'danger');
                   $('#btn' + this.mpTransactionid).prop('disabled', false)
-                  // this.data.reloadPage(this.route.url);
+                  // location.reload();
                 } else {
                   this.marginReset();
                   this.data.alert(result.error.error_msg, 'success');
                   this.handleSelectedTab('margin')
                   $('#btn' + this.mpTransactionid).prop('disabled', false)
-                  this.data.reloadPage(this.route.url);
+                  location.reload();
                 }
                 //this.marginReset();
               });
@@ -3505,7 +3522,12 @@ export class MyWalletComponent implements OnInit {
   /*** method defination get contract details ***/
   getContractDetails = () => {
     //this.data.alert('Loading...', 'dark');
-    this.http.get<any>(this.data.WEBSERVICE + '/fTrade/getContractsName')
+    this.http.get<any>(this.data.WEBSERVICE + '/fTrade/getContractsName',{
+      headers: {
+        'Content-Type': 'application/json',
+        'authorization': 'BEARER ' + localStorage.getItem('access_token'),
+      }
+    })
       .subscribe(data => {
         var result = data;
         if (result.statusCode === 0) {
@@ -3636,7 +3658,7 @@ export class MyWalletComponent implements OnInit {
     this.portfolioDeatilsForFuture();
   }
   userPortfolioBalanceForFuture() {
-    var url = this.data.FUTUREMARGINURL + "userPortfolioBalance?customerId=" + localStorage.getItem('user_id') + "&marginType=" + this.selectedMarginType + "&contractTypeId=" + this.selectedContractTypeId;
+    var url = this.data.FUTUREMARGINURL + "userPortfolioBalance?uuid=" + localStorage.getItem('uuid') + "&marginType=" + this.selectedMarginType + "&contractTypeId=" + this.selectedContractTypeId;
     this.http.get<any>(url, {
       headers: {
         'Content-Type': 'application/json',
@@ -3655,7 +3677,7 @@ export class MyWalletComponent implements OnInit {
     // console.log('iammmmmmmm innnnnnnnn 2');
 
 
-    var url = this.data.FUTUREMARGINURL + "portfolioDetails?customerId=" + localStorage.getItem('user_id') + "&marginType=2";
+    var url = this.data.FUTUREMARGINURL + "portfolioDetails?uuid=" + localStorage.getItem('uuid') + "&marginType=2";
     this.http.get<any>(url, {
       headers: {
         'Content-Type': 'application/json',
@@ -3713,7 +3735,7 @@ export class MyWalletComponent implements OnInit {
     // console.log('iammmmmmmm innnnnnnnn',this.selectedMarginType);
 
 
-    var url = this.data.FUTUREMARGINURL + "portfolioDetails?customerId=" + localStorage.getItem('user_id') + "&marginType=" + this.selectedMarginType;
+    var url = this.data.FUTUREMARGINURL + "portfolioDetails?uuid=" + localStorage.getItem('uuid') + "&marginType=" + this.selectedMarginType;
     this.http.get<any>(url, {
       headers: {
         'Content-Type': 'application/json',
@@ -3924,7 +3946,7 @@ export class MyWalletComponent implements OnInit {
 
   /* Method defination which are used for options functionalities */
   getUserTransactionBalanceForOptions() {
-    var url = this.data.OPTIONSMARGINURL + "getMainWalletBalanceStream?customerId=" + localStorage.getItem('user_id') + "";
+    var url = this.data.OPTIONSMARGINURL + "getMainWalletBalanceStream?uuid=" + localStorage.getItem('uuid') + "";
     if (this.source7 != undefined) {
       this.source7.close();
     }
@@ -3989,7 +4011,7 @@ export class MyWalletComponent implements OnInit {
 
   faitmarginForOptions() {
     this.flag = true;
-    this.http.get<any>(this.data.OPTIONSLENDINGURL + 'getMarginWalletByCurrency?customerId=' + localStorage.getItem('user_id') + '&currencyName=USD&marginType=' + this.selectedMarginTypeForOptions + '&leverage=' + this.selectedLeverageType, {
+    this.http.get<any>(this.data.OPTIONSLENDINGURL + 'getMarginWalletByCurrency?uuid=' + localStorage.getItem('uuid') + '&currencyName=USD&marginType=' + this.selectedMarginTypeForOptions + '&leverage=' + this.selectedLeverageType, {
       headers: {
         'Content-Type': 'application/json',
         'authorization': 'BEARER ' + localStorage.getItem('access_token'),
@@ -4016,7 +4038,7 @@ export class MyWalletComponent implements OnInit {
   somethingChangedForOption(event) {
     var bal = event
     this.flag = true;
-    this.http.get<any>(this.data.OPTIONSLENDINGURL + 'getMarginWalletByCurrency?customerId=' + localStorage.getItem('user_id') + '&currencyName=' + bal + '&marginType=' + this.selectedMarginTypeForOptions + '&leverage=' + this.selectedLeverageType, {
+    this.http.get<any>(this.data.OPTIONSLENDINGURL + 'getMarginWalletByCurrency?uuid=' + localStorage.getItem('uuid') + '&currencyName=' + bal + '&marginType=' + this.selectedMarginTypeForOptions + '&leverage=' + this.selectedLeverageType, {
       headers: {
         'Content-Type': 'application/json',
         'authorization': 'BEARER ' + localStorage.getItem('access_token'),
@@ -4089,7 +4111,7 @@ export class MyWalletComponent implements OnInit {
       dt.month = '0' + dt.month
     }
     objdata = {
-      "customerId": localStorage.getItem('user_id'), "amount": this.send_amount, "currencyId": this.marginCurId,
+      "uuid": localStorage.getItem('uuid'), "amount": this.send_amount, "currencyId": this.marginCurId,
       "unitPrice": 50, "returnDate": dt.day + '-' + dt.month + '-' + dt.year,
     };
     objdata['assetPair'] = this.cryptoCurrency.toUpperCase();
@@ -4123,7 +4145,7 @@ export class MyWalletComponent implements OnInit {
 
   lendingPriceForOptions() {
     var objdata = {
-      "customerId": localStorage.getItem('user_id'),
+      "uuid": localStorage.getItem('uuid'),
       "amount": this.send_amount,
       "currencyId": this.marginCurId,
       "baseCurrencyId": this.fiatCurrencyId,
@@ -4156,7 +4178,7 @@ export class MyWalletComponent implements OnInit {
   assetlendingPriceForOptions() {
     this.selectedAssetPairForOptionMargin = this.cryptoCurrency.toUpperCase();
     var objdata = {
-      "customerId": localStorage.getItem('user_id'),
+      "uuid": localStorage.getItem('uuid'),
       "amount": this.send_amount,
       "currencyId": this.fiatCurrencyId,
       "baseCurrencyId": this.fiatCurrencyId,
@@ -4194,7 +4216,7 @@ export class MyWalletComponent implements OnInit {
       dt.month = '0' + dt.month
     }
     objdata = {
-      "customerId": localStorage.getItem('user_id'), "amount": this.send_amount, "currencyId": this.fiatCurrencyId,
+      "uuid": localStorage.getItem('uuid'), "amount": this.send_amount, "currencyId": this.fiatCurrencyId,
       "baseCurrencyId": this.fiatCurrencyId, "unitPrice": 50, "returnDate": dt.day + '-' + dt.month + '-' + dt.year,
     };
     objdata['assetPair'] = this.cryptoCurrency.toUpperCase();
@@ -4231,7 +4253,7 @@ export class MyWalletComponent implements OnInit {
       this.assettodate.month = '0' + this.assettodate.month
     }
     var objdatafund = {
-      "customerId": localStorage.getItem('user_id'),
+      "uuid": localStorage.getItem('uuid'),
       "currencyId": 1,
       "fromDate": `${this.assetfromdate.day}-${this.assetfromdate.month}-${this.assetfromdate.year}`,
       "toDate": `${this.assettodate.day}-${this.assettodate.month}-${this.assettodate.year}`,
@@ -4300,7 +4322,7 @@ export class MyWalletComponent implements OnInit {
       dp.month = '0' + dp.month
     }
     var objdatafund = {
-      "customerId": localStorage.getItem('user_id'),
+      "uuid": localStorage.getItem('uuid'),
       "currencyId": parseInt(this.arrayy),
       "fromDate": `${ds.day}-${ds.month}-${ds.year}`,
       "toDate": `${dp.day}-${dp.month}-${dp.year}`,
@@ -4413,7 +4435,7 @@ export class MyWalletComponent implements OnInit {
                 $('.tradeBtn').attr('disabled', true);
               } else { */
           var inputObj = {};
-          // inputObj['userId'] = localStorage.getItem('user_id');
+          inputObj['userId'] = localStorage.getItem('user_id');
           inputObj['selling_asset_code'] = (this.baseCurrencyName).toUpperCase();
           inputObj['buying_asset_code'] = (this.curencyName).toUpperCase();
           inputObj['amount'] = parseFloat(onlyBuyAmount);
@@ -4439,12 +4461,12 @@ export class MyWalletComponent implements OnInit {
                 var result = data;
                 if (result.error.error_data != '0') {
                   this.data.alert(result.error.error_msg, 'danger');
-                  //this.data.reloadPage(this.route.url);
+                  //location.reload();
                 } else {
                   this.marginReset();
                   this.data.alert(result.error.error_msg, 'success');
                   localStorage.setItem('last_selected_tab_of_wallet', 'margin')
-                  this.data.reloadPage(this.route.url);
+                  location.reload();
                 }
                 //this.marginReset();
               });
@@ -4510,7 +4532,7 @@ export class MyWalletComponent implements OnInit {
           //       $('.tradeBtn').attr('disabled', true);
           //     } else {
           var inputObj = {};
-          // inputObj['userId'] = localStorage.getItem('user_id');
+          inputObj['userId'] = localStorage.getItem('user_id');
           inputObj['selling_asset_code'] = (this.curencyName).toUpperCase();
           inputObj['buying_asset_code'] = (this.baseCurrencyName).toUpperCase();
           inputObj['amount'] = parseFloat(onlySellAmount);
@@ -4536,12 +4558,12 @@ export class MyWalletComponent implements OnInit {
                 var result = data;
                 if (result.error.error_data != '0') {
                   this.data.alert(result.error.error_msg, 'danger');
-                  // this.data.reloadPage(this.route.url);
+                  // location.reload();
                 } else {
                   this.marginReset();
                   this.data.alert(result.error.error_msg, 'success');
                   localStorage.setItem('last_selected_tab_of_wallet', 'margin')
-                  this.data.reloadPage(this.route.url);
+                  location.reload();
                 }
                 //this.marginReset();
               });
@@ -4588,7 +4610,12 @@ export class MyWalletComponent implements OnInit {
 
   getContractDetailsForOptions = () => {
     //this.data.alert('Loading...', 'dark');
-    this.http.get<any>(this.data.WEBSERVICE + '/optionsTrade/getContractsName')
+    this.http.get<any>(this.data.WEBSERVICE + '/optionsTrade/getContractsName',{
+      headers: {
+        'Content-Type': 'application/json',
+        'authorization': 'BEARER ' + localStorage.getItem('access_token'),
+      }
+    })
       .subscribe(data => {
         var result = data;
         if (result.statusCode === 0) {
@@ -4616,7 +4643,7 @@ export class MyWalletComponent implements OnInit {
 
   userPortfolioBalanceForOption() {
     document.body.classList.add("overlay")
-    var url = this.data.OPTIONSMARGINURL + "userPortfolioBalance?customerId=" + localStorage.getItem('user_id') + "&marginType=" + this.selectedMarginTypeForOptions + "&contractTypeId=" + this.selectedContractTypeIdForOptions;
+    var url = this.data.OPTIONSMARGINURL + "userPortfolioBalance?uuid=" + localStorage.getItem('uuid') + "&marginType=" + this.selectedMarginTypeForOptions + "&contractTypeId=" + this.selectedContractTypeIdForOptions;
     this.http.get<any>(url, {
       headers: {
         'Content-Type': 'application/json',
@@ -4634,7 +4661,7 @@ export class MyWalletComponent implements OnInit {
   }
   portfolioDeatilsForOption() {
     document.body.classList.add("overlay")
-    var url = this.data.OPTIONSMARGINURL + "portfolioDetails?customerId=" + localStorage.getItem('user_id') + "&marginType=" + this.selectedMarginTypeForOptions;
+    var url = this.data.OPTIONSMARGINURL + "portfolioDetails?uuid=" + localStorage.getItem('uuid') + "&marginType=" + this.selectedMarginTypeForOptions;
     this.http.get<any>(url, {
       headers: {
         'Content-Type': 'application/json',

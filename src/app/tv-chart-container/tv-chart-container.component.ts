@@ -21,8 +21,6 @@ import { HttpClient } from '@angular/common/http';
 import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
-import { interval, timer } from 'rxjs';
-
 
 @Component({
     selector: 'app-tv-chart-container',
@@ -33,14 +31,14 @@ export class TvChartContainerComponent implements OnInit, OnDestroy {
 
     @Input() theme = 'Dark';
 
-    private _symbol: ChartingLibraryWidgetOptions['symbol'] =  ':' + localStorage.getItem("buying_crypto_asset") + '/' + localStorage.getItem("selling_crypto_asset");
+    private _symbol: ChartingLibraryWidgetOptions['symbol'] = ':' + localStorage.getItem("buying_crypto_asset") + '/' + localStorage.getItem("selling_crypto_asset");
     private _interval: ChartingLibraryWidgetOptions['interval'] = '1D';
     private _datafeedUrl = 'https://accounts.paybito.com/ChartApi/spot';
-    private _libraryPath: ChartingLibraryWidgetOptions['library_path'] = './assets/charting_library/';
-    private _chartsStorageUrl: ChartingLibraryWidgetOptions['charts_storage_url'] = '';
+    private _libraryPath: ChartingLibraryWidgetOptions['library_path'] = '/assets/charting_library/';
+    private _chartsStorageUrl: ChartingLibraryWidgetOptions['charts_storage_url'] = 'https://saveload.tradingview.com'; //TODO: adding in this will chnage make save and apear the save button
     private _chartsStorageApiVersion: ChartingLibraryWidgetOptions['charts_storage_api_version'] = '1.1';
     private _clientId: ChartingLibraryWidgetOptions['client_id'] = 'tradingview.com';
-    private _userId: ChartingLibraryWidgetOptions['user_id'] = 'public_user_id';
+    private _userId: ChartingLibraryWidgetOptions['user_id'] = 'public_user_id'; //NEED a user id for chart trading view
     private _fullscreen: ChartingLibraryWidgetOptions['fullscreen'] = false;
     private _autosize: ChartingLibraryWidgetOptions['autosize'] = true;
     private _containerId: ChartingLibraryWidgetOptions['container_id'] = 'tv_chart_container';
@@ -48,10 +46,10 @@ export class TvChartContainerComponent implements OnInit, OnDestroy {
     private buyingAsset: any;
     private sellingAsset: any;
     Themecolor: any;
-    Datafeed:IBasicDataFeed;
-    timezone:Timezone='Etc/UTC';
-    supportedResolutions:string[] = ["1", "15", "30", "60", "240", "1D", "2D", "3D", "1W", "3W", "1M", "6M"]
-    historyDepthReturn:HistoryDepth;
+    Datafeed: IBasicDataFeed;
+    timezone: Timezone = 'Etc/UTC';
+    supportedResolutions: string[] = ["1", "3", "5", "15", "30", "60", "240", "1D", "2D", "3D", "1W", "3W", "1M", "6M"]
+    historyDepthReturn: HistoryDepth;
     config = {
         supported_resolutions: this.supportedResolutions
     };
@@ -114,7 +112,9 @@ export class TvChartContainerComponent implements OnInit, OnDestroy {
 
     changeThemeColor(theme) {
         this.Themecolor = theme;
-        this.loadTradingViewData()
+        console.log('in changeThemeColor func', this.Themecolor);
+        this.loadTradingViewData();
+
         if (theme == 'Dark') {
             const widgetOptions: ChartingLibraryWidgetOptions = {
                 symbol: this._symbol,
@@ -124,14 +124,15 @@ export class TvChartContainerComponent implements OnInit, OnDestroy {
                 container_id: this._containerId,
                 library_path: this._libraryPath,
                 locale: 'en',
-                disabled_features: ['use_localstorage_for_settings', 'header_saveload', 'header_settings', 'header_compare', 'header_symbol_search', 'header_chart_type', 'widget_logo'],
-                enabled_features: ['hide_left_toolbar_by_default', 'header_indicators'],
+                disabled_features: ['use_localstorage_for_settings', 'header_settings', 'header_compare', 'header_symbol_search', 'widget_logo'],
+                enabled_features: ['hide_left_toolbar_by_default', 'header_indicators', 'header_chart_type', 'save_chart_properties_to_local_storage', 'header_saveload'],
                 charts_storage_url: this._chartsStorageUrl,
                 charts_storage_api_version: this._chartsStorageApiVersion,
                 client_id: this._clientId,
                 user_id: this._userId,
                 fullscreen: this._fullscreen,
                 autosize: this._autosize,
+                auto_save_delay: 5,
                 theme: "Dark",
                 overrides: {
                     // "mainSeriesProperties.showCountdown": true,
@@ -158,14 +159,15 @@ export class TvChartContainerComponent implements OnInit, OnDestroy {
                 container_id: this._containerId,
                 library_path: this._libraryPath,
                 locale: 'en',
-                disabled_features: ['use_localstorage_for_settings', 'header_saveload', 'header_settings', 'header_compare', 'header_symbol_search', 'header_chart_type', 'widget_logo'],
-                enabled_features: ['hide_left_toolbar_by_default', 'header_indicators'],
+                disabled_features: ['use_localstorage_for_settings', 'header_settings', 'header_compare', 'header_symbol_search', 'widget_logo'],
+                enabled_features: ['hide_left_toolbar_by_default', 'header_indicators', 'header_chart_type', 'save_chart_properties_to_local_storage', 'header_saveload'],
                 charts_storage_url: this._chartsStorageUrl,
                 charts_storage_api_version: this._chartsStorageApiVersion,
                 client_id: this._clientId,
                 user_id: this._userId,
                 fullscreen: this._fullscreen,
                 autosize: this._autosize,
+                auto_save_delay: 5,
                 theme: "Light",
                 overrides: {
                     // "mainSeriesProperties.showCountdown": true,
@@ -192,10 +194,10 @@ export class TvChartContainerComponent implements OnInit, OnDestroy {
 
         if (this.chartSocket.stompClient != null) {
             // setTimeout(() => {
-                this.chartSocket.subscribe();
+            this.chartSocket.subscribe();
             // }, 1000);
         }
-        
+
 
     }
 
@@ -213,7 +215,7 @@ export class TvChartContainerComponent implements OnInit, OnDestroy {
         this.tvChartInitialize();
 
 
-          window.onbeforeunload = () => this.ngOnDestroy();
+        window.onbeforeunload = () => this.ngOnDestroy();
 
     }
 
@@ -246,12 +248,12 @@ export class TvChartContainerComponent implements OnInit, OnDestroy {
         /* checking for if asset pair has been chnaged */
         let isAssetPairChangedRecently = localStorage.getItem('isAssetPairChangedRecently')
         if (isAssetPairChangedRecently == 'true') {
-             this.chartSocket.unsubscribe();
+            this.chartSocket.unsubscribe();
             let toTimestamp = Math.floor(Date.now() / 1000)
             this.loadTradingViewData()
             // setTimeout(() => {
-                this.chartSocket.subscribe();
-                
+            this.chartSocket.subscribe();
+
             // }, 0);
             $('.loading-paybito').css('display', 'block');
             localStorage.setItem('isAssetPairChangedRecently', 'false')
@@ -264,16 +266,16 @@ export class TvChartContainerComponent implements OnInit, OnDestroy {
         }
         let isUnsubscribeOccured = localStorage.getItem('isUnsubscribeOccuredChart')
 
-        if(isUnsubscribeOccured == 'true'){
+        if (isUnsubscribeOccured == 'true') {
             //console.log('chart has unsubscribe')
             // setTimeout(() => {
-                this.chartSocket.subscribe();
+            this.chartSocket.subscribe();
             // }, 0);
         }
 
-       
+
     }
-    
+
 
     changeTheme() {
 
@@ -306,10 +308,10 @@ export class TvChartContainerComponent implements OnInit, OnDestroy {
         }
         if (this.chartSocket.stompClient != null) {
             this.chartSocket.unsubscribe();
-            // timer(5000).subscribe(()=>{
-                this.chartSocket._disconnect();  
-            // });
-          }
+            // setTimeout(() => {
+            this.chartSocket._disconnect();
+            // }, 1000);
+        }
     }
 
 
@@ -323,20 +325,21 @@ export class TvChartContainerComponent implements OnInit, OnDestroy {
 
             const widgetOptions: ChartingLibraryWidgetOptions = {
                 symbol: this._symbol,
-                 //datafeed: new (window as any).Datafeeds.UDFCompatibleDatafeed(this._datafeedUrl, 850000),
-                 datafeed: this.Datafeed,
+                //datafeed: new (window as any).Datafeeds.UDFCompatibleDatafeed(this._datafeedUrl, 850000),
+                datafeed: this.Datafeed,
                 interval: this._interval,
                 container_id: this._containerId,
                 library_path: this._libraryPath,
                 locale: 'en',
-                disabled_features: ['use_localstorage_for_settings', 'header_saveload', 'header_settings', 'header_compare', 'header_symbol_search', 'header_chart_type', 'widget_logo'],
-                enabled_features: ['hide_left_toolbar_by_default', 'header_indicators'],
+                disabled_features: ['use_localstorage_for_settings', 'header_settings', 'header_compare', 'header_symbol_search', 'widget_logo'],
+                enabled_features: ['hide_left_toolbar_by_default', 'header_indicators', 'header_chart_type', 'save_chart_properties_to_local_storage', 'header_saveload'],
                 charts_storage_url: this._chartsStorageUrl,
                 charts_storage_api_version: this._chartsStorageApiVersion,
                 client_id: this._clientId,
                 user_id: this._userId,
                 fullscreen: this._fullscreen,
                 autosize: this._autosize,
+                auto_save_delay: 5,
                 theme: "Dark",
                 overrides: {
                     // "mainSeriesProperties.showCountdown": true,
@@ -357,6 +360,7 @@ export class TvChartContainerComponent implements OnInit, OnDestroy {
             tvWidget.onChartReady(() => {
                 tvWidget.headerReady().then(() => {
                     const button = tvWidget.createButton();
+                   
                 });
             });
 
@@ -372,20 +376,21 @@ export class TvChartContainerComponent implements OnInit, OnDestroy {
                 const widgetOptions: ChartingLibraryWidgetOptions = {
                     symbol: this._symbol,
                     // datafeed: new (window as any).Datafeeds.UDFCompatibleDatafeed(this._datafeedUrl, 100000),
-                datafeed: this.Datafeed,
+                    datafeed: this.Datafeed,
 
                     interval: this._interval,
                     container_id: this._containerId,
                     library_path: this._libraryPath,
                     locale: 'en',
-                    disabled_features: ['use_localstorage_for_settings', 'header_saveload', 'header_settings', 'header_compare', 'header_symbol_search', 'header_chart_type', 'widget_logo'],
-                    enabled_features: ['hide_left_toolbar_by_default', 'header_indicators'],
+                    disabled_features: ['use_localstorage_for_settings', 'header_settings', 'header_compare', 'header_symbol_search', 'widget_logo'],
+                    enabled_features: ['hide_left_toolbar_by_default', 'header_indicators', 'header_chart_type', 'save_chart_properties_to_local_storage', 'header_saveload'],
                     charts_storage_url: this._chartsStorageUrl,
                     charts_storage_api_version: this._chartsStorageApiVersion,
                     client_id: this._clientId,
                     user_id: this._userId,
                     fullscreen: this._fullscreen,
                     autosize: this._autosize,
+                    auto_save_delay: 5,
                     theme: "Dark",
                     overrides: {
                         // "mainSeriesProperties.showCountdown": true,
@@ -406,6 +411,7 @@ export class TvChartContainerComponent implements OnInit, OnDestroy {
                 tvWidget.onChartReady(() => {
                     tvWidget.headerReady().then(() => {
                         const button = tvWidget.createButton();
+                        
                     });
                 });
 
@@ -418,20 +424,21 @@ export class TvChartContainerComponent implements OnInit, OnDestroy {
 
                 const widgetOptions: ChartingLibraryWidgetOptions = {
                     symbol: this._symbol,
-                   // datafeed: new (window as any).Datafeeds.UDFCompatibleDatafeed(this._datafeedUrl, 850000),
+                    // datafeed: new (window as any).Datafeeds.UDFCompatibleDatafeed(this._datafeedUrl, 850000),
                     datafeed: this.Datafeed,
                     interval: this._interval,
                     container_id: this._containerId,
                     library_path: this._libraryPath,
                     locale: 'en',
-                    disabled_features: ['use_localstorage_for_settings', 'header_saveload', 'header_settings', 'header_compare', 'header_symbol_search', 'header_chart_type', 'widget_logo'],
-                    enabled_features: ['hide_left_toolbar_by_default', 'header_indicators'],
+                    disabled_features: ['use_localstorage_for_settings', 'header_settings', 'header_compare', 'header_symbol_search', 'widget_logo'],
+                    enabled_features: ['hide_left_toolbar_by_default', 'header_indicators', 'header_chart_type', 'save_chart_properties_to_local_storage', 'header_saveload'],
                     charts_storage_url: this._chartsStorageUrl,
                     charts_storage_api_version: this._chartsStorageApiVersion,
                     client_id: this._clientId,
                     user_id: this._userId,
                     fullscreen: this._fullscreen,
                     autosize: this._autosize,
+                    auto_save_delay: 5,
                     theme: "Light",
                     overrides: {
                         // "mainSeriesProperties.showCountdown": true,
@@ -452,6 +459,7 @@ export class TvChartContainerComponent implements OnInit, OnDestroy {
                 tvWidget.onChartReady(() => {
                     tvWidget.headerReady().then(() => {
                         const button = tvWidget.createButton();
+                       
                     });
                 });
 
@@ -467,214 +475,216 @@ export class TvChartContainerComponent implements OnInit, OnDestroy {
 
     }
 
-    loadTradingViewData(){
+    
 
-        this.Datafeed = 
+    loadTradingViewData() {
+
+        this.Datafeed =
         {
-          
-          onReady: cb => {
-             setTimeout(() =>cb(this.config) , 0);
-            
-              
+
+            onReady: cb => {
+                setTimeout(() => cb(this.config), 0);
+
+
             },
-            searchSymbols: async(userInput, exchange, symbolType, onResultReadyCallback) => {
+            searchSymbols: async (userInput, exchange, symbolType, onResultReadyCallback) => {
             },
-            resolveSymbol: async(symbolName, onSymbolResolvedCallback, onResolveErrorCallback) => {
-              
-              var split_data = symbolName.split(/[:/]/);
-              
-              var symbol_stub = {
-                name: symbolName,
-                description: `${split_data[1]}/${split_data[2]}`,
-                type: 'crypto',
-                session: '24x7',
-                timezone: this.timezone,
-                ticker: symbolName,
-                exchange: split_data[0],
-                minmov: 1,
-                pricescale: 100000000,
-                has_intraday: true,
-                intraday_multipliers: ['1', '60'],
-                supported_resolutions:  this.supportedResolutions,
-                volume_precision: 8,
-                full_name:'full_name',
-                listed_exchange:'listed_exchange'
-              }
-              
-              symbol_stub.pricescale = 100;
-              setTimeout(function() {
-                onSymbolResolvedCallback(symbol_stub)
-                // console.log('Resolved Symbol ', JSON.stringify(symbol_stub));
-              }, 0)
-              
-          
+            resolveSymbol: async (symbolName, onSymbolResolvedCallback, onResolveErrorCallback) => {
+
+                var split_data = symbolName.split(/[:/]/);
+
+                var symbol_stub = {
+                    name: symbolName,
+                    description: `${split_data[1]}/${split_data[2]}`,
+                    type: 'crypto',
+                    session: '24x7',
+                    timezone: this.timezone,
+                    ticker: symbolName,
+                    exchange: split_data[0],
+                    minmov: 1,
+                    pricescale: 100000000,
+                    has_intraday: true,
+                    intraday_multipliers: ['1', '60'],
+                    supported_resolutions: this.supportedResolutions,
+                    volume_precision: 8,
+                    full_name: 'full_name',
+                    listed_exchange: 'listed_exchange'
+                }
+
+                symbol_stub.pricescale = 100;
+                setTimeout(function () {
+                    onSymbolResolvedCallback(symbol_stub)
+                    // console.log('Resolved Symbol ', JSON.stringify(symbol_stub));
+                }, 0)
+
+
             },
-            getBars: async(symbolInfo, resolution, from, to, onHistoryCallback) => {
+            getBars: async (symbolInfo, resolution, from, to, onHistoryCallback) => {
                 console.log('get bars calling')
 
-                try{
+                try {
 
-                     
-                  
-                   //console.log('resolution' + resolution)
-                let toTimestamp = Math.floor(Date.now() / 1000)
-            //   let oneYearFromNow : any = new Date();
-            //   oneYearFromNow.setFullYear(oneYearFromNow.getFullYear() - 1);
-            //   let fromTimestamp = (Math.floor(oneYearFromNow / 1000))
-  
-              this.http.get<any>(this._datafeedUrl + '/history?symbol=' + localStorage.getItem("buying_crypto_asset").toUpperCase() + '%2F' + localStorage.getItem("selling_crypto_asset").toUpperCase() + '&resolution='+resolution+'&from='+from+'&to=' + toTimestamp).subscribe((data:any=[]) => {
-                    // console.log('history of paybito', data)
-                    var bars = [];
-      
-                  
 
-                    try{
 
-                        let responseLength = data.c.length
-                          for(let i = 0 ;i<responseLength;i++){
-                            //   let obj = {
-                              
-              
-                            //   close: data.c[i],
-                            //   high : data.h[i],
-                            //   low : data.l[i],
-                            //   open: data.o[i],
-                            //   time: data.t[i]*1000,
-                            //   volume: data.v[i]*0.7,
-                              
-                            //   }
-                            //   bars.push(obj)
-    
-                            bars = [...bars, {
-                                close: data.c[i],
-                              high : data.h[i],
-                              low : data.l[i],
-                              open: data.o[i],
-                              time: data.t[i]*1000,
-                              volume: data.v[i]*0.7,
-                            }]
-                              }
-                              
-                        //  if (bars.length) {
-                        //       onHistoryCallback(bars, {noData: false})
-                        //     } else {
-                        //       onHistoryCallback([], {noData: true})
-                        //     }
-    
-                            console.log('inside get bars',bars.length)
-    
-    
-                        if(bars.length >= 1){
-                            console.log('if block inside get bars')
-    
-                            onHistoryCallback(bars, { noData: false });
-    
-                          } else {
-                            console.log('else block inside get bars')
-    
+                    //console.log('resolution' + resolution)
+                    let toTimestamp = Math.floor(Date.now() / 1000)
+                    //   let oneYearFromNow : any = new Date();
+                    //   oneYearFromNow.setFullYear(oneYearFromNow.getFullYear() - 1);
+                    //   let fromTimestamp = (Math.floor(oneYearFromNow / 1000))
+
+                    this.http.get<any>(this._datafeedUrl + '/history?symbol=' + localStorage.getItem("buying_crypto_asset").toUpperCase() + '%2F' + localStorage.getItem("selling_crypto_asset").toUpperCase() + '&resolution=' + resolution + '&from=' + from + '&to=' + toTimestamp).subscribe((data: any = []) => {
+                        // console.log('history of paybito', data)
+                        var bars = [];
+
+
+
+                        try {
+
+                            let responseLength = data.c.length
+                            for (let i = 0; i < responseLength; i++) {
+                                //   let obj = {
+
+
+                                //   close: data.c[i],
+                                //   high : data.h[i],
+                                //   low : data.l[i],
+                                //   open: data.o[i],
+                                //   time: data.t[i]*1000,
+                                //   volume: data.v[i]*0.7,
+
+                                //   }
+                                //   bars.push(obj)
+
+                                bars = [...bars, {
+                                    close: data.c[i],
+                                    high: data.h[i],
+                                    low: data.l[i],
+                                    open: data.o[i],
+                                    time: data.t[i] * 1000,
+                                    volume: data.v[i] * 0.7,
+                                }]
+                            }
+
+                            //  if (bars.length) {
+                            //       onHistoryCallback(bars, {noData: false})
+                            //     } else {
+                            //       onHistoryCallback([], {noData: true})
+                            //     }
+
+                            console.log('inside get bars', bars.length)
+
+
+                            if (bars.length >= 1) {
+                                console.log('if block inside get bars')
+
+                                onHistoryCallback(bars, { noData: false });
+
+                            } else {
+                                console.log('else block inside get bars')
+
+                                onHistoryCallback([], { noData: true });
+
+                            }
                             onHistoryCallback([], { noData: true });
-    
-                          }
-                        onHistoryCallback([], { noData: true });
-    
-    
-                      }
-                  catch{
-
-                    console.log('error in data length', data)
 
 
-                  }
-                      
-                  
-                    
-                  })
-  
-      
-        
+                        }
+                        catch {
+
+                            console.log('error in data length', data)
+
+
+                        }
+
+
+
+                    })
+
+
+
 
                 }
 
-                catch{
+                catch {
                     console.log('error in date format')
 
                 }
 
-               
-              
-          
+
+
+
             },
             subscribeBars: (symbolInfo, resolution, onRealtimeCallback,) => {
-               console.log('subscribeBars Runnning', resolution)
-            //    this.chartSocket._connect()
-                this.chartSocket.currentMessage.subscribe((message:string = '') => {
+                console.log('subscribeBars Runnning', resolution)
+                //    this.chartSocket._connect()
+                this.chartSocket.currentMessage.subscribe((message: string = '') => {
                     setInterval(() => {
 
 
-                    },5000)
+                    }, 5000)
                     try {
                         let mes = JSON.parse(message)
-                         onRealtimeCallback({
-                    
-    
-    
-                            time: parseFloat(mes.t[0])*1000,
+                        onRealtimeCallback({
+
+
+
+                            time: parseFloat(mes.t[0]) * 1000,
                             open: parseFloat(mes.o[0]),
                             high: parseFloat(mes.h[0]),
                             low: parseFloat(mes.l[0]),
                             close: parseFloat(mes.c[0]),
-                            volume: parseFloat(mes.v[0])*0.7
+                            volume: parseFloat(mes.v[0]) * 0.7
                         });
-    
-    
-                    } catch(e) {
-
-                       }
-                    
-                    
-                    
-                       
-                   
-                }) 
-              },
-            unsubscribeBars: subscriberUID => {
-             console.log('unsubscribeBars Running')
-              this.chartSocket.unsubscribe();
-            //   this.chartSocket._disconnect(); 
 
 
-          
-            //   this.socketService.unsubscribeBars(subscriberUID)
+                    } catch (e) {
+
+                    }
+
+
+
+
+
+                })
             },
-            calculateHistoryDepth:(resolution: ResolutionString): HistoryDepth | undefined =>{
+            unsubscribeBars: subscriberUID => {
+                console.log('unsubscribeBars Running')
+                this.chartSocket.unsubscribe();
+                //   this.chartSocket._disconnect(); 
+
+
+
+                //   this.socketService.unsubscribeBars(subscriberUID)
+            },
+            calculateHistoryDepth: (resolution: ResolutionString): HistoryDepth | undefined => {
                 console.log('calculate History depth is running ');
-                console.log('resolution '+ resolution);
+                console.log('resolution ' + resolution);
                 localStorage.setItem('resolutionDataSocket', resolution)
 
                 if (resolution === "1D") {
-                  return {
-                      resolutionBack: 'M',
-                      intervalBack: 6
-                  };
+                    return {
+                        resolutionBack: 'M',
+                        intervalBack: 6
+                    };
                 }
-                if(resolution=='3D'){
-                  return {
-                    resolutionBack: 'M',
-                    intervalBack: 6
-                  };
+                if (resolution == '3D') {
+                    return {
+                        resolutionBack: 'M',
+                        intervalBack: 6
+                    };
                 }
-                if(parseInt(resolution) < 60 ){
-                  //this.historyDepthReturn.resolutionBack = 'D';
-                  //this.historyDepthReturn.intervalBack = 1;
-                  return {resolutionBack: 'D', intervalBack: 1};
+                if (parseInt(resolution) < 60) {
+                    //this.historyDepthReturn.resolutionBack = 'D';
+                    //this.historyDepthReturn.intervalBack = 1;
+                    return { resolutionBack: 'D', intervalBack: 1 };
                 }
-                else{
-                  return undefined;
+                else {
+                    return undefined;
                 }
-                
-               
-              },
-            
+
+
+            },
+
             // getMarks: (symbolInfo, startDate, endDate, onDataCallback, resolution) => {
             //   //optional
             //   // console.log('getMarks Running')
@@ -687,7 +697,7 @@ export class TvChartContainerComponent implements OnInit, OnDestroy {
             //   // console.log('getServerTime Running')
             // }
         }
-      }
+    }
 
-   
+
 }

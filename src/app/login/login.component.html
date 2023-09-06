@@ -1,9 +1,7 @@
 
 
-<!-- <app-loader></app-loader> -->
 
-
-<div class="bitrump-body paybito-bitrump">
+ <div class="bitrump-body paybito-bitrump">
     
   <nav class="navbar navbar-expand-lg navbar-dark fixed-top extraPadding">
       <div class="container-fluid">
@@ -19,85 +17,75 @@
     </nav>
     <section class="testimonial" id="testimonial" style="padding-top: 16px;">
       <div class="container">
-        <div class="card card-login mx-auto mt-5">
-          <!-- <div class="card-header text-center text-blue bg-pbgreen bitrump-logo"><img [src]="data.brokerlogo" alt="">
-            </div> -->
-            <div class="card-header text-center text-blue p-0">
-              <h5 class="text-white" style="color: black!important;">Login</h5>
-           </div>
-          <div class="card-body p-3 card-login-body" style="color: black;background-color: white;">
-            <form name="login_form" style="
-                  padding-left: 30px;
-                  padding-right: 30px;
-              ">
-                      <span class="text-center" style="color: #f94e26;">{{logoutReason}}</span>
-                      <div class="form-group">
-                      <input class="form-control" name="email" id="email" type="email" [(ngModel)]="email" placeholder="Email *" autofocus >
-                      </div>
-                      <div class="form-group">
-                      <input class="form-control" name="password" type="password" [(ngModel)]="password" autocomplete placeholder="Password *" id="signupInputPassword">
-                      <span toggle="#signupInputPassword" (click)="showHide()" class="fa fa-fw fa-eye-slash field-icon showHide-password"></span>
-                      </div>
-                      <div class="form-group otp_segment" *ngIf="otpBlock">
-                      <input class="form-control" id="loginInputOTP" name="otp" type="text" [(ngModel)]="otp" placeholder="OTP" autofocus autocomplete="off" (keyup)="validateOtp($event)">
-                      <small>*Input otp from your google authenticator</small>
-                      </div>
-                      
-                          <!-- <button type="submit" class="btn btn-primary btn-block login_btn" (click)="openModalForCaptcha()" >
-                            Log in
-                          </button> -->
-                      <!-- <button type="submit" class="btn btn-primary btn-block otp_btn" (click)="loginThroughOtp()" *ngIf="otpBlock">Submit</button> -->
-                      <button type="submit" class="btn btn-primary btn-block login_btn" (click)="openModalForCaptcha()" >
-                        Log in
-                        </button>
-                    </form>
-
-                  <br>
-                  <p *ngIf="loader" class="text-center">
-                      <img src="./assets/svg-loaders/30.svg" alt="" width="100">
-                  </p>
-                 
-                  <p [hidden]="!error" class="text-danger text-center my-3">{{errormessage}}</p>
-                  <div id="unverifiesusermsgd" style="display: none;">
-                      <div style='display: flex;justify-content: space-between;align-items: center;'>
-                          Resend device verification mail &nbsp; &nbsp; <button id='verifyuser' class='btn btn-success'>RESEND</button>
-                      </div>
-                  </div>
-                  <div id="countermsg" style="display: none;"></div>
-                  <div class="d-flex justify-content-center" *ngIf="disableSecStatus">
-                   <div ><img style="width: 50px;"src="./assets/loading-11.gif">
-                  </div>
-                  </div>
-                  
-
-                  <div class="d-flex mt-2 forgot-pswd" [ngClass]="disableSecStatus == true ? 'disableSecClass' : ''">
-
+        
+<div class="row">
+  <div class="col-md-3"></div>
+  <div class="col-md-6 col-md-offset-1">
+      <div class="login_topimg">
+      </div>
+      <div class="wrap-login100">
+        <div class="card-body p-3 card-login-body" style="color: black;background-color: white;">
+          <form name="login_form" style="
+                padding-left: 30px;
+                padding-right: 30px;
+            ">
+                    <span class="text-center" style="color: #f94e26;">{{logoutReason}}</span>
+                    <div class="form-group">
+                    <input class="form-control" name="email" id="email" type="email" [(ngModel)]="email" placeholder="Email *" autofocus >
+                    </div>
+                    <div class="form-group">
+                    <input class="form-control" name="password" type="password" [(ngModel)]="password" autocomplete placeholder="Password *" id="signupInputPassword">
+                    <span toggle="#signupInputPassword" (click)="showHide()" class="fa fa-fw fa-eye-slash field-icon showHide-password"></span>
+                    </div>
+                    <div class="form-group otp_segment" *ngIf="otpBlock">
+                    <input class="form-control" id="loginInputOTP" name="otp" type="text" [(ngModel)]="otp" placeholder="OTP" autofocus autocomplete="off" (keyup)="validateOtp($event)">
+                    <small>*Input otp from your google authenticator</small>
+                    </div>
                     
-                      <!-- <div class="p-1 mr-auto"><a routerLink="/secure-token">Forgot Password?</a></div> -->
-                      <div class="p-1 mr-auto"  style="padding-left: 30px !important;"><a routerLink="/forget-password" style="text-decoration: none;font-family: system-ui !important;">Forgot Password?</a></div>
-                      
-                      <div class="p-1 " ><strong>Don't have an account yet?</strong><a routerLink="/signup"> Register<!--{{data.exchange}}--></a></div>
-      
-                  </div>
-                  <app-login-with-facebook [purpose]="'login'"></app-login-with-facebook>
+                       <button type="submit" class="btn btn-primary btn-block login_btn" (click)="openModalForCaptcha()" >
+                      Log in
+                      </button>
+                  </form>
+
+                <br>
+                <p *ngIf="loader" class="text-center">
+                    <img src="./assets/svg-loaders/30.svg" alt="" width="100">
+                </p>
+               
+                <p [hidden]="!error" class="text-danger text-center my-3">{{errormessage}}</p>
+                <div id="unverifiesusermsgd" style="display: none;">
+                    <div style='display: flex;justify-content: space-between;align-items: center;'>
+                        Resend device verification mail &nbsp; &nbsp; <button id='verifyuser' class='btn btn-success'>RESEND</button>
+                    </div>
+                </div>
+                <div id="countermsg" style="display: none;"></div>
+                <div class="d-flex justify-content-center" *ngIf="disableSecStatus">
+                 <div ><img style="width: 50px;"src="./assets/loading-11.gif">
+                </div>
+                </div>
                 
-<br/>
+
+                <div class="d-flex mt-2 forgot-pswd" [ngClass]="disableSecStatus == true ? 'disableSecClass' : ''">
+
                   
-                  <div class="d-flex justify-content-center" >
-                    <!-- <span style="color: #aeabab;">Version: {{data.appVersion}}</span> -->
-                  </div>
-      
-          </div>
-          
-          
+                    <div class="p-1 mr-auto"  style="padding-left: 30px !important;"><a routerLink="/forget-password" style="text-decoration: none;font-family: system-ui !important;">Forgot Password?</a></div>
+                    
+                    <div class="p-1 " ><strong>Don't have an account yet?</strong><a routerLink="/signup"> Register</a></div>
+    
+                </div>
+                
+    
         </div>
+      </div>
+  </div>
+  <div class="col-md-3"></div>
+</div>
       </div>
     </section>
 
 </div>
 
-
-<ng-template #myModal let-modal>
+ <ng-template #myModal let-modal>
   <div class=" lightTheme modal-header test proper-alighnment-header">
     <div class="row">
       <div class="col-md-3"></div>
@@ -146,9 +134,7 @@
 
       </div>
 
-      <!-- <button type="button" class="btn btn-primary btn-block" (click)="redirectToAuthentication()">Next</button> -->
-
-    </div>
+      </div>
   </div>
 </ng-template>
 
@@ -215,20 +201,12 @@
 
         
       </form>
-      <!-- [disabled]="emailVerificationCode == '' || emailVerificationCode == undefined || smsOtp == '' || smsOtp == undefined || twoFactorOtp == '' || twoFactorOtp == undefined" -->
-
       <button (click)="loginData(true)"  type="submit" class="btn btn-primary btn-block"
         style="margin-top: 28px;">
         Confirm
       </button>
 
-      <!-- <p [hidden]="!error" class="text-danger text-center my-3">{{errormessage}}</p>
-                  <div id="unverifiesusermsgd" style="display: none;">
-                      <div style='display: flex;justify-content: space-between;align-items: center;'>
-                          Resend device verification mail &nbsp; &nbsp; <button id='verifyuser' class='btn btn-success'>RESEND</button>
-                      </div>
-                  </div>
-                  <div id="countermsg" style="display: none;"></div> -->
+   
 
 
     </div>
@@ -236,7 +214,6 @@
 </ng-template>
 <ng-template #twoFactorAuth let-modal>
   <div  class=" lightTheme modal-header test proper-alighnment-header">
-    <!-- <h4 class="modal-title" id="modal-basic-title" style="color: black;">Security Authentication</h4> -->
     <div class="row">
       <div class="col-md-3"></div>
       <div class="col-md-6">
@@ -249,9 +226,7 @@
     
     <div class="modal-body">
         <p class="text-left" style="color: black;">Input otp from your google authenticator</p>
-        <!-- <p class="text-left" style="margin-top: -21px; color: black;">{{hiddenEmail}}</p> -->
-  
-        
+       
         <form>
           <div class="form-group">
             <input class="form-control" name="emailVerificationCode" id="twoFactorOtp" type="password" [(ngModel)]="twoFactorOtp" placeholder="Two-Factor Authenticator code" autofocus >
@@ -267,13 +242,7 @@
           Confirm
           </button>
   
-          <!-- <p [hidden]="!error" class="text-danger text-center my-3">{{errormessage}}</p>
-                    <div id="unverifiesusermsgd" style="display: none;">
-                        <div style='display: flex;justify-content: space-between;align-items: center;'>
-                            Resend device verification mail &nbsp; &nbsp; <button id='verifyuser' class='btn btn-success'>RESEND</button>
-                        </div>
-                    </div>
-                    <div id="countermsg" style="display: none;"></div> -->
+          
       
       
     </div>
@@ -288,49 +257,11 @@
         <span aria-hidden="true">&times;</span>
       </button>
       <div class="modal-body">
-          <!-- <p class="text-left" style="color: black;">Version Checking</p> -->
-         
-        
+       
     <span class="text-center">You are using version <b>{{data.appVersion}}</b>. New version <b>{{currentVerson}}</b> available for <a [href]="appLink" download>download</a>.</span>
         
       </div>
     </div>
     </ng-template>
 
-    <!-- <ng-template #smsAuth let-modal>
-      <div class=" lightTheme modal-header test proper-alighnment-header">
-        <div class="row">
-          <div class="col-md-3"></div>
-          <div class="col-md-6">
-            <h4 class="modal-title" id="modal-basic-title" style="color: black;">SMS Authentication</h4> 
-          </div>
-          <div class="col-md-3">
-            <i class="fa fa-times" aria-hidden="true"  (click)="modal.dismiss()" style="margin: 6px 0px 0px 32px;cursor: pointer;"></i>
-          </div>
-        </div>
-        
-        <div class="modal-body">
-          <p class="text-left" style="color: black;">Input otp from your registered phone number</p>
-    
-          <form>
-            <div class="form-group">
-              <input class="form-control" name="emailVerificationCode" id="smsOtpSms" type="password" [(ngModel)]="smsOtp"
-                placeholder="OTP from registered phone no" autofocus>
-                <span class="text-primary smsOtpSms" [ngClass]="disabledSpan ? 'disableSpanClass' : ''"  *ngIf="showGetCodeButtonInSmsOtpPopup" (click)="handleSendOtpThroughSms()" 
-                > Get code</span>
-    
-            </div>
-          </form>
-          <p class="text-left">
-            <span class="text-success"> {{intervalMessageForSmsPopup}}</span>
-    
-          </p>
-    
-          <button type="button" class="btn btn-primary btn-block" [disabled]="smsOtp == '' || smsOtp == undefined"
-        style="margin-top: 28px;" (click)="handleSmsAuthSubmit()">
-         Confirm
-       </button>
-    
-        </div>
-      </div>
-    </ng-template> -->
+ 

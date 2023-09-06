@@ -16,9 +16,7 @@ import { Router } from '@angular/router';
 @Injectable()
 export class HttpResponseInterceptors implements HttpInterceptor {
 
-  constructor(public route: Router) {
-    console.log('err response', this.route.url);
-  }
+  constructor(public route: Router) {}
 
   // intercept(request: HttpRequest<any>, next: HttpHandler): any{
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>>{
@@ -29,17 +27,14 @@ export class HttpResponseInterceptors implements HttpInterceptor {
 
             console.log('err response', err.status);
             
-
-
-          
-            
   
-            if (err.status === 401 || err.status === 403 || err.status === 0) {
+             if (err.status === 401 || err.status === 403 || err.status === 0 || err.status === 404) {
 
 
-              if(this.route.url == '/' 
+              if(
+                this.route.url == '/' 
               || this.route.url == '' 
-              || this.route.url == '/login' 
+              || this.route.url == '/login'
               || this.route.url == '/signup'
               || this.route.url == '/otp'
               || this.route.url == '/forgot-password'
@@ -65,6 +60,7 @@ export class HttpResponseInterceptors implements HttpInterceptor {
               }
 
             }
+            
   
             // return the error back to the caller
             return throwError(err);

@@ -111,11 +111,10 @@ export class OptionsChartComponent implements OnInit {
   }
 
   ngOnInit() {
+     this.Themecolor = localStorage.getItem('themecolor');
     this.changemode();
 
-    // this.Themecolor = this.deridash.Themecolor;
     localStorage.setItem('isLandedOption','true');
-
     if (
       localStorage.getItem('selected_options_asset_pair_name') == undefined ||
       localStorage.getItem('selected_options_asset_pair_name') == null ||
@@ -234,7 +233,7 @@ export class OptionsChartComponent implements OnInit {
         }
       }
 
-      this.setTitle(this.data.ltpdata + ' | ' + localStorage.getItem('selected_options_asset_pair_name') + ' | ' + 'Paybito');
+      this.setTitle(this.data.ltpdata + ' | ' + localStorage.getItem('selected_options_asset_pair_name') + ' | ' + this.data.exchange);
 
     });
 
@@ -564,7 +563,7 @@ export class OptionsChartComponent implements OnInit {
      // }
       console.log('Data Value .... ')
       console.log(this.data)
-      this.setTitle(this.data.ltpdata + ' | ' + localStorage.getItem('selected_options_asset_pair_name') + ' | ' + 'Paybito');
+      this.setTitle(this.data.ltpdata + ' | ' + localStorage.getItem('selected_options_asset_pair_name') + ' | ' + this.data.exchange);
 
     });
   }
@@ -572,7 +571,6 @@ export class OptionsChartComponent implements OnInit {
 
 
   ngDoCheck() {
-    // this.changemode();
     // this.Themecolor = this.deridash.Themecolor
   }
 

@@ -13,7 +13,7 @@ export class SecureTokenComponent implements OnInit {
   signupObj:any;
   email: any;
 
-  constructor(private http:HttpClient, public data:CoreDataService, private route:Router) { }
+  constructor(private http:HttpClient, private data:CoreDataService, private route:Router) { }
 
   ngOnInit() {
   }

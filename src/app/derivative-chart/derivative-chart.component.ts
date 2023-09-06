@@ -142,8 +142,8 @@ export class DerivativeChartComponent implements OnInit {
         if (this.chartlist) {
           this.ctpdata = this.data.ctpdata = this.chartlist.ctp;
           console.log('#############################################')
-          console.log(this.chartlist.ltp)
-          console.log(this.data.ltpdata)
+          //console.log(this.chartlist.ltp)
+          //console.log(this.data.ltpdata)
           this.ltpdata = this.data.ltpdata = this.chartlist.ltp;
           this.lowprice = this.data.lowprice = parseFloat(this.chartlist.lowPrice).toFixed(2);
           this.highprice = this.data.highprice = parseFloat(this.chartlist.highPrice).toFixed(2);
@@ -187,10 +187,10 @@ export class DerivativeChartComponent implements OnInit {
           this.chartlist = result;
           console.log(this.chartlist)
           if (this.chartlist) {
-            this.ctpdata = this.data.ctpdata = this.chartlist.ctp;
-            console.log(this.data)
-            console.log(this.chartlist.ltp)
-            this.ltpdata = this.data.ltpdata = this.chartlist.ltp;
+            //this.ctpdata = this.data.ctpdata = this.chartlist.ctp;
+            //console.log(this.data)
+            //console.log(this.chartlist.ltp)
+            //this.ltpdata = this.data.ltpdata = this.chartlist.ltp;
             this.lowprice = this.data.lowprice = this.chartlist.lowPrice;
             this.highprice = this.data.highprice = this.chartlist.highPrice;
             this.act = this.data.ACTION = this.chartlist.action;
@@ -228,7 +228,7 @@ export class DerivativeChartComponent implements OnInit {
       }
       console.log('Data Value .... ')
       console.log(this.data)
-      this.setTitle(this.data.ltpdata + ' | ' + 'BTCUSD Perpetual' + ' | ' + 'Paybito');
+      this.setTitle(this.data.ltpdata + ' | ' + 'BTCUSD Perpetual' + ' | ' + this.data.exchange);
       this.Themecolor = localStorage.getItem('themecolor')
 
     });
@@ -250,8 +250,8 @@ export class DerivativeChartComponent implements OnInit {
         if (this.currency_code == 'BTC' || this.base_currency == 'USDT') {
           this.chartlist = JSON.parse(result);
           if (this.chartlist.tR) {
-            this.ctpdata = this.data.ctpdata = this.chartlist.tR.ctp;
-            this.ltpdata = this.data.ltpdata = this.chartlist.tR.ltp;
+            //this.ctpdata = this.data.ctpdata = this.chartlist.tR.ctp;
+            //this.ltpdata = this.data.ltpdata = this.chartlist.tR.ltp;
             this.lowprice = this.data.lowprice = parseFloat(this.chartlist.tR.lowPrice).toFixed(2);
             this.highprice = this.data.highprice = parseFloat(this.chartlist.tR.highPrice).toFixed(2);
             this.act = this.data.ACTION = this.chartlist.tR.action;
@@ -288,8 +288,8 @@ export class DerivativeChartComponent implements OnInit {
 
             this.chartlist = result;
             if (this.chartlist.tR) {
-              this.ctpdata = this.data.ctpdata = this.chartlist.tR.ctp;
-              this.ltpdata = this.data.ltpdata = this.chartlist.tR.ltp;
+              //this.ctpdata = this.data.ctpdata = this.chartlist.tR.ctp;
+              //this.ltpdata = this.data.ltpdata = this.chartlist.tR.ltp;
               this.lowprice = this.data.lowprice = this.chartlist.tR.lowPrice;
               this.highprice = this.data.highprice = this.chartlist.tR.highPrice;
               this.act = this.data.ACTION = this.chartlist.tR.action;
@@ -327,7 +327,7 @@ export class DerivativeChartComponent implements OnInit {
         }
       }
 
-      this.setTitle(this.data.ltpdata + ' | ' + 'BTCUSD Perpetual' + ' | ' + 'Paybito');
+      this.setTitle(this.data.ltpdata + ' | ' + 'BTCUSD Perpetual' + ' | ' + this.data.exchange);
       this.Themecolor = localStorage.getItem('themecolor')
 
     });
@@ -575,10 +575,10 @@ export class DerivativeChartComponent implements OnInit {
           this.chartlist = result[0];
           if (this.chartlist) {
             this.ctpdata = this.data.ctpdata = this.chartlist.ctp;
-            console.log('#############################################')
-            console.log(this.chartlist.ltp)
-            console.log(this.data.ltpdata)
-            this.ltpdata = this.data.ltpdata = this.chartlist.ltp;
+            //console.log('#############################################')
+            //console.log(this.chartlist.ltp)
+            //console.log(this.data.ltpdata)
+            //this.ltpdata = this.data.ltpdata = this.chartlist.ltp;
             this.lowprice = this.data.lowprice = parseFloat(this.chartlist.lowPrice).toFixed(2);
             this.highprice = this.data.highprice = parseFloat(this.chartlist.highPrice).toFixed(2);
             this.act = this.data.ACTION = this.chartlist.action;
@@ -621,10 +621,10 @@ export class DerivativeChartComponent implements OnInit {
             this.chartlist = result;
             console.log(this.chartlist)
             if (this.chartlist) {
-              this.ctpdata = this.data.ctpdata = this.chartlist.ctp;
-              console.log(this.data)
-              console.log(this.chartlist.ltp)
-              this.ltpdata = this.data.ltpdata = this.chartlist.ltp;
+              //this.ctpdata = this.data.ctpdata = this.chartlist.ctp;
+              //console.log(this.data)
+              //console.log(this.chartlist.ltp)
+              //this.ltpdata = this.data.ltpdata = this.chartlist.ltp;
               this.lowprice = this.data.lowprice = this.chartlist.lowPrice;
               this.highprice = this.data.highprice = this.chartlist.highPrice;
               this.act = this.data.ACTION = this.chartlist.action;
@@ -662,7 +662,7 @@ export class DerivativeChartComponent implements OnInit {
         }
         console.log('Data Value .... ')
         console.log(this.data)
-        this.setTitle(this.data.ltpdata + ' | ' + 'BTCUSD Perpetual' + ' | ' + 'MEX Digital');
+        this.setTitle(this.data.ltpdata + ' | ' + 'BTCUSD Perpetual' + ' | ' + this.data.exchange);
   
       });
      }

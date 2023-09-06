@@ -1,0 +1,499 @@
+<!-- <app-navbar></app-navbar> -->
+<app-navbar></app-navbar>
+
+<div class="content-wrapper pt-0 pl-3">
+
+  <div class="container-fluid" data-ng-controller="profileCtrl" data-ng-init="loginDuration();">
+    <div class="row d-flex">
+
+
+
+      <div class="col-12 col-md-12 mt-3">
+        <div class=" p-2 pr-3 rounded align-self-stretch h-100"
+          [ngClass]="Themecolor == 'Dark' ? 'bg-dark' : 'bg-light'">
+          <div class="w-100 mt-2"></div>
+
+          <ngb-tabset [ngClass]="Themecolor == 'Dark' ? 'tab-dark' : 'tab-light'">
+
+
+            <ngb-tab class="darkss">
+              <ng-template ngbTabTitle>
+                <h6 id="trade" style="padding: 8px 10px -2px 10px;" (click)="changeScreenBot(1)">Trader API Keys</h6>
+
+              </ng-template>
+              <ng-template ngbTabContent>
+
+
+
+
+
+
+
+
+
+
+              </ng-template>
+            </ngb-tab>
+
+
+            <ngb-tab>
+              <ng-template ngbTabTitle>
+                <h6 class="get-offer disabledText" style="padding: 8px 10px -2px 10px;" (click)="changeScreenBot(2)">
+                  Trader Bots </h6>
+              </ng-template>
+              <ng-template ngbTabContent>
+
+              </ng-template>
+            </ngb-tab>
+          </ngb-tabset>
+
+          <div class="row" *ngIf="tradeApiKeyStatus">
+
+            <!-- <form> -->
+
+              <div class="col-md-2 col-sm-6">
+                <select class="form-control" name="timePeriod" [(ngModel)]="exchanageName">
+                  <option value="All Exchanges">All</option>
+                  <option value="PAYBITO">{{data.exchange}}</option>
+
+                  <option value="BINANCE">BINANCE</option>
+  
+                </select>
+              </div>
+
+
+              <div class="col-md-2 col-sm-6">
+                <select class="form-control" name="timePeriod" [(ngModel)]="timePeriod">
+                  <option value="All Time">All Time</option>
+                  <option value="Last Month">Last Month</option>
+                  <option value="Last Week">Last Week</option>
+  
+                </select>
+              </div>
+              <div class="col-md-2 col-sm-6">
+                <select class="form-control" [(ngModel)]="traderNameFilter" name="traderNameFilter">
+                  <option value="">Select Any</option>
+                  <option *ngFor="let name of traderName">{{name.traderName}}</option>
+  
+  
+                </select>
+              </div>
+              <div class="col-md-2 col-sm-6">
+                <select class="form-control" [(ngModel)]="marketType" name="marketType" (change)="getBaseCurrency()">
+                  <option value="All Markets">All Markets</option>
+                  <option value="Spot" *ngIf="data.isSpot == 1">Spot</option>
+                  <option value="Futures" *ngIf="data.isFutures == 1">Futures</option>
+                  <!-- <option value="Options" *ngIf="data.isOptions == 1">Options</option> -->
+
+                  
+  
+  
+                </select>
+              </div>
+
+            <div class="col-md-2 col-sm-6">
+              <select class="form-control" [(ngModel)]="basecurrency" name="basecurrency">
+                <option value="All">All Base Currencies</option>
+                <option *ngFor="let m of baseCurrencyFromApi">{{m.baseCurrency}}</option>
+
+              </select>
+            </div>
+
+
+            <div class="col-md-2 col-sm-6">
+              <input type="text" class="form-control" placeholder="Minimum Trade Quantity" [(ngModel)]="minTrade"
+                name="minTrade">
+            </div>
+
+            <div class="col-md-2 col-sm-6">
+              <div class="form-check" style="padding-top: 8px;">
+                <input class="form-check-input" type="checkbox" id="flexCheckDefault" (change)="followCheckBox($event)">
+                <label class="form-check-label" for="flexCheckDefault">
+                  Show followed only
+                </label>
+              </div>
+            </div>
+
+            
+
+            <!-- </form> -->
+          </div>
+          <div class="row" *ngIf="tradeApiKeyStatus">
+            <div class="col-md-2 col-sm-6" style="margin-top: 30px">
+              <button class="btn btn-outline-primary" (click)="getApiMarketDataFilter()">Filter</button>
+
+            </div>
+
+          </div>
+
+          <div class="row cardDiv" style="margin-top: 2%;" *ngIf="tradeApiKeyStatus">
+
+
+
+            <!-- <div class="col-md-4 col-sm-12">
+              <div class="card p-4">
+                
+                <div class="d-flex justify-content-between">
+                  <span>API Key Name</span>
+                  <span>USDT/mo</span>
+
+                </div>
+                <div class=" image d-flex flex-column justify-content-center align-items-center">
+                  <button class="imgBtn btn btn-secondary"> <img src="https://i.imgur.com/wvxPV9S.png" height="100"
+                      width="100" /></button>
+                  <span class="name mt-3">API Key Name</span>
+                  <span class="idd">Profile Name</span>
+                  
+                  
+                  
+
+                  
+                </div>
+                <br/>
+
+                <div class="chart-container" width="250" height="180">
+    <canvas  id="myChart0" >{{ chart }}</canvas>
+</div>
+                
+                
+                <div class="d-flex justify-content-center">
+                  <h5>P/L</h5>
+                </div>
+                <div class="d-flex justify-content-center">
+                  <h5 class="text-success">24215%</h5>
+                </div>
+                
+                <div class="d-flex justify-content-between">
+                  <button class="btn btn-outline-primary" (click)="gotoViewTrader()">View Trader </button>
+                  <button class="btn btn-outline-primary">Follow Trader</button>
+                </div>
+
+
+                
+              </div>
+            </div>
+
+            <div class="col-md-4 col-sm-12">
+              <div class="card p-4">
+                <div class="d-flex justify-content-between">
+                  <span>API Key Name</span>
+                  <span>USDT/mo</span>
+
+                </div>
+                <div class=" image d-flex flex-column justify-content-center align-items-center">
+                  <button class="imgBtn btn btn-secondary"> <img src="https://i.imgur.com/wvxPV9S.png" height="100"
+                      width="100" /></button>
+                  <span class="name mt-3">API Key Name</span>
+                  <span class="idd">Profile Name</span>
+                  
+                  
+                  
+
+                  
+                </div>
+                <br/>
+                <div class="chart-container" >
+                  <canvas  id="myChart1" >{{ chart }}</canvas>
+              </div>
+              
+              <div class="d-flex justify-content-center">
+                <h5>P/L</h5>
+              </div>
+              <div class="d-flex justify-content-center">
+                <h5 class="text-success">24215%</h5>
+              </div>
+                
+                <div class="d-flex justify-content-between">
+                  <button class="btn btn-outline-primary" (click)="gotoViewTrader()">View Trader</button>
+                  <button class="btn btn-outline-primary">Follow Trader</button>
+                </div>
+
+
+                
+              </div>
+            </div>
+
+            <div class="col-md-4 col-sm-12">
+              <div class="card p-4">
+                <div class="d-flex justify-content-between">
+                  <span>API Key Name</span>
+                  <span>USDT/mo</span>
+
+                </div>
+                <div class=" image d-flex flex-column justify-content-center align-items-center">
+                  <button class="imgBtn btn btn-secondary"> <img src="https://i.imgur.com/wvxPV9S.png" height="100"
+                      width="100" /></button>
+                  <span class="name mt-3">API Key Name</span>
+                  <span class="idd">Profile Name</span>
+                  
+                  
+                  
+
+                  
+                </div>
+                <br/>
+                <div class="chart-container" >
+                  <canvas  id="myChart2" >{{ chart }}</canvas>
+              </div>
+                
+              <div class="d-flex justify-content-center">
+                <h5>P/L</h5>
+              </div>
+              <div class="d-flex justify-content-center">
+                <h5 class="text-success">24215%</h5>
+              </div>
+                
+                <div class="d-flex justify-content-between">
+                  <button class="btn btn-outline-primary" (click)="gotoViewTrader()">View Trader</button>
+                  <button class="btn btn-outline-primary">Follow Trader</button>
+                </div>
+
+
+                
+              </div>
+            </div>  -->
+
+            
+              <div class="col-md-4 col-sm-12" *ngFor="let traderApi of traderApiMarketCard; let i = index">
+                <div class="card p-4">
+
+                  <div class="d-flex justify-content-between">
+                    <span>{{traderApi.apiKeyName}}</span>
+                    <span>USDT {{traderApi.monthlySubscriptionCharge}}/mo</span>
+
+                  </div>
+                  <div class=" image d-flex flex-column justify-content-center align-items-center">
+                    <button class="imgBtn btn btn-secondary"> 
+                      <img *ngIf="traderApi.profileLink == null" src="https://i.imgur.com/wvxPV9S.png" height="100"
+                      width="100" />
+                      <img *ngIf="traderApi.profileLink != null" [src]="traderApi.profileLink" height="100"
+                      width="100" />
+                      </button>
+                    <span class="name mt-3">{{traderApi.apiKeyName}}</span>
+                    <span class="idd">{{traderApi.tradeName}}</span>
+
+
+
+
+
+                  </div>
+                  <br />
+
+                  <div class="chart-container" width="250" height="180">
+                    <canvas id="myChart{{i}}">{{ chart }}</canvas>
+                  </div>
+
+
+                  <div class="d-flex justify-content-center">
+                    <h5>P/L</h5>
+                  </div>
+                  <div class="d-flex justify-content-center">
+                    <h5 class="text-success">{{traderApi.pnl}}</h5>
+                  </div>
+
+                  <div class="d-flex justify-content-between">
+                    <button class="btn btn-outline-primary" (click)="gotoViewTrader(traderApi.id,'apiKey',traderApi.isFollowed)">View Trader
+                    </button>
+                    <button class="btn btn-outline-primary" *ngIf="traderApi.isFollowed == '2'"  [disabled]="traderRole != 'copyTrader' || traderApi.allowCopyTrading == '0'" (click)="openSubscriptionInfoModal(subscription,traderApi.monthlySubscriptionCharge, traderApi.id,'apiKey')">Follow Trader</button>
+                    
+                    <button class="btn btn-outline-primary" disabled *ngIf="traderApi.isFollowed == '1'">Following</button>
+                    <button class="btn btn-outline-primary" disabled *ngIf="traderApi.isFollowed == '0'">My API</button>
+
+                  </div>
+
+
+
+                </div>
+              </div>
+
+            
+
+          </div>
+
+
+          <div class="row" *ngIf="botTraderStatus">
+
+            <div class="col-md-2 col-sm-6">
+              <select class="form-control" name="timePeriod" [(ngModel)]="exchanageName">
+                <option value="All Exchanges">All</option>
+                <option value="PAYBITO">PAYBITO</option>
+                <option value="PAYBITO">{{data.exchange}}</option>
+
+
+              </select>
+            </div>
+
+            <div class="col-md-2 col-sm-6">
+              <select class="form-control" name="timePeriod" [(ngModel)]="timePeriod">
+                <option value="All Time">All Time</option>
+                <option value="Last Month">Last Month</option>
+                <option value="Last Week">Last Week</option>
+
+              </select>
+            </div>
+            <div class="col-md-2 col-sm-6">
+              <select class="form-control" [(ngModel)]="traderNameFilter" name="traderNameFilter">
+                <option *ngFor="">Select Any</option>
+                
+                <option *ngFor="let name of traderName">{{name.traderName}}</option>
+
+
+              </select>
+            </div>
+            <div class="col-md-2 col-sm-6">
+              <select class="form-control" [(ngModel)]="marketType" name="marketType" (change)="getBaseCurrency()">
+                <option value="All Markets">All Markets</option>
+                <option value="Spot" *ngIf="data.isSpot == 1">Spot</option>
+                <option value="Futures" *ngIf="data.isFutures == 1">Futures</option>
+                <!-- <option value="Options" *ngIf="data.isOptions == 1">Options</option> -->
+
+
+              </select>
+            </div>
+
+            <div class="col-md-2 col-sm-6">
+              <select class="form-control" [(ngModel)]="basecurrency" name="basecurrency">
+                <option value="All">All Base Currencies</option>
+                <option *ngFor="let m of baseCurrencyFromApi">{{m.baseCurrency}}</option>
+                
+
+              </select>
+            </div>
+
+
+            <div class="col-md-2 col-sm-6">
+              <input type="text" class="form-control" placeholder="Minimum Trade Quantity" [(ngModel)]="minTrade"
+                name="minTrade">
+            </div>
+
+            <div class="col-md-2 col-sm-6">
+              <div class="form-check" style="padding-top: 8px;">
+                <input class="form-check-input" type="checkbox" id="flexCheckDefault" (change)="followCheckBox($event)">
+                <label class="form-check-label" for="flexCheckDefault">
+                  Show followed only
+                </label>
+              </div>
+            </div>
+            </div>
+            <div class="row" *ngIf="botTraderStatus">
+
+            <div class="col-md-2 col-sm-6" style="margin-top: 30px">
+              <button class="btn btn-outline-primary" (click)="getBotMarketDataFilter()">Filter</button>
+
+            </div>
+          </div>
+
+          <div class="row cardDiv" style="margin-top: 2%;" *ngIf="botTraderStatus">
+
+
+
+            <div *ngFor="let traderBot of traderBotsMarketCard;let i = index">
+              <div class="col-md-4 col-sm-12">
+                <div class="card p-4">
+
+                  <div class="d-flex justify-content-between">
+                    <span>{{traderBot.apiKeyName}}</span>
+                    <span>USDT {{traderBot.monthlySubscriptionCharge}}/mo</span>
+
+                  </div>
+                  <div class=" image d-flex flex-column justify-content-center align-items-center">
+                    <button class="imgBtn btn btn-secondary"> 
+                      <img *ngIf="traderBot.profileLink == null" src="https://i.imgur.com/wvxPV9S.png" height="100"
+                        width="100" />
+                        <img *ngIf="traderBot.profileLink != null" [src]="traderBot.profileLink" height="100"
+                      width="100" />
+                      </button>
+                    <span class="name mt-3">{{traderBot.apiKeyName}}</span>
+                    <span class="idd">{{traderBot.tradeName}}</span>
+
+
+
+
+
+                  </div>
+                  <br />
+
+                  <div class="chart-container" width="250" height="180">
+                    <canvas id="myChartBot{{i}}">{{ chart }}</canvas>
+                  </div>
+
+
+                  <div class="d-flex justify-content-center">
+                    <h5>P/L</h5>
+                  </div>
+                  <div class="d-flex justify-content-center">
+                    <h5 class="text-success">{{traderBot.pnl}}</h5>
+                  </div>
+
+                  <div class="d-flex justify-content-between">
+                    <button class="btn btn-outline-primary" (click)="gotoViewBotTrader(traderBot.id,'bots',traderBot.isFollowed)">View Bot
+                    </button>
+                    
+                    <button class="btn btn-outline-primary" *ngIf="traderBot.isFollowed == '2'" [disabled]="traderRole != 'copyTrader' || traderBot.allowCopyTrading == '0'" (click)="openSubscriptionInfoModal(subscription,traderBot.monthlySubscriptionCharge,traderBot.id,'bots')">Follow Bot</button>
+                    <button class="btn btn-outline-primary" disabled *ngIf="traderBot.isFollowed == '1'">Following</button>
+                    <button class="btn btn-outline-primary" disabled *ngIf="traderBot.isFollowed == '0'">My Bot</button>
+                  </div>
+
+
+
+                </div>
+              </div>
+
+            </div>
+
+
+
+          </div>
+
+
+        </div>
+      </div>
+
+
+
+
+
+
+    </div>
+  </div>
+
+
+  <ng-template #subscription let-modal>
+    <div id="myDiv" [ngClass]="Themecolor == 'Dark' ? '' : 'lightTheme'">
+    <div [ngClass]="Themecolor == 'Dark' ? '' : 'lightTheme'" class="modal-header sendreceive-wallet">
+      <h4 class="modal-title" id="modal-basic-title receiveModalLabel">Subscription info</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    
+    <div [ngClass]="Themecolor == 'Dark' ? '' : 'lightThemeModalBody'" class="modal-body">
+
+      
+<form>
+ 
+ 
+  <div class="form-group">
+    <label >Price:</label>
+   
+    <input type="text" class="form-control" value="{{subscriptionPrice}} USDT/mo"  name="price" readonly>
+  </div>
+  <div class="form-group">
+    <label >Period: </label>
+    <input type="text" class="form-control" value="30 days" name="period" readonly >
+  </div>
+  
+  <button type="submit" class="btn btn-primary" (click)="followTrader()">Subscribe</button>
+</form>
+      
+      </div>
+    </div>
+  </ng-template>
+
+  <footer class="sticky-footer">
+    <div class="container">
+      <div class="text-center"> <small>Copyright © Paybito 2019</small> </div>
+    </div>
+  </footer>
+  <a class="scroll-to-top rounded" href="#page-top"> <i class="fa fa-angle-up"></i> </a>
+</div>

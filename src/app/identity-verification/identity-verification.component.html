@@ -37,7 +37,7 @@
                    
                   
                
-                  <small style=" margin-top: 33px !important; font-size: 12px !important; font-family: Verdana !important;" [ngClass]="Themecolor == 'Dark' ? 'spanText-dark' : 'spanText-light'">Please  upload a photo without wearing any hats, masks or glasses and holding your ID Proof, Address Proof Document and a sheet of Paper with the Text - 'Only for trading cryptocurrencies on {{data.exchange}}.' Ensure all documents are clearly visible in photo.</small>
+                  <small style=" margin-top: 33px !important; font-size: 12px !important; font-family: Verdana !important;" [ngClass]="Themecolor == 'Dark' ? 'spanText-dark' : 'spanText-light'">Please  upload a photo without wearing any hats, masks or glasses and holding your ID Proof, Address Proof Document and a sheet of Paper with the Text - 'Only for trading cryptocurrencies on {{data.exchange}}.' Ensure all documents are clearly visible in photo. Please add .JPG or .PNG or .JPEG or .BMP  file. MAX limit 6 MB.</small>
       
                 </div>
               </div>
@@ -51,7 +51,9 @@
                   alt="Cancelled Cheque Copy" class="ml-2 profile-picture profile-picture-addressproof p-2 bg-black rounded" width="96" height="96" /> -->
                    <small id="adddoc" class="pp-ht1" style="color:rgb(119 176 228);  border: 1px solid;padding: 8px;" *ngIf="adddoc"><span>&#9989;</span> Uploaded file is {{addressproof}}.</small>
                    <br>
-                  <small style="margin-top: 32px !important; font-size: 12px !important; font-family: Verdana !important;" [ngClass]="Themecolor == 'Dark' ? 'spanText-dark' : 'spanText-light'">Please provide a recent Utility Bill or Bank Account Statement from within the last three months. Please do not submit Credit card bill.</small>
+                  <small style="margin-top: 32px !important; font-size: 12px !important; font-family: Verdana !important;" [ngClass]="Themecolor == 'Dark' ? 'spanText-dark' : 'spanText-light'">Please provide a recent Utility Bill or Bank Account Statement from within the last three months. Please do not submit Credit card bill. Please add .JPG .PDF or .PNG or .JPEG or .DOC or DOCX or .JFIF or .HEIC file. MAX limit 6 MB.</small>
+
+
                 </div>
               </div>
 
@@ -65,7 +67,8 @@
                    <small id="iddocf" class="pp-ht2" style="color:rgb(119 176 228);  border: 1px solid;
                    padding: 4px;
                    " *ngIf="iddocf"><span>&#9989;</span> Uploaded file is {{idf}}.</small>
-                  <small style="margin-top: 30px !important; font-size: 12px !important; font-family:Verdana !important;" [ngClass]="Themecolor == 'Dark' ? 'spanText-dark' : 'spanText-light'">Only government issued documents such as Driver's license, Identity Cards, etc, are applicable.</small>
+                  <small style="margin-top: 30px !important; font-size: 12px !important; font-family:Verdana !important;" [ngClass]="Themecolor == 'Dark' ? 'spanText-dark' : 'spanText-light'">Only government issued documents such as Driver's license, Identity Cards, etc, are applicable. Please add .JPG .PDF or .PNG or .JPEG or .DOC or DOCX or .JFIF or .HEIC file. MAX limit 6 MB.</small>
+                  
                 </div>
               </div>
 
@@ -77,7 +80,8 @@
                   <!--  <img id="aadhar_card_front_side" src="./assets/img/default.png" [lazyLoad]="aadharCardFront"
                   alt="Cancelled Cheque Copy" class="ml-2 p-2 profile-picture bg-black rounded" width="96" height="96" /> -->
                    <small id="iddocb" class="pp-ht3" style="color:rgb(119 176 228);  border: 1px solid;padding: 4px;" *ngIf="iddocb"><span>&#9989;</span> Uploaded file is {{idb}}.</small>
-                  <small style="margin-top: 30px !important; font-size: 12px !important; font-family: Verdana !important;" [ngClass]="Themecolor == 'Dark' ? 'spanText-dark' : 'spanText-light'">Only government issued documents such as Driver's license, Identity Cards, etc, are applicable.</small>
+                  <small style="margin-top: 30px !important; font-size: 12px !important; font-family: Verdana !important;" [ngClass]="Themecolor == 'Dark' ? 'spanText-dark' : 'spanText-light'">Only government issued documents such as Driver's license, Identity Cards, etc, are applicable. Please add .JPG .PDF or .PNG or .JPEG or .DOC or DOCX or .JFIF or .HEIC file. MAX limit 6 MB.</small>
+                  
                 </div>
               </div>
 
@@ -248,9 +252,11 @@
                   <div class="form-row">
                     <label for="pan_card_photo" class=" pl-3" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Bank Statement</label>
                     <div class="w-100"></div>
-                    <input type="file" id="file5" (change)="getSizeforT2('file5');getSizeforT2StatusChangeBank('file5')" class="form-control w-75 id_file bank_statement_doc"
+                    <input type="file" id="file5" (change)="getSizeforT2StatusChangeBank('file5')" class="form-control w-75 id_file bank_statement_doc"
                     [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'"
                      name="bank_statement_doc" />
+                    <small style="color:#fff ; ">* Please add .JPG .PDF or .PNG or .JPEG or .DOC or .DOCX file. MAX limit 6 MB.</small><br>
+
                     <small id="docname1" class="dconame1" style="display:none ; color:rgb(119 176 228) ;
                     margin-top: 10px;
                     /* position: absolute; */
@@ -262,9 +268,11 @@
                   <div class="form-row">
                     <label for="aadhar_card_front_side" class=" pl-3" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Tax Statement</label>
                     <div class="w-100"></div>
-                    <input type="file" id="file6" (change)="getSizeforT2('file6');getSizeforT2StatusChangeTax('file5')" class="form-control w-75 id_file tax_statement_pic"
+                    <input type="file" id="file6" (change)="getSizeforT2StatusChangeTax('file5')" class="form-control w-75 id_file tax_statement_pic"
                     [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'"
                      name="tax_statement_pic" />
+                    <small style="color:#fff ; ">* Please add .JPG .PDF or .PNG or .JPEG or .DOC or .DOCX file. MAX limit 6 MB.</small><br>
+
                     <small id="docname2" style="display:none; color:rgb(119 176 228) ;position: relative;
                     margin-top: 12px;
                     margin-right: 32px;  border: 1px solid;padding: 8px;" *ngIf="docname2"><span>&#9989;</span> Uploaded file is {{taxStatement}}.</small>
@@ -389,7 +397,7 @@
           <label for="profile_photo" class="text-white image-modification col-12">House no./Apt no./Street no. *</label>
           <div class="input-group">
             <input appAlphaNumericOnly type="text" id="address" class="form-control w-75 text-field disablecopypaste" name="address"
-              placeholder="Enter House no./Apt no./Street no." maxlength="50"/>
+              placeholder="Enter House no./Apt no./Street no." maxlength="100"/>
           </div>
         </div>
       </div>
@@ -398,7 +406,7 @@
           <label for="profile_photo" class="text-white image-modification col-12" style="padding-right: 118px;">City *</label>
           <div class="input-group">
             <input appOnlyAlphabet type="text" id="city" class="form-control w-75 text-field disablecopypaste" name="city"
-              placeholder="Enter City" maxlength="30"/>
+              placeholder="Enter City" maxlength="50"/>
           </div>
         </div>
       </div>
@@ -407,7 +415,7 @@
           <label for="profile_photo" class="text-white image-modification col-12" style="padding-right: 118px;">State *</label>
           <div class="input-group">
             <input appOnlyAlphabet type="text" id="state" class="form-control w-75 text-field disablecopypaste" name="state"
-              placeholder="Enter State" maxlength="30"/>
+              placeholder="Enter State" maxlength="50"/>
           </div>
         </div>
       </div>
@@ -539,8 +547,8 @@
           <input type="file" id="addressProof" (change)="getSize('addressProof')"
             class="form-control w-75 " name="addressProof" />
             <small style="color:#fff ; ">* Utility Bill or Bank Account Statement from the last 3 months. Please do not submit Credit card bill.</small><br>
-         
-          <div style="width: 500px;"></div>
+            <small style="color:#fff ; ">* Please add .JPG .PDF or .PNG or .JPEG or .DOC or DOCX or .JFIF or .HEIC file. MAX limit 6 MB.</small><br>
+            <div style="width: 500px;"></div>
         </div>
       </div>
     </div>
@@ -564,6 +572,9 @@
             class="form-control w-75 " name="idProofFront" />
          
             <small style="color:#fff ; ">*  Only government issued documents such as Driver's license,Identity Cards,etc,are applicable.</small><br>
+            <small style="color:#fff ; ">* Please add .JPG .PDF or .PNG or .JPEG or .DOC or DOCX or .JFIF or .HEIC file. MAX limit 6 MB.</small><br>
+            
+
             <div style="width: 500px;"></div>
         </div>
       </div>
@@ -574,6 +585,9 @@
             class="form-control w-75 " name="idProofBack" />
 
           <small style="color:#fff ; ">*  Only government issued documents such as Driver's license,Identity Cards,etc,are applicable.</small><br>
+          <small style="color:#fff ; ">* Please add .JPG .PDF or .PNG or .JPEG or .DOC or DOCX or .JFIF or .HEIC file. MAX limit 6 MB.</small><br>
+          
+
          
           <div style="width: 500px;"></div>
         </div>
@@ -648,7 +662,9 @@
     <div class="col-md-6">
       <div class="form-group">
         <label [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-dark'">Bank Statement</label>
-        <input type="file" id="bankStatementPre" (change)="getSizeforT2('bankStatementPre')" class="form-control w-75 id_file"  [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'"/>
+        <input type="file" id="bankStatementPre" (change)="getSizeforT2StatusChangeBank('bankStatementPre')" class="form-control w-75 id_file"  [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'"/><br/>
+        <small style="color:#fff ; ">* Please add .JPG .PDF or .PNG or .JPEG or .DOC or .DOCX file. MAX limit 6 MB.</small><br>
+
       </div>
     </div>
     <div class="row mt-4">
@@ -676,7 +692,9 @@
     <div class="col-md-6">
       <div class="form-group">
         <label [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-dark'">Tax Statement</label>
-        <input type="file" id="taxStatementPre" (change)="getSizeforT2('taxStatementPre')" class="form-control w-75 id_file"  [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'"/>
+        <input type="file" id="taxStatementPre"  (change)="getSizeforT2StatusChangeTax('taxStatementPre')" class="form-control w-75 id_file"  [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'"/><br/>
+        <small style="color:#fff ; ">* Please add .JPG .PDF or .PNG or .JPEG or .DOC or .DOCX file. MAX limit 6 MB.</small><br>
+
       </div>
     </div>
     <div class="row mt-4">

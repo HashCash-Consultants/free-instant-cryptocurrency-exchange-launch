@@ -1,0 +1,141 @@
+<app-navbar (themeChanged)="themeChangedHandler($event)"></app-navbar>
+
+<!-- <app-loader></app-loader> -->
+<div class="content-wrapper pt-0 pl-3" [ngClass]="Themecolor == 'Dark' ? '' : 'content-wrapper-light'">
+  
+
+
+  <div class="row d-flex" data-ng-init="loginDuration();" data-ng-controller="bankDetailsCtrl">
+    <div class="col-lg-12 col-12 bank-alighnment align-self-stretch bankDetailsCtrl" [ngClass]="Themecolor == 'Dark' ? 'bg-dark' : 'bg-light'">
+      
+      
+      <div class="p-2 rounded h-100"> <span class="font-md text-theme-dark-blue mr-2 pl-3">My Bots</span>
+        <div class="w-100"></div>
+        <div class="row d-flex mt-3 mb-4 ml-0">
+          <div class="col-md 4">
+            <button type="button" routerLink="/my-bots/create-new-bot" class="btn btn-primary" >Create a New Bot</button>
+          </div>
+        </div>
+        <div class="table-responsive-sm">
+          <table class="table table-sm table-hover">
+            <thead>
+              <tr align="center" class="" [ngClass]="Themecolor == 'Dark' ? 'bg-black text-white' : 'tableHeader-bg-light'">
+                <th scope="col">Bot ID</th>
+                <th scope="col">Exchange Name</th>
+
+                <th scope="col">Name</th>
+                <th scope="col">Description</th>
+                <th scope="col">Market</th>
+                <th scope="col">Pair</th>
+                <th scope="col">Order</th>
+                <th scope="col">Order Type</th>
+                <th scope="col">Bot Type</th>
+                <th scope="col">Expires in</th>
+                <th scope="col">Is Active</th>
+
+                <th scope="col" colspan="4">Actions</th>
+              </tr>
+            </thead>
+            
+            <tbody class="walletHistoryTableBody" id="walletHistoryTableBody">
+
+              <tr align="center" [ngClass]="Themecolor == 'Dark' ? 'newRowShade' : 'newRowShade-light'" *ngFor = "let bots of allBots">
+                <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">{{bots.botId}}</td>
+                <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">{{bots.exchange_name}}</td>
+
+                <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"> {{bots.botName}}</td>
+                <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">{{bots.botDescription}}</td>
+                <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">{{bots.botMarketType}}</td>
+                <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">{{bots.botAssetPair}}</td>
+                <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">{{bots.botTradeOrder}}</td>
+                <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">{{bots.botOrderType}}</td>
+                <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">{{bots.botType}}</td>
+                
+                <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'" *ngIf="bots.bot_is_expired == 0"> {{bots.days_left_to_expire}} Days {{bots.hours_left_to_expire}} Hours {{bots.mins_left_to_expire}} Min</td>
+                <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'" *ngIf="bots.bot_is_expired == 1"> <span style="color: red;font-size: smaller;">Expired on {{bots.bot_expired_on}}</span></td>
+                <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'" *ngIf="bots.bot_is_deleted == 1"> <span style="color: red;font-size: smaller;">Deleted on {{bots.bot_deleted_on}}</span></td>
+
+                
+                <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'" *ngIf="bots.bot_is_expired == 0 && bots.bot_is_deleted != 1">
+                  <label class="switch">
+                    <input type="checkbox" [checked] = "bots.botIsActive == 1" (change)="changeBotIsActiveStatus($event,bots.botId)">
+                    <span class="slider round"></span>
+                  </label>
+                </td>
+                <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'" *ngIf="bots.bot_is_expired == 1 && bots.bot_is_deleted != 1">
+                  
+                    <span>NA</span>
+                  
+                </td>
+                
+               
+                  <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'" *ngIf="bots.bot_is_expired == 0 && bots.bot_is_deleted != 1" style="width: 250px;">
+                  
+                  <button type="button" class="btn btn-sm btn-primary ml-1" *ngIf="bots.botIsRunning == 1" (click)="pauseBot(bots.botId, 'PAUSE')"> <i class="fa fa-pause" aria-hidden="true"></i> Pause</button>
+                  <button type="button" class="btn btn-sm btn-primary ml-1" *ngIf="bots.botIsRunning == 0" (click)="pauseBot(bots.botId, 'RESUME')"> <i class="fa fa-play" aria-hidden="true"></i> Resume</button>
+
+                  <button type="button" class="btn btn-sm btn-warning ml-1" (click)="gotoEditBot(bots)"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</button>
+                  
+                  <button type="button" class="btn btn-sm btn-danger ml-1" (click)="deleteBot(bots.botId)"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</button>
+                </td>
+                <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'" *ngIf="bots.bot_is_expired == 1 && bots.bot_is_deleted != 1">
+                  
+                  <span>NA</span>
+                
+              </td>
+                
+              </tr>
+              
+              
+            </tbody>
+            
+          </table>
+        </div>
+
+        <div class="row">
+          <div class="col-12">
+            <div class="float-sm-right btn-group btn-group-sm pagination_div" role="group"
+              aria-label="transaction-history">
+              <div class="btn-group">
+                <button class="btn btn-info" (click)="pager(1)" [disabled]="pageNo==1">
+                  <i class="fa fa-angle-double-left" aria-hidden="true"></i>
+                </button>
+                <button class="btn btn-info" (click)="pagerPre(pageNo)" [disabled]="pageNo==1">
+                  <i class="fa fa-angle-left" aria-hidden="true"></i>
+                </button>
+                <button class="btn btn-info {{pageNo==p?'active':''}} {{((p<pageNo+5)&&(p>pageNo-5))?'':'d-none'}}"
+                  (click)="pager(p);" *ngFor="let p of pgn">{{p}}</button>
+                <button class="btn btn-info" (click)="pagerNext(pageNo)" [disabled]="pageNo==pgn.length">
+                  <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </button>
+                <button class="btn btn-info" (click)="pager(pgn.length)" [disabled]="pageNo==pgn.length">
+                  <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    
+    </div>
+  </div>
+
+</div>
+
+<ng-template #addNewBot let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Create New Bot</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body" style="margin-left: 25px;">
+    
+  </div>
+  
+</ng-template>
+
+
+
+

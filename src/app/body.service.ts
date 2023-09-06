@@ -51,6 +51,7 @@ export class BodyService {
   trigxBalance: number;
   Themecolor: string;
   historyDetailsMod: any = [];
+  phoneCountryCode: any;
 
   constructor(private http: HttpClient, private data: CoreDataService, private route: Router) {
     //this.orderbk.tradePageSetup();
@@ -193,12 +194,13 @@ export class BodyService {
         this.fiatCurrencyList = arr;
 
       }, error => {
+        // console.log(error)
         if(error.status == '401'){
           this.data.logout();
           this.data.alert('Session Timeout. Login Again', 'warning');
         }else if(error.status != '200' && error.status != '429' && error.status != '403' ){
-          // this.data.alert(error.message, 'warning');
-      }
+            // this.data.alert(error.message, 'warning');
+        }
       });
 
   }
@@ -220,7 +222,7 @@ export class BodyService {
 
   getDashBoardInfo() {
     var infoObj = {};
-    // infoObj['userId'] = localStorage.getItem('user_id');
+    //infoObj['userId'] = localStorage.getItem('user_id');
     infoObj['uuid'] = localStorage.getItem('uuid');
     var jsonString = JSON.stringify(infoObj);
     this.http.post<any>(this.data.WEBSERVICE + '/user/GetUserAppSettings', jsonString, {
@@ -247,7 +249,6 @@ export class BodyService {
           this.userTierDocsStatus = result.userAppSettingsResult.userTierDocsStatus;
 
           if (result.userAppSettingsResult.user_docs_status == '') {
-
             if(this.route.url == '/identity-verification'){
 
               this.indentificationStatus = 'You are in Tier 1 , please submit documents for Tier 2 .';
@@ -257,6 +258,8 @@ export class BodyService {
             else{
               // not showing the alert message for other routes
             }
+            
+            
           }
           if (result.userAppSettingsResult.user_docs_status == '1') {
             this.indentificationStatus = '  Tier 2 Identity verification documents verified.';
@@ -301,12 +304,13 @@ export class BodyService {
           localStorage.setItem('check_id_verification_status', 'false');
         }
       }, error => {
+        // console.log(error)
         if(error.status == '401'){
           this.data.logout();
           this.data.alert('Session Timeout. Login Again', 'warning');
         }else if(error.status != '200' && error.status != '429' && error.status != '403' ){
-          // this.data.alert(error.message, 'warning');
-      }
+            // this.data.alert(error.message, 'warning');
+        }
       });
 
   }
@@ -325,7 +329,7 @@ export class BodyService {
     var userDocStatus = userAppSettingsObj.user_docs_status;
     if (userDocStatus == '') {
       this.verificationTitle = 'Submit ID Verification';
-      this.verificationText = 'Please submit Identity verification documents to access all Paybito features.';
+      this.verificationText = 'Please submit Identity verification documents to access all '+this.data.exchange+'features.';
       this.data.alert(this.verificationText, 'danger');
       this.route.navigateByUrl('/identity-verification');
       return false;
@@ -395,11 +399,10 @@ export class BodyService {
     var historyObj = {};
     historyObj['pageNo'] = pageNo;
     historyObj['noOfItemsPerPage'] = 20;
-    // historyObj['userId'] = localStorage.getItem('user_id');
+    //historyObj['userId'] = localStorage.getItem('user_id');
+    historyObj['uuid'] = localStorage.getItem('uuid');
     historyObj['timeSpan'] = this.timeSpan;
     historyObj['transactionType'] = 'all';
-    historyObj['uuid'] = localStorage.getItem('uuid')
-
     var jsonString = JSON.stringify(historyObj);
     this.http.post<any>(this.data.WEBSERVICE + '/transaction/getUserAllTransaction', jsonString, {
       headers: {
@@ -612,7 +615,7 @@ export class BodyService {
       }, reason => {
         this.data.logout();
         if (reason.error.error == 'invalid_token') {
-
+          this.data.logout();
           this.data.alert('Session Timeout. Login Again', 'warning');
         } else this.data.alert('Session Timeout. Login Again', 'danger');
       });
@@ -638,7 +641,7 @@ export class BodyService {
 
     var userObj = {};
     userObj['userId'] = localStorage.getItem('user_id');
-    userObj['uuid'] = localStorage.getItem('uuid')
+    userObj['uuid'] = localStorage.getItem('uuid');
     var jsonString = JSON.stringify(userObj);
     this.http.post<any>(this.data.WEBSERVICE + '/user/GetUserDetails', jsonString, {
       headers: {
@@ -663,7 +666,11 @@ export class BodyService {
           this.email = result.userResult.email;
           this.editEmail = result.userResult.email;
           this.phone = result.userResult.phone;
-          localStorage.setItem('phone',this.phone)
+          this.phoneCountryCode = result.userResult.countryCode;
+
+          localStorage.setItem('phone',this.phone);
+          localStorage.setItem('phoneCountryCode',this.phoneCountryCode);
+          
           this.referralCode = result.userResult.referralCode;
           this.shareUrlForFacebook = 'https://paybito.com/refer-earn-broker-app.php?uuid=' + result.userResult.uuid +'&type=web';
           
@@ -700,9 +707,7 @@ export class BodyService {
           this.data.alert('Could Not Connect To Server', 'danger');
         }
         setTimeout(() => {
-          // location.reload();
-        this.route.navigateByUrl('/login');
-
+          location.reload();
         }, 1000);
 
       });
@@ -792,6 +797,7 @@ export class BodyService {
   sessionExpiredLogout() {
     localStorage.clear();
     this.route.navigateByUrl('/login');
+    this.data.handlePageReloadForecibily(100)
   }
 
   invoiceClick() {

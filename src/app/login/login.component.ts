@@ -97,6 +97,7 @@ export class LoginComponent implements OnInit {
   currentVerson: any;
   isPhoneVerificationEnable : boolean = false;
   isGoogleAuthEnable : boolean = false;
+  userPhoneCountryCodeUsingForSendingSms: any;
 
   constructor(
     private http: HttpClient,
@@ -416,37 +417,12 @@ export class LoginComponent implements OnInit {
                 this.error = false;
                 localStorage.setItem('secondStatusCheck', 'false');
                 localStorage.setItem('countdownSec', '0')
-                localStorage.setItem('twoFactorAuth', data.userResult.twoFactorAuth)
-                this.userSmsAuthStatus = data.userResult.phoneValidation
-                localStorage.setItem('userSmsAuthStatus', this.userSmsAuthStatus)
-                this.userPhoneUsingForSendingSms = data.userResult.phone;
+               
                 this.loginResponse = data;
-                if (data.userResult.phoneValidation == '1') {
-                  this.accessTokenWillBeComingAfterVerifing = 'phone'
-                } else if (data.userResult.twoFactorAuth == '1') {
-                  this.accessTokenWillBeComingAfterVerifing = '2fa'
-                } else if (data.userResult.phoneValidation == '1' && data.userResult.twoFactorAuth == '1') {
-                  this.accessTokenWillBeComingAfterVerifing = '2fa'
-                } else {
-                  this.accessTokenWillBeComingAfterVerifing = 'none'
-                }
-                if (this.userSmsAuthStatus == 1) {
-                  this.handleOpenSmsOtp();
-                } else if (localStorage.getItem('twoFactorAuth') == '1') {
-                  this.loader = false;
-                  //this.otpBlock = true;
-                  this.modalService.dismissAll()
-
-                  this.modalService.open(this.twoFactorAuth, { centered: true, backdrop: false, keyboard: false });
-
-                  this.isLoginButtonEnabled = true
-                  $('.otp_segment').show();
-                  $('.otp_btn').show();
-                  $('.login_btn').hide();
-                  $('#loginInputOTP').focus();
-                } else {
+               
+                
                   this.setLoginData(this.loginResponse);
-                }
+                
 
               }
             }, error => {
@@ -485,7 +461,7 @@ export class LoginComponent implements OnInit {
 
   /* Method defination for calling API for sms auth   */
   async handleSmsAuthSubmit() {
-    let isOtpValidated = await this.data.handleConfirmOtpInSmsForLogin('loginverifymobileotp', this.userPhoneUsingForSendingSms, this.smsOtp, this.password,'');
+    let isOtpValidated = await this.data.handleConfirmOtpInSmsForLogin('loginverifymobileotp', this.userPhoneUsingForSendingSms, this.userPhoneCountryCodeUsingForSendingSms, this.smsOtp, this.password,'');
 
     if (isOtpValidated) {
 
@@ -516,7 +492,9 @@ export class LoginComponent implements OnInit {
   async handleSendOtpThroughSms() {
     this.disabledSpan = true;
     let payload = {
-      phone : this.userPhoneUsingForSendingSms
+      phone : this.userPhoneUsingForSendingSms,
+      countryCode: this.userPhoneCountryCodeUsingForSendingSms
+
     }
     let isOtpSendToPhone = await this.data.handleSendOtpInSms(payload, 'loginmobileotp');
     if (isOtpSendToPhone) {
@@ -631,7 +609,7 @@ export class LoginComponent implements OnInit {
           localStorage.setItem('BROKERID', dataRecheck.userResult.brokerId);
               this.data.BROKERID = dataRecheck.userResult.brokerId;
 
-              this.data.getAllBrokerDetails();
+              this.data.getBrokerWhitelabelDetails();
               this.data.getAllBrokerMarkets();
 
           this.cookie.set('access_token', localStorage.getItem('access_token'), 60);
@@ -835,8 +813,16 @@ export class LoginComponent implements OnInit {
             this.modalService.dismissAll();
             if (data.error.error_data == '1') {
               this.data.alert(data.error.error_msg,'danger')
+            }else if(data.error.error_data == '2'){
+              this.data.alert(data.error.error_msg,'danger')
             }else{
               this.userPhoneUsingForSendingSms = data.userResult.phone;
+              this.userPhoneCountryCodeUsingForSendingSms = data.userResult.countryCode;
+
+
+
+              localStorage.setItem('twoFactorAuth', data.userResult.twoFactorAuth)
+            localStorage.setItem('userSmsAuthStatus', data.userResult.phoneValidation)
               //Show hide GA field in popup
               if(data.userResult.twoFactorAuth == 1){
                 this.isGoogleAuthEnable = true
@@ -919,7 +905,7 @@ export class LoginComponent implements OnInit {
       this.countdownSec = i;
       localStorage.setItem('countdownSec', this.countdownSec)
       i-- || clearInterval(this.showCountdownVar) || this.newF();  //if i is 0, then stop the interval
-      console.log(i)
+      // console.log(i)
 
     }.bind(this), 1000)
 
@@ -932,27 +918,27 @@ export class LoginComponent implements OnInit {
   }
 
 
-  checkAppVesion(){
+  // checkAppVesion(){
 
-    this.http.get<any>(this.data.WEBSERVICE + '/home/checkAppVersion?appVersion='+this.data.appVersion)
-      .subscribe(response => {
+  //   this.http.get<any>(this.data.WEBSERVICE + '/home/checkAppVersion?appVersion='+this.data.appVersion)
+  //     .subscribe(response => {
 
-        if(this.data.appVersion < response.currentVersion){
+  //       if(this.data.appVersion < response.currentVersion){
 
-          this.modalService.open(this.versionModal, { centered: true});
-          this.appLink = response.link
-          this.currentVerson = response.currentVersion
-
-
-        }
+  //         this.modalService.open(this.versionModal, { centered: true});
+  //         this.appLink = response.link
+  //         this.currentVerson = response.currentVersion
 
 
-        // console.log('version',response);
+  //       }
+
+
+  //       // console.log('version',response);
         
         
 
-      })
+  //     })
 
-  }
+  // }
 
 }

@@ -1,0 +1,231 @@
+<!-- <app-navbar></app-navbar> -->
+<app-navbar (themeChanged)="themeChangedHandler($event)"></app-navbar>
+
+<div class="content-wrapper pt-0 pl-3" [ngClass]="Themecolor == 'Dark' ? '' : 'content-wrapper-light'">
+
+  <div class="container-fluid" data-ng-controller="profileCtrl" data-ng-init="loginDuration();">
+    <div class="row d-flex">
+
+      <div class="col-12 col-md-12 mt-3">
+        <div class=" p-2 pr-3 rounded align-self-stretch h-100" [ngClass]="Themecolor == 'Dark' ? 'bg-dark' : 'bg-light'">
+          <div class="w-100 mt-2"></div>
+
+          <div class="d-flex justify-content-between">
+            <div class="p-2"><h4>My API Keys</h4></div>
+            <div class="p-2">
+              <button class="btn btn-primary" style="margin-bottom: 12px;" (click)="goToSettings()">Create API Key</button> &nbsp;&nbsp;
+
+              <button class="btn btn-success" style="margin-bottom: 12px;" (click)="openAddApiKeyModal(deposit)" >Add API Key</button>
+            </div>
+
+          </div>
+
+          
+
+          <div class="table-responsive-sm">
+            
+
+           
+            <table class="table table-sm table-hover">
+              <thead>
+                <tr align="center" [ngClass]="Themecolor == 'Dark' ? 'bg-black text-white' : 'tableHeader-bg-light'">
+                  <th  scope="col" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="" style="font-size:16px">Key Name</th>
+                  <th scope="col" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="" style="font-size:16px">Exchange</th>
+                  <th scope="col" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="" style="font-size:16px">Market</th>
+                  <th scope="col" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="" style="font-size:16px">API Key</th>
+                  <th scope="col" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="" style="font-size:16px">Status</th>
+                  <th colspan="2" scope="col" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="" style="font-size:16px">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr align="center" *ngFor = "let keys of allApiKeys">
+                  <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="extraPaddingTop">{{keys.apiKeyName}}</td>
+                  <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="extraPaddingTop">{{keys.exchange_name}}</td>
+
+                  <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="extraPaddingTop">{{keys.marketType}}</td>
+                  <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="extraPaddingTop">{{keys.apiKey}}</td>
+                  <!-- <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="extraPaddingTop">{{keys.secretKey}}</td> -->
+                  <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="extraPaddingTop">
+                    <label class="switch">
+                      <input type="checkbox" [checked]="keys.status == '1'" (change)="toggleData($event, keys)">
+                      <span class="slider round"></span>
+                    </label>
+                  </td>
+                  <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="">
+                    <tr>
+                      <td><button class="btn btn-warning" (click)="openUpdateApiKeyModal(update, keys)">Edit</button></td> 
+                      <td><button class="btn btn-danger" (click)="deleteApiKey(keys)">Delete</button></td>
+                    </tr>
+                  </td>
+          
+          
+                </tr>
+                
+                
+              </tbody>
+            </table>
+          </div>
+
+        
+
+          
+          
+        </div>
+      </div>
+
+
+
+         
+      
+      
+    </div>
+  </div>
+
+  <ng-template #deposit let-modal>
+    <div id="myDiv" [ngClass]="Themecolor == 'Dark' ? '' : 'lightTheme'">
+    <div [ngClass]="Themecolor == 'Dark' ? '' : 'lightTheme'" class="modal-header sendreceive-wallet">
+      <h4 class="modal-title" id="modal-basic-title receiveModalLabel">Add Api Key</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    
+    <div [ngClass]="Themecolor == 'Dark' ? '' : 'lightThemeModalBody'" class="modal-body">
+
+      
+<form>
+  <div class="form-group">
+    <label for="exampleInputEmail1">Choose Exchange</label>
+   <select class="form-control" [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'" [(ngModel)]="exchangeName" name="exchange">
+    <option value="PAYBITO">{{data.exchange}}</option>
+    <option value="BINANCE">Binance</option>
+
+
+   </select>
+  </div>
+  <div class="form-group">
+    <label for="exampleInputEmail1">Choose Market</label>
+   <select class="form-control" [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'" [(ngModel)]="market" name="market" (change)="showBinancePopup(binancePopup)">
+    <option value="">select market</option>
+    
+    <option value="SPOT" *ngIf="data.isSpot == 1">Spot</option>
+    <option value="FUTURES" *ngIf="data.isFutures == 1">Futures</option>
+    <!-- <option value="OPTIONS" *ngIf="data.isOptions == 1">Options</option> -->
+
+
+   </select>
+  </div>
+ 
+  <div class="form-group">
+   <label >Enter API key name</label>
+   <input type="text" class="form-control" [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'" [(ngModel)]="apiKeyName" name="apiKeyName" min="1" max="30"  
+   placeholder="Enter API Key Name"  (keypress)="VALIDATION1($event)">
+    
+  </div>
+  <div class="form-group">
+    <label >Enter API key</label>
+    <input type="text" class="form-control" [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'" [(ngModel)]="apiKey" 
+    name="apiKey" min="1" max="200"  placeholder="Enter API key" (keypress)="VALIDATION2($event)">
+     
+   </div>
+  <div class="form-group">
+    <label >Secret Key</label>
+    <input type="text" class="form-control" [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'" [(ngModel)]="secretKey" 
+    min="1" max="200" name="secretKey"  placeholder="Enter Secret Key" (keypress)="VALIDATION2($event)">
+  </div>
+  
+  <button type="submit" class="btn btn-primary" [disabled]="apiKey == ''" (click)="addApiKey()">Submit</button>
+</form>
+      
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template #update let-modal>
+    <div id="myDiv" [ngClass]="Themecolor == 'Dark' ? '' : 'lightTheme'">
+    <div [ngClass]="Themecolor == 'Dark' ? '' : 'lightTheme'" class="modal-header sendreceive-wallet">
+      <h4 class="modal-title" id="modal-basic-title receiveModalLabel">Update Api Key</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    
+    <div [ngClass]="Themecolor == 'Dark' ? '' : 'lightThemeModalBody'" class="modal-body">
+
+      
+<form>
+  <div class="form-group">
+    <label for="exampleInputEmail1">Choose Exchange</label>
+   <select class="form-control" [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'" [(ngModel)]="exchangeName" name="exchange">
+    <option value="PAYBITO">{{data.exchange}}</option>
+    <option value="BINANCE">Binance</option>
+
+
+   </select>
+  </div>
+  <div class="form-group">
+    <label for="exampleInputEmail1">Choose Market</label>
+   <select class="form-control" [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'" [(ngModel)]="market" name="market">
+
+    <option value="SPOT" *ngIf="data.isSpot == 1">Spot</option>
+    <option value="FUTURES" *ngIf="data.isFutures == 1">Futures</option>
+    <!-- <option value="OPTIONS" *ngIf="data.isOptions == 1">Options</option> -->
+
+
+   </select>
+  </div>
+ 
+  <div class="form-group">
+   <label >Enter API key name</label>
+   <input type="text" class="form-control" [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'" [(ngModel)]="apiKeyName" name="apiKeyName" 
+    (keypress)="VALIDATION1($event)"  placeholder="Enter API Key Name" min="1" max="30">
+    
+  </div>
+  <div class="form-group">
+    <label >Enter API key</label>
+    <input type="text" class="form-control" [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'" min="1" max="200" [(ngModel)]="apiKey" name="apiKey" (keypress)="VALIDATION2($event)"  placeholder="Enter API key">
+     
+   </div>
+  <div class="form-group">
+    <label >Secret Key</label>
+    <input type="text" class="form-control" [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'" min="1" max="200" [(ngModel)]="secretKey" name="secretKey" (keypress)="VALIDATION2($event)"  placeholder="Enter Secret Key">
+  </div>
+  
+  <button type="submit" class="btn btn-primary" (click)="updateKey()">Submit</button>
+</form>
+      
+      </div>
+    </div>
+  </ng-template>
+
+
+
+
+  <ng-template #binancePopup let-modal>
+    <div id="myDiv" [ngClass]="Themecolor == 'Dark' ? '' : 'lightTheme'">
+    <div [ngClass]="Themecolor == 'Dark' ? '' : 'lightTheme'" class="modal-header sendreceive-wallet">
+      <h4 class="modal-title" id="modal-basic-title receiveModalLabel">IP Whitelist</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    
+    <div [ngClass]="Themecolor == 'Dark' ? '' : 'lightThemeModalBody'" class="modal-body">
+
+      <p>Please make sure to whitelist this IP address  52.195.139.223 with your api key in binance site of spot/futures market.</p>
+
+      
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="modal.dismiss()">Close</button>
+        </div>
+    </div>
+  </ng-template>
+  <footer class="sticky-footer">
+    <div class="container">
+      <div class="text-center"> <small>Copyright © Paybito 2019</small> </div>
+    </div>
+  </footer>
+  <a class="scroll-to-top rounded" href="#page-top"> <i class="fa fa-angle-up"></i> </a>
+</div>

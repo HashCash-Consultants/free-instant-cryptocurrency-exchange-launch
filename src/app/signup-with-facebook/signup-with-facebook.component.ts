@@ -1,4 +1,4 @@
-import { Component, OnInit,DoCheck } from '@angular/core';
+import { Component, OnInit, DoCheck } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { CoreDataService } from '../core-data.service';
@@ -50,7 +50,7 @@ export class SignupWithFacebookComponent implements OnInit {
   public Isdesktop: any;
   deviceInfo = null;
 
-  constructor(private route: Router, private activeRoute: ActivatedRoute, public data: CoreDataService, private http: HttpClient, private modalService: NgbModal, private deviceService: DeviceDetectorService, private cookie: CookieService) { 
+  constructor(private route: Router, private activeRoute: ActivatedRoute, private data: CoreDataService, private http: HttpClient, private modalService: NgbModal, private deviceService: DeviceDetectorService, private cookie: CookieService) {
     this.route.routeReuseStrategy.shouldReuseRoute = () => false;
   }
 
@@ -136,11 +136,11 @@ export class SignupWithFacebookComponent implements OnInit {
         //this.signupObj['brokerId'] = this.data.BROKERID
         payload['gRecaptchaResponse'] = this.captcha;
         payload['loginType'] = 2;
-        if(localStorage.getItem('socialLoginType') == 'facebook'){
+        if (localStorage.getItem('socialLoginType') == 'facebook') {
           payload['socialMediaId'] = localStorage.getItem('facebook_app_id');
-        }else if(localStorage.getItem('socialLoginType') == 'google'){
+        } else if (localStorage.getItem('socialLoginType') == 'google') {
           payload['socialMediaId'] = localStorage.getItem('google_app_id');
-        }else if(localStorage.getItem('socialLoginType') == 'linkedin'){
+        } else if (localStorage.getItem('socialLoginType') == 'linkedin') {
           payload['socialMediaId'] = localStorage.getItem('linkedin_app_id');
         }
         payload['brokerId'] = this.broker
@@ -157,11 +157,8 @@ export class SignupWithFacebookComponent implements OnInit {
         payload['repassword1'] = this.userrepassword1;
         payload['password'] = this.userpassword;
         payload['country'] = '';
-        payload['email']=this.facebookemail;
-
-        localStorage.setItem('phoneUsedForRegistration',payload['phone']);
-
-
+        payload['email'] = this.facebookemail;
+        localStorage.setItem('phoneUsedForRegistration', payload['phone']);
         var jsonString = JSON.stringify(payload);
         console.log('payload data', jsonString);
 
@@ -242,34 +239,34 @@ export class SignupWithFacebookComponent implements OnInit {
   }
   checkEmail() {
     if (this.facebookemail != undefined && this.facebookemail != '') {
-        //if (this.is_mail(this.facebookemail) == true) {
-          var emailValue = this.facebookemail;
-          var emailObj = {};
-          emailObj['email'] = emailValue;
-          var jsonString = JSON.stringify(emailObj);
-          this.http.post<any>(this.data.WEBSERVICE + '/user/CheckEmail', jsonString, {
-            headers: {
+      //if (this.is_mail(this.facebookemail) == true) {
+      var emailValue = this.facebookemail;
+      var emailObj = {};
+      emailObj['email'] = emailValue;
+      var jsonString = JSON.stringify(emailObj);
+      this.http.post<any>(this.data.WEBSERVICE + '/user/CheckEmail', jsonString, {
+        headers: {
 
-              'Content-Type': 'application/json'
+          'Content-Type': 'application/json'
+        }
+      })
+        .subscribe(response => {
+          var result = response;
+          if (result.error.error_data != '0') {
+            this.data.alert(result.error.error_msg, 'danger');
+          } else {
+            if (result.userResult.checkEmailPhoneFlag == 1) {
+              this.data.alert('Email already registered , please try with another email address', 'warning');
+              this.facebookemail = '';
+            } else {
+
             }
-          })
-            .subscribe(response => {
-              var result = response;
-              if (result.error.error_data != '0') {
-                this.data.alert(result.error.error_msg, 'danger');
-              } else {
-                if (result.userResult.checkEmailPhoneFlag == 1) {
-                  this.data.alert('Email already registered , please try with another email address', 'warning');
-                  this.facebookemail = '';
-                } else {
-
-                }
-              }
-            }, reason => {
-              this.data.alert('Internal Server Error', 'danger')
-            });
-        /* } else {
-        } */
+          }
+        }, reason => {
+          this.data.alert('Internal Server Error', 'danger')
+        });
+      /* } else {
+      } */
     } else {
       this.data.alert('Please Provide Email Id', 'warning');
     }
@@ -347,7 +344,7 @@ export class SignupWithFacebookComponent implements OnInit {
   }
 
   checkAlphaNumeric(string) {
-    if (string.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$!@#.])[a-zA-Z0-9$!@.#]{8,35}$/)) {
+    if (string.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$!@.])[a-zA-Z0-9$!.@]{8,35}$/)) {
       return true;
     } else {
       return false;
@@ -359,7 +356,7 @@ export class SignupWithFacebookComponent implements OnInit {
     return regex.test(email);
   }
 
-  is_name(name){
+  is_name(name) {
     let regex = /^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/;
     return regex.test(name);
   }
@@ -418,45 +415,59 @@ export class SignupWithFacebookComponent implements OnInit {
     }
   }
 
-      /* Method defination for broker id check */
-      handleBrokerIdCheck = (e) => {
-        let value  = e.target.value;
-        if(value != ''){
-    
-          let payload = {
-            brokerId : value
-          }
-    
-          this.http.post<any>(this.data.WEBSERVICE + '/user/CheckBroker', JSON.stringify(payload), {
-            headers: {
-    
-              'Content-Type': 'application/json'
-            }
-          })
-            .subscribe(response => {
-              // wip(0);
-              var result = response;
-              if (result.error.error_data != '0') {
-                e.target.value = ''
-                this.broker = '';
-                this.step = 2;
-                this.data.alert(result.error.error_msg, 'danger');
-              } else {
-                
-              }
-            }, reason => {
-              // wip(0);
-              this.data.alert('Internal Server Error', 'danger')
-    
-            });
-        }
-    
-        
+  /* Method defination for broker id check */
+  handleBrokerIdCheck = (e) => {
+    let value = e.target.value;
+    if (value != '') {
+
+      let payload = {
+        brokerId: value
       }
+
+      this.http.post<any>(this.data.WEBSERVICE + '/user/CheckBroker', JSON.stringify(payload), {
+        headers: {
+
+          'Content-Type': 'application/json'
+        }
+      })
+        .subscribe(response => {
+          // wip(0);
+          var result = response;
+          if (result.error.error_data != '0') {
+            e.target.value = ''
+            this.broker = '';
+            this.step = 2;
+            this.data.alert(result.error.error_msg, 'danger');
+          } else {
+
+          }
+        }, reason => {
+          // wip(0);
+          this.data.alert('Internal Server Error', 'danger')
+
+        });
+    }
+
+
+  }
+
+  /* Method defination for copy broker id */
+  copyBrokerId = () => {
+    let copyText = document.getElementById("brokerIdField") as HTMLInputElement;
+
+    // Select the text field
+    copyText.select();
+    copyText.setSelectionRange(0, 99999); // For mobile devices
+
+    // Copy the text inside the text field
+    // navigator.clipboard.writeText(copyText.value);
+    window.navigator['clipboard'].writeText(copyText.value);
+    this.data.alert('Broker Id Copied', 'success');
+  }
 
   ngOnInit() {
     //console.log(localStorage.getItem('facebook_email'),localStorage.getItem('facebook_name'))
-    if(localStorage.getItem('socialLoginType') == 'facebook'){
+    if (localStorage.getItem('socialLoginType') == 'facebook') {
       if (localStorage.getItem('facebook_email') != 'undefined') {
 
         this.facebookemail = localStorage.getItem('facebook_email')
@@ -464,15 +475,15 @@ export class SignupWithFacebookComponent implements OnInit {
       } else {
         this.facebookemail = ''
       }
-  
+
       if (localStorage.getItem('facebook_name') != 'undefined') {
-  
+
         this.facebookname = localStorage.getItem('facebook_name')
       } else {
         this.facebookname = ''
       }
 
-    }else if(localStorage.getItem('socialLoginType') == 'google'){
+    } else if (localStorage.getItem('socialLoginType') == 'google') {
       if (localStorage.getItem('google_email') != 'undefined') {
 
         this.facebookemail = localStorage.getItem('google_email')
@@ -480,14 +491,14 @@ export class SignupWithFacebookComponent implements OnInit {
       } else {
         this.facebookemail = ''
       }
-  
+
       if (localStorage.getItem('google_name') != 'undefined') {
-  
+
         this.facebookname = localStorage.getItem('google_name')
       } else {
         this.facebookname = ''
       }
-    }if(localStorage.getItem('socialLoginType') == 'linkedin'){
+    } if (localStorage.getItem('socialLoginType') == 'linkedin') {
       if (localStorage.getItem('linkedin_email') != 'undefined') {
 
         this.facebookemail = localStorage.getItem('linkedin_email')
@@ -495,32 +506,32 @@ export class SignupWithFacebookComponent implements OnInit {
       } else {
         this.facebookemail = ''
       }
-  
+
       if (localStorage.getItem('linkedin_name') != 'undefined') {
-  
+
         this.facebookname = localStorage.getItem('linkedin_name')
       } else {
         this.facebookname = ''
       }
     }
 
-    if(
-      localStorage.getItem('referralCodeFromUrl') != undefined && 
-      localStorage.getItem('referralCodeFromUrl') != 'undefined' && 
-      localStorage.getItem('referralCodeFromUrl') != 'null' 
-    ){
+    if (
+      localStorage.getItem('referralCodeFromUrl') != undefined &&
+      localStorage.getItem('referralCodeFromUrl') != 'undefined' &&
+      localStorage.getItem('referralCodeFromUrl') != 'null'
+    ) {
       this.userreferralCode = localStorage.getItem('referralCodeFromUrl')
     }
 
-    if(
-      localStorage.getItem('brokerIdFromUrl') != undefined && 
-      localStorage.getItem('brokerIdFromUrl') != 'undefined' && 
-      localStorage.getItem('brokerIdFromUrl') != 'null' 
-    ){
+    if (
+      localStorage.getItem('brokerIdFromUrl') != undefined &&
+      localStorage.getItem('brokerIdFromUrl') != 'undefined' &&
+      localStorage.getItem('brokerIdFromUrl') != 'null'
+    ) {
       this.broker = localStorage.getItem('brokerIdFromUrl');
     }
-    
-    
+
+    this.broker = this.data.BROKERID;
 
     this.generateUUID();
     this.epicFunction();
@@ -537,8 +548,8 @@ export class SignupWithFacebookComponent implements OnInit {
     });
   }
 
-  ngDoCheck(){
-    
+  ngDoCheck() {
+
   }
 
 }

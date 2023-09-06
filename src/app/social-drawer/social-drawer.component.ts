@@ -16,7 +16,6 @@ export class SocialDrawerComponent implements OnInit {
   questionField: string = ''
   @Input() Themecolor = 'Dark';
 
-
   constructor(private http: HttpClient, public data: CoreDataService, public main: BodyService) { }
 
   /* Method defination for selecting social button */
@@ -27,7 +26,7 @@ export class SocialDrawerComponent implements OnInit {
 
   /* Method defination for posting question button click */
   handlePostQuestion = () => {
-    let shareUrl = 'https://www.paybito.com/download-app.php?uuid=' + localStorage.getItem('uuid') +'&from=exchange';
+    let shareUrl = 'https://www.paybito.com/download-app-paybito.php?uuid=' + localStorage.getItem('uuid') +'&from=exchange';
 
     if (this.selectedSocialBrand == 'Facebook') {
 

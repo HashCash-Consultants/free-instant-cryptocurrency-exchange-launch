@@ -47,23 +47,15 @@ export class DerivativeWebSocketAPI {
         this.stompClient.debug = null
       }else{
         //console.log('else')
-        // window.location.href = "https://trade.paybito.com/";
+        // window.location.href = this.data.brokerDomain;
       }
         
     };
 
     _disconnect() {
-      try{
         if (this.stompClient !== null) {
-          this.stompClient.disconnect();
-      }
-
-      }
-      catch{
-
-        console.log('connection not established yet')
-
-      }
+            this.stompClient.disconnect();
+        }
     }
 
     // on error, schedule a reconnection attempt
@@ -138,17 +130,13 @@ export class DerivativeWebSocketAPI {
             this._send(req);
           }
           else{
-           // window.location.href = "https://trade.paybito.com/";
+           // window.location.href = this.data.brokerDomain;
           }
         }
       
         catch(e){
          // window.location.href = "http://54.193.164.152//";
-          // location.reload();
-        //this.route.navigateByUrl('/login');
-        //console.log('seting the true in catch')
-        localStorage.setItem('isTimeToRelad','true');
-
+         location.reload();
         }
       }
        

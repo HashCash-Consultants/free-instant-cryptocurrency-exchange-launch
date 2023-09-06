@@ -1,0 +1,51 @@
+.card {
+    /* width: 350px; */
+    background-color: #2c313c;
+    border: none;
+    cursor: pointer;
+    transition: all 0.5s;
+    color: #fff;
+    min-height: 200px;
+
+}
+.traderLabel{
+    color: gray;
+}
+.imgBtn {
+    height: 100px;
+    width: 100px;
+    border-radius: 50%
+}
+.traderProfileImage{
+    padding: 10px;
+}
+.traderValue{
+    font-size: 15px;
+    font-weight: 600;
+}
+
+/* .table tr {
+    background-color: #282c34 !important;
+    
+} */
+.newRowShade{
+    background-color: #282c34 ;
+    border-top: 4px solid #2c313c;
+    
+    
+    }
+
+    .smallFont{
+        font-size: 11px;
+    }
+
+    .paddingforMobile{
+        margin-left: 6px;
+    }
+
+    @media (max-width:480px){
+        .paddingforMobile{
+        margin-top: 16px;
+        margin-left: 0px;
+        }
+      }

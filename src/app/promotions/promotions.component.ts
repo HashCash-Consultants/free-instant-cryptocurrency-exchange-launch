@@ -14,7 +14,7 @@ export class PromotionsComponent implements OnInit {
   private checkmailApi: Subscription;
   refferedList: Array<string> = [];
   showReferredUsers: boolean = false
-  Themecolor: string = 'Dark';
+  Themecolor: string;
   constructor(private http: HttpClient, public data: CoreDataService, public main: BodyService) { }
   signupObj: any = {};
   isRefferdListRendered: boolean = false;
@@ -35,9 +35,6 @@ export class PromotionsComponent implements OnInit {
 
 
     this.Themecolor = localStorage.getItem('themecolor');
-    if(localStorage.getItem('themecolor') == '' || localStorage.getItem('themecolor') == null || localStorage.getItem('themecolor') == 'null'  || localStorage.getItem('themecolor') == undefined){
-      this.Themecolor = 'Dark';
-    }
     //console.log('saved theme', this.Themecolor)
   }
 
@@ -137,10 +134,6 @@ export class PromotionsComponent implements OnInit {
     if (this.checkmailApi != undefined) {
       this.checkmailApi.unsubscribe();
     }
-  }
-
-  openInBrowser(){
-    localStorage.setItem('openInBrowser', 'true')
   }
 
 }

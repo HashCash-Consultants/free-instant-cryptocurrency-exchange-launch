@@ -4,7 +4,7 @@
   <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
     <div class="container-fluid">
       <a class="navbar-brand1" href="#">
-        <!-- <img src="./assets/img/logo-white-paybito.png" alt="..." style="width:70%"> -->
+        <img src="../../assets/img/logo-white-paybito.png" alt="..." style="width: 72%;">
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -116,14 +116,6 @@
            <button class="btn btn-primary col-md-5" *ngIf="step == 5 " type="button" (click)="handleSubmitButtonClick()"
              style="width: 125px;" [disabled]="!captchaNextButton"> Submit</button>
          </div>
-
-         <div class="row">
-          <button class="brn btn-success" style="
-          margin-left: 14px;
-          margin-top: 18px;
-      "(click)="data.logout()">Goto Login</button>
-
-         </div>
           </form>
         </div>
         <div class="col-lg-3"></div>
@@ -141,10 +133,11 @@
     </button>
   </div> -->
   <div class="modal-body" style="margin-top: 39px;margin-left: 44px;">
-    <p>PayBito Broker / Membership ID is PAYB18022021121103.</p>
+    <p>{{data.exchange}} Broker / Membership ID is {{data.BROKERID}}.<input type="text" id="brokerIdField" style="display:none;" [value]="data.BROKERID"></p>
     <p>Please use this or the one provided by your Broker.</p>
   </div>
   <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="copyBrokerId()">Copy</button>
     <button type="button" class="btn btn-primary" (click)="modal.dismiss()">Close</button>
   </div>
 </ng-template>

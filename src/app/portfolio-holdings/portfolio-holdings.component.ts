@@ -4,7 +4,6 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CoreDataService } from '../core-data.service';
 import * as $ from 'jquery';
 import { StopLossComponent } from '../stop-loss/stop-loss.component';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-portfolio-holdings',
@@ -47,7 +46,7 @@ export class PortfolioHoldingsComponent implements OnInit {
   baseCurrencyName:any;
   assetcode:any;
   mpTransactionid:any;
-  constructor(private stoploss:StopLossComponent,private http: HttpClient,private data:CoreDataService, private modalService: NgbModal,private route: Router) { }
+  constructor(private stoploss:StopLossComponent,private http: HttpClient,private data:CoreDataService, private modalService: NgbModal,) { }
 
   ngOnInit() {
     this.data.currentMessage1.subscribe(message1=>{
@@ -164,7 +163,7 @@ export class PortfolioHoldingsComponent implements OnInit {
                 $('.tradeBtn').attr('disabled', true);
               } else {
                 var inputObj = {};
-                inputObj['customerId'] = localStorage.getItem('user_id');
+                // inputObj['customerId'] = localStorage.getItem('user_id');
                 inputObj['uuid'] = localStorage.getItem('uuid');
 
                 inputObj['selling_asset_code'] = (this.baseCurrencyName).toUpperCase();
@@ -188,15 +187,11 @@ export class PortfolioHoldingsComponent implements OnInit {
                       var result = data;
                       if (result.error!= '0') {
                           this.data.alert(result.message, 'danger');
-                          // location.reload();
-                              this.data.reloadPage(this.route.url);
-
+                          location.reload();
                       } else {
                         this.marginReset();
                         this.data.alert(result.message, 'success');
-                        // location.reload();
-                            this.data.reloadPage(this.route.url);
-
+                        location.reload();
                       }
                       //this.marginReset();
                     });
@@ -253,7 +248,7 @@ export class PortfolioHoldingsComponent implements OnInit {
                 $('.tradeBtn').attr('disabled', true);
               } else {
                 var inputObj = {};
-                inputObj['customerId'] = localStorage.getItem('user_id');
+                // inputObj['customerId'] = localStorage.getItem('user_id');
                 inputObj['uuid'] = localStorage.getItem('uuid');
 
                 inputObj['selling_asset_code'] = (this.curencyName).toUpperCase();
@@ -277,15 +272,11 @@ export class PortfolioHoldingsComponent implements OnInit {
                       var result = data;
                       if (result.error!= '0') {
                           this.data.alert(result.message, 'danger');
-                          // location.reload();
-      this.data.reloadPage(this.route.url);
-
+                          location.reload();
                       } else {
                         this.marginReset();
                         this.data.alert(result.message, 'success');
-                        // location.reload();
-      this.data.reloadPage(this.route.url);
-
+                        location.reload();
                       }
                       //this.marginReset();
                     });

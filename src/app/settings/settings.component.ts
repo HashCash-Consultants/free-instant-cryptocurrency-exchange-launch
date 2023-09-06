@@ -9,7 +9,6 @@ import { NavbarComponent } from '../navbar/navbar.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { not } from '@angular/compiler/src/output/output_ast';
 import { element } from '@angular/core/src/render3/instructions';
-import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-settings',
@@ -80,7 +79,6 @@ export class SettingsComponent implements OnInit {
     gaOtpForSaveApi: string = '';
     smsOtpForRegisteredNo: string = '';
     smsOtpForNewNo: string = '';
-    isSmsOtpProceedClicked: boolean = false;
     isDisableSendOtpButtonForRegisteredPhone: boolean = false;
     isDisableSendOtpButtonForNewPhone: boolean = false;
     ipRestrictStatus: number = 0
@@ -99,37 +97,39 @@ export class SettingsComponent implements OnInit {
     apiKeyDataForEdit: any
     intervalMessageForDeleteApi: string = '';
     isGetCodeForSmsOtpEnabledForDeleteApi: boolean = false
-    @ViewChild('smsAuthModalForPhoneChange')smsAuthModalForPhoneChange: any;
+    @ViewChild('smsAuthModalForPhoneChange') smsAuthModalForPhoneChange: any;
     @ViewChild('ipAddressModal') ipAddressModal: any;
     @ViewChild('editApiModal') editApiModal: any;
     @ViewChild('afterEditAuthModal') afterEditAuthModal: any;
     @ViewChild('preDeleteAuthModal') preDeleteAuthModal: any;
     @ViewChild('authCode') authCode: any;
-    
-    emailOtpForEdit : string = '';
-    phoneOtpForEdit : string = '';
-    gaOtpForEdit : string = '';
-    emailOtpForDelete : string = '';
-    phoneOtpForDelete : string = '';
-    gaOtpForDelete : string = '';
-    registeredPhone : string = '';
-    isEditButtonForApiDisable : boolean = false;
-    constructor(private http: HttpClient, 
-        private main: BodyService, 
-        public data: CoreDataService, 
-        private modalService: NgbModal,
-        public route: Router) { }
+
+    emailOtpForEdit: string = '';
+    phoneOtpForEdit: string = '';
+    gaOtpForEdit: string = '';
+    emailOtpForDelete: string = '';
+    phoneOtpForDelete: string = '';
+    gaOtpForDelete: string = '';
+    registeredPhone: string = '';
+    isEditButtonForApiDisable: boolean = false;
+    constructor(private http: HttpClient, private main: BodyService, public data: CoreDataService, private modalService: NgbModal) { }
 
     settingsObj: any = {
 
     };
 
     ngOnInit() {
+       
         var authobjkey = {};
         this.main.getDashBoardInfo();
         this.getUserAppSetting();
-        this.allApiTypeKey();
         this.getApiKeyList();
+
+        setTimeout(() => {
+
+            this.allApiTypeKey();
+            
+        }, 2000);
         $('.bs-example').hide();
         $(document).on('keyup', '.keyname', function () {
             this.keyapi = $(this).val();
@@ -155,12 +155,12 @@ export class SettingsComponent implements OnInit {
     }
 
     openAfterEditAuthModal = () => {
-       this.phoneOtpForEdit = '';
+        this.phoneOtpForEdit = '';
         this.modalService.open(this.afterEditAuthModal, { centered: true });
 
     }
     openAuthModalForDelete = () => {
-       this.phoneOtpForDelete = '';
+        this.phoneOtpForDelete = '';
         this.modalService.open(this.preDeleteAuthModal, { centered: true });
 
     }
@@ -194,7 +194,7 @@ export class SettingsComponent implements OnInit {
         let phone = this.main.phone;
         //console.log(phone)
         let result = '';
-        if(phone != undefined && phone != null){
+        if (phone != undefined && phone != null) {
             for (let i = 0; i < phone.length; i++) {
                 if (i > 3 && i <= 8) {
                     result += '*';
@@ -228,7 +228,9 @@ export class SettingsComponent implements OnInit {
             // wip(1);
             var phoneValue = this.selectedCountryPhone + this.editablePhone;
             var phoneObj = {};
-            phoneObj['phone'] = phoneValue;
+            phoneObj['phone'] = this.editablePhone;
+            phoneObj['countryCode'] = this.selectedCountryPhone;
+
             var jsonString = JSON.stringify(phoneObj);
 
             this.http.post<any>(this.data.WEBSERVICE + '/user/CheckPhone', jsonString, {
@@ -283,13 +285,13 @@ export class SettingsComponent implements OnInit {
         // this.editablePhone = phone
     }
 
-   
+
     validateApiKeyName = (e) => {
         let reg = /^[A-Za-z\s]{3,40}$/gm
         let value = e.target.value;
-        if(!value.match(reg)){
+        if (!value.match(reg)) {
             this.isEditButtonForApiDisable = true
-        }else{
+        } else {
             this.isEditButtonForApiDisable = false
 
         }
@@ -299,9 +301,11 @@ export class SettingsComponent implements OnInit {
     /* Method defination for calling method for get code while toggling verification popup*/
     async handleSendSmsOtpForSmsAuthVerification() {
         let payload = {
-            phone: localStorage.getItem('phone')
+            phone: this.editablePhone,
+            uuid: localStorage.getItem('uuid'),
+            countryCode: this.selectedCountryPhone
         }
-        let isOtpSendToPhone = await this.data.handleSendOtpInSms(payload, '2famobileotp');
+        let isOtpSendToPhone = await this.data.handleSendOtpInSms(payload, 'changephonemobileotp');
         if (isOtpSendToPhone) {
             this.callbackAfterSendingOtpInSms();
         } else {
@@ -309,24 +313,27 @@ export class SettingsComponent implements OnInit {
         }
     }
     async handleSendSmsOtpForSaveApiVerification() {
+        this.isGetCodeForSmsOtpEnabledForSaveApi = false;
         let payload = {
-            phone: localStorage.getItem('phone')
+            phone: localStorage.getItem('phone'),
+            countryCode : localStorage.getItem('phoneCountryCode')
+
         }
         let isOtpSendToPhone = await this.data.handleSendOtpInSms(payload, 'createapikey');
         if (isOtpSendToPhone) {
             var timeleft = this.data.timeIntervalForSms;
-            this.interval;
+            let interval:any;
             var s = timer(1000, 1000);
-            this.abc = s.subscribe(val => {
-                this.interval = timeleft - val;
-                this.intervalMessageForSaveApi = 'Resend in ' + this.interval + ' seconds';
+            let abc = s.subscribe(val => {
+                interval = timeleft - val;
+                this.intervalMessageForSaveApi = 'Resend in ' + interval + ' seconds';
 
                 this.isGetCodeForSmsOtpEnabledForSaveApi = false;
 
-                if (this.interval == 0 || this.interval < 0) {
+                if (interval == 0 || interval < 0) {
                     this.isGetCodeForSmsOtpEnabledForSaveApi = true;
                     this.intervalMessageForSaveApi = ''
-                    this.abc.unsubscribe();
+                    abc.unsubscribe();
                 }
             });
         } else {
@@ -335,14 +342,16 @@ export class SettingsComponent implements OnInit {
     }
     async handleSendSmsOtpForEditApiVerification() {
         let payload = {
-            phone: localStorage.getItem('phone')
+            phone: localStorage.getItem('phone'),
+            countryCode : localStorage.getItem('phoneCountryCode')
+
         }
         let isOtpSendToPhone = await this.data.handleSendOtpInSms(payload, 'updateapikey');
         if (isOtpSendToPhone) {
             var timeleft = this.data.timeIntervalForSms;
             this.interval;
             var s = timer(1000, 1000);
-            this.abc = s.subscribe(val => {
+            let abc = s.subscribe(val => {
                 this.interval = timeleft - val;
                 this.intervalMessageForEditApi = 'Resend in ' + this.interval + ' seconds';
 
@@ -351,7 +360,7 @@ export class SettingsComponent implements OnInit {
                 if (this.interval == 0 || this.interval < 0) {
                     this.isGetCodeForSmsOtpEnabledForEditApi = true;
                     this.intervalMessageForEditApi = ''
-                    this.abc.unsubscribe();
+                    abc.unsubscribe();
                 }
             });
         } else {
@@ -360,7 +369,9 @@ export class SettingsComponent implements OnInit {
     }
     async handleSendSmsOtpForDeleteApiVerification() {
         let payload = {
-            phone: localStorage.getItem('phone')
+            phone: localStorage.getItem('phone'),
+            countryCode : localStorage.getItem('phoneCountryCode')
+
         }
         let isOtpSendToPhone = await this.data.handleSendOtpInSms(payload, 'deleteapikey');
         if (isOtpSendToPhone) {
@@ -388,11 +399,13 @@ export class SettingsComponent implements OnInit {
     async handleSendOtpForPhoneVerification() {
         if (this.editablePhone != '') {
             let payload = {
-                phone: localStorage.getItem('phone')
+                phone: this.editablePhone,
+                uuid: localStorage.getItem('uuid'),
+                countryCode: this.selectedCountryPhone
+
             }
-            let isOtpSendToPhone = await this.data.handleSendOtpInSms(payload, '2famobileotp');
+            let isOtpSendToPhone = await this.data.handleSendOtpInSms(payload, 'changephonemobileotp');
             if (isOtpSendToPhone) {
-                this.isSmsOtpProceedClicked = false;
                 this.isDisableSendOtpButtonForRegisteredPhone = true
                 this.isDisableSendOtpButtonForNewPhone = true
                 this.smsOtpForRegisteredNo = '';
@@ -413,7 +426,7 @@ export class SettingsComponent implements OnInit {
                         this.abcForPhoneVerification.unsubscribe();
                         this.isDisableSendOtpButtonForRegisteredPhone = false
                         this.isDisableSendOtpButtonForNewPhone = false
-        
+
                     }
                 });
             } else {
@@ -427,12 +440,13 @@ export class SettingsComponent implements OnInit {
 
     async handleSendOtpForNewPhone() {
         let payload = {
-            newPhone: this.selectedCountryPhone + this.editablePhone,
-            uuid: localStorage.getItem('uuid')
+            newPhone: this.editablePhone,
+            uuid: localStorage.getItem('uuid'),
+            countryCode: this.selectedCountryPhone
+
         }
         let isOtpSendToPhone = await this.data.handleSendOtpInSms(payload, 'changephonemobileotp');
         if (isOtpSendToPhone) {
-            this.isSmsOtpProceedClicked = true;
             this.isDisableSendOtpButtonForNewPhone = true;
             let timeleft = this.data.timeIntervalForSms;
             this.intervalForPhoneVerification;
@@ -454,52 +468,18 @@ export class SettingsComponent implements OnInit {
         }
     }
 
-    async handleProceedButtonClick() {
-        let payload = {
-            phone: localStorage.getItem('phone'),
-            uuid: localStorage.getItem('uuid'),
-            mobileOtp: this.smsOtpForRegisteredNo
-        }
-        let isOtpVerified = await this.data.handleValidateSmsOtp('verifychangephonemobileotp', payload)
-        if (isOtpVerified) {
-            let payload = {
-                newPhone: this.selectedCountryPhone + this.editablePhone,
-                uuid: localStorage.getItem('uuid')
-            }
-            let isOtpSendToPhone = await this.data.handleSendOtpInSms(payload, 'changephonemobileotp');
-            if (isOtpSendToPhone) {
-                this.isSmsOtpProceedClicked = true;
-                this.isDisableSendOtpButtonForNewPhone = true;
-                let timeleft = this.data.timeIntervalForSms;
-                this.intervalForPhoneVerification;
-                var s = timer(1000, 1000);
-                /* this.abcForPhoneVerification = s.subscribe(val => {
-                    this.isPhoneVerifyTimerOn = true
-                    this.intervalForPhoneVerification = timeleft - val;
-                    this.phoneVerificationcountdownmessage = 'Resend in ' + this.intervalForPhoneVerification + ' seconds';
-                    if (this.intervalForPhoneVerification == 0 || this.intervalForPhoneVerification < 0) {
-                        this.phoneVerificationcountdownmessage = ''
-                        // this.isPhoneAuthSendOtpButtonEnabled = false
-                        this.isPhoneVerifyTimerOn = false
-                        this.abcForPhoneVerification.unsubscribe();
-                        this.isDisableSendOtpButtonForNewPhone = false
-                    }
-                }); */
-            } else {
-
-            }
-        }
-    }
+   
 
     /* function defination for resend new phone otp */
     async resendNewPhoneOtp() {
         let payload = {
-            newPhone: this.selectedCountryPhone + this.editablePhone,
-            uuid: localStorage.getItem('uuid')
+            newPhone: this.editablePhone,
+            uuid: localStorage.getItem('uuid'),
+            countryCode: this.selectedCountryPhone
+
         }
         let isOtpSendToPhone = await this.data.handleSendOtpInSms(payload, 'changephonemobileotp');
         if (isOtpSendToPhone) {
-            this.isSmsOtpProceedClicked = true;
             this.isDisableSendOtpButtonForNewPhone = true;
             let timeleft = this.data.timeIntervalForSms;
             this.intervalForPhoneVerification;
@@ -521,15 +501,28 @@ export class SettingsComponent implements OnInit {
         }
     }
 
+    resetPhoneOtpTimer = () => {
+        this.phoneVerificationcountdownmessage = ''
+        // this.isPhoneAuthSendOtpButtonEnabled = false
+        this.isPhoneVerifyTimerOn = false
+        this.abcForPhoneVerification.unsubscribe();
+        this.isDisableSendOtpButtonForNewPhone = false;
+        this.phoneVerificationcountdownmessage = ''
+        this.isDisableSendOtpButtonForRegisteredPhone = false
+    }
+
     /* Method defination for chnaging mobile no */
     confirmOtpCallbackForVerifingNewMobile = () => {
         let payload = {
             uuid: localStorage.getItem('uuid'),
-            mobileOtp: this.smsOtpForNewNo,
-            phone: this.selectedCountryPhone + this.editablePhone
+            phoneOtp: this.smsOtpForRegisteredNo,
+            newPhoneOtp : this.smsOtpForNewNo,
+            phone: this.editablePhone,
+            countryCode: this.selectedCountryPhone
+
 
         }
-        //TODO: add parameter her in payload 
+        
         this.http.post<any>(this.data.WEBSERVICE + '/user/ChangePhoneNo', JSON.stringify(payload), {
             headers: {
                 'Content-Type': 'application/json',
@@ -542,7 +535,7 @@ export class SettingsComponent implements OnInit {
                     this.data.alert(result.error.error_msg, 'danger');
                 } else {
                     this.data.alert('Phone number updated successfully', 'success')
-                    this.data.reloadPage(this.route.url);
+                    location.reload();
                 }
 
             });
@@ -572,13 +565,13 @@ export class SettingsComponent implements OnInit {
         let payload = {
             uuid: localStorage.getItem('uuid'),
             otp: $('#orangeForm-email').val(),
-            mobileOtp: $('#orangeForm-phoneOtp').val(),
+            phoneOtp: $('#orangeForm-phoneOtp').val(),
             securityCode: $('#orangeForm-passkey').val(),
             keyName: $('#signupInputname').val()
         }
 
         this.http
-            .post<any>(this.data.WEBSERVICE + "/user/generateKeys/", JSON.stringify(payload), {
+            .post<any>(this.data.WEBSERVICE + "/user/generateKeys", JSON.stringify(payload), {
                 headers: {
                     "Content-Type": "application/json",
                     'authorization': 'BEARER ' + localStorage.getItem('access_token'),
@@ -587,9 +580,9 @@ export class SettingsComponent implements OnInit {
             .subscribe(
                 response => {
                     var result = response;
-                    if(result.error.error_data != '0'){
-                        this.data.alert(result.error.error_msg,'danger')
-                    }else{
+                    if (result.error.error_data != '0') {
+                        this.data.alert(result.error.error_msg, 'danger')
+                    } else {
                         this.apikey = result.apiKey;
                         this.secretkey = result.secretKey;
                         this.data.alert('API Created sucessfully', 'success');
@@ -611,40 +604,41 @@ export class SettingsComponent implements OnInit {
                 response => {
                     this.apitype = response.apiTypeList;
 
-                    console.log('all apisss type before',this.apitype);
+                    console.log('all apisss type before', this.apitype);
 
-                    if(this.data.isSpot != 1){
+                    if (this.data.isSpot != 1) {
 
                         this.removeObjectWithId(this.apitype, 4);
 
                     }
-                    if(this.data.isFutures != 1){
+                    if (this.data.isFutures != 1) {
 
                         this.removeObjectWithId(this.apitype, 5);
 
                     }
-                    if(this.data.isOptions != 1){
+                    if (this.data.isOptions != 1) {
 
                         this.removeObjectWithId(this.apitype, 6);
 
                     }
-                    console.log('all apisss type after',this.apitype);
-                    
+                    console.log('all apisss type after', this.apitype);
+
 
                 });
     }
 
+
     removeObjectWithId(arr, id) {
         const objWithIdIndex = arr.findIndex((obj) => obj.apiTypeId === id);
-      
+
         if (objWithIdIndex > -1) {
-          arr.splice(objWithIdIndex, 1);
+            arr.splice(objWithIdIndex, 1);
         }
 
         this.apitype = arr;
-      
+
         return arr;
-      }
+    }
 
     handleIpCheckSelection = (param) => {
         //console.log('ipRestrictStatus',this.ipRestrictStatus)
@@ -948,6 +942,10 @@ export class SettingsComponent implements OnInit {
             updateSettingObj['otp'] = this.emailOtpSpecific;
             updateSettingObj['securityCode'] = this.twoFactorOtpSpecific;
         }
+        if (this.twoFactorStatus == "0" || this.twoFactorStatus == 0) {
+            updateSettingObj['otp'] = this.emailOtpSpecific;
+            updateSettingObj['securityCode'] = this.twoFactorOtpSpecific;
+        }
         var jsonString = JSON.stringify(updateSettingObj);
         // wip(1);
 
@@ -1050,6 +1048,10 @@ export class SettingsComponent implements OnInit {
             updateSettingObj['otp'] = this.emailOtpSpecific;
             updateSettingObj['securityCode'] = this.twoFactorOtpSpecific;
         }
+        if (this.twoFactorStatus == "0" || this.twoFactorStatus == 0) {
+            updateSettingObj['otp'] = this.emailOtpSpecific;
+            updateSettingObj['securityCode'] = this.twoFactorOtpSpecific;
+        }
         var jsonString = JSON.stringify(updateSettingObj);
         // wip(1);
         this.http.post<any>(this.data.WEBSERVICE + '/user/SaveUserAppSettings', jsonString, {
@@ -1096,7 +1098,7 @@ export class SettingsComponent implements OnInit {
                     $('#google_auth_qr_code').html('');
                     this.google_auth_otp = '';
                     this.twoFactorSecureToken = result.userResult.twoFactorAuthKey
-                    this.twoFactorAuthKey = 'otpauth://totp/' + localStorage.getItem('email') + '?secret=' + result.userResult.twoFactorAuthKey + '&issuer=Paybito';
+                    this.twoFactorAuthKey = 'otpauth://totp/' + localStorage.getItem('email') + '?secret=' + result.userResult.twoFactorAuthKey + '&issuer='+this.data.exchange;
                     this.modalService.open(content, {
                         centered: true,
                         backdrop: 'static',
@@ -1191,10 +1193,10 @@ export class SettingsComponent implements OnInit {
     }
 
     Create(key) {
-        if (this.twoFactorStatus != 0 && this.apikeylist.length < 3) {
+        if (this.twoFactorStatus != 0 && this.apikeylist.length < 15) {
             this.modalService.open(key, { centered: true });
         }
-        else if (this.twoFactorStatus == 0 && this.apikeylist.length < 3) {
+        else if (this.twoFactorStatus == 0 && this.apikeylist.length < 15) {
             alert("Please turn on your two factor authentication");
         }
         else {
@@ -1221,6 +1223,7 @@ export class SettingsComponent implements OnInit {
         var jsonString = JSON.stringify(getotpObj);
         this.isGetCodeButtonDisabledSpecific = true;
         this.isGetCodeButtonDisabledForSmsAuth = true;
+        this.isGetCodeButtonDisabled = true;
         this.http
             .post<any>(this.data.WEBSERVICE + "/user/ResendOTP/" + param, jsonString, {
                 headers: {
@@ -1269,7 +1272,6 @@ export class SettingsComponent implements OnInit {
     }
 
     checkauthenticationOtp() {
-        //TODO:Following two lines will be under generate keys API call
         $('.bs-example').show();
         $('.apikeycheckcreate-READ').attr('checked', 'checked');
         var otpObj = {};
@@ -1356,7 +1358,8 @@ export class SettingsComponent implements OnInit {
                 this.data.alert(result.error.error_msg, 'danger');
             }
             else {
-                this.data.alert(result.error.error_msg, 'success');
+                this.data.alert('Updated successfully', 'success');
+                this.modalService.dismissAll();
                 this.apikeyid = result.id;
             }
         });
@@ -1377,52 +1380,52 @@ export class SettingsComponent implements OnInit {
         authObj['secretKey'] = this.apiKeyDataForEdit.secretKey;
         authObj['securityCode'] = this.gaOtpForEdit;
         authObj['otp'] = this.emailOtpForEdit;
-        authObj['mobileOtp'] = this.phoneOtpForEdit;
+        authObj['phoneOtp'] = this.phoneOtpForEdit;
 
         authObj['action'] = 'UPDATE';
         console.log(favorite)
-        for(let i = 1 ;i<= 6 ;i++){
-           // console.log(i,favorite.indexOf(i));
-            if(i == 1){
-                if(favorite.indexOf('1') != -1){
+        for (let i = 1; i <= 6; i++) {
+            // console.log(i,favorite.indexOf(i));
+            if (i == 1) {
+                if (favorite.indexOf('1') != -1) {
                     authObj['isRead'] = 1;
-                }else{
+                } else {
                     authObj['isRead'] = 0;
                 }
-            }else if(i == 2){
-                if(favorite.indexOf('2') != -1){
+            } else if (i == 2) {
+                if (favorite.indexOf('2') != -1) {
                     authObj['isDeposit'] = 1;
-                }else{
+                } else {
                     authObj['isDeposit'] = 0;
                 }
-            }else if(i == 3){
-                if(favorite.indexOf('3') != -1){
+            } else if (i == 3) {
+                if (favorite.indexOf('3') != -1) {
                     authObj['isWithdraw'] = 1;
-                }else{
+                } else {
                     authObj['isWithdraw'] = 0;
                 }
-            }else if(i == 4){
-                if(favorite.indexOf('4') != -1){
+            } else if (i == 4) {
+                if (favorite.indexOf('4') != -1) {
                     authObj['isSpotTrade'] = 1;
-                }else{
+                } else {
                     authObj['isSpotTrade'] = 0;
                 }
-            } else if(i == 5){
-                if(favorite.indexOf('5') != -1){
+            } else if (i == 5) {
+                if (favorite.indexOf('5') != -1) {
                     authObj['isFuturesTrade'] = 1;
-                }else{
+                } else {
                     authObj['isFuturesTrade'] = 0;
                 }
-            }else if(i == 6){
-                if(favorite.indexOf('6') != -1){
+            } else if (i == 6) {
+                if (favorite.indexOf('6') != -1) {
                     authObj['isOptionsTrade'] = 1;
-                }else{
+                } else {
                     authObj['isOptionsTrade'] = 0;
                 }
             }
         }
-        
-      
+
+
         if (this.ipListTemp.length > 0) {
             let ipString = '';
             for (let i = 0; i < this.ipListTemp.length; i++) {
@@ -1447,7 +1450,8 @@ export class SettingsComponent implements OnInit {
                 this.data.alert(result.error.error_msg, 'danger');
             }
             else {
-                this.data.alert(result.error.error_msg, 'success');
+                this.data.alert('Updated successfully', 'success');
+                this.modalService.dismissAll();
                 this.getApiKeyList();
                 $('.bs-example').hide();
             }
@@ -1472,7 +1476,7 @@ export class SettingsComponent implements OnInit {
             }
             else {
                 this.data.alert('list of api key deleted successfully', 'success');
-                this.data.reloadPage(this.route.url);
+                location.reload();
             }
 
             if (result == '') {
@@ -1498,9 +1502,9 @@ export class SettingsComponent implements OnInit {
 
     }
     deleteApiKeyCall = () => {
-        this.deleteapikeyObj['securityCode'] =this.gaOtpForDelete;
+        this.deleteapikeyObj['securityCode'] = this.gaOtpForDelete;
         this.deleteapikeyObj['otp'] = this.emailOtpForDelete;
-        this.deleteapikeyObj['mobileOtp'] = this.phoneOtpForDelete;
+        this.deleteapikeyObj['phoneOtp'] = this.phoneOtpForDelete;
         var jsonString = JSON.stringify(this.deleteapikeyObj);
         // wip(1);
         this.http.post<any>(this.data.WEBSERVICE + '/user/updateKeys', jsonString, {
@@ -1514,8 +1518,8 @@ export class SettingsComponent implements OnInit {
                 this.data.alert(result.error.error_msg, 'danger');
             }
             else {
-                this.data.alert(result.error.error_msg, 'success');
-                this.data.reloadPage(this.route.url);
+                this.data.alert('Deleted successfully', 'success');
+                location.reload();
             }
         });
     }
@@ -1617,13 +1621,14 @@ export class SettingsComponent implements OnInit {
                 this.data.alert(result.error.error_msg, 'danger');
             }
             else {
-                this.data.alert(result.error.error_msg, 'success');
+                this.data.alert('Updated successfully', 'success');
+                this.modalService.dismissAll();
             }
         });
     }
 
     cancelApiKey() {
-        this.data.reloadPage(this.route.url);
+        location.reload();
     }
 
     copy(inputElement) {
@@ -1652,7 +1657,7 @@ export class SettingsComponent implements OnInit {
                     if (result.error.error_data == 1) {
                         this.data.alertm(result.error.error_msg, 'danger');
                         setTimeout(function () {
-                            this.data.reloadPage(this.route.url);
+                            location.reload();
                         }, 10000);
 
                     } else {
@@ -1684,7 +1689,7 @@ export class SettingsComponent implements OnInit {
                         //   });
                         this.data.alertm(result.error.error_msg, 'danger');
                         setTimeout(function () {
-                            this.data.reloadPage(this.route.url);
+                            location.reload();
                         }, 10000);
 
                     } else {

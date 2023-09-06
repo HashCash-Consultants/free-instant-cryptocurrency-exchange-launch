@@ -90,7 +90,7 @@
   <div class="col-12 mt-3 align-self-stretch">
     <div class="p-2 pl-3 pr-3 rounded h-100 customer-report-widget" [ngClass]="Themecolor == 'Dark' ? 'bg-dark' : 'bg-light'">
       <span class="font-md  mr-2" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">CUSTOMER REPORT WIDGET</span>
-      <a *ngIf="showExportButton==1" class="btn btn-sm btn-primary" style="cursor: pointer;margin-left: 750px;margin-bottom: 20px;margin-top: 20px;" id="downloadCSVBtn" href="{{downloadUrl}}" target="_blank" download>Export CSV</a>
+      <a *ngIf="showExportButton==1" class="btn btn-sm btn-primary" [ngClass]="Themecolor == 'Dark' ? '' : 'text-black'" style="cursor: pointer;margin-left: 750px;margin-bottom: 20px;margin-top: 20px;" id="downloadCSVBtn" href="{{downloadUrl}}" target="_blank" download>Export CSV</a>
       <div class="table-responsive-sm" style="overflow: auto;">
 
           <div *ngIf="this.repu ==3; else restOfTheTable">
@@ -254,7 +254,7 @@
   <div class="col-12 mt-3 align-self-stretch">
     <div class="p-2 pl-3 pr-3 rounded h-100 customer-report-widget" [ngClass]="Themecolor == 'Dark' ? 'bg-dark' : 'bg-light'">
       <span class="font-md  mr-2" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">CUSTOMER REPORT WIDGET FOR FUTURE</span>
-      <a *ngIf="fshowExportButton==1" class="btn btn-sm btn-primary"
+      <a *ngIf="fshowExportButton==1" class="btn btn-sm btn-primary" [ngClass]="Themecolor == 'Dark' ? '' : 'text-black'"
         style="cursor: pointer;margin-left: 750px;margin-bottom: 20px;margin-top: 20px;" id="downloadCSVBtn"
         href="{{fdownloadUrl}}" target="_blank" download>Export CSV</a>
       <div class="table-responsive-sm" style="overflow: auto;" >
@@ -431,6 +431,7 @@
     <div class=" p-2 pl-3 pr-3 rounded h-100 customer-report-widget" [ngClass]="Themecolor == 'Dark' ? 'bg-black' : 'bg-light'">
       <span class="font-md  mr-2" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">CUSTOMER REPORT WIDGET FOR OPTIONS</span>
       <a *ngIf="oshowExportButton==1" class="btn btn-sm btn-primary"
+      [ngClass]="Themecolor == 'Dark' ? '' : 'text-black'"
         style="cursor: pointer;margin-left: 750px;margin-bottom: 20px;margin-top: 20px;" id="downloadCSVBtn"
         href="{{odownloadUrl}}" target="_blank" download>Export CSV</a>
       <div class="table-responsive-sm" style="overflow: auto;">

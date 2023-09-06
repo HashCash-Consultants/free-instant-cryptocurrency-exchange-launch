@@ -6,7 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { HashLocationStrategy, LocationStrategy, CommonModule, DecimalPipe,PathLocationStrategy } from "@angular/common";
 import { AngularDraggableModule } from 'angular2-draggable';
 import { Title } from '@angular/platform-browser';
-
+import { WorkerService } from './order-book/worker.service';
 // import { UserIdleModule } from 'angular-user-idle';
 import { QRCodeModule } from 'angularx-qrcode';
 import { RecaptchaModule } from 'ng-recaptcha';
@@ -29,7 +29,7 @@ import { LoginComponent } from './login/login.component';
 import { CookieService } from "ngx-cookie-service";
 import { MyWalletComponent } from './my-wallet/my-wallet.component';
 import { DepositFundsComponent } from './deposit-funds/deposit-funds.component';
-
+import { ShareModule } from '@ngx-share/core';
 import { WithdrawFundsComponent } from './withdraw-funds/withdraw-funds.component';
 import { HistoryComponent } from './history/history.component';
 import { ProfileDetailsComponent } from './profile-details/profile-details.component';
@@ -48,6 +48,7 @@ import { ReportComponent } from './report/report.component';
 import { NumericDirective } from '../app/core-data.directive';
 import { NgbdModalContent, } from './deposit-funds/deposit-funds.component';
 import { TvChartContainerComponent } from './tv-chart-container/tv-chart-container.component';
+import { TvChartWebSocketAPI } from './tv-chart-container/TvChartWebSocketAPI';
 import { AppHeaderComponent } from './app-header/app-header.component';
 import { WalletgraphComponent } from './walletgraph/walletgraph.component';
 import { DeviceDetectorModule } from 'ngx-device-detector';
@@ -76,65 +77,63 @@ import { OptionsWebSocketAPI } from './OptionsWebSocketAPI';
 import { HttpConfigInterceptor } from './interceptors/httpconfig.interceptor';
 import { SearchPipe } from './my-wallet/search.pipe';
 import { Ng2TelInputModule } from 'ng2-tel-input';
-import { RedirectionComponent } from './redirection/redirection.component';
-import {ConnectionServiceModule} from 'ng-connection-service'; 
+import { ConnectionServiceModule } from 'ng-connection-service';
 import { RECAPTCHA_SETTINGS,  RecaptchaSettings } from 'ng-recaptcha';
+
 import { environment } from '../environments/environment';
-import { TvChartWebSocketAPI } from './tv-chart-container/TvChartWebSocketAPI';
+import { TradeHistoryService } from './tv-chart-container/trade-history.service';
+import { SocketService } from './tv-chart-container/socket.service';
+import { HttpModule } from '../../node_modules/@angular/http';
 import { DerivativeTvChartWebSocketAPI } from './derivative-tvchartcontainer/DerivativeTvChartWebSocketAPI';
-import { OptionsTvChartWebSocketAPI } from './options-tvchartcontainer/OptionsTvChartWebSocketAPI';
-import { IsnegativeDirective } from './isnegative.directive';
-
-import { ShareModule } from '@ngx-share/core';
-import { SignupWithFacebookComponent } from './signup-with-facebook/signup-with-facebook.component';
 import { LoginWithFacebookComponent } from './login-with-facebook/login-with-facebook.component';
+import { MyBotsComponent } from './my-bots/my-bots.component';
+import { SignupWithFacebookComponent } from './signup-with-facebook/signup-with-facebook.component';
+import { CopyTradingComponent } from './copy-trading/copy-trading.component';
+import { IsnegativeDirective } from './isnegative.directive';
+import { CreateNewBotComponent } from './my-bots/create-new-bot/create-new-bot.component';
+import { EditBotComponent } from './my-bots/edit-bot/edit-bot.component';
+import { AddApiKeyComponent } from './add-api-key/add-api-key.component';
+import { OptionsTvChartWebSocketAPI } from './options-tvchartcontainer/OptionsTvChartWebSocketAPI';
+import { MarketplaceComponent } from './marketplace/marketplace.component';
+import { ViewTraderComponent } from './view-trader/view-trader.component';
+import { ViewBotComponent } from './view-bot/view-bot.component';
+import { ManageCopyTradingComponent } from './manage-copy-trading/manage-copy-trading.component';
+import { ManageCopyTradingMyPayoutsComponent } from './manage-copy-trading-my-payouts/manage-copy-trading-my-payouts.component';
+import { ManageCopyTradingMyFollowersComponent } from './manage-copy-trading-my-followers/manage-copy-trading-my-followers.component';
+import { ManageCopyTradingWhomIFollowComponent } from './manage-copy-trading-whom-ifollow/manage-copy-trading-whom-ifollow.component';
 import { SocialDrawerComponent } from './social-drawer/social-drawer.component';
-import { ChatgptChatBotComponent } from './chat-bots/chatgpt-chat-bot/chatgpt-chat-bot.component';
-import { HttpResponseInterceptors } from './httpResponse.interceptors';
+import { AngularMultiSelectModule } from 'angular2-multiselect-dropdown';
+import { ViewBotTraderComponent } from './view-bot-trader/view-bot-trader.component';
 import { NumbersOnlyDirective } from './numbers-only.directive';
-
-
-
-import {
-  SocialLoginModule,
-  AuthServiceConfig,
-  GoogleLoginProvider,
-  FacebookLoginProvider,
-} from "ngx-angular-social-login";
-import { AlphabetOnlyDirective } from './alphabet-only.directive';
+import { ChatgptChatBotComponent } from './chat-bots/chatgpt-chat-bot/chatgpt-chat-bot.component';
+ import { HttpResponseInterceptors } from './httpResponse.interceptors';
 import { AlphaNumericOnlyDirective } from './alpha-numeric-only.directive';
-import { OnlyAlphabetDirective } from './only-alphabet.directive';
 import { AlphanumericPattern2Directive } from './alphanumeric-pattern2.directive';
+import { OnlyAlphabetDirective } from './only-alphabet.directive';
+import { TradeBookComponent } from './trade-book/trade-book.component';
+import { DerivativeTradeBookComponent } from './derivative-trade-book/derivative-trade-book.component';
+import { OptionsTradeBookComponent } from './options-trade-book/options-trade-book.component';
+import { BinanceLtpWebsocket } from './my-bots/binanceLtpWebsocket';
+import { DepthChartComponent } from './depth-chart/depth-chart.component';
+import { DerivativeDepthChartComponent } from './derivative-depth-chart/derivative-depth-chart.component';
+import { BinanceFutuesLtpWebsocket } from './my-bots/binanceFuturesLtpWebsocket';
+import { OptionsDepthChartComponent } from './options-depth-chart/options-depth-chart.component';
+import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.component';
+import { TermsAndConditionComponent } from './terms-and-condition/terms-and-condition.component';
+import { CopyTradingHistoryComponent } from './copy-trading-history/copy-trading-history.component';
 
 export * from './chart/chart.component';
 
-// Configs 
-export function getAuthServiceConfigs() {
-  let config = new AuthServiceConfig(
-      [
-        {
-          id: FacebookLoginProvider.PROVIDER_ID,
-          provider: new FacebookLoginProvider("452299420223404")
-        },
-        {
-          id: GoogleLoginProvider.PROVIDER_ID,
-          provider: new GoogleLoginProvider("745537630536-mpu63dt7rsdcia6jece33jlvavkls3g2.apps.googleusercontent.com")
-        },
-      ]
-  );
-  return config;
-}
-
 const appRoutes: Routes = [
-  { path: '', component: LoginComponent },
-  { path: 'index.html', component: LoginComponent },
+  { path: '', component: LoginComponent,pathMatch: 'full' },
   { path: 'login/:userId/:location/:deviceId', component: LoginComponent },
   { path: 'signup', component: SignupComponent },
-  // { path: 'facebook-signup', component: SignupWithFacebookComponent },
-  { path: 'signup/:id', component: SignupComponent },
   { path: 'social-signup', component: SignupWithFacebookComponent},
+  { path: 'signup/:id', component: SignupComponent },
   { path: 'otp', component: OtpComponent },
   { path: 'dashboard', component: DashboardComponent },
+  { path: 'spot', component: DashboardComponent },
+
   { path: 'login', component: LoginComponent },
   { path: 'my-wallet', component: MyWalletComponent },
   { path: 'deposit-funds', component: DepositFundsComponent },
@@ -144,6 +143,9 @@ const appRoutes: Routes = [
   { path: 'profile-details', component: ProfileDetailsComponent },
   { path: 'identity-verification', component: IdentityVerificationComponent },
   { path: 'bank-details', component: BankDetailsComponent },
+  { path: 'my-bots', component: MyBotsComponent },
+  { path: 'my-bots/create-new-bot', component: CreateNewBotComponent },
+  { path: 'my-bots/edit-bot', component: EditBotComponent },
   { path: 'promotion', component: PromotionsComponent },
   { path: 'settings', component: SettingsComponent },
   { path: 'support', component: SupportComponent },
@@ -156,8 +158,32 @@ const appRoutes: Routes = [
   { path: 'otc', component: OtcRevisedComponent },
   { path: 'portfolio-holdings', component: PortfolioHoldingsComponent },
   { path: 'derivative-dashboard', component: DerivativeDashboardComponent },
+  { path: 'futures', component: DerivativeDashboardComponent },
+
   { path: 'options-dashboard', component: OptionsDashboardComponent },
-  { path: 'redirect/:url', component: RedirectionComponent },
+  { path: 'options', component: OptionsDashboardComponent },
+
+  { path: 'copy-trading', component: CopyTradingComponent },
+  { path: 'add-apiKey', component: AddApiKeyComponent },
+  { path: 'marketplace', component: MarketplaceComponent },
+  { path: 'view-traders/:p1/:q1/:follow', component: ViewTraderComponent },
+  { path: 'view-bot-traders/:b1/:c1/:follow', component: ViewBotTraderComponent },
+
+  { path: 'view-bots', component: ViewBotComponent },
+  { path: 'manage-copytrading', component: ManageCopyTradingComponent },
+  { path: 'my-payouts', component: ManageCopyTradingMyPayoutsComponent },
+  { path: 'my-followers', component: ManageCopyTradingMyFollowersComponent },
+  { path: 'whom-I-follow', component: ManageCopyTradingWhomIFollowComponent },
+
+  { path: 'privacy-policy', component: PrivacyPolicyComponent },
+  { path: 'terms-of-use', component: TermsAndConditionComponent },
+  { path: 'copy-trading-history', component: CopyTradingHistoryComponent },
+
+
+
+
+
+
 
   
 
@@ -216,17 +242,37 @@ const appRoutes: Routes = [
     OptionsTradeComponent,
     OptionsTvchartcontainerComponent,
     SearchPipe,
-    RedirectionComponent,
-    IsnegativeDirective,
     LoginWithFacebookComponent,
+    MyBotsComponent,
     SignupWithFacebookComponent,
+    CopyTradingComponent,
+    IsnegativeDirective,
+    CreateNewBotComponent,
+    EditBotComponent,
+    AddApiKeyComponent,
+    MarketplaceComponent,
+    ViewTraderComponent,
+    ViewBotTraderComponent,
+    ViewBotComponent,
+    ManageCopyTradingComponent,
+    ManageCopyTradingMyPayoutsComponent,
+    ManageCopyTradingMyFollowersComponent,
+    ManageCopyTradingWhomIFollowComponent,
     SocialDrawerComponent,
-    ChatgptChatBotComponent,
-    AlphabetOnlyDirective,
     NumbersOnlyDirective,
+    ChatgptChatBotComponent,
     AlphaNumericOnlyDirective,
+    AlphanumericPattern2Directive,
     OnlyAlphabetDirective,
-    AlphanumericPattern2Directive
+    TradeBookComponent,
+    DerivativeTradeBookComponent,
+    OptionsTradeBookComponent,
+    DepthChartComponent,
+    DerivativeDepthChartComponent,
+    OptionsDepthChartComponent,
+    PrivacyPolicyComponent,
+    TermsAndConditionComponent,
+    CopyTradingHistoryComponent
 
   ],
   imports: [
@@ -244,13 +290,15 @@ const appRoutes: Routes = [
     Ng2TelInputModule,
     ConnectionServiceModule,
     ShareModule.forRoot(),
+    HttpModule,
     //control idle timeout
     RouterModule.forRoot(
-      appRoutes, { useHash: true }
+      appRoutes
       // { enableTracing: true } // <-- debugging purposes only
     ),
     DeviceDetectorModule,
-    SocialLoginModule
+    AngularMultiSelectModule,
+    
   ],
 
   providers: [Title,
@@ -273,6 +321,9 @@ const appRoutes: Routes = [
     NgbActiveModal,
     WebSocketAPI,
     DerivativeWebSocketAPI,
+    TvChartWebSocketAPI,
+    DerivativeTvChartWebSocketAPI,
+    OptionsTvChartWebSocketAPI,
     DerivativeTradeComponent,
     DerivativeStoplossComponent,
     DerivativeOrderbookComponent,
@@ -284,33 +335,21 @@ const appRoutes: Routes = [
     OptionsTvchartcontainerComponent,
     OptionsOrderbookComponent,
     OptionsWebSocketAPI,
-    TvChartWebSocketAPI,
-    DerivativeTvChartWebSocketAPI,
-    PromotionsComponent,
-    {provide:HTTP_INTERCEPTORS, useClass:HttpResponseInterceptors, multi: true},
-
+    TradeHistoryService,
+    SocketService,
+    WorkerService,
+    BinanceLtpWebsocket,
+    BinanceFutuesLtpWebsocket,
     { provide: LocationStrategy, useClass: PathLocationStrategy },
     { provide: HTTP_INTERCEPTORS, useClass: HttpConfigInterceptor, multi: true },
     DecimalPipe,
-    OptionsTvChartWebSocketAPI,
     {
       provide: RECAPTCHA_SETTINGS,
       useValue: {
         siteKey: environment.recaptcha.siteKey,
       } as RecaptchaSettings,
     },
-    {
-      provide: AuthServiceConfig,
-      useFactory: getAuthServiceConfigs
-    }
-
-    // , {
-    //   provide: LocationStrategy,
-    //   useClass: HashLocationStrategy
-    // }
-
   ],
-  exports: [RouterModule],
   entryComponents: [NgbdModalContent],
   bootstrap: [AppComponent]
 })

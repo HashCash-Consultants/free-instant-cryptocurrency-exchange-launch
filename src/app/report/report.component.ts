@@ -194,7 +194,7 @@ export class ReportComponent implements OnInit {
   finddata(datastore, reportarray, pageNo,content1,content2) {
     this.page = pageNo != 0 ? pageNo : this.page;
     console.log('pages', this.page)
-    var usr = localStorage.getItem('user_id');
+    var usr = localStorage.getItem('uuid');
     // debugger;
     this.repu = reportarray;
     var ds = this.fromdate;
@@ -264,7 +264,7 @@ export class ReportComponent implements OnInit {
               console.log("page", this.pagiArr)
             });
         }else{
-          this.urlForMailingReport = 'https://accounts.paybito.com/api/report/viewRepotDetailsServer2/' + usr + '/' + reportarray + '/' + this.fromDate + '/' + this.toDate + '/' + 2022 ;
+          this.urlForMailingReport = 'https://accounts.paybito.com/api/report/viewRepotDetailsServer2/' + usr + '/' + reportarray + '/' + this.fromDate + '/' + this.toDate + '/' + 2022 + '?access_token=' + localStorage.getItem("access_token");
           this.modalService.open(content1, {
             centered: true
           });
@@ -272,7 +272,7 @@ export class ReportComponent implements OnInit {
         
       }
       else {
-        this.urlForMailingReport = 'https://accounts.paybito.com/api/report/viewRepotDetailsServer2/' + usr + '/' + reportarray + '/' + 0 + '/' + 0 + '/' +  this.selectyear ;
+        this.urlForMailingReport = 'https://accounts.paybito.com/api/report/viewRepotDetailsServer2/' + usr + '/' + reportarray + '/' + 0 + '/' + 0 + '/' +  this.selectyear + '?access_token=' + localStorage.getItem("access_token");
 
         this.modalService.open(content1, {
           centered: true
@@ -312,9 +312,9 @@ export class ReportComponent implements OnInit {
           }); */
       }
       if (this.repu != 6) {
-        this.downloadUrl = this.data.REPORTSERVISE + 'viewRepotDetails/' + localStorage.getItem('user_id') + '/' + this.repu + '/' + this.fromDate + '/' + this.toDate + '/' + '2022' + '?access_token=' + localStorage.getItem("access_token");
+        this.downloadUrl = this.data.REPORTSERVISE + 'viewRepotDetails/' + localStorage.getItem('uuid') + '/' + this.repu + '/' + this.fromDate + '/' + this.toDate + '/' + '2022' + '?access_token=' + localStorage.getItem("access_token");
       } else {
-        this.downloadUrl = this.data.REPORTSERVISE + 'viewRepotDetails/' + localStorage.getItem('user_id') + '/' + this.repu + '/0/0/' + this.selectyear + '/?access_token=' + localStorage.getItem("access_token");
+        this.downloadUrl = this.data.REPORTSERVISE + 'viewRepotDetails/' + localStorage.getItem('uuid') + '/' + this.repu + '/0/0/' + this.selectyear + '/?access_token=' + localStorage.getItem("access_token");
       }
 
     }
@@ -327,7 +327,7 @@ export class ReportComponent implements OnInit {
   }
   finddatafuture(datastore, futurereportarray, pageNo,content1,content2) {
     this.page = pageNo != 0 ? pageNo : this.page;
-    var usr = localStorage.getItem('user_id');
+    var usr = localStorage.getItem('uuid');
     this.frepu = futurereportarray;
     console.log('report type', this.frepu)
     var ds = this.ffromdate;
@@ -398,9 +398,9 @@ export class ReportComponent implements OnInit {
           this.showOptionReport = false;
         });
         if (this.frepu != 2) {
-          this.fdownloadUrl = this.data.REPORTSERVISE + 'viewFuturesRepotDetails/' + localStorage.getItem('user_id') + '/' + futurereportarray + '/' + this.ffromDate + '/' + this.ftoDate + '/' + '2022' + '?access_token=' + localStorage.getItem("access_token");
+          this.fdownloadUrl = this.data.REPORTSERVISE + 'viewFuturesRepotDetails/' + localStorage.getItem('uuid') + '/' + futurereportarray + '/' + this.ffromDate + '/' + this.ftoDate + '/' + '2022' + '?access_token=' + localStorage.getItem("access_token");
         } else {
-          this.fdownloadUrl = this.data.REPORTSERVISE + 'viewFuturesRepotDetails/' + localStorage.getItem('user_id') + '/' + futurereportarray + '/0/0/' + this.fselectyear + '/?access_token=' + localStorage.getItem("access_token");
+          this.fdownloadUrl = this.data.REPORTSERVISE + 'viewFuturesRepotDetails/' + localStorage.getItem('uuid') + '/' + futurereportarray + '/0/0/' + this.fselectyear + '/?access_token=' + localStorage.getItem("access_token");
         }
       }else{
         this.modalService.open(content1, {
@@ -421,7 +421,7 @@ export class ReportComponent implements OnInit {
 
 
     this.page = pageNo != 0 ? pageNo : this.page;
-    var usr = localStorage.getItem('user_id');
+    var usr = localStorage.getItem('uuid');
     this.frepu = optionsreportarray;
     var ds = this.ofromdate;
     var dp = this.otodate;
@@ -495,14 +495,14 @@ export class ReportComponent implements OnInit {
           });
   
         /*  if(this.frepu!=6){ */
-        //this.odownloadUrl=this.data.REPORTSERVISE+'viewRepotDetails/'+localStorage.getItem('user_id')+'/'+this.frepu+'/'+this.ffromDate+'/'+this.ftoDate+'/2018';
+        //this.odownloadUrl=this.data.REPORTSERVISE+'viewRepotDetails/'+localStorage.getItem('uuid')+'/'+this.frepu+'/'+this.ffromDate+'/'+this.ftoDate+'/2018';
         /*  }else{
-           this.fdownloadUrl=this.data.REPORTSERVISE+'viewRepotDetails/'+localStorage.getItem('user_id')+'/'+this.frepu+'/0/0/'+this.selectyear;
+           this.fdownloadUrl=this.data.REPORTSERVISE+'viewRepotDetails/'+localStorage.getItem('uuid')+'/'+this.frepu+'/0/0/'+this.selectyear;
          } */
         if (this.frepu != 2) {
-          this.odownloadUrl = this.data.REPORTSERVISE + 'viewOptionsRepotDetails/' + localStorage.getItem('user_id') + '/' + optionsreportarray + '/' + this.ofromDate + '/' + this.otoDate + '/' + '2022' + '?access_token=' + localStorage.getItem("access_token");
+          this.odownloadUrl = this.data.REPORTSERVISE + 'viewOptionsRepotDetails/' + localStorage.getItem('uuid') + '/' + optionsreportarray + '/' + this.ofromDate + '/' + this.otoDate + '/' + '2022' + '?access_token=' + localStorage.getItem("access_token");
         } else {
-          this.odownloadUrl = this.data.REPORTSERVISE + 'viewOptionsRepotDetails/' + localStorage.getItem('user_id') + '/' + optionsreportarray + '/0/0/' + this.oselectyear + '/?access_token=' + localStorage.getItem("access_token");
+          this.odownloadUrl = this.data.REPORTSERVISE + 'viewOptionsRepotDetails/' + localStorage.getItem('uuid') + '/' + optionsreportarray + '/0/0/' + this.oselectyear + '/?access_token=' + localStorage.getItem("access_token");
         }
       }else{
         this.modalService.open(content1, {
@@ -647,9 +647,9 @@ export class ReportComponent implements OnInit {
 
   downloadCsvFromBackend() {
     if (this.repu != 6) {
-      var downloadUrl = this.data.REPORTSERVISE + 'viewRepotDetails/' + localStorage.getItem('user_id') + '/' + this.repu + '/' + this.fromDate + '/' + this.toDate + '/2022';
+      var downloadUrl = this.data.REPORTSERVISE + 'viewRepotDetails/' + localStorage.getItem('uuid') + '/' + this.repu + '/' + this.fromDate + '/' + this.toDate + '/2022' + '?access_token=' + localStorage.getItem("access_token");
     } else {
-      var downloadUrl = this.data.REPORTSERVISE + 'viewRepotDetails/' + localStorage.getItem('user_id') + '/' + this.repu + '/0/0/' + this.selectyear;
+      var downloadUrl = this.data.REPORTSERVISE + 'viewRepotDetails/' + localStorage.getItem('uuid') + '/' + this.repu + '/0/0/' + this.selectyear + '?access_token=' + localStorage.getItem("access_token");
     }
     this.http.get<any>(downloadUrl)
       .subscribe(response => {

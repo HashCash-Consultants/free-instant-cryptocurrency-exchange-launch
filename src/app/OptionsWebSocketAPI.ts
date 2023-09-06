@@ -32,13 +32,13 @@ export class OptionsWebSocketAPI {
     
     _connect() {
        
-        //console.log('Access Token : ', localStorage.getItem('access_token'))
+        console.log('Access Token : ', localStorage.getItem('access_token'))
         if (localStorage.getItem('access_token') !== null && localStorage.getItem('access_token') !== undefined) {
-          //console.log('if')
+          console.log('if')
           let ws = new SockJS(this.webSocketEndPoint);
           this.stompClient = Stomp.over(ws);
           const _this = this;
-          //console.log(_this.stompClient)
+          console.log(_this.stompClient)
         _this.stompClient.connect({}, function (frame) {
             _this.stompClient.subscribe(_this.topic, function (sdkEvent) {
                 _this.onMessageReceived(sdkEvent);
@@ -47,28 +47,20 @@ export class OptionsWebSocketAPI {
         this.stompClient.debug = null
       }else{
         //alert('access token not found')
-        // window.location.href = "https://trade.paybito.com/";
+        // window.location.href = this.data.brokerDomain;
       }
         
     };
 
     _disconnect() {
-      try{
         if (this.stompClient !== null) {
-          this.stompClient.disconnect();
-      }
-
-      }
-      catch{
-
-        console.log('connection not established yet')
-
-      }
+            this.stompClient.disconnect();
+        }
     }
 
     // on error, schedule a reconnection attempt
     errorCallBack(error) {
-        //console.log("errorCallBack -> " + error)
+        console.log("errorCallBack -> " + error)
         setTimeout(() => {
             this._connect();
         }, 5000);
@@ -139,17 +131,13 @@ export class OptionsWebSocketAPI {
           }
           else{
            // alert('last asset pair not found')
-           // window.location.href = "https://trade.paybito.com/";
+           // window.location.href = this.data.brokerDomain;
           }
         }
       
         catch(e){
          // window.location.href = "http://54.193.164.152//";
-          // location.reload();
-        //this.route.navigateByUrl('/login');
-        //console.log('seting the true in catch')
-        localStorage.setItem('isTimeToRelad','true');
-
+         location.reload();
         }
       }
        

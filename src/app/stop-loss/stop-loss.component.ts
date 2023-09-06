@@ -1,8 +1,7 @@
 import {
   Component,
   OnInit,
-  DoCheck,
-  Input
+  DoCheck
 } from '@angular/core';
 import {
   CoreDataService
@@ -96,14 +95,19 @@ export class StopLossComponent implements DoCheck {
   showOrderTypeDropdown: boolean = false;
   selectedOrderType: string = 'GTC';
   disclosedQuantity: any;
-  limitAmountForOco: any
-  limitTotalForOco: any
-  limitPriceForOco: any
+  limitAmountForOco1: any
+  limitTotalForOco1: any
+  limitPriceForOco1: any
+  limitAmountForOco2: any
+  limitTotalForOco2: any
+  limitPriceForOco2: any
   isPlaceOrderEnabled: boolean = false;
   isPlaceOrderEnabledForSell: boolean = false;
   buySellPillsClassStatus: boolean = true;
   isOrderTypeDropdownEnabled: boolean = false;
-  limittriggerForOco: any;
+  Themecolor: any;
+  limittriggerForOco1: any;
+  limittriggerForOco2: any;
 
   sliderValueBuy:any = 0;
   sliderValueSell:any = 0;
@@ -125,7 +129,13 @@ export class StopLossComponent implements DoCheck {
   stopLossTotal: any;
   activeTabForSpot : any = 'market'
   stpLoader: boolean = true;
-  @Input() Themecolor = 'Dark';
+  stopLossQuantitySell: any;
+  stopLossTriggerPriceSell: any;
+  stopLossPriceSell: any;
+  stopLossTotalSell: any;
+  limitAmountSell: any;
+  limitValueSell: any;
+  limitPriceSell: any;
 
 
   constructor(public data: CoreDataService, private http: HttpClient, public main: BodyService, public dash: DashboardComponent, private modalService: NgbModal, public mywallet: MyWalletComponent, private decimalPipe: DecimalPipe,public ticker: ChartComponent) {
@@ -139,6 +149,10 @@ export class StopLossComponent implements DoCheck {
 
   }
   ngOnInit() {
+    this.data.orderbookPrice = 0;
+    this.data.orderbookSellPrice = 0;
+
+    
     
     this.Themecolor = localStorage.getItem('themecolor');
 
@@ -165,12 +179,21 @@ export class StopLossComponent implements DoCheck {
     /* storing precesion list */
     this.getAllPrecision()
     this.tradep = localStorage.getItem('priceprc')
+    console.log('buying asset',localStorage.getItem('buying_crypto_asset'))
+
 
     if(this.tradep == null || this.tradep == 'null' || this.tradep == undefined || this.tradep == 'undefined'){
       this.tradep = 6;
       console.log('5',this.tradep)
+
+
       localStorage.setItem('priceprc',this.tradep)
-    }else{
+    }
+    else if(localStorage.getItem('buying_crypto_asset') == 'BTC' || localStorage.getItem('buying_crypto_asset') == 'btc' ){
+      this.tradep = 6;
+
+    }
+    else{
       console.log('6',this.tradep)
     }
 
@@ -181,7 +204,7 @@ export class StopLossComponent implements DoCheck {
 
   getfeesOfUser() {
 
-    this.http.get<any>('https://accounts.paybito.com/api/userTrade/userTradingFeeByVolume?uuid=' + localStorage.getItem('uuid') + '&offerType=M', {
+    this.http.get<any>(this.data.WEBSERVICE + '/userTrade/userTradingFeeByVolume?uuid=' + localStorage.getItem('uuid') + '&offerType=M', {
       headers: {
         'Content-Type': 'application/json',
         'authorization': 'BEARER ' + localStorage.getItem('access_token'),
@@ -217,6 +240,11 @@ export class StopLossComponent implements DoCheck {
     if (this.data.orderbookPrice != 0) {
       this.limitPrice = this.data.orderbookPrice;
     }
+    if (this.data.orderbookSellPrice != 0) {
+      this.limitPriceSell = this.data.orderbookSellPrice;
+    }
+
+    
     // timer(5000).subscribe(()=>{
     //   this.data.orderbookPrice = 0
     // });
@@ -307,10 +335,14 @@ export class StopLossComponent implements DoCheck {
     this.limitValue = "";
     this.limitPrice = "";
     this.limitAmount = "";
-    this.limitAmountForOco = "";
-    this.limittriggerForOco="";
-    this.limitPriceForOco = "";
-    this.limitTotalForOco = "";
+    this.limitAmountForOco1 = "";
+    this.limitAmountForOco2 = "";
+    this.limittriggerForOco1="";
+    this.limittriggerForOco2="";
+    this.limitPriceForOco1 = "";
+    this.limitPriceForOco2 = "";
+    this.limitTotalForOco1 = "";
+    this.limitTotalForOco2 = "";
     this.onlyBuyAmount = this.onlyBuyPrice = this.onlyBuyTotalPrice = '';
     this.onlySellAmount = this.onlySellPrice = this.onlySellTotalPrice = '';
     this.stopLossQuantity = "";
@@ -501,12 +533,12 @@ export class StopLossComponent implements DoCheck {
                 $('#msell').prop('disabled', false);
               }
             }
-            $('.onlyBuyError').hide();
+            $('.onlySellError').hide();
             $('#msell').prop('disabled', false);
           } else {
             this.onlySellPrice = 0;
             this.onlySellTotalPrice = 0;
-            $('.onlyBuyError').show();
+            $('.onlySellError').show();
             $('#msell').prop('disabled', true);
           }
         })
@@ -615,7 +647,7 @@ export class StopLossComponent implements DoCheck {
 
     // } else {
     var inputObj = {};
-    inputObj['userId'] = localStorage.getItem('user_id');
+    // inputObj['userId'] = localStorage.getItem('user_id');
     inputObj['selling_asset_code'] = (this.data.selectedBuyingAssetText).toUpperCase();
     inputObj['buying_asset_code'] = (this.data.selectedSellingAssetText).toUpperCase();
     inputObj['amount'] = parseFloat(this.onlySellAmount);
@@ -656,7 +688,8 @@ export class StopLossComponent implements DoCheck {
             this.data.renderDataForStopLimitSpot('buy');
           }else{
 
-            this.data.renderDataForMyTradeSpot();
+            //this.data.renderDataForMyTradeSpot();
+            localStorage.setItem('isTimeToRenderSpotMyTrade','true');
           }
           //this.ticker.handle24hrTickerManualy();
 
@@ -730,7 +763,7 @@ export class StopLossComponent implements DoCheck {
             } else {
 
               var inputObj = {};
-              inputObj['userId'] = localStorage.getItem('user_id');
+              // inputObj['userId'] = localStorage.getItem('user_id');
               inputObj['uuid'] = localStorage.getItem('uuid');
 
               inputObj['selling_asset_code'] = (this.data.selectedBuyingAssetText).toUpperCase();
@@ -830,7 +863,7 @@ export class StopLossComponent implements DoCheck {
     //       $('.tradeBtn').attr('disabled', true);
     //     } else {
     var inputObj = {};
-    inputObj['userId'] = localStorage.getItem('user_id');
+    // inputObj['userId'] = localStorage.getItem('user_id');
     inputObj['selling_asset_code'] = this.data.selectedSellingAssetText.toUpperCase();
     inputObj['buying_asset_code'] = this.data.selectedBuyingAssetText.toUpperCase();
     inputObj['amount'] = parseFloat(this.onlyBuyAmount);
@@ -873,7 +906,8 @@ export class StopLossComponent implements DoCheck {
             this.data.renderDataForStopLimitSpot('buy');
           }else{
 
-            this.data.renderDataForMyTradeSpot();
+            //this.data.renderDataForMyTradeSpot();
+            localStorage.setItem('isTimeToRenderSpotMyTrade','true');
           }
           //this.ticker.handle24hrTickerManualy();
 
@@ -936,7 +970,7 @@ export class StopLossComponent implements DoCheck {
         //       $('.tradeBtn').attr('disabled', true);
         //     } else {
         var inputObj = {};
-        inputObj['userId'] = localStorage.getItem('user_id');
+        // inputObj['userId'] = localStorage.getItem('user_id');
         inputObj['uuid'] = localStorage.getItem('uuid');
 
         inputObj['selling_asset_code'] = this.data.selectedSellingAssetText.toUpperCase();
@@ -987,6 +1021,9 @@ export class StopLossComponent implements DoCheck {
   limitAmount: any = 0;
   limitPrice: any = 0;
   limitValue: any = 0;
+  limitAmount2: any = 0;
+  limitPrice2: any = 0;
+  limitValue2: any = 0;
 
   async limitBuy() {
     $('.onlyBuyBtn').prop('disabled', true);
@@ -1024,7 +1061,7 @@ export class StopLossComponent implements DoCheck {
       //     } else {
       if (this.limitAmount != undefined && this.limitPrice != undefined) {
         var inputObj = {};
-        inputObj['userId'] = localStorage.getItem('user_id');
+        // inputObj['userId'] = localStorage.getItem('user_id');
         inputObj['selling_asset_code'] = this.data.selectedSellingAssetText.toUpperCase();
         inputObj['buying_asset_code'] = this.data.selectedBuyingAssetText.toUpperCase();
         inputObj['amount'] = this.limitAmount;
@@ -1082,7 +1119,8 @@ export class StopLossComponent implements DoCheck {
                 this.data.renderDataForStopLimitSpot('buy');
               }else{
     
-                this.data.renderDataForMyTradeSpot();
+                //this.data.renderDataForMyTradeSpot();
+                localStorage.setItem('isTimeToRenderSpotMyTrade','true');
               }
               //this.ticker.handle24hrTickerManualy();
               this.reset();
@@ -1140,7 +1178,7 @@ export class StopLossComponent implements DoCheck {
           } else {
             if (this.limitAmount != undefined && this.limitPrice != undefined) {
               var inputObj = {};
-              inputObj['userId'] = localStorage.getItem('user_id');
+              // inputObj['userId'] = localStorage.getItem('user_id');
               inputObj['uuid'] = localStorage.getItem('uuid');
 
               inputObj['selling_asset_code'] = this.data.selectedSellingAssetText.toUpperCase();
@@ -1213,19 +1251,20 @@ export class StopLossComponent implements DoCheck {
     $('.onlySellBtn').prop('disabled', true);
     $('.tradeBtn').attr('disabled', true);
     this.data.alert('Loading...', 'dark', 30000);
-    if (this.limitPrice != undefined && this.limitAmount != undefined) {
+    if (this.limitPriceSell != undefined && this.limitAmountSell != undefined) {
       var inputObj = {}
       inputObj['selling_asset_code'] = (this.data.selectedBuyingAssetText).toUpperCase();
       inputObj['buying_asset_code'] = (this.data.selectedSellingAssetText).toUpperCase();
       inputObj['userId'] = localStorage.getItem('user_id');
-      inputObj['price'] = this.limitPrice;
+      inputObj['price'] = this.limitPriceSell;
       inputObj['txn_type'] = '2';
       
       if (this.selectedMarginType !== undefined && this.selectedMarginType !== null) {
         //inputObj['marginType'] = this.selectedMarginType
       }
       var jsonString = JSON.stringify(inputObj);
-      if ((this.limitPrice * this.limitAmount) > this.valLimit) {
+      //alert((this.limitPriceSell * this.limitAmountSell) +'  '+this.limitValueSell)
+      if ((this.limitPriceSell * this.limitAmountSell) >= this.limitValueSell) {
         // this.http.post<any>(this.data.WEBSERVICE + '/userTrade/OfferPriceCheck', jsonString, {
         //   headers: {
         //     'Content-Type': 'application/json'
@@ -1241,11 +1280,11 @@ export class StopLossComponent implements DoCheck {
         //       $('.tradeBtn').attr('disabled', true);
         //     } else {
         var inputObj = {};
-        inputObj['userId'] = localStorage.getItem('user_id');
+        // inputObj['userId'] = localStorage.getItem('user_id');
         inputObj['selling_asset_code'] = this.data.selectedBuyingAssetText.toUpperCase();
         inputObj['buying_asset_code'] = this.data.selectedSellingAssetText.toUpperCase();
-        inputObj['amount'] = this.limitAmount;
-        inputObj['price'] = this.limitPrice;
+        inputObj['amount'] = this.limitAmountSell;
+        inputObj['price'] = this.limitPriceSell;
         // inputObj["offerType"] = 'L';
         inputObj['txn_type'] = '2';
         if(this.selectedOrderType == 'FOK' || this.selectedOrderType == 'IOC'){
@@ -1298,21 +1337,22 @@ export class StopLossComponent implements DoCheck {
                 this.data.renderDataForStopLimitSpot('buy');
               }else{
     
-                this.data.renderDataForMyTradeSpot();
+                //this.data.renderDataForMyTradeSpot();
+                localStorage.setItem('isTimeToRenderSpotMyTrade','true');
               }
               //this.ticker.handle24hrTickerManualy();
-              this.limitAmount = 0;
-              this.limitPrice = 0;
+              this.limitAmountSell = 0;
+              this.limitPriceSell = 0;
               this.reset();
               $('#trade').click();
             }
           });
         //}
-        this.limitAmount = this.limitPrice = this.limitValue = null;
+        this.limitAmountSell = this.limitPriceSell = this.limitValueSell = null;
 
         // });
       } else {
-        this.limitAmount = this.limitPrice = this.limitValue = null;
+        this.limitAmountSell = this.limitPriceSell = this.limitValueSell = null;
         this.data.loader = false;
         this.data.alert('Your offer is too small', 'warning');
         $('.onlyBuyBtn').prop('disabled', false);
@@ -1361,7 +1401,7 @@ export class StopLossComponent implements DoCheck {
               $('.tradeBtn').attr('disabled', true);
             } else {
               var inputObj = {};
-              inputObj['userId'] = localStorage.getItem('user_id');
+              // inputObj['userId'] = localStorage.getItem('user_id');
               inputObj['uuid'] = localStorage.getItem('uuid');
 
               inputObj['selling_asset_code'] = this.data.selectedBuyingAssetText.toUpperCase();
@@ -1502,30 +1542,31 @@ export class StopLossComponent implements DoCheck {
       $('#placeOrderForStopLossBtn').attr('disabled', true);
     $('.stopLossError').hide();
     this.data.alert('Loading...', 'dark');
-    if (this.stopLossPrice != undefined && this.stopLossTriggerPrice != undefined && this.stopLossQuantity != undefined) {
+    if (this.stopLossPriceSell != undefined && this.stopLossTriggerPriceSell != undefined && this.stopLossQuantitySell != undefined) {
       $('#placeOrderForStopLossBtn').attr('disabled', false);
       if (this.data.ltpdata != null) {
         this.marketOrderPrice = parseFloat(this.data.ltpdata);
         if (
-          this.marketOrderPrice > this.stopLossTriggerPrice &&
-          this.marketOrderPrice > this.stopLossPrice &&
-          this.stopLossTriggerPrice > this.stopLossPrice
+          this.marketOrderPrice > this.stopLossTriggerPriceSell &&
+          this.marketOrderPrice > this.stopLossPriceSell &&
+          this.stopLossTriggerPriceSell > this.stopLossPriceSell
         ) {
 
           var inputObj = {};
           inputObj['buying_asset_code'] = localStorage.getItem('selling_crypto_asset').toUpperCase();
-          inputObj['userId'] = localStorage.getItem('user_id');
+          // inputObj['userId'] = localStorage.getItem('user_id');
           inputObj['selling_asset_code'] = localStorage.getItem('buying_crypto_asset').toUpperCase();
-          inputObj['quantity'] = this.stopLossQuantity;
-          inputObj['stop_loss_price'] = this.stopLossPrice;
-          inputObj['trigger_price'] = this.stopLossTriggerPrice;
+          inputObj['quantity'] = this.stopLossQuantitySell;
+          inputObj['stop_loss_price'] = this.stopLossPriceSell;
+          inputObj['trigger_price'] = this.stopLossTriggerPriceSell;
           inputObj['txn_type'] = '2';
           inputObj['uuid'] = localStorage.getItem('uuid');
 
           var jsonString = JSON.stringify(inputObj);
           this.http.post<any>(this.data.WEBSERVICE + '/userTrade/StopLossBuySellTrade', jsonString, {
             headers: {
-              'Content-Type': 'application/json'
+              'Content-Type': 'application/json',
+              'authorization': 'BEARER ' + localStorage.getItem('access_token')
             }
           })
             .subscribe(data => {
@@ -1541,7 +1582,7 @@ export class StopLossComponent implements DoCheck {
                 $('#trade').click();
                 
               }
-              this.stopLossPrice = this.stopLossTriggerPrice = this.stopLossQuantity = this.stopLossTotal = null
+              this.stopLossPriceSell = this.stopLossTriggerPriceSell = this.stopLossQuantitySell = this.stopLossTotalSell = null
               $('.onlyBuyBtn').prop('disabled', true);
               $('.onlySellBtn').prop('disabled', true);
             });
@@ -1590,7 +1631,7 @@ export class StopLossComponent implements DoCheck {
           ) {
             var inputObj = {};
             inputObj['buying_asset_code'] = localStorage.getItem('buying_crypto_asset').toUpperCase();
-            inputObj['userId'] = localStorage.getItem('user_id');
+            // inputObj['userId'] = localStorage.getItem('user_id');
             inputObj['selling_asset_code'] = localStorage.getItem('selling_crypto_asset').toUpperCase();
             inputObj['quantity'] = this.stopLossQuantity;
             inputObj['stop_loss_price'] = this.stopLossPrice;
@@ -1601,7 +1642,9 @@ export class StopLossComponent implements DoCheck {
             var jsonString = JSON.stringify(inputObj);
             this.http.post<any>(this.data.WEBSERVICE + '/userTrade/StopLossBuySellTrade', jsonString, {
               headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                 'authorization': 'BEARER ' + localStorage.getItem('access_token')
+
               }
             })
               .subscribe(data => {
@@ -1654,21 +1697,21 @@ export class StopLossComponent implements DoCheck {
     //if(a == true){
 
       this.placeOrderForOcoBuy();
-    if(this.limitPriceForOco !=undefined && this.limittriggerForOco !=undefined){
+    if(this.limitPriceForOco1 !=undefined && this.limittriggerForOco1 !=undefined){
       if (this.data.ltpdata != null) {
         this.marketOrderPrice = parseFloat(this.data.ltpdata);
         console.log('market',this.marketOrderPrice)
-        console.log(this.marketOrderPrice , parseFloat(this.limittriggerForOco))
-        console.log(this.marketOrderPrice , parseFloat(this.limitPriceForOco))
-        console.log(parseFloat(this.limittriggerForOco) , parseFloat(this.limitPriceForOco))
+        console.log(this.marketOrderPrice , parseFloat(this.limittriggerForOco1))
+        console.log(this.marketOrderPrice , parseFloat(this.limitPriceForOco1))
+        console.log(parseFloat(this.limittriggerForOco1) , parseFloat(this.limitPriceForOco1))
         if(
-          this.marketOrderPrice > parseFloat(this.limittriggerForOco) &&
-          this.marketOrderPrice > parseFloat(this.limitPriceForOco) &&
-          parseFloat(this.limittriggerForOco) > parseFloat(this.limitPriceForOco)
+          this.marketOrderPrice > parseFloat(this.limittriggerForOco1) &&
+          this.marketOrderPrice > parseFloat(this.limitPriceForOco1) &&
+          parseFloat(this.limittriggerForOco1) > parseFloat(this.limitPriceForOco1)
         ){
           
           let payload = {
-            "userId":localStorage.getItem('user_id'),
+            // "userId":localStorage.getItem('user_id'),
             "uuid":localStorage.getItem('uuid'),
 
             "selling_asset_code":(this.data.selectedSellingAssetText).toUpperCase(),
@@ -1678,9 +1721,9 @@ export class StopLossComponent implements DoCheck {
             "offerType":"L",
             "txn_type":"1",
             "assetCode":this.data.getAssetCode(localStorage.getItem('buying_crypto_asset'), localStorage.getItem('selling_crypto_asset')),
-            "quantity":this.limitAmountForOco,
-            "stop_loss_price": this.limitPriceForOco,
-            "trigger_price":this.limittriggerForOco
+            "quantity":this.limitAmountForOco1,
+            "stop_loss_price": this.limitPriceForOco1,
+            "trigger_price":this.limittriggerForOco1
           }
 
           console.log('OCO BUY PAYLOAD',payload);
@@ -1743,18 +1786,18 @@ export class StopLossComponent implements DoCheck {
     //if(a == true){
 
       this.placeOrderForOcoSell()
-    if(this.limitPriceForOco !=undefined && this.limittriggerForOco !=undefined){
+    if(this.limitPriceForOco2 !=undefined && this.limittriggerForOco2 !=undefined){
       if (this.data.ltpdata != null) {
         this.marketOrderPrice = parseFloat(this.data.ltpdata);
         console.log('market',this.marketOrderPrice)
         if(
-          this.marketOrderPrice < parseFloat(this.limittriggerForOco) &&
-          this.marketOrderPrice < parseFloat(this.limitPriceForOco) &&
-          parseFloat(this.limittriggerForOco) < parseFloat(this.limitPriceForOco)
+          this.marketOrderPrice < parseFloat(this.limittriggerForOco2) &&
+          this.marketOrderPrice < parseFloat(this.limitPriceForOco2) &&
+          parseFloat(this.limittriggerForOco2) < parseFloat(this.limitPriceForOco2)
         ){
           
           let payload = {
-            "userId":localStorage.getItem('user_id'),
+            // "userId":localStorage.getItem('user_id'),
             "uuid":localStorage.getItem('uuid'),
 
             "selling_asset_code":(this.data.selectedBuyingAssetText).toUpperCase(),
@@ -1764,9 +1807,9 @@ export class StopLossComponent implements DoCheck {
             "offerType":"L",
             "txn_type":"2",
             "assetCode":this.data.getAssetCode(localStorage.getItem('buying_crypto_asset'), localStorage.getItem('selling_crypto_asset')),
-            "quantity":this.limitAmountForOco,
-            "stop_loss_price": this.limitPriceForOco,
-            "trigger_price":this.limittriggerForOco
+            "quantity":this.limitAmountForOco2,
+            "stop_loss_price": this.limitPriceForOco2,
+            "trigger_price":this.limittriggerForOco2
           }
 
           console.log('OCO BUY PAYLOAD',payload);
@@ -1840,7 +1883,7 @@ export class StopLossComponent implements DoCheck {
     if (this.selectedOrderType == 'OCO') {
 
       if ((this.limitAmount <= 0.0001) || (this.limitPrice <= 0)
-        || (this.limitAmountForOco <= 0.0001) || (this.limitPriceForOco <= 0) || (this.limittriggerForOco <=0.0001)) {
+        || (this.limitAmountForOco1 <= 0.0001) || (this.limitPriceForOco1 <= 0) || (this.limittriggerForOco1 <=0.0001)) {
         this.isPlaceOrderEnabled = false;
       }
       else {
@@ -1852,7 +1895,7 @@ export class StopLossComponent implements DoCheck {
   placeOrderForOcoSell() {
     if (this.selectedOrderType == 'OCO') {
 
-      if ((this.limitAmount <= 0.0001) || (this.limitPrice <= 0) || (this.limitAmountForOco <= 0.0001) || (this.limitPriceForOco <= 0) || (this.limittriggerForOco <=0.0001)) {
+      if ((this.limitAmount <= 0.0001) || (this.limitPrice <= 0) || (this.limitAmountForOco2 <= 0.0001) || (this.limitPriceForOco2 <= 0) || (this.limittriggerForOco2 <=0.0001)) {
         this.isPlaceOrderEnabledForSell = false;
       }
       else {
@@ -1889,7 +1932,31 @@ export class StopLossComponent implements DoCheck {
     }
     return 0.0001 >= this.limitAmount || 0.00000001 >= this.limitPrice;
   }
-  validatelimitAmountForOco() {
+
+  validateLimitSell(){
+
+    this.placeOrderForOcoBuy();
+    this.placeOrderForOcoSell();
+    var lv: number = 0.000001;
+    if (this.limitAmountSell <= 0.0001) {
+      $('.onlySellError2').show();
+      $('#mbuy').prop('disabled', true);
+      $('#msell').prop('disabled', true);
+      $('#onlySellBtn').prop('disabled', true);
+      
+
+    }
+    else {
+      $('.onlySellError2').hide();
+      $('#mbuy').prop('disabled', false);
+      $('#msell').prop('disabled', false);
+      $('#onlySellBtn').prop('disabled', false);
+    }
+    return 0.0001 >= this.limitAmountSell || 0.00000001 >= this.limitPriceSell;
+  }
+
+
+  /* validatelimitAmountForOco() {
     this.placeOrderForOcoBuy();
     this.placeOrderForOcoSell();
     var lv: number = 0.000001;
@@ -1906,9 +1973,9 @@ export class StopLossComponent implements DoCheck {
       $('#msell').prop('disabled', false);
     }
     return 0.0001 >= this.limitAmountForOco || 0.00000001 >= this.limitPriceForOco;
-  }
+  } */
 
-  validatelimitPriceForOco(){
+ /*  validatelimitPriceForOco(){
     this.placeOrderForOcoBuy();
     this.placeOrderForOcoSell();
     if(this.limitPriceForOco <=0.0001){
@@ -1924,10 +1991,10 @@ export class StopLossComponent implements DoCheck {
       $('#msell').prop('disabled', false);
     }
     return 0.0001 >= this.limitPriceForOco
-  }
+  } */
   
 
-  handlelimittriggerForOco(){
+  /* handlelimittriggerForOco(){
     // console.log('0here',this.limittriggerForOco)
     this.placeOrderForOcoBuy();
     this.placeOrderForOcoSell();
@@ -1942,7 +2009,7 @@ export class StopLossComponent implements DoCheck {
       $('#msell').prop('disabled', false);
     }
     return 0.0001 >= this.limittriggerForOco;
-  }
+  } */
 
 
   validatemarketLimit() {
@@ -2000,6 +2067,28 @@ export class StopLossComponent implements DoCheck {
     return 0.0001 >= this.stopLossQuantity;
   }
 
+  validateStoplossAmountSell(){
+
+    if (this.stopLossQuantitySell <= 0.0001) {
+      $('.onlySellError2').show();
+      $('#mbuy').prop('disabled', true);
+      $('#msell').prop('disabled', true);
+      this.stopLossTotalSell = ''
+
+    }
+    else {
+      this.stopLossTotalSell = (parseFloat(this.stopLossQuantitySell) * parseFloat(this.stopLossPriceSell)).toFixed(this.tradep)
+      if (isNaN(this.stopLossTotalSell)) {
+        this.stopLossTotalSell = ''
+      }
+      $('.onlySellError2').hide();
+      $('#mbuy').prop('disabled', false);
+      $('#msell').prop('disabled', false);
+    }
+    return 0.0001 >= this.stopLossQuantitySell;
+
+  }
+
   validateStoplossPrice() {
     /* $('.form-range').val('0'); document.getElementById('customRange3').classList.remove("changeBackgroundSlider");;
     this.sliderValueBuy = 0;
@@ -2027,6 +2116,23 @@ export class StopLossComponent implements DoCheck {
     return 0.0001 >= this.stopLossPrice;
   }
 
+  validateStoplossPriceSell() {
+  
+    if (this.stopLossPriceSell <= 0.0001) {
+      $('.onlySellError2').show();
+      $('#mbuy').prop('disabled', true);
+      $('#msell').prop('disabled', true);
+      this.stopLossTotal = ''
+
+    }
+    else {
+     $('.onlySellError2').hide();
+      $('#mbuy').prop('disabled', false);
+      $('#msell').prop('disabled', false);
+    }
+    return 0.0001 >= this.stopLossPriceSell;
+  }
+
   validateStoplossTriggerPrice() {
     /* $('.form-range').val('0'); document.getElementById('customRange3').classList.remove("changeBackgroundSlider");;
     this.sliderValueBuy = 0;
@@ -2046,6 +2152,21 @@ export class StopLossComponent implements DoCheck {
       $('#msell').prop('disabled', false);
     }
     return 0.0001 >= this.stopLossTriggerPrice;
+  }
+
+  validateStoplossTriggerPriceSell() {
+    
+    if (this.stopLossTriggerPriceSell <= 0.0001) {
+      $('.onlySellError2').show();
+      $('#mbuy').prop('disabled', true);
+      $('#msell').prop('disabled', true);
+    }
+    else {
+      $('.onlySellError2').hide();
+      $('#mbuy').prop('disabled', false);
+      $('#msell').prop('disabled', false);
+    }
+    return 0.0001 >= this.stopLossTriggerPriceSell;
   }
 
   /*** Method defination for selecting margin type ***/
@@ -2104,9 +2225,12 @@ export class StopLossComponent implements DoCheck {
   handleShowOrderTypeDropdown = (param) => {
     //this.selectedOrderType = 'GTC';
     this.disclosedQuantity = null;
-    this.limitAmountForOco = null;
-    this.limitTotalForOco = null;
-    this.limitPriceForOco = null;
+    this.limitAmountForOco1 = null;
+    this.limitTotalForOco1 = null;
+    this.limitPriceForOco1 = null;
+    this.limitAmountForOco2 = null;
+    this.limitTotalForOco2 = null;
+    this.limitPriceForOco2 = null;
     if (param.toLowerCase() == 'limit') {
       this.showOrderTypeDropdown = true
       $('#orderTypeDropdown').show();
@@ -2291,9 +2415,10 @@ export class StopLossComponent implements DoCheck {
     console.log('slide ltp', this.data.ltpdata);
     console.log('slide selelectedSellingAssetBalance', parseFloat(this.selelectedSellingAssetBalance));
     console.log('slide selelectedBuyingAssetBalance', parseFloat(this.selelectedBuyingAssetBalance));
+    console.log('slide this.tradep', parseFloat(this.tradep));
 
 
-
+    
 
     let sliderValue = this.sliderValueBuyLimit
     let ltp = this.data.ltpdata
@@ -2306,7 +2431,15 @@ export class StopLossComponent implements DoCheck {
       }
     }).subscribe(data => {
 
+
+      console.log('this.newBuybalanceLimit',this.newBuybalanceLimit);
+      console.log('this.sliderValue',sliderValue);
+      console.log('this.percentageValue',this.percentageValue);
       console.log('askme', data.ask[0].price);
+      console.log('this.tradep',this.tradep);
+
+
+      
 
       //this.limitAmount = (((this.newBuybalanceLimit * (sliderValue/100)) / parseFloat(data.ask[0].price))*this.percentageValue).toFixed(this.tradep)
 
@@ -2341,6 +2474,81 @@ export class StopLossComponent implements DoCheck {
   }
 
   getSellSliderValLimit(e) {
+    this.stpLoader = true
+
+    var balance;
+    if (e.target.value == 0) {
+      this.sliderValueSellLimit = 0;
+      document.getElementById('customRange4').classList.remove("changeBackgroundSlider");
+
+    }
+    if (e.target.value == 1) {
+      this.sliderValueSellLimit = 25;
+      document.getElementById('customRange4').classList.remove("changeBackgroundSlider");
+
+    }
+    if (e.target.value == 2) {
+      this.sliderValueSellLimit = 50;
+      document.getElementById('customRange4').classList.remove("changeBackgroundSlider");
+
+    }
+    if (e.target.value == 3) {
+      this.sliderValueSellLimit = 75;
+      document.getElementById('customRange4').classList.remove("changeBackgroundSlider");
+
+    }
+    if (e.target.value == 4) {
+      this.sliderValueSellLimit = 100;
+      document.getElementById('customRange4').classList.add("changeBackgroundSlider");
+
+    }
+
+    console.log('slide sliderValue', this.sliderValueSellLimit);
+    console.log('slide ltp', this.data.ltpdata);
+    console.log('slide selelectedSellingAssetBalance', parseFloat(this.selelectedSellingAssetBalance));
+    console.log('slide selelectedBuyingAssetBalance', parseFloat(this.selelectedBuyingAssetBalance));
+
+
+
+
+    let sliderValue = this.sliderValueSellLimit
+    let ltp = this.data.ltpdata
+    this.newSellbalanceLimit = parseFloat(this.selelectedBuyingAssetBalance);
+
+    this.limitAmountSell = ((this.newSellbalanceLimit * (sliderValue / 100)));
+
+    this.http.get<any>('https://stream.paybito.com/SocketStream/api/depth?symbol=' + localStorage.getItem('buying_crypto_asset') + localStorage.getItem('selling_crypto_asset') + '&limit=1', {
+      headers: {
+        'Content-Type': 'application/json',
+        'authorization': 'BEARER ' + localStorage.getItem('access_token'),
+      }
+    }).subscribe(data => {
+
+      console.log('askme', data.bid[0].price);
+
+
+      if (this.sliderValueSellLimit == 0) {
+        this.limitPriceSell = 0;
+      }
+      else {
+        this.limitPriceSell = (parseFloat(data.bid[0].price) + (parseFloat(data.bid[0].price) * 0.01)).toFixed(this.tradep);
+
+      }
+
+      this.limitValueSell = (this.limitAmountSell * this.limitPriceSell).toFixed(this.tradep);
+      this.validateLimitSell()
+
+
+
+    })
+
+
+
+    this.stpLoader = false
+
+
+  }
+  getSellSliderValLimitOCO(e) {
     this.stpLoader = true
 
     var balance;
@@ -2382,7 +2590,7 @@ export class StopLossComponent implements DoCheck {
     let ltp = this.data.ltpdata
     this.newSellbalanceLimit = parseFloat(this.selelectedBuyingAssetBalance);
 
-    this.limitAmount = ((this.newSellbalanceLimit * (sliderValue / 100)));
+    this.limitAmount2 = ((this.newSellbalanceLimit * (sliderValue / 100)));
 
     this.http.get<any>('https://stream.paybito.com/SocketStream/api/depth?symbol=' + localStorage.getItem('buying_crypto_asset') + localStorage.getItem('selling_crypto_asset') + '&limit=1', {
       headers: {
@@ -2395,15 +2603,15 @@ export class StopLossComponent implements DoCheck {
 
 
       if (this.sliderValueSellLimit == 0) {
-        this.limitPrice = 0;
+        this.limitPrice2 = 0;
       }
       else {
-        this.limitPrice = (parseFloat(data.bid[0].price) + (parseFloat(data.bid[0].price) * 0.01)).toFixed(this.tradep);
+        this.limitPrice2 = (parseFloat(data.bid[0].price) + (parseFloat(data.bid[0].price) * 0.01)).toFixed(this.tradep);
 
       }
 
-      this.limitValue = (this.limitAmount * this.limitPrice).toFixed(this.tradep);
-      this.validateLimit()
+      this.limitValue2 = (this.limitAmount2 * this.limitPrice2).toFixed(this.tradep);
+      this.validateLimitSell()
 
 
 
@@ -2418,7 +2626,6 @@ export class StopLossComponent implements DoCheck {
 
   getBuySliderValStopLimit(e) {
     this.stpLoader = true
-
     var balance;
     if (e.target.value == 0) {
       document.getElementById('customRange3').classList.remove("changeBackgroundSlider");
@@ -2552,28 +2759,30 @@ export class StopLossComponent implements DoCheck {
       }
     }).subscribe(data => { */
       //this.stopLossPrice = ((this.newBuybalanceLimit * (sliderValue / 100)));
-      this.stopLossPrice = (parseFloat(this.data.ltpdata) - (parseFloat(this.data.ltpdata)*0.02)).toFixed(this.tradep);
-      this.stopLossQuantity = ((this.newBuybalanceLimit * (sliderValue / 100)));
-      this.stopLossTriggerPrice = (parseFloat(this.data.ltpdata) - (parseFloat(this.data.ltpdata)*0.01)).toFixed(this.tradep);
-    this.stopLossTotal = (parseFloat(this.stopLossPrice) * parseFloat(this.stopLossQuantity)).toFixed(this.tradep)
+      this.stopLossPriceSell = (parseFloat(this.data.ltpdata) - (parseFloat(this.data.ltpdata)*0.02)).toFixed(this.tradep);
+      this.stopLossQuantitySell = ((this.newBuybalanceLimit * (sliderValue / 100)));
+      this.stopLossTriggerPriceSell = (parseFloat(this.data.ltpdata) - (parseFloat(this.data.ltpdata)*0.01)).toFixed(this.tradep);
+    this.stopLossTotalSell = (parseFloat(this.stopLossPriceSell) * parseFloat(this.stopLossQuantitySell))
 
-    
-    
+    // console.log('slide1', this.stopLossPriceSell);
+    // console.log('slide2', this.stopLossQuantitySell);
+    // console.log('slide3', this.stopLossTriggerPriceSell);
+    // console.log('slide4', this.stopLossTotalSell);    
 
     // this.getBuyValSlider(this.onlyBuyAmount)
 
     //   let balance = this.selelectedBuyingAssetBalance
     // this.onlySellPrice = (balance * sliderValue%)
 
-    if(parseFloat(this.stopLossQuantity)>0.0001){
-      $('.onlySellBtn').prop('disabled', false);
+    if(parseFloat(this.stopLossQuantitySell)>0.0001){
+      $('.onlySellBtnStopLimit').prop('disabled', false);
     }else{
-      $('.onlySellBtn').prop('disabled', true);
+      $('.onlySellBtnStopLimit').prop('disabled', false);
     }
 
     
 
-    this.validateStoplossAmount()
+    this.validateStoplossAmountSell()
 //});
 
     console.log('slide newBuybalance', this.newBuybalance);
@@ -2640,13 +2849,13 @@ export class StopLossComponent implements DoCheck {
       
       
       //FOR OCO 
-    this.limitPriceForOco = (parseFloat(this.data.ltpdata) + (parseFloat(this.data.ltpdata)*0.02)).toFixed(this.tradep);
-    this.limitAmountForOco = (((this.newBuybalanceLimit * (sliderValue / 100)) - ((this.newBuybalanceLimit * (sliderValue / 100)) * this.percentageValue)) / parseFloat(this.limitPriceForOco)).toFixed(this.tradep);
-    this.limittriggerForOco = (parseFloat(this.data.ltpdata) + (parseFloat(this.data.ltpdata)*0.01)).toFixed(this.tradep);
+    this.limitPriceForOco2 = (parseFloat(this.data.ltpdata) + (parseFloat(this.data.ltpdata)*0.02)).toFixed(this.tradep);
+    this.limitAmountForOco2 = (((this.newBuybalanceLimit * (sliderValue / 100)) - ((this.newBuybalanceLimit * (sliderValue / 100)) * this.percentageValue)) / parseFloat(this.limitPriceForOco2)).toFixed(this.tradep);
+    this.limittriggerForOco2 = (parseFloat(this.data.ltpdata) + (parseFloat(this.data.ltpdata)*0.01)).toFixed(this.tradep);
 
       
 
-      if(parseFloat(this.limitAmountForOco)>0.0001){
+      if(parseFloat(this.limitAmountForOco2)>0.0001){
         this.isPlaceOrderEnabledForSell = true
       }else{
         this.isPlaceOrderEnabledForSell = false
@@ -2672,7 +2881,6 @@ export class StopLossComponent implements DoCheck {
 
   getSellSliderValStopLimitOco(e) {
     this.stpLoader = true
-
     var balance;
     if (e.target.value == 0) {
       document.getElementById('customRange3OCO').classList.remove("changeBackgroundSlider");
@@ -2722,10 +2930,10 @@ export class StopLossComponent implements DoCheck {
       
 
     //FOR OCO 
-    this.limitPriceForOco = (parseFloat(this.data.ltpdata) - (parseFloat(this.data.ltpdata)*0.02)).toFixed(this.tradep);
+    this.limitPriceForOco1 = (parseFloat(this.data.ltpdata) - (parseFloat(this.data.ltpdata)*0.02)).toFixed(this.tradep);
     console.log(this.newBuybalanceLimit,sliderValue)
-      this.limitAmountForOco = ((this.newBuybalanceLimit * (sliderValue / 100)));
-      this.limittriggerForOco = (parseFloat(this.data.ltpdata) - (parseFloat(this.data.ltpdata)*0.01)).toFixed(this.tradep);
+      this.limitAmountForOco1 = ((this.newBuybalanceLimit * (sliderValue / 100)));
+      this.limittriggerForOco1 = (parseFloat(this.data.ltpdata) - (parseFloat(this.data.ltpdata)*0.01)).toFixed(this.tradep);
     
 
     // this.getBuyValSlider(this.onlyBuyAmount)
@@ -2735,7 +2943,7 @@ export class StopLossComponent implements DoCheck {
 
     
 
-    if(parseFloat(this.limitAmountForOco)>0.0001){
+    if(parseFloat(this.limitAmountForOco1)>0.0001){
       this.isPlaceOrderEnabled = true
     }else{
       this.isPlaceOrderEnabled = false
@@ -2950,13 +3158,13 @@ export class StopLossComponent implements DoCheck {
 
       }
     } else {
-      this.stopLossPrice = (parseFloat(this.data.ltpdata) - (parseFloat(this.data.ltpdata) * 0.02)).toFixed(this.tradep);
-      this.stopLossTriggerPrice = (parseFloat(this.data.ltpdata) - (parseFloat(this.data.ltpdata) * 0.01)).toFixed(this.tradep);
-      this.stopLossQuantity = (parseFloat(inputValue) / parseFloat(this.stopLossPrice)).toFixed(this.tradep);
+      this.stopLossPriceSell = (parseFloat(this.data.ltpdata) - (parseFloat(this.data.ltpdata) * 0.02)).toFixed(this.tradep);
+      this.stopLossTriggerPriceSell = (parseFloat(this.data.ltpdata) - (parseFloat(this.data.ltpdata) * 0.01)).toFixed(this.tradep);
+      this.stopLossQuantitySell = (parseFloat(inputValue) / parseFloat(this.stopLossPriceSell)).toFixed(this.tradep);
       $('.onlySellBtn').prop('disabled', false);
 
-      if (isNaN(this.stopLossQuantity)) {
-        this.stopLossQuantity = ''
+      if (isNaN(this.stopLossQuantitySell)) {
+        this.stopLossQuantitySell = ''
         $('.onlySellBtn').prop('disabled', true);
 
       }
@@ -2980,37 +3188,55 @@ export class StopLossComponent implements DoCheck {
       }
 
       //For OCO 
-      this.limitPriceForOco = (parseFloat(this.data.ltpdata) - (parseFloat(this.data.ltpdata) * 0.02)).toFixed(this.tradep);
-      this.limittriggerForOco = (parseFloat(this.data.ltpdata) - (parseFloat(this.data.ltpdata) * 0.01)).toFixed(this.tradep);
+      this.limitPriceForOco2 = (parseFloat(this.data.ltpdata) - (parseFloat(this.data.ltpdata) * 0.02)).toFixed(this.tradep);
+      this.limittriggerForOco2 = (parseFloat(this.data.ltpdata) - (parseFloat(this.data.ltpdata) * 0.01)).toFixed(this.tradep);
       
     } else {
-      this.stopLossPrice = (parseFloat(this.data.ltpdata) - (parseFloat(this.data.ltpdata) * 0.02)).toFixed(this.tradep);
-      this.stopLossTriggerPrice = (parseFloat(this.data.ltpdata) - (parseFloat(this.data.ltpdata) * 0.01)).toFixed(this.tradep);
-      this.stopLossTotal = (parseFloat(inputValue) * parseFloat(this.stopLossPrice)).toFixed(this.tradep);
+      this.stopLossPriceSell = (parseFloat(this.data.ltpdata) - (parseFloat(this.data.ltpdata) * 0.02)).toFixed(this.tradep);
+      this.stopLossTriggerPriceSell = (parseFloat(this.data.ltpdata) - (parseFloat(this.data.ltpdata) * 0.01)).toFixed(this.tradep);
+      this.stopLossTotalSell = (parseFloat(inputValue) * parseFloat(this.stopLossPriceSell)).toFixed(this.tradep);
       $('.onlySellBtn').prop('disabled', false);
 
-      if (isNaN(this.stopLossTotal)) {
-        this.stopLossTotal = ''
+      if (isNaN(this.stopLossTotalSell)) {
+        this.stopLossTotalSell = ''
         $('.onlySellBtn').prop('disabled', true);
 
       }
 
       //FOR OCO
-      this.limitPriceForOco = (parseFloat(this.data.ltpdata) + (parseFloat(this.data.ltpdata) * 0.02)).toFixed(this.tradep);
-      this.limittriggerForOco = (parseFloat(this.data.ltpdata) + (parseFloat(this.data.ltpdata) * 0.01)).toFixed(this.tradep);
+      this.limitPriceForOco2 = (parseFloat(this.data.ltpdata) + (parseFloat(this.data.ltpdata) * 0.02)).toFixed(this.tradep);
+      this.limittriggerForOco2 = (parseFloat(this.data.ltpdata) + (parseFloat(this.data.ltpdata) * 0.01)).toFixed(this.tradep);
     }
   }
 
   calculateAmountFromLimitForStopLoss = (type) => {
     if(this.stopLossPrice != ''){
-      //if(type == 'buy'){
-        this.stopLossQuantity = (parseFloat(this.stopLossTotal)/parseFloat(this.stopLossPrice)).toFixed(this.tradep)
 
-      //}else{
-  
-      //}
+
+      // this.stopLossQuantity = (parseFloat(this.stopLossTotal)/parseFloat(this.stopLossPrice)).toFixed(this.tradep)
+
+          this.stopLossTotal = (parseFloat(this.stopLossQuantity) * parseFloat(this.stopLossPrice)).toFixed(this.tradep);
+
+
+      
       if(isNaN(this.stopLossQuantity)){
         this.stopLossQuantity = ''
+      }
+    }
+  }
+
+  calculateAmountFromLimitForStopLossSell = (type) => {
+    if(this.stopLossPriceSell != ''){
+
+
+      // this.stopLossQuantity = (parseFloat(this.stopLossTotal)/parseFloat(this.stopLossPrice)).toFixed(this.tradep)
+
+          this.stopLossTotalSell = (parseFloat(this.stopLossQuantitySell) * parseFloat(this.stopLossPriceSell)).toFixed(this.tradep);
+
+
+      
+      if(isNaN(this.stopLossQuantitySell)){
+        this.stopLossQuantitySell = ''
       }
     }
   }
@@ -3037,7 +3263,7 @@ export class StopLossComponent implements DoCheck {
         //   /* If total is  zero then calculating amount */
         //   this.limitAmount = (parseFloat(this.limitValue)/parseFloat(this.limitPrice)).toFixed(this.tradep)
         // }
-        this.limitValue = (parseFloat(this.limitPrice)*parseFloat(this.limitAmount)).toFixed(this.tradep)
+        this.limitValueSell = (parseFloat(this.limitPriceSell)*parseFloat(this.limitAmountSell)).toFixed(this.tradep)
       }
       if(isNaN(this.limitAmount)){
         this.limitAmount = ''
@@ -3094,6 +3320,14 @@ export class StopLossComponent implements DoCheck {
     this.limitValue = (this.limitAmount * this.limitPrice).toFixed(this.tradep);
     if(isNaN(this.limitValue)){
       this.limitValue = '';
+    }
+
+  }
+
+  calculateLimitTotalFromAmountSell(){
+    this.limitValueSell = (this.limitAmountSell * this.limitPriceSell).toFixed(this.tradep);
+    if(isNaN(this.limitValueSell)){
+      this.limitValueSell = '';
     }
 
   }

@@ -1,5 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { CoreDataService } from "../core-data.service";
+
 import * as $ from 'jquery';
 import {
     widget,
@@ -12,10 +14,7 @@ import {
     ResolutionBackValues,
     HistoryDepth
 } from '../../assets/charting_library/charting_library.min';
-import { CoreDataService } from '../core-data.service';
 import { OptionsTvChartWebSocketAPI } from './OptionsTvChartWebSocketAPI';
-import { interval, timer } from 'rxjs';
-
 
 @Component({
     selector: 'app-options-tvchartcontainer',
@@ -28,7 +27,7 @@ export class OptionsTvchartcontainerComponent implements OnInit {
     private _interval: ChartingLibraryWidgetOptions['interval'] = 'D';
     //private _datafeedUrl= 'http://13.52.20.196:8080/api/public';
     private _datafeedUrl = 'https://accounts.paybito.com/ChartApi/options';
-    private _libraryPath: ChartingLibraryWidgetOptions['library_path'] = './assets/charting_library/';
+    private _libraryPath: ChartingLibraryWidgetOptions['library_path'] = '/assets/charting_library/';
     private _chartsStorageUrl: ChartingLibraryWidgetOptions['charts_storage_url'] = '';
     private _chartsStorageApiVersion: ChartingLibraryWidgetOptions['charts_storage_api_version'] = '1.1';
     private _clientId: ChartingLibraryWidgetOptions['client_id'] = 'tradingview.com';
@@ -43,7 +42,7 @@ export class OptionsTvchartcontainerComponent implements OnInit {
     private assetPairName: any;
     Datafeed:IBasicDataFeed;
     timezone:Timezone='Etc/UTC';
-    supportedResolutions:string[] = ["1", "15", "30", "60", "240", "1D", "2D", "3D", "1W", "3W", "1M", "6M"]
+    supportedResolutions:string[] = ["1","3","5", "15", "30", "60", "240", "1D", "2D", "3D", "1W", "3W", "1M", "6M"]
     historyDepthReturn:HistoryDepth;
     config = {
         supported_resolutions: this.supportedResolutions
@@ -113,7 +112,11 @@ export class OptionsTvchartcontainerComponent implements OnInit {
     }
 
     changeThemeColor(theme){
-       this.loadTradingViewData()
+
+        this.Themecolor = theme;
+        console.log('colour changed to ',this.Themecolor);
+        this.loadTradingViewData();
+
         if(theme == 'Dark'){
             const widgetOptions: ChartingLibraryWidgetOptions = {
                 symbol: this._symbol,
@@ -123,8 +126,8 @@ export class OptionsTvchartcontainerComponent implements OnInit {
                 container_id: this._containerId,
                 library_path: this._libraryPath,
                 locale: 'en',
-                disabled_features: ['use_localstorage_for_settings', 'header_saveload', 'header_settings', 'header_compare', 'header_symbol_search', 'header_chart_type','widget_logo'],
-                enabled_features: ['hide_left_toolbar_by_default', 'header_indicators'],
+                disabled_features: ['use_localstorage_for_settings', 'header_saveload', 'header_settings', 'header_compare', 'header_symbol_search', 'widget_logo'],
+                enabled_features: ['hide_left_toolbar_by_default', 'header_indicators','header_chart_type'],
                 charts_storage_url: this._chartsStorageUrl,
                 charts_storage_api_version: this._chartsStorageApiVersion,
                 client_id: this._clientId,
@@ -157,8 +160,8 @@ export class OptionsTvchartcontainerComponent implements OnInit {
                 container_id: this._containerId,
                 library_path: this._libraryPath,
                 locale: 'en',
-                disabled_features: ['use_localstorage_for_settings', 'header_saveload', 'header_settings', 'header_compare', 'header_symbol_search', 'header_chart_type','widget_logo'],
-                enabled_features: ['hide_left_toolbar_by_default', 'header_indicators'],
+                disabled_features: ['use_localstorage_for_settings', 'header_saveload', 'header_settings', 'header_compare', 'header_symbol_search', 'widget_logo'],
+                enabled_features: ['hide_left_toolbar_by_default', 'header_indicators','header_chart_type'],
                 charts_storage_url: this._chartsStorageUrl,
                 charts_storage_api_version: this._chartsStorageApiVersion,
                 client_id: this._clientId,
@@ -199,23 +202,29 @@ export class OptionsTvchartcontainerComponent implements OnInit {
     }
 
     ngOnInit() {
-        localStorage.setItem('resolutionData', '1D')
+        // setTimeout(() => {
+            localStorage.setItem('resolutionData', '1D')
 
-        this.buyingAsset = localStorage.getItem("buying_crypto_asset").toLocaleUpperCase();
-        this.sellingAsset = localStorage.getItem("selling_crypto_asset").toLocaleUpperCase();
-        this.assetPair = localStorage.getItem("selected_options_asset_pair")
-        this.assetPairName = localStorage.getItem("selected_options_asset_pair_name")
-        this._symbol = this.assetPair;
-        var test = localStorage.getItem('themecolor');
+            this.buyingAsset = localStorage.getItem("buying_crypto_asset").toLocaleUpperCase();
+            this.sellingAsset = localStorage.getItem("selling_crypto_asset").toLocaleUpperCase();
+            this.assetPair = localStorage.getItem("selected_options_asset_pair")
+            this.assetPairName = localStorage.getItem("selected_options_asset_pair_name")
+            this._symbol = this.assetPair;
+            var test = localStorage.getItem('themecolor');
 
-        this.callWebSocket();
+            this.callWebSocket();
 
         this.loadTradingViewData();
 
         this.tvChartInitialize();
 
 
-        window.onbeforeunload = () => this.ngOnDestroy();
+          window.onbeforeunload = () => this.ngOnDestroy();
+
+            
+        // }, 0);
+
+
     }
 
 
@@ -235,8 +244,8 @@ export class OptionsTvchartcontainerComponent implements OnInit {
                 container_id: this._containerId,
                 library_path: this._libraryPath,
                 locale: 'en',
-                disabled_features: ['use_localstorage_for_settings', 'header_saveload', 'header_settings', 'header_compare', 'header_symbol_search', 'header_chart_type', 'widget_logo'],
-                enabled_features: ['hide_left_toolbar_by_default', 'header_indicators'],
+                disabled_features: ['use_localstorage_for_settings', 'header_saveload', 'header_settings', 'header_compare', 'header_symbol_search',  'widget_logo'],
+                enabled_features: ['hide_left_toolbar_by_default', 'header_indicators','header_chart_type'],
                 charts_storage_url: this._chartsStorageUrl,
                 charts_storage_api_version: this._chartsStorageApiVersion,
                 client_id: this._clientId,
@@ -285,8 +294,8 @@ export class OptionsTvchartcontainerComponent implements OnInit {
                     container_id: this._containerId,
                     library_path: this._libraryPath,
                     locale: 'en',
-                    disabled_features: ['use_localstorage_for_settings', 'header_saveload', 'header_settings', 'header_compare', 'header_symbol_search', 'header_chart_type', 'widget_logo'],
-                    enabled_features: ['hide_left_toolbar_by_default', 'header_indicators'],
+                    disabled_features: ['use_localstorage_for_settings', 'header_saveload', 'header_settings', 'header_compare', 'header_symbol_search',  'widget_logo'],
+                    enabled_features: ['hide_left_toolbar_by_default', 'header_indicators','header_chart_type'],
                     charts_storage_url: this._chartsStorageUrl,
                     charts_storage_api_version: this._chartsStorageApiVersion,
                     client_id: this._clientId,
@@ -332,8 +341,8 @@ export class OptionsTvchartcontainerComponent implements OnInit {
                     container_id: this._containerId,
                     library_path: this._libraryPath,
                     locale: 'en',
-                    disabled_features: ['use_localstorage_for_settings', 'header_saveload', 'header_settings', 'header_compare', 'header_symbol_search', 'header_chart_type','widget_logo'],
-                    enabled_features: ['hide_left_toolbar_by_default', 'header_indicators'],
+                    disabled_features: ['use_localstorage_for_settings', 'header_saveload', 'header_settings', 'header_compare', 'header_symbol_search', 'widget_logo'],
+                    enabled_features: ['hide_left_toolbar_by_default', 'header_indicators','header_chart_type'],
                     charts_storage_url: this._chartsStorageUrl,
                     charts_storage_api_version: this._chartsStorageApiVersion,
                     client_id: this._clientId,
@@ -630,9 +639,9 @@ export class OptionsTvchartcontainerComponent implements OnInit {
 
         if (this.chartSocket.stompClient != null) {
             this.chartSocket.unsubscribe();
-            // timer(5000).subscribe(()=>{
+            // setTimeout(() => {
                 this.chartSocket._disconnect();  
-            // });
+            // }, 3000);
           }
     }
 

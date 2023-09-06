@@ -46,16 +46,15 @@ export class BasicComponent implements OnInit {
   accountType: string = "Buying";
   buttonType: string = "Buy";
   buttonTypeSmall: string = "buy";
-  constructor(public data: CoreDataService, private http: HttpClient, private route1: ActivatedRoute, private modalService: NgbModal, public meta: Meta) {
-
-    let fifthParam = this.route1.snapshot.queryParamMap.get('basic');
-    sessionStorage.setItem('basicroute', fifthParam);
+  constructor(public data: CoreDataService, private http: HttpClient, private route1: ActivatedRoute, private modalService: NgbModal,private meta: Meta) {
 
     this.meta.addTags
       ([
-      { name: 'description', content: 'Paybito Pro Futures - Start crypto future trading in one of the most trusted crypto exchanges in the world with 500+ crypto markets, Up to 125:1 Leverage, and low trading fees. ' },
+      { name: 'description', content: 'Broker basic exchange allows instant buying and selling of all major cryptocurrencies from around the world.' },
         
       ]);
+    let fifthParam = this.route1.snapshot.queryParamMap.get('basic');
+    sessionStorage.setItem('basicroute', fifthParam);
   }
 
   ngOnInit() {
@@ -164,7 +163,7 @@ export class BasicComponent implements OnInit {
 
   getBasecurrencyList() {
 
-    this.http.get<any>(this.data.WEBSERVICE + '/home/getAllCurrency', {
+    this.http.get<any>(this.data.WEBSERVICE + '/home/getAllCurrency/'+this.data.BROKERID, {
       headers: {
         'Content-Type': 'application/json',
         'authorization': 'BEARER ' + localStorage.getItem('access_token'),
@@ -183,7 +182,16 @@ export class BasicComponent implements OnInit {
     $('#base-cur-basic').prop('disabled', false);
     $('#base-cur-bas').prop('disabled', false);
     let abcd = this.balencelist.filter(x => x.currencyCode == Currency);
+
+    try{
     this.selelectedBuyingAssetBalance = abcd[0].closingBalance;
+
+
+    }
+    catch{
+      this.selelectedBuyingAssetBalance = 0;
+
+    }
     this.counter_currency = Currency;
     this.http.get<any>(this.data.WEBSERVICE + "/home/getBaseByCurrency?currency=" + Currency, {
       headers: {
@@ -212,7 +220,8 @@ export class BasicComponent implements OnInit {
       .subscribe(data => {
         var result = data;
         this.basecurrency = result.baseCurrencyList;
-        this.getUserTransaction();
+        // this.getUserTransaction();
+        this.renderUpdatedBalance('sell')
       });
 
   }
@@ -649,7 +658,7 @@ export class BasicComponent implements OnInit {
               } else {
 
                 var inputObj = {};
-                inputObj['userId'] = localStorage.getItem('user_id');
+                // inputObj['userId'] = localStorage.getItem('user_id');
                 inputObj['selling_asset_code'] = (this.counter_currency).toUpperCase();
                 inputObj['buying_asset_code'] = (this.base_currency).toUpperCase();
                 inputObj['amount'] = parseFloat(this.onlySellAmount);
@@ -776,7 +785,7 @@ export class BasicComponent implements OnInit {
                 $('.tradeBtn').attr('disabled', true);
               } else {
                 var inputObj = {};
-                inputObj['userId'] = localStorage.getItem('user_id');
+                // inputObj['userId'] = localStorage.getItem('user_id');
                 inputObj['selling_asset_code'] = this.base_currency.toUpperCase();
                 inputObj['buying_asset_code'] = this.counter_currency.toUpperCase();
                 inputObj['amount'] = parseFloat(this.onlyBuyAmount);
@@ -931,6 +940,8 @@ export class BasicComponent implements OnInit {
       }
     })
       .subscribe(response => {
+        console.log('ghghghghghg');
+        
         var result = response;
         if (result.error.error_data != '0') {
           this.data.alert('Cannot fetch user balance', 'danger');
@@ -940,12 +951,14 @@ export class BasicComponent implements OnInit {
           let balance = result.userBalanceList;
           for (var i = 0; i <= balance.length - 1; i++) {
             if (action == 'buy') {
-              console.log(balance[i].currencyCode, this.counter_currency.toUpperCase())
+              console.log('mmmm',balance[i].currencyCode, this.counter_currency.toUpperCase())
               if (balance[i].currencyCode == this.base_currency.toUpperCase()) {
                 this.selelectedSellingAssetBalance = balance[i].closingBalance;
                 break;
               }
             } else {
+              console.log('pppp',balance[i].currencyCode, this.counter_currency.toUpperCase())
+
               if (balance[i].currencyCode == this.counter_currency.toUpperCase()) {
                 this.selelectedBuyingAssetBalance = balance[i].closingBalance;
                 break;

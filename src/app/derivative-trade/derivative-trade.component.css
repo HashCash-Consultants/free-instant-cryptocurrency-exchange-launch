@@ -46,3 +46,13 @@ th,thead{
   border: none; */
   font-size: 16px;
 }
+
+.tradeHeader{
+  background-color: #273338 !important;
+  
+}
+
+.tradeHeaderlight{
+  background-color: #d3dddd !important;
+
+}

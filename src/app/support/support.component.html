@@ -3,7 +3,7 @@
         <div class="row d-flex" data-ng-controller="supportCtrl" data-ng-init="loginDuration();">
                 <div class="col-12 col-md-8 col-sm-10 mt-3 align-self-stretch">
                   <div class="bg-dark p-2 rounded h-100">
-                    <span class="font-md text-white mr-2 pl-3">Paybito Support</span>
+                    <span class="font-md text-white mr-2 pl-3">{{data.exchange}} Support</span>
                     <div class="w-100"></div>
                         <form (ngSubmit)="f.form.valid && supportMail()" #f="ngForm">
                             <ul class="list-group mt-3">

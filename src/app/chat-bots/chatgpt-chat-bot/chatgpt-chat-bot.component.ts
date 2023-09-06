@@ -98,6 +98,7 @@ export class ChatgptChatBotComponent implements OnInit {
 
       }, reason => {
         // wip(0);
+        // wip(0);
         console.log('CHATGPT REASON ==> ',reason);
         if(reason.statusText == 'Unknown Error'){
         this.data.alert('It seems your session is timed out for chat gpt. Please login again.', 'danger');
@@ -110,7 +111,6 @@ export class ChatgptChatBotComponent implements OnInit {
         this.isMessageSending = false;
 
         }
-        
 
       });
 

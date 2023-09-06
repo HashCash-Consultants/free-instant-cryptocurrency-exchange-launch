@@ -1,28 +1,21 @@
 <div [ngClass]="noInternetConnection == true ? 'extraPadding' : ''" *ngIf="noInternetConnection">
   <div wire:loading class="fixed top-0 left-0 right-0 bottom-0 w-full h-screen z-50 overflow-hidden bg-gray-700 opacity-1 flex flex-col items-center justify-center">
-    <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12 mb-4"></div>
     <h2 class="text-center text-xl font-semibold" style="color:#eb4d5c;">Loading...</h2>
     <p class="w-1/3 text-center" style="color:#eb4d5c;">No internet connection found. Please check your connection. </p>
   </div>
 </div>
+<div class="loading style-2" *ngIf="noInternetConnection"><div class="loading-wheel"></div></div>
 
-
-<nav [ngClass]="Themecolor == 'Dark' ? '' : 'navbar-light'" class="navbar navbar-expand-lg navbar-dark fixed-top " id="mainNav">
-  <a  class="navbar-brand" [ngClass]="Themecolor == 'Dark' ? '' : 'navbar-light'" routerLink="/dashboard">
+<nav [ngClass]="Themecolor == 'Dark' ? '' : 'navbar-light'" class="navbar navbar-expand-lg navbar-dark fixed-top dsktpNav" id="mainNav">
+  <a class="navbar-brand" [ngClass]="Themecolor == 'Dark' ? '' : 'navbar-light'" routerLink="/spot">
     <!-- <div class="text-center text-blue logo-deaitls">
-          <img src="./assets/img/Paybito Pro" alt="">
+          <img src="../../assets/img/Paybito Pro" alt="">
           <span><i class="fa fa-btc"></i></span>itrump
         </div> -->
 
-     
-      <!-- <img [src]="data.brokerlogo" class="img-fluid mx-auto d-block" style="height:36px;" alt="Broker Logo" *ngIf="data.brokerlogo != ''"> -->
-      <!-- <img src='./assets/img/logo-paybito.png' class="img-fluid mx-auto d-block" style="height:36px;" alt="Paybito Logo" *ngIf="Themecolor != 'Dark'"> -->
-      <img [src]="data.brokerlogo" class="img-fluid mx-auto d-block" style="height:36px;" alt="Paybito Logo" *ngIf="Themecolor == 'Dark'">
-      <img [src]="data.brokerlogo" class="img-fluid mx-auto d-block" style="height:36px;" alt="Paybito Logo" *ngIf="Themecolor != 'Dark' && data.BROKERID != 'PAYB18022021121103'">
-
-      <img src="./assets/img/logo-paybito.png" class="img-fluid mx-auto d-block" style="height:36px;" alt="Paybito Logo" *ngIf="Themecolor != 'Dark' && data.BROKERID == 'PAYB18022021121103'">
-  
-    
+        
+    <img height="40" [src]="data.logo"   style="" alt="Paybito Logo" *ngIf="Themecolor == 'Dark'">
+    <img height="40" [src]="data.logo"  style="" alt="Paybito Logo" *ngIf="Themecolor != 'Dark'">
 
   </a>
   <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
@@ -31,96 +24,286 @@
     <span class="navbar-toggler-icon"></span>
   </button>
   <div [ngbCollapse]="isNavbarCollapsed" class="collapse navbar-collapse" id="navbarResponsive" >
-    <ul [ngClass]="Themecolor == 'Dark' ? '' : 'sideav-light'" class="navbar-nav navbar-sidenav navbar-sidenav_new bg-dark" id="exampleAccordion">
+
+    <!-- <div class="d-flex justify-content-between" style="width: 100%;"> -->
+
+      
+
+
+      <ul id="menu" style="text-align: center; width: 100%">
+        
+        
+        <!--   -------------------------------------------------------------------------   -->
+        
+        <li [ngClass]="Themecolor == 'Dark' ? 'parent' : 'parant-light'">
+          
+        <a *ngIf="data.isConvert == 1 || data.isSpot == 1 || data.isOtc == 1;" data-toggle="tooltip"
+          data-placement="right" title="Trade with basic spot and OTC feature"> Trade 
+          <i class="fa fa-caret-down drop" aria-hidden="true"></i> <i class="fa fa-caret-up" aria-hidden="true"></i>
+        </a>
+          
+          <ul *ngIf="data.isConvert == 1 || data.isSpot == 1 || data.isOtc == 1;" [ngClass]="Themecolor == 'Dark' ? 'child' : 'child-light'">
+            <li *ngIf="data.isConvert == 1"><img class="menuimage" src="/assets/img/menu-icon/basic.svg" alt="Snow"><a data-toggle="tooltip"
+              data-placement="right" title="Trade with ease as a beginner" class="padlft" routerLink="/basic">Convert</a></li>
+            <li *ngIf="data.isSpot == 1;"><img class="menuimage" src="/assets/img/menu-icon/dashboard.svg" alt="Snow"><a class="padlft" data-toggle="tooltip"
+              data-placement="right" title="Simple interface with access to more trading features" routerLink="/spot">Spot</a></li>
+            <li *ngIf="data.isOtc == 1;"><img class="menuimage" src="/assets/img/menu-icon/otc.svg" alt="Snow"><a data-toggle="tooltip"
+              data-placement="right" title="Execute large trades at better pricing and enjoy faster settlements" class="padlft" routerLink="/otc">OTC</a></li>
+
+          </ul>
+        </li>
+        
+        <!--   -------------------------------------------------------------------------   -->
+        
+        <li   [ngClass]="Themecolor == 'Dark' ? 'parent' : 'parant-light'">
+          <a *ngIf="data.isFutures == 1 || data.isOptions == 1" data-toggle="tooltip"
+          data-placement="right" title="Trade with Derivatives">Derivatives 
+          <i class="fa fa-caret-down drop" aria-hidden="true"></i><i class="fa fa-caret-up" aria-hidden="true"></i> <span class="expand"></span>
+        </a>
+          <ul *ngIf="data.isFutures == 1 || data.isOptions == 1" [ngClass]="Themecolor == 'Dark' ? 'child' : 'child-light'">
+            <li *ngIf="data.isFutures == 1;"><img class="menuimage" src="/assets/img/menu-icon/derivative-dashboard.svg" alt="Snow"><a data-toggle="tooltip"
+              data-placement="right" title="Enjoy higher bottom line and hedge risks in the Futures market" class="padlft" routerLink="/futures">Futures</a></li>
+            <li *ngIf="data.isOptions == 1;"><img class="menuimage" src="/assets/img/optTrade.png" alt="Snow" height="40" width="40" style="padding-top: 15px; margin-left: -6px; margin-top: -3px;"><a data-toggle="tooltip"
+              data-placement="right" title="Trade European vanilla Options" class="padlft" routerLink="/options">Options</a></li>
+          </ul>
+        </li>
+        
+        <!--   -------------------------------------------------------------------------   -->
+        
+        
+        
+        <!--   -------------------------------------------------------------------------   -->
+        
+        <li [ngClass]="Themecolor == 'Dark' ? 'parent' : 'parant-light'">
+          <a routerLink="/copy-trading" *ngIf="data.isCopyTrade== 1;">Copy trade</a>
+        </li>
+
+        
+        <li [ngClass]="Themecolor == 'Dark' ? 'parent' : 'parant-light'">
+          <a target="_blank" href="https://billbitcoins.com/app/v2/ui/" *ngIf="data.isPayment == 1">Payments</a>
+        </li>
+        <!--   -------------------------------------------------------------------------   -->
+        
+        
+        
+        <!--   -------------------------------------------------------------------------   -->
+        
+        
+        
+        <!--   -------------------------------------------------------------------------   -->
+        
+        
+        
+        <li [ngClass]="Themecolor == 'Dark' ? 'parent' : 'parant-light'" class="dummy1" *ngIf="data.isPayment != 1"> <a></a></li>
+        <li [ngClass]="Themecolor == 'Dark' ? 'parent' : 'parant-light'" class="dummy2"> <a></a></li>
+        <li [ngClass]="Themecolor == 'Dark' ? 'parent' : 'parant-light'" class="dummy3" > <a></a></li>
+        
+        
+        
+
+        <li [ngClass]="Themecolor == 'Dark' ? 'parent' : 'parant-light'" class=" tyyt"><a title="History and Reports"><i class="fa fa-book" aria-hidden="true"></i>   <i class="fa fa-caret-down drop" aria-hidden="true" style="padding-left: 5px;"></i> <i class="fa fa-caret-up" aria-hidden="true" style="padding-left: 5px;"></i><span class="expand"></span></a>
+          <ul [ngClass]="Themecolor == 'Dark' ? 'child' : 'child-light'">
+            <li><img class="menuimage" src="/assets/img/menu-icon/history.svg" alt="Snow"><a title="History" class="padlft" routerLink="/history">History</a></li>
+            <li><img class="menuimage" src="/assets/img/menu-icon/report.svg" alt="Snow"><a title="Reports" class="padlft" routerLink="/report">Reports</a></li>
+          </ul>
+        </li>
+
+        <!-- <li [ngClass]="Themecolor == 'Dark' ? 'parent' : 'parant-light'" class=" tyyt"><a title="Wallet" routerLink="/my-wallet"><img class="menuimage" src="/assets/img/menu-icon/bitcoin-wallet.png" alt="Snow" style="width: 31px;margin-top: -5px;"></a>
+        </li> -->
+
+        <li [ngClass]="Themecolor == 'Dark' ? 'parent' : 'parant-light'" class=" tyyt"><a title="Wallet" ><img class="menuimage" src="/assets/img/menu-icon/bitcoin-wallet.png" alt="Snow" style="width: 29px;margin-top: -5px;">   <i class="fa fa-caret-down drop" aria-hidden="true" style="padding-left: 5px;"></i> <i class="fa fa-caret-up" aria-hidden="true" style="padding-left: 5px;"></i><span class="expand"></span></a>
+          <ul [ngClass]="Themecolor == 'Dark' ? 'child' : 'child-light'">
+            <li><img class="menuimage" src="/assets/img/menu-icon/my-wallet.svg" alt="Snow"><a title="My Wallet" class="padlft" routerLink="/my-wallet">My Wallet</a></li>
+            
+            <li><img class="menuimage" src="/assets/img/menu-icon/deposit-funds.svg" alt="Snow"><a title="Deposit Fiat" class="padlft" routerLink="/deposit-funds">Deposit Fiat</a></li>
+            <li><img class="menuimage" src="/assets/img/menu-icon/withdraw-funds.svg" alt="Snow"><a title="Withdraw Fiat" class="padlft" routerLink="/withdraw-funds"> Withdraw Fiat</a></li>
+          </ul>
+        </li>
+
+        
+        
+        <!--   -------------------------------------------------------------------------   -->
+        
+        <li [ngClass]="Themecolor == 'Dark' ? 'parent' : 'parant-light'" class=" sml tyyt"><a title="Settings" routerLink="/settings"><i class="fa fa-cog" aria-hidden="true"></i></a>
+        </li>
+
+
+        <li [ngClass]="Themecolor == 'Dark' ? 'parent' : 'parant-light'" class=" sml">
+          <a ><img [src]="imageLink"  class="rounded-circle mr-2" width="30px"
+          height="30px" alt="">
+        {{userName}} <i class="fa fa-caret-down drop" aria-hidden="true"></i>  <i class="fa fa-caret-up" aria-hidden="true" ></i></a>
+
+        <ul [ngClass]="Themecolor == 'Dark' ? 'child' : 'child-light'" class=" ext" *ngIf="Themecolor == 'Dark'">
+          <li><img class="menuimage" src="/assets/img/menu-icon/profile-details.svg" alt="Snow"><a class="padlft" routerLink="/profile-details">Profile Info</a></li>
+          <li><img class="menuimage" src="/assets/img/menu-icon/identity-verification.svg" alt="Snow"><a class="padlft" routerLink="/identity-verification">Identity Verification</a></li>
+          <li><img class="menuimage" src="/assets/img/menu-icon/bank-details.svg" alt="Snow"><a class="padlft" routerLink="/bank-details">Bank Info</a></li>
+          <li><img class="menuimage" src="/assets/img/menu-icon/promotion.svg" alt="Snow"><a class="padlft" routerLink="/promotion">Refer & earn</a></li>
+          <li *ngIf="!lightActive" (click)="changebg(false)" style="cursor: pointer;"><a class="padlft"><span class="thememg"><img src="../../assets/Moon_emoji_icon_png_grande.png" 
+            alt="Snow"></span> Change Mode</a></li>
+          <li *ngIf="lightActive" (click)="changebg(true)" style="cursor: pointer;"><a class="padlft"><span class="thememg"><img src="../../assets/sun_PNG13426.png"  alt="Snow"> Change Mode </span></a></li>
+
+          <li><a data-toggle="modal" (click)="open(content)" style="cursor: pointer;"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a></li>
+
+
+
+        </ul>
+
+        <ul [ngClass]="Themecolor == 'Dark' ? 'child' : 'child-light'" class=" ext" *ngIf="Themecolor != 'Dark'">
+          <li><img class="menuimage" src="/assets/img/menu-icon/profile-details-light.svg" alt="Snow"><a title="Profile Info" class="padlft" routerLink="/profile-details">Profile Info</a></li>
+          <li><img class="menuimage" src="/assets/img/menu-icon/identity-verification-light.svg" alt="Snow"><a class="padlft" routerLink="/identity-verification">Identity Verification</a></li>
+          <li><img class="menuimage" src="/assets/img/menu-icon/bank-details-light.svg" alt="Snow"><a class="padlft" routerLink="/bank-details">Bank Info</a></li>
+          <li><img class="menuimage" src="/assets/img/menu-icon/promotion-light.svg" alt="Snow"><a class="padlft" routerLink="/promotion">Refer & earn</a></li>
+          <li *ngIf="!lightActive" (click)="changebg(false)" style="cursor: pointer;"><a class="padlft"><span class="thememg"><img src="../../assets/Moon_emoji_icon_png_grande.png" 
+            alt="Snow"></span> Change Mode</a></li>
+          <li *ngIf="lightActive" (click)="changebg(true)" style="cursor: pointer;"><a class="padlft"><span class="thememg"><img src="../../assets/sun_PNG13426.png"  alt="Snow"> Change Mode </span></a></li>
+
+          <li><a data-toggle="modal" (click)="open(content)" style="cursor: pointer;"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a></li>
+
+
+
+        </ul>
+        </li>
+
+
+        <li [ngClass]="Themecolor == 'Dark' ? 'parent' : 'parant-light'" class=" sml tyyt"><a title="Support" href="{{data.supportUrl}}" target="_blank"><i class="fa fa-question-circle" aria-hidden="true"></i></a>
+        </li>
+
+
+        
+        <!--   -------------------------------------------------------------------------   -->
+        
+       
+      </ul>
+      
+
+
+      
+     
+    
+
+ 
+
+  </div>
+
+  
+
+
+</nav>
+
+
+<nav [ngClass]="Themecolor == 'Dark' ? '' : 'navbar-light'" class="navbar navbar-expand-lg navbar-dark fixed-top mobilescrrenNav" id="mainNav" style="display: none ;">
+  <a class="navbar-brand" [ngClass]="Themecolor == 'Dark' ? '' : 'navbar-light'" routerLink="/spot">
+    <!-- <div class="text-center text-blue logo-deaitls">
+          <img src="../../assets/img/Paybito Pro" alt="">
+          <span><i class="fa fa-btc"></i></span>itrump
+        </div> -->
+
+        
+    <img [src]="data.logo" height="40"  style="" alt="Paybito Logo" *ngIf="Themecolor == 'Dark'">
+    <img [src]="data.logo" height="40"  style="" alt="Paybito Logo" *ngIf="Themecolor != 'Dark'">
+
+  </a>
+  <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+    data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
+    aria-label="Toggle navigation" (click)="isNavbarCollapsed = !isNavbarCollapsed">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div [ngbCollapse]="isNavbarCollapsed" class="collapse navbar-collapse" id="navbarResponsive">
+    <ul [ngClass]="Themecolor == 'Dark' ? '' : 'sideav-light'" class="navbar-nav navbar-sidenav navbar-sidenav_new bg-dark" id="exampleAccordion" style="overflow: auto;">
 
       <li [ngClass]="Themecolor == 'Dark' ? '' : 'sideav-item-light'" class="nav-item {{currentRoute.url=='/'+s.alias ? 'active': ''}}" data-toggle="tooltip" data-placement="right"
         title="{{s.name}}" *ngFor="let s of sideMenu">
         <a class="nav-link" routerLink="/{{s.alias}}">
-          <img src="./assets/img/menu-icon/{{s.alias}}.svg" class="mr-2" width="14" height="14" alt="{{s.name}}" *ngIf="Themecolor == 'Dark'">
-          <img src="./assets/img/menu-icon/{{s.alias}}-light.svg" class="mr-2" width="14" height="14" alt="{{s.name}}" *ngIf="Themecolor != 'Dark'">
+          <img src="./assets/img/menu-icon/{{s.alias}}.svg" class="mr-2"  alt="{{s.name}}" *ngIf="Themecolor == 'Dark'">
+          <img src="./assets/img/menu-icon/{{s.alias}}-light.svg" class="mr-2"  alt="{{s.name}}" *ngIf="Themecolor != 'Dark'">
 
-          <span class="nav-link-text">{{s.name}}</span>
+          <span class="nav-link-text">{{s.name}} <i class="fa fa-users" aria-hidden="true" *ngIf="s.alias == 'promotion'" style="margin-left: 10px;color: #53b987;"></i></span> 
         </a>
       </li>
       <li [ngClass]="Themecolor == 'Dark' ? '' : 'sideav-item-light'" class="nav-item">
         <a class="nav-link" href="{{data.supportUrl}}" target="_blank">
-          <img src="./assets/img/menu-icon/support.svg" class="mr-2" width="14" height="14" alt="Support" *ngIf="Themecolor == 'Dark'">
-          <img src="./assets/img/menu-icon/support-light.svg" class="mr-2" width="14" height="14" alt="Support" *ngIf="Themecolor != 'Dark'">
+          <img src="./assets/img/menu-icon/support.svg" class="mr-2"  alt="Support" *ngIf="Themecolor == 'Dark'">
+          <img src="./assets/img/menu-icon/support-light.svg" class="mr-2"  alt="Support" *ngIf="Themecolor != 'Dark'">
 
           <span class="nav-link-text">Support</span>
         </a>
       </li>
+
+      <li [ngClass]="Themecolor == 'Dark' ? '' : 'sideav-item-light'" class="nav-item tryPadding">
+        
+      </li>
+      
     </ul>
-    <ul class="navbar-nav mr-auto " [ngClass]="disableMenu == true ? 'disabledCLass' : ''">
+    <ul class="navbar-nav mr-auto">
       <li class="nav-item  {{currentRoute.url=='/'+u.alias ? 'active': ''}}" *ngFor="let u of upperMenu">
-
-
         <a *ngIf="u.name == 'Basic';" class="nav-link" routerLink="/{{u.alias}}" data-toggle="tooltip"
           data-placement="right" title="Trade with ease as a beginner">
-          <img src="./assets/img/menu-icon/{{u.alias}}.svg" width="20" height="14"  alt="{{u.name}}">
+          <img src="./assets/img/menu-icon/{{u.alias}}.svg"  alt="{{u.name}}">
           <span class="nav-link-text">{{u.name}}</span>
         </a>
 
         <a *ngIf="u.name == 'Spot' && data.isSpot == 1;" class="nav-link" routerLink="/{{u.alias}}" data-toggle="tooltip"
           data-placement="right" title="Trade with ease as a beginner">
-          <img src="./assets/img/menu-icon/{{u.alias}}.svg" width="14" height="14" alt="{{u.name}}">
+          <img src="./assets/img/menu-icon/{{u.alias}}.svg"  alt="{{u.name}}">
           <span class="nav-link-text">{{u.name}}</span>
         </a>
 
         <a *ngIf="u.name == 'Futures'&& data.isFutures == 1;" class="nav-link" routerLink="/{{u.alias}}" data-toggle="tooltip"
           data-placement="right" title="Trade with ease as a beginner">
-          <img src="./assets/img/menu-icon/{{u.alias}}.svg" width="20px"  alt="{{u.name}}">
+          <img src="./assets/img/menu-icon/{{u.alias}}.svg"  alt="{{u.name}}">
           <span class="nav-link-text">{{u.name}}</span>
         </a>
 
         <a *ngIf="u.name == 'Options' && data.isOptions == 1;" class="nav-link" routerLink="/{{u.alias}}" data-toggle="tooltip"
           data-placement="right" title="Trade with ease as a beginner">
-          <img src="./assets/img/menu-icon/{{u.alias}}.svg" width="20px"  alt="{{u.name}}">
+          <img src="./assets/img/menu-icon/{{u.alias}}.svg"  alt="{{u.name}}">
           <span class="nav-link-text">{{u.name}}</span>
         </a>
 
         <a *ngIf="u.name == 'OTC';" class="nav-link" routerLink="/{{u.alias}}" data-toggle="tooltip"
           data-placement="right" title="Trade with ease as a beginner">
-          <img src="./assets/img/menu-icon/{{u.alias}}.svg" width="20px"  alt="{{u.name}}">
+          <img src="./assets/img/menu-icon/{{u.alias}}.svg"  alt="{{u.name}}">
           <span class="nav-link-text">{{u.name}}</span>
         </a>
+        
 
-
-
-
-        <!-- <a *ngIf="u.name == 'Basic';else pro" class="nav-link" routerLink="/{{u.alias}}" data-toggle="tooltip"
-          data-placement="right" title="Trade with ease as a beginner">
-          <img src="./assets/img/menu-icon/{{u.alias}}.svg" width="20" height="14" alt="{{u.name}}">
-          <span class="nav-link-text"> {{u.name}}</span>
-        </a>
-        <ng-template #pro>
-          <a *ngIf="u.name == 'Pro';else futures" class="nav-link" routerLink="/{{u.alias}}" data-toggle="tooltip"
-            data-placement="right" title="Simple interface with access to more trading features">
-            <img src="./assets/img/menu-icon/{{u.alias}}.svg" width="14" height="14" alt="{{u.name}}">
+        <!-- <ng-template #pro>
+          <a *ngIf="u.name == 'Spot';else futures" class="nav-link" routerLink="{{'/' + u.alias}}" data-toggle="tooltip"
+            data-placement="right" title="Use advanced trading features">
+            <img src="./assets/img/menu-icon/{{u.alias}}.svg"  alt="{{u.name}}">
             <span class="nav-link-text">{{u.name}}</span>
           </a>
         </ng-template>
         <ng-template #futures>
-          <a *ngIf="u.name == 'Futures';else options" class="nav-link" routerLink="/{{u.alias}}" data-toggle="tooltip"
+          <a *ngIf="u.name == 'Futures';else options" class="nav-link" routerLink="{{'/' + u.alias}}" data-toggle="tooltip"
             data-placement="right" title="Enjoy higher bottom line and hedge risks in the Futures market">
-            <img src="./assets/img/menu-icon/{{u.alias}}.svg" width="20px" alt="{{u.name}}">
+            <img src="./assets/img/menu-icon/{{u.alias}}.svg"  alt="{{u.name}}">
             <span class="nav-link-text">{{u.name}}</span>
           </a>
         </ng-template>
         <ng-template #options>
-          <a *ngIf="u.name == 'Options';else otc" class="nav-link" routerLink="/{{u.alias}}" data-toggle="tooltip"
-            data-placement="right" title="Trade European vanilla Options">
-            <img src="./assets/img/menu-icon/{{u.alias}}.svg" width="20px" alt="{{u.name}}">
+          <a *ngIf="u.name == 'Options';else copy" class="nav-link" routerLink="{{'/' + u.alias}}" data-toggle="tooltip"
+            data-placement="right" title="Trade European Vanilla Options">
+            <img src="./assets/img/menu-icon/{{u.alias}}.svg"  alt="{{u.name}}">
             <span class="nav-link-text">{{u.name}}</span>
           </a>
         </ng-template>
+
+        <ng-template #copy>
+          <a *ngIf="u.name == 'Copy Trading / Social Trading';else otc" class="nav-link" routerLink="/copy-trading" data-toggle="tooltip"
+            data-placement="right" title="Trade European Vanilla Options">
+            <span class="nav-link-text">{{u.name}}</span>
+          </a>
+        </ng-template>
+        
         <ng-template #otc>
           <a class="nav-link" routerLink="/{{u.alias}}" data-toggle="tooltip" data-placement="right"
             title="Execute large trades at better pricing and enjoy faster settlements">
-            <img src="./assets/img/menu-icon/{{u.alias}}.svg" width="20px" alt="{{u.name}}">
+            <img src="./assets/img/menu-icon/{{u.alias}}.svg"  alt="{{u.name}}">
             <span class="nav-link-text">{{u.name}}</span>
           </a>
         </ng-template> -->
+        
 
       </li>
 
@@ -139,10 +322,10 @@
             <div class="col">
               <span class="btngrpinr">
               <button class="btn btn-primary btn-sm day-light-btn widget screen-col" [ngClass]="Themecolor == 'Dark' ? 'themeToggleButonDark' : 'themeToggleButonLight'" *ngIf="!lightActive" style="z-index: 99;"
-               (click)="changebg(false)"><img src='./assets/Moon_emoji_icon_png_grande.png' width="20"
+               (click)="changebg(false)"><img src="../../assets/Moon_emoji_icon_png_grande.png" 
                  alt="Snow"></button>
              <button class="btn btn-primary btn-sm day-light-btn widget screen-col" [ngClass]="Themecolor == 'Dark' ? 'themeToggleButonDark' : 'themeToggleButonLight'" *ngIf="lightActive"  style="z-index: 99;"
-               (click)="changebg(true)"><img src='./assets/sun_PNG13426.png' width="20" alt="Snow"></button>
+               (click)="changebg(true)"><img src="../../assets/sun_PNG13426.png"  alt="Snow"></button>
            </span>
            </div>
           </div>
@@ -165,16 +348,8 @@
   </div>
 </nav>
 
-<!-- <div *ngIf="noInternetConnection">
-  <div class="overlay1 show"></div>
-  <div class="spanner show">
-    <div class="loader"></div>
-    <p style="color: #f23636; font-size: 25px; font-weight: bold;">Oops!! Slow or no internet connection</p>
-  </div>
-</div> -->
+<!-- <app-social-drawer [Themecolor]="Themecolor"></app-social-drawer> -->
 
-<app-social-drawer [Themecolor]="Themecolor"></app-social-drawer>
-  
 <app-chatgpt-chat-bot [Themecolor]="Themecolor"></app-chatgpt-chat-bot>
 
 <ng-template #content let-modal>
@@ -186,7 +361,19 @@
     <div [ngClass]="Themecolor == 'Dark' ? '' : 'lightThemeModalBody'" class="modal-body">
       <p>Select "Logout" below if you are ready to end your current session.</p>
       <button type="button" class="btn btn-secondary" (click)="modal.close()">Cancel</button>
-      <button type="button" class="btn btn-danger" (click)="modal.close(); data.logout();handleGoogleLogout();">Logout</button>
+      <button type="button" class="btn btn-danger" (click)="modal.close(); data.logout();handleFacebookLogout();handleGoogleLogout();">Logout</button>
     </div>
+  </div>
+</ng-template>
+
+<ng-template #myModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Subscription Ended</h4>
+  </div>
+  <div class="modal-body">
+    <span class="text-center">Your product usage subscription has expired. Please contact your system administrator for more info.</span>
+  </div>
+  <div class="modal-footer">
+    <!-- <button type="button" class="btn btn-success" (click)="redirectToPayment()">Renew</button> -->
   </div>
 </ng-template>

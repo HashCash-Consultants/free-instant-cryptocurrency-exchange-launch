@@ -1,4 +1,4 @@
-<div [ngResizable]="data.resize" class="stoploss-component p-2 pl-3 pr-3 rounded resizable-widget">
+<div   class="stoploss-component p-2 pl-3 pr-3 rounded resizable-widget">
 
   <button (click)="reset()" class="reset d-none">reset</button>
   <button (click)="warnKyc(content)" class="d-none" id="warn">click</button>
@@ -44,12 +44,12 @@
                           </span>
                           <span class="font-xs mr-1 deposit-withdraw-btn" *ngIf="valid">
                             <span class="diposit-hover">DEPOSIT</span>
-                            <img src="../../assets/img/send.png" style="width: 20px;" routerLink="/deposit-funds" />
+                            <img src="../../assets/img/send.png" alt="send logo" style="width: 20px;" routerLink="/deposit-funds" />
 
                           </span>
                           <span class="font-xs mr-1 deposit-withdraw-btn" *ngIf="!valid">
                             <span class="diposit-hover">RECEIVE</span>
-                            <img src="../../assets/img/pay.png" style="width: 20px;" routerLink="/my-wallet" />
+                            <img src="../../assets/img/send.png" alt="pay logo" style="width: 20px;" routerLink="/my-wallet" />
                           </span>
                           <div style="top: 0px;left: 142px;position: absolute;">
                             <div class="icon-section pull-left">
@@ -158,7 +158,7 @@
                               {{selectedBuyingAssetText | uppercase}}</small></span>
                           <span class="font-xs mr-1 deposit-withdraw-btn">
                             <span class="diposit-hover">RECEIVE</span>
-                            <img src="../../assets/img/pay.png" style="width: 20px;" routerLink="/my-wallet" />
+                            <img src="../../assets/img/send.png" alt="pay logo" style="width: 20px;" routerLink="/my-wallet" />
                           </span>
                           <div style="top: 0px;left: 153px;position: absolute;">
                             <div class="icon-section pull-left">
@@ -277,12 +277,12 @@
                           </span>
                           <span class="font-xs mr-1 deposit-withdraw-btn" *ngIf="valid">
                             <span class="diposit-hover">DEPOSIT</span>
-                            <img src="../../assets/img/send.png" style="width: 20px;" routerLink="/deposit-funds" />
+                            <img src="../../assets/img/send.png" alt="send logo" style="width: 20px;" routerLink="/deposit-funds" />
 
                           </span>
                           <span class="font-xs mr-1 deposit-withdraw-btn" *ngIf="!valid">
                             <span class="diposit-hover">RECEIVE</span>
-                            <img src="../../assets/img/pay.png" style="width: 20px;" routerLink="/my-wallet" />
+                            <img src="../../assets/img/send.png" alt="pay logo" style="width: 20px;" routerLink="/my-wallet" />
                           </span>
                           <div  style="top: 0px;left: 142px;position: absolute;z-index: 99999999;">
                             <div class="icon-section pull-left">
@@ -504,7 +504,7 @@
                               {{selectedBuyingAssetText | uppercase}}</small></span>
                           <span class="font-xs mr-1 deposit-withdraw-btn">
                             <span class="diposit-hover">RECEIVE</span>
-                            <img src="../../assets/img/pay.png" style="width: 20px;" routerLink="/my-wallet" />
+                            <img src="../../assets/img/send.png" alt="pay logo" style="width: 20px;" routerLink="/my-wallet" />
                           </span>
                           <div style="top: 0px;left: 143px;position: absolute; z-index: 99999999;">
                             <div class="icon-section pull-left sell_limit_icon">
@@ -733,12 +733,12 @@
                           </span>
                           <span class="font-xs mr-1 deposit-withdraw-btn" *ngIf="valid">
                             <span class="diposit-hover">DEPOSIT</span>
-                            <img src="../../assets/img/send.png" style="width: 20px;" routerLink="/deposit-funds" />
+                            <img src="../../assets/img/send.png" alt="send logo" style="width: 20px;" routerLink="/deposit-funds" />
 
                           </span>
                           <span class="font-xs mr-1 deposit-withdraw-btn" *ngIf="!valid">
                             <span class="diposit-hover">RECEIVE</span>
-                            <img src="../../assets/img/pay.png" style="width: 20px;" routerLink="/my-wallet" />
+                            <img src="../../assets/img/send.png" alt="pay logo" style="width: 20px;" routerLink="/my-wallet" />
                           </span>
                           <div style="top: 0px;left: 142px;position: absolute;">
                             <div class="icon-section pull-left">
@@ -853,7 +853,7 @@
                               {{selectedBuyingAssetText | uppercase}}</small></span>
                           <span class="font-xs mr-1 deposit-withdraw-btn">
                             <span class="diposit-hover">RECEIVE</span>
-                            <img src="../../assets/img/pay.png" style="width: 20px;" routerLink="/my-wallet" />
+                            <img src="../../assets/img/send.png" alt="pay logo" style="width: 20px;" routerLink="/my-wallet" />
                           </span>
                           <div style="top: 0px;left: 144px;position: absolute;">
                             <div class="icon-section pull-left">
@@ -989,12 +989,12 @@
                         </span>
                         <span class="font-xs mr-1 deposit-withdraw-btn" *ngIf="valid">
                           <span class="diposit-hover">DEPOSIT</span>
-                          <img src="../../assets/img/send.png" style="width: 20px;" routerLink="/deposit-funds" />
+                          <img src="../../assets/img/send.png" alt="send logo" style="width: 20px;" routerLink="/deposit-funds" />
 
                         </span>
                         <span class="font-xs mr-1 deposit-withdraw-btn" *ngIf="!valid">
                           <span class="diposit-hover">RECEIVE</span>
-                          <img src="../../assets/img/pay.png" style="width: 20px;" routerLink="/my-wallet" />
+                          <img src="../../assets/img/send.png" alt="pay logo" style="width: 20px;" routerLink="/my-wallet" />
                         </span>
 
                       </span>
@@ -1085,8 +1085,8 @@
                         </span>
                         <span class="font-xs mr-1 deposit-withdraw-btn">
                           <span class="diposit-hover">RECEIVE</span>
-                          <!--  <img src="../../assets/img/pay.png" style="width: 20px;" routerLink="/my-wallet" /> -->
-                          <img src="../../assets/img/send.png" style="width: 20px;" routerLink="/deposit-funds" />
+                          <!--  <img src="../../assets/img/send.png" alt="pay logo" style="width: 20px;" routerLink="/my-wallet" /> -->
+                          <img src="../../assets/img/send.png" alt="send logo" style="width: 20px;" routerLink="/deposit-funds" />
                         </span>
                       </span>
                       <div class="form-row">
@@ -1183,12 +1183,12 @@
                         </span>
                         <span class="font-xs mr-1 deposit-withdraw-btn" *ngIf="valid">
                           <span class="diposit-hover">DEPOSIT</span>
-                          <img src="../../assets/img/send.png" style="width: 20px;" routerLink="/deposit-funds" />
+                          <img src="../../assets/img/send.png" alt="send logo" style="width: 20px;" routerLink="/deposit-funds" />
 
                         </span>
                         <span class="font-xs mr-1 deposit-withdraw-btn" *ngIf="!valid">
                           <span class="diposit-hover">RECEIVE</span>
-                          <img src="../../assets/img/pay.png" style="width: 20px;" routerLink="/my-wallet" />
+                          <img src="../../assets/img/send.png" alt="pay logo" style="width: 20px;" routerLink="/my-wallet" />
                         </span>
 
                       </span>
@@ -1283,8 +1283,8 @@
                         </span>
                         <span class="font-xs mr-1 deposit-withdraw-btn">
                           <span class="diposit-hover">RECEIVE</span>
-                          <!-- <img src="../../assets/img/pay.png" style="width: 20px;" routerLink="/my-wallet" /> -->
-                          <img src="../../assets/img/send.png" style="width: 20px;" routerLink="/deposit-funds" />
+                          <!-- <img src="../../assets/img/send.png" alt="pay logo" style="width: 20px;" routerLink="/my-wallet" /> -->
+                          <img src="../../assets/img/send.png" alt="send logo" style="width: 20px;" routerLink="/deposit-funds" />
                         </span>
 
                       </span>
@@ -1385,12 +1385,12 @@
                           </span>
                           <span class="font-xs mr-1 deposit-withdraw-btn" *ngIf="valid">
                             <span class="diposit-hover">DEPOSIT</span>
-                            <img src="../../assets/img/send.png" style="width: 20px;" routerLink="/deposit-funds" />
+                            <img src="../../assets/img/send.png" alt="send logo" style="width: 20px;" routerLink="/deposit-funds" />
         
                           </span>
                           <span class="font-xs mr-1 deposit-withdraw-btn" *ngIf="!valid">
                             <span class="diposit-hover">RECEIVE</span>
-                            <img src="../../assets/img/pay.png" style="width: 20px;" routerLink="/my-wallet" />
+                            <img src="../../assets/img/send.png" alt="pay logo" style="width: 20px;" routerLink="/my-wallet" />
                           </span>
         
                         </span>
@@ -1472,7 +1472,7 @@
                               {{selectedBuyingAssetText | uppercase}}</small></span>
                           <span class="font-xs mr-1 deposit-withdraw-btn">
                             <span class="diposit-hover">RECEIVE</span>
-                            <img src="../../assets/img/pay.png" style="width: 20px;" routerLink="/my-wallet" />
+                            <img src="../../assets/img/send.png" alt="pay logo" style="width: 20px;" routerLink="/my-wallet" />
                           </span>
                         </span>
         
@@ -1574,12 +1574,12 @@
                         </span>
                         <span class="font-xs mr-1 deposit-withdraw-btn" *ngIf="valid">
                           <span class="diposit-hover">DEPOSIT</span>
-                          <img src="../../assets/img/send.png" style="width: 20px;" routerLink="/deposit-funds" />
+                          <img src="../../assets/img/send.png" alt="send logo" style="width: 20px;" routerLink="/deposit-funds" />
 
                         </span>
                         <span class="font-xs mr-1 deposit-withdraw-btn" *ngIf="!valid">
                           <span class="diposit-hover">RECEIVE</span>
-                          <img src="../../assets/img/pay.png" style="width: 20px;" routerLink="/my-wallet" />
+                          <img src="../../assets/img/send.png" alt="pay logo" style="width: 20px;" routerLink="/my-wallet" />
                         </span>
 
                       </span>
@@ -1670,8 +1670,8 @@
                         </span>
                         <span class="font-xs mr-1 deposit-withdraw-btn">
                           <span class="diposit-hover">RECEIVE</span>
-                          <!--  <img src="../../assets/img/pay.png" style="width: 20px;" routerLink="/my-wallet" /> -->
-                          <img src="../../assets/img/send.png" style="width: 20px;" routerLink="/deposit-funds" />
+                          <!--  <img src="../../assets/img/send.png" alt="pay logo" style="width: 20px;" routerLink="/my-wallet" /> -->
+                          <img src="../../assets/img/send.png" alt="send logo" style="width: 20px;" routerLink="/deposit-funds" />
                         </span>
                       </span>
                       <div class="form-row">
@@ -1768,12 +1768,12 @@
                         </span>
                         <span class="font-xs mr-1 deposit-withdraw-btn" *ngIf="valid">
                           <span class="diposit-hover">DEPOSIT</span>
-                          <img src="../../assets/img/send.png" style="width: 20px;" routerLink="/deposit-funds" />
+                          <img src="../../assets/img/send.png" alt="send logo" style="width: 20px;" routerLink="/deposit-funds" />
 
                         </span>
                         <span class="font-xs mr-1 deposit-withdraw-btn" *ngIf="!valid">
                           <span class="diposit-hover">RECEIVE</span>
-                          <img src="../../assets/img/pay.png" style="width: 20px;" routerLink="/my-wallet" />
+                          <img src="../../assets/img/send.png" alt="pay logo" style="width: 20px;" routerLink="/my-wallet" />
                         </span>
 
                       </span>
@@ -1868,8 +1868,8 @@
                         </span>
                         <span class="font-xs mr-1 deposit-withdraw-btn">
                           <span class="diposit-hover">RECEIVE</span>
-                          <!-- <img src="../../assets/img/pay.png" style="width: 20px;" routerLink="/my-wallet" /> -->
-                          <img src="../../assets/img/send.png" style="width: 20px;" routerLink="/deposit-funds" />
+                          <!-- <img src="../../assets/img/send.png" alt="pay logo" style="width: 20px;" routerLink="/my-wallet" /> -->
+                          <img src="../../assets/img/send.png" alt="send logo" style="width: 20px;" routerLink="/deposit-funds" />
                         </span>
 
                       </span>
@@ -1970,12 +1970,12 @@
                           </span>
                           <span class="font-xs mr-1 deposit-withdraw-btn" *ngIf="valid">
                             <span class="diposit-hover">DEPOSIT</span>
-                            <img src="../../assets/img/send.png" style="width: 20px;" routerLink="/deposit-funds" />
+                            <img src="../../assets/img/send.png" alt="send logo" style="width: 20px;" routerLink="/deposit-funds" />
         
                           </span>
                           <span class="font-xs mr-1 deposit-withdraw-btn" *ngIf="!valid">
                             <span class="diposit-hover">RECEIVE</span>
-                            <img src="../../assets/img/pay.png" style="width: 20px;" routerLink="/my-wallet" />
+                            <img src="../../assets/img/send.png" alt="pay logo" style="width: 20px;" routerLink="/my-wallet" />
                           </span>
         
                         </span>
@@ -2057,7 +2057,7 @@
                               {{selectedBuyingAssetText | uppercase}}</small></span>
                           <span class="font-xs mr-1 deposit-withdraw-btn">
                             <span class="diposit-hover">RECEIVE</span>
-                            <img src="../../assets/img/pay.png" style="width: 20px;" routerLink="/my-wallet" />
+                            <img src="../../assets/img/send.png" alt="pay logo" style="width: 20px;" routerLink="/my-wallet" />
                           </span>
                         </span>
         

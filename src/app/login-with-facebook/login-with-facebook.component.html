@@ -1,29 +1,30 @@
 <div>
-  <br>
-  <div class="d-flex justify-content-center">
-    <span>Or log in with</span>
+  <div class="or-section">
+    <span class="mutedText">Or log in with</span>
   </div>
-  <br>
-  <div class="d-flex justify-content-center">
-    <!-- <div class="col-md-4 col-sm-12 col-xs-12">
-      <button type="button" class="btn btn-outline-primary" (click)="getCurrentUrl()" style="width:100%"><i class="fa fa-facebook" aria-hidden="true"></i></button>
-
-    </div> -->
-    <div class="col-sm-4 col-md-4 col-xs-12">
-      <button type="button" class="btn btn-primary" style="width:100%" #loginRef><i class="fa fa-google" aria-hidden="true"></i></button>
-    </div>
-    <div class="col-sm-4 col-md-4 col-xs-12">
-      <button type="button" class="btn btn-primary" style="width:100%" (click)="loginWithLinkedIn()"><i class="fa fa-linkedin" aria-hidden="true"></i></button>
+  <div class="login-btn-div">
+    <div class="d-flex justify-content-center">
+      <!-- <div class="col-md-4 col-sm-12 col-xs-12">
+        <button type="button" class="btn btn-outline-primary" (click)="getCurrentUrl()" style="width:100%"><i class="fa fa-facebook" aria-hidden="true"></i></button>
+  
+      </div> -->
+      <!-- <div class="col-sm-4 col-md-4 col-xs-12">
+        <button type="button" class="btn btn-primary" style="width:100%" #loginRef><i class="fa fa-google" aria-hidden="true"></i></button>
+      </div>
+      <div class="col-sm-4 col-md-4 col-xs-12">
+        <button type="button" class="btn btn-primary" style="width:100%" (click)="loginWithLinkedIn()"><i class="fa fa-linkedin" aria-hidden="true"></i></button>
+      </div> -->
     </div>
   </div>
   <button style="display:none" id="authModalTrigger" (click)="handleOpenAuthModal(twoFactorAuthSocial)"></button>
+
   <ng-template #twoFactorAuthSocial let-modal>
     <div  class=" lightTheme modal-header test proper-alighnment-header">
       <h4 class="modal-title" id="modal-basic-title" style="color: black;">Security Authentication</h4>
       
       <div class="modal-body">
         
-          <div *ngIf="isPhoneVerificationEnable == true">
+          <div *ngIf="isPhoneVerificationEnable">
             <p class="text-left" style="color: black;">Input otp from your registered phone number</p>
     
           <form>
@@ -40,7 +41,7 @@
     
           </p>
           </div>
-          <div *ngIf="isGoogleAuthEnable == true">
+          <div *ngIf="isGoogleAuthEnable">
             <p class="text-left" style="color: black;">Input otp from your google authenticator</p>
       
             
@@ -55,7 +56,6 @@
               
             </p>
           </div>
-          
           <!-- [disabled]="twoFactorOtp == '' || smsOtp == '' " -->
           <button type="submit" class="btn btn-primary btn-block" 
             
@@ -84,7 +84,7 @@
     
           <form>
             <div class="form-group">
-              <input numbersOnly class="form-control" name="emailVerificationCode" id="smsOtp" type="password" [(ngModel)]="smsOtp"
+              <input class="form-control" numbersOnly name="emailVerificationCode" id="smsOtp" type="password" [(ngModel)]="smsOtp"
                 placeholder="OTP from registered phone no" autofocus>
                 <span class="text-primary sendCode" [ngClass]="disabledSpan ? 'disableSpanClass' : ''" *ngIf="showGetCodeButtonInSmsOtpPopup" (click)="handleSendOtpThroughSms()" 
                 > Get code</span>
@@ -104,6 +104,8 @@
         </div>
       </div>
     </ng-template>
+
+    
 </div>
   
 

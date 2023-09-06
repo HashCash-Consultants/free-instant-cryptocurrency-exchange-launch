@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, Optional, Input } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, Optional, Input, ViewChild, ElementRef } from '@angular/core';
 import { CoreDataService } from '../core-data.service';
 import { HttpClient } from '@angular/common/http';
 import * as $ from 'jquery';
@@ -22,7 +22,7 @@ export class TradesComponent implements OnInit {
   selectedBuyingAssetText: any;
   marketTradeBodyHtml: any;
   transactionType: any;
-  myTradeTableDisplayStatus: any;
+  myTradeTableDisplayStatus: any = 0;
   CreditCurrencyAmount: any;
   CreditBaseAmount: any;
   selectedCurrency: any;
@@ -116,6 +116,8 @@ export class TradesComponent implements OnInit {
   selldataStream: any;
   activeIdString: string;
 
+  //@ViewChild('allButtonClick') allButtonClick: ElementRef<HTMLElement>;
+
   @Input() Themecolors = 'Dark';
   constructor(
     public data: CoreDataService,
@@ -131,12 +133,24 @@ export class TradesComponent implements OnInit {
 
   ngOnInit() {
     // this.Themecolors = this.dash.Themecolor;
+    this.changemode();
+
     this.getTradeNavHist();
-    //this.callAllStopLimitOffers();
 
-
-    /* calling API to render data before event source for my trade, my offer and stop limit */
     this.data.renderDataForMyTradeSpot();
+    this.data.renderDataForMyOfferSpot();
+    this.callAllStopLimitOffers();
+
+
+    
+
+    setTimeout(() => {
+      this.handleClickAllButton('allButtonClick')
+     
+    }, 5000);
+
+
+
 
 
     this.data.currentMessage1.subscribe(message1 => {
@@ -162,13 +176,48 @@ export class TradesComponent implements OnInit {
 
   }
 
+
+
+
+  renderDataForMyOfferSpot = () => {
+    this.http.get<any>("https://stream.paybito.com/StreamingApi/rest/getOfferByAccountIDRest?userID=" + localStorage.getItem('user_id') + "&buyingAssetCode=" + this.selectedBuyingAssetText.toLocaleLowerCase() + "&sellingAssetCode=" + this.selectedSellingAssetText.toLowerCase() + "&pageNo=1&noOfItemsPerPage=10", {
+      headers: {
+        "Content-Type": "application/json",
+        authorization: "BEARER " + localStorage.getItem("access_token")
+      }
+    })
+      .subscribe(response => {
+        this.loader = false;
+        var res = response;
+        /* if (result.error.error_data != '0') {
+          this.alert(result.error.error_msg, 'danger');
+        } else { */
+        this.tradeofferbyId = response.tradeListResult;
+        this.clickAllButton();
+
+        document.body.classList.remove("overlay")
+        //}
+      }, reason => {
+        // document.body.classList.remove("overlay")
+
+      });
+  }
+
+
+
+
+
   convertToNumber(val) {
-    return (parseFloat(val)).toFixed(parseInt(this.tradep));
+    return (parseFloat(val)).toFixed(parseInt(localStorage.getItem('priceprc')));
 
   }
   convertToNumberP(val) {
-    return (parseFloat(val)).toFixed(parseInt(this.tradep));
+    return (parseFloat(val)).toFixed(parseInt(localStorage.getItem('priceprc')));
 
+  }
+
+  myTradeTotal(val) {
+    return (parseFloat(val)).toFixed(parseInt(localStorage.getItem('priceprc')));
   }
 
   ngDoCheck() {
@@ -176,17 +225,34 @@ export class TradesComponent implements OnInit {
     // this.Themecolors = this.dash.Themecolor;
 
     this.changemode();
-    this.tradehistrybyId = this.data.spotMyTradeData;
-    this.tradeofferbyId = this.data.spotMyOfferData;
-    // buyData = this.data.spotSpotLimitBuyData;
+    var a = localStorage.getItem('tradeFuncCall');
+
+    if (a == 'true') {
+      localStorage.setItem('tradeFuncCall', 'false')
+
+      this.data.renderDataForMyTradeSpot();
+      this.data.renderDataForMyOfferSpot();
+      this.callAllStopLimitOffers();
+    }
+    if (localStorage.getItem('isTimeToRenderSpotMyTrade') == 'true') {
+      localStorage.setItem('isTimeToRenderSpotMyTrade', 'false');
+      //this.handleClickAllButton('allButtonClick')
+      this.handleAllButtonClickForMyTrades();
+      
+      
+    }
+    
+      //this.tradehistrybyId = this.data.spotMyTradeData;
+    //  this.tradeofferbyId = this.data.spotMyOfferData;
+    //  buyData = this.data.spotSpotLimitBuyData;
     // this.selldata = this.data.spotSpotLimitSellData;
 
     // this.buyselldata = this.data.spotSpotLimitBuyData1;
-    //   this.buydata = buyData.filter(function (e) {
-    //     return e.action == 'buy';
-    // });
+      /* this.buydata = buyData.filter(function (e) {
+        return e.action == 'buy';
+    }); */
 
-    if (this.tradeofferbyId == undefined) {
+    /* if (this.tradeofferbyId == undefined) {
       this.tradeofferbyId = []
     }
     else {
@@ -197,10 +263,19 @@ export class TradesComponent implements OnInit {
       this.tradeofferbyIdSell = this.tradeofferbyId.filter(function (e) {
         return e.txn_type == 2;
       });
-    }
+    } */
 
     // console.log('tradeofferbyId', this.tradeofferbyId)
 
+    this.ref.detectChanges()
+  }
+
+  clickAllButton() {
+    //let el: HTMLElement = this.allButtonClick.nativeElement;
+    //console.log(el)
+    this.callAllStopLimitOffers();
+    //el.click();
+    // $('#allButtonClick').click();
 
   }
 
@@ -213,10 +288,24 @@ export class TradesComponent implements OnInit {
     else if (text_type == 1) {
       $('.typeBuy').show();
       $('.typeSell').hide();
+      this.tradeofferbyIdBuy = [];
+      let allData = this.data.spotMyOfferData;
+      for (let i = 0; i < allData.length; i++) {
+        if (allData[i].txn_type == 1) {
+          this.tradeofferbyIdBuy.push(allData[i])
+        }
+      }
     }
     else {
       $('.typeBuy').hide();
       $('.typeSell').show();
+      this.tradeofferbyIdSell = [];
+      let allData = this.data.spotMyOfferData;
+      for (let i = 0; i < allData.length; i++) {
+        if (allData[i].txn_type == 2) {
+          this.tradeofferbyIdSell.push(allData[i])
+        }
+      }
     }
   }
 
@@ -229,7 +318,7 @@ export class TradesComponent implements OnInit {
   }
 
   changemode() {
-    if (this.data.changescreencolor == true) {
+    if (this.Themecolors != 'Dark') {
       $(".bg_new_class").removeClass("bg-dark").css("background-color", "#fefefe");
       $(".bg-black").css("background-color", "transparent");
       $(".btn").css("color", "#000");
@@ -241,6 +330,30 @@ export class TradesComponent implements OnInit {
       $(".btn").css("color", "#fff");
       $(".text-blue").css("color", "white");
 
+    }
+
+    if (this.Themecolors != 'Dark') {
+      $(".bg_new_class")
+        .removeClass("bg-dark")
+        .css("background-color", "#fefefe");
+      $(".sp-highlow").css("background-color", "#d3dddd");
+      $(".sp-highlow").css("color", "Black");
+      $(".border-col").css("border-color", "#d3dddd");
+      $("th").css({ "background-color": "#d3dddd", color: "#273338" });
+      $(".text-left").css("color", "black");
+      $(".text-right").css("color", "black");
+    } else {
+      $(".bg_new_class")
+        .removeClass("bg-dark")
+        .css("background-color", "#16181a");
+      $(".sp-highlow").css("background-color", "#273338");
+      $(".sp-highlow").css("color", "yellow");
+      $(".border-col").css("border-color", "#273338");
+      $("th").css({ "background-color": "#273338", color: "#d3dddd" });
+      $(".text-left")
+        .css("color", "")
+        .css("color", "rgb(153, 152, 152)");
+      $(".text-right").css("color", "rgb(153, 152, 152)");
     }
   }
 
@@ -300,15 +413,13 @@ export class TradesComponent implements OnInit {
     this.myTradeTableDisplayStatus = value;
     if (this.myTradeTableDisplayStatus == 0) {
       // this.GetTradeDetail();
-      this.data.renderDataForMyTradeSpot()
+      //this.data.renderDataForMyTradeSpot()
       $('#myTradeBody').children('.filter').show();
       $('.tradeall').show();
 
     }
     if (this.myTradeTableDisplayStatus == 1) {
-      if (this.data.source4 != undefined) {
-        this.data.source4.close();
-      }
+
       $('#myTradeBody').children('.filter').show();
       $('#myTradeBody').children('tr.sell').hide();
       $('#myTradeBody').children('tr.short-sell').hide();
@@ -317,10 +428,7 @@ export class TradesComponent implements OnInit {
 
     }
     if (this.myTradeTableDisplayStatus == 2) {
-      if (this.data.source4 != undefined) {
-        this.data.source4.close();
 
-      }
       $('#myTradeBody').children('.filter').show();
       $('#myTradeBody').children('tr.buy').hide();
       $('#myTradeBody').children('tr.long-buy').hide();
@@ -382,8 +490,9 @@ export class TradesComponent implements OnInit {
     this.data.alert('Loading...', 'dark');
     inputObj['offer_id'] = offerId;
     inputObj['userId'] = localStorage.getItem('user_id');
+    inputObj['uuid'] = localStorage.getItem('uuid');
     var jsonString = JSON.stringify(inputObj);
-    this.http.post<any>(this.data.WEBSERVICE + '/userTrade/GetOfferByID', jsonString, { headers: { 'Content-Type': 'application/json' } })
+    this.http.post<any>(this.data.WEBSERVICE + '/userTrade/GetOfferByID', jsonString, { headers: { 'Content-Type': 'application/json', authorization: "BEARER " + localStorage.getItem("access_token") } })
       .subscribe(response => {
         this.data.loader = false;
         var result = response;
@@ -418,8 +527,9 @@ export class TradesComponent implements OnInit {
     this.data.alert('Loading...', 'dark');
     inputObj['offer_id'] = offerId;
     inputObj['userId'] = localStorage.getItem('user_id');
+    inputObj['uuid'] = localStorage.getItem('uuid');
     var jsonString = JSON.stringify(inputObj);
-    this.http.post<any>(this.data.WEBSERVICE + '/userTrade/GetOfferByID', jsonString, { headers: { 'Content-Type': 'application/json' } })
+    this.http.post<any>(this.data.WEBSERVICE + '/userTrade/GetOfferByID', jsonString, { headers: { 'Content-Type': 'application/json', authorization: "BEARER " + localStorage.getItem("access_token") } })
       .subscribe(response => {
         document.body.classList.remove("overlay")
         this.data.loader = false;
@@ -502,7 +612,7 @@ export class TradesComponent implements OnInit {
 
     var inputObj = {};
     inputObj["offer_id"] = this.manageOfferId;
-    inputObj["userId"] = localStorage.getItem("user_id");
+    // inputObj["userId"] = localStorage.getItem("user_id");
     if (this.modifyType == 1) {
       inputObj["selling_asset_code"] = this.data.selectedSellingAssetText.toUpperCase();
       inputObj["buying_asset_code"] = this.data.selectedBuyingAssetText.toUpperCase();
@@ -607,7 +717,7 @@ export class TradesComponent implements OnInit {
 
           var inputObj = {};
           inputObj["offer_id"] = this.manageOfferId;
-          inputObj["userId"] = localStorage.getItem("user_id");
+          // inputObj["userId"] = localStorage.getItem("user_id");
           inputObj["uuid"] = localStorage.getItem("uuid");
 
           if (this.modifyType == 1) {
@@ -707,7 +817,7 @@ export class TradesComponent implements OnInit {
 
     var inputObj = {};
     inputObj["offer_id"] = this.manageOfferId;
-    inputObj["userId"] = localStorage.getItem("user_id");
+    // inputObj["userId"] = localStorage.getItem("user_id");
     if (this.modifyType == 1) {
       inputObj["selling_asset_code"] = this.data.selectedSellingAssetText.toUpperCase();
       inputObj["buying_asset_code"] = this.data.selectedBuyingAssetText.toUpperCase();
@@ -818,7 +928,7 @@ export class TradesComponent implements OnInit {
 
           var inputObj = {};
           inputObj["offer_id"] = this.manageOfferId;
-          inputObj["userId"] = localStorage.getItem("user_id");
+          // inputObj["userId"] = localStorage.getItem("user_id");
           inputObj["uuid"] = localStorage.getItem("uuid");
 
           if (this.modifyType == 1) {
@@ -907,7 +1017,7 @@ export class TradesComponent implements OnInit {
     $('.load').fadeIn();
     var inputObj = {};
     inputObj['offer_id'] = this.delOfferId;
-    inputObj['userId'] = localStorage.getItem('user_id');
+    // inputObj['userId'] = localStorage.getItem('user_id');
     if (this.delTxnType == 2) {
       inputObj['selling_asset_code'] = this.data.selectedBuyingAssetText.toUpperCase();
       inputObj['buying_asset_code'] = this.data.selectedSellingAssetText.toUpperCase();
@@ -962,7 +1072,7 @@ export class TradesComponent implements OnInit {
     $('.load').fadeIn();
     var inputObj = {};
     inputObj['offer_id'] = this.delOfferId;
-    inputObj['userId'] = localStorage.getItem('user_id');
+    // inputObj['userId'] = localStorage.getItem('user_id');
     inputObj["uuid"] = localStorage.getItem("uuid");
 
     if (this.delTxnType == 2) {
@@ -1227,7 +1337,7 @@ export class TradesComponent implements OnInit {
     return (parseFloat(s.triggerPrice)).toFixed(parseInt(this.tradep));
   }
   getStoplossAmount(s) {
-    return (parseFloat(s.quantity)).toFixed(parseInt(this.tradem));
+    return (parseFloat(s.quantity)).toFixed(parseInt(localStorage.getItem('amountprc')));
   }
   getStoplossPriceNew(s) {
     return (parseFloat(s.stop_loss_price)).toFixed(parseInt(this.tradep));
@@ -1286,14 +1396,14 @@ export class TradesComponent implements OnInit {
               var inputObj = {};
               inputObj['selling_asset_code'] = localStorage.getItem('selling_crypto_asset').toUpperCase();
               inputObj['buying_asset_code'] = localStorage.getItem('buying_crypto_asset').toUpperCase();
-              inputObj['userId'] = localStorage.getItem('user_id');
+              // inputObj['userId'] = localStorage.getItem('user_id');
               inputObj['modify_type'] = 'edit';
               inputObj['stoploss_id'] = this.modifySlOffer;
               inputObj['stop_loss_price'] = this.modifySlPrice;
               inputObj['trigger_price'] = this.modifySlTrigger;
               inputObj['quantity'] = this.modifySlAmount;
               inputObj['txn_type'] = '1';
-            inputObj['uuid'] = localStorage.getItem('uuid');
+              inputObj['uuid'] = localStorage.getItem('uuid');
 
               var jsonString = JSON.stringify(inputObj);
               this.modifystoplossapi = this.http.post<any>(this.data.WEBSERVICE + '/userTrade/ModifyStopLossBuySell', jsonString, { headers: { "Content-Type": "application/json" } })
@@ -1320,14 +1430,14 @@ export class TradesComponent implements OnInit {
               var inputObj = {};
               inputObj['selling_asset_code'] = localStorage.getItem('buying_crypto_asset').toUpperCase();
               inputObj['buying_asset_code'] = localStorage.getItem('selling_crypto_asset').toUpperCase();
-              inputObj['userId'] = localStorage.getItem('user_id');
+              // inputObj['userId'] = localStorage.getItem('user_id');
               inputObj['modify_type'] = 'edit';
               inputObj['stoploss_id'] = this.modifySlOffer;
               inputObj['stop_loss_price'] = this.modifySlPrice;
               inputObj['trigger_price'] = this.modifySlTrigger;
               inputObj['quantity'] = this.modifySlAmount;
               inputObj['txn_type'] = '2';
-            inputObj['uuid'] = localStorage.getItem('uuid');
+              inputObj['uuid'] = localStorage.getItem('uuid');
 
               var jsonString = JSON.stringify(inputObj);
               this.stoploss2api = this.http.post<any>(this.data.WEBSERVICE + '/userTrade/ModifyStopLossBuySell', jsonString, { headers: { "Content-Type": "application/json" } })
@@ -1375,14 +1485,14 @@ export class TradesComponent implements OnInit {
               var inputObj = {};
               inputObj['selling_asset_code'] = localStorage.getItem('selling_crypto_asset').toUpperCase();
               inputObj['buying_asset_code'] = localStorage.getItem('buying_crypto_asset').toUpperCase();
-              inputObj['userId'] = localStorage.getItem('user_id');
+              // inputObj['userId'] = localStorage.getItem('user_id');
               inputObj['modify_type'] = 'edit';
               inputObj['stoploss_id'] = this.modifySlOffer;
               inputObj['stop_loss_price'] = this.modifySlPrice;
               inputObj['trigger_price'] = this.modifySlTrigger;
               inputObj['quantity'] = this.modifySlAmount;
               inputObj['txn_type'] = '1';
-            inputObj['uuid'] = localStorage.getItem('uuid');
+              inputObj['uuid'] = localStorage.getItem('uuid');
 
               var jsonString = JSON.stringify(inputObj);
               this.modifystoplossapi = this.http.post<any>(this.data.WEBSERVICE + '/userTrade/ModifyStopLossBuySell', jsonString, { headers: { "Content-Type": "application/json" } })
@@ -1410,14 +1520,14 @@ export class TradesComponent implements OnInit {
               var inputObj = {};
               inputObj['selling_asset_code'] = localStorage.getItem('buying_crypto_asset').toUpperCase();
               inputObj['buying_asset_code'] = localStorage.getItem('selling_crypto_asset').toUpperCase();
-              inputObj['userId'] = localStorage.getItem('user_id');
+              // inputObj['userId'] = localStorage.getItem('user_id');
               inputObj['modify_type'] = 'edit';
               inputObj['stoploss_id'] = this.modifySlOffer;
               inputObj['stop_loss_price'] = this.modifySlPrice;
               inputObj['trigger_price'] = this.modifySlTrigger;
               inputObj['quantity'] = this.modifySlAmount;
               inputObj['txn_type'] = '2';
-            inputObj['uuid'] = localStorage.getItem('uuid');
+              inputObj['uuid'] = localStorage.getItem('uuid');
 
               var jsonString = JSON.stringify(inputObj);
               this.stoploss2api = this.http.post<any>(this.data.WEBSERVICE + '/userTrade/ModifyStopLossBuySell', jsonString, { headers: { "Content-Type": "application/json" } })
@@ -1455,26 +1565,27 @@ export class TradesComponent implements OnInit {
     this.stopLossBuyingAsset = localStorage.getItem('buying_crypto_asset');
     this.stopLossSellingAsset = localStorage.getItem('selling_crypto_asset');
     var inputObj = {};
-    inputObj['selling_asset_code'] = (this.stopLossSellingAsset).toUpperCase();
-    inputObj['buying_asset_code'] = (this.stopLossBuyingAsset).toUpperCase();
-    inputObj['userId'] = localStorage.getItem('user_id');
+    // inputObj['userId'] = localStorage.getItem('user_id');
     inputObj['modify_type'] = 'delete';
     inputObj['stoploss_id'] = this.modifySlOffer;
     inputObj['stop_loss_price'] = this.modifySlPrice;
     inputObj['trigger_price'] = this.modifySlTrigger;
     inputObj['quantity'] = this.modifySlAmount;
     inputObj['uuid'] = localStorage.getItem('uuid');
-
     if (this.flag.toLocaleLowerCase() == 'buy') {
       inputObj['txn_type'] = '1';
+      inputObj['selling_asset_code'] = (this.stopLossSellingAsset).toUpperCase();
+      inputObj['buying_asset_code'] = (this.stopLossBuyingAsset).toUpperCase();
     } else {
       inputObj['txn_type'] = '2';
+      inputObj['selling_asset_code'] = (this.stopLossBuyingAsset).toUpperCase();
+      inputObj['buying_asset_code'] = (this.stopLossSellingAsset).toUpperCase();
     }
-
     var jsonString = JSON.stringify(inputObj);
     this.stoplossdelapi = this.http.post<any>(this.data.WEBSERVICE + '/userTrade/ModifyStopLossBuySell', jsonString, {
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        "authorization": "BEARER " + localStorage.getItem("access_token")
       }
     })
       .subscribe(data => {
@@ -1486,7 +1597,6 @@ export class TradesComponent implements OnInit {
           this.data.alert(result.error.error_msg, 'success');
           $('#trade').click();
         }
-
       });
   }
 
@@ -1662,8 +1772,18 @@ export class TradesComponent implements OnInit {
     this.myTradeTableAllPairs = isChecked.target.checked;
     if (this.myTradeTableAllPairs == true) {
       this.callMyTradeAllPairsAPI();
+    }else{
+      this.data.renderDataForMyTradeSpot();
     }
 
+  }
+
+  handleAllButtonClickForMyTrades = () => {
+    if (this.myTradeTableAllPairs == true) {
+      this.callMyTradeAllPairsAPI();
+    }else{
+      this.data.renderDataForMyTradeSpot();
+    }
   }
 
   callMyTradeAllPairsAPI() {
@@ -1681,7 +1801,10 @@ export class TradesComponent implements OnInit {
         this.Nodata1 = false;
         this.isloading = false;
 
-        //  console.log('ttttt', data)
+        console.log('ttttt', this.tradehistrybyIdNewData)
+
+        // let el: HTMLElement = this.allButtonClick.nativeElement;
+        // el.click();
 
       });
   }
@@ -1693,7 +1816,7 @@ export class TradesComponent implements OnInit {
     }
   }
   callMyOfferAllPairsAPI() {
-    this.stoplossdelapi = this.http.get<any>('https://stream.paybito.com/StreamingApi/rest/getOfferByAccountIDAll?uuid=' + localStorage.getItem('uuid'), {
+    this.stoplossdelapi = this.http.get<any>('https://stream.paybito.com/StreamingApi/rest/getOfferByAccountIDAll?userID=' + localStorage.getItem('user_id'), {
       headers: {
         'Content-Type': 'application/json'
       }
@@ -1701,6 +1824,7 @@ export class TradesComponent implements OnInit {
       .subscribe(data => {
 
         this.tradeofferbyIdNewData = data.tradeListResult;
+        this.clickAllButton();
 
         //  console.log('ttttt', data)
 
@@ -1713,6 +1837,16 @@ export class TradesComponent implements OnInit {
     this.myStopLimitAllPairs = isChecked.target.checked;
     if (this.myStopLimitAllPairs == true) {
       this.callStopLimitAllPairsAPI();
+    }else{
+      this.callAllStopLimitOffers();
+    }
+  }
+
+  handleStopLimitAllButton = () => {
+    if (this.myStopLimitAllPairs == true) {
+      this.callStopLimitAllPairsAPI();
+    }else{
+      this.callAllStopLimitOffers();
     }
   }
 
@@ -1725,14 +1859,34 @@ export class TradesComponent implements OnInit {
       .subscribe(data => {
 
         this.buydataNew = data.tradeListResult;
+        console.log(this.buydataNew.length,typeof(this.buydataNew.length))
+        //this.clickAllButton();
 
         //  console.log('ttttt', data)
+        this.handleClickAllButton('spotStopLimitAllButton')
+        
 
       });
   }
 
+  /* method for establishing click event and perform programiticcaly click on all filter button*/
+
+  handleClickAllButton = (param) => {
+    let elem = document.getElementById(param)
+     //console.log(elem);
+     var evt = document.createEvent('MouseEvents');
+     evt.initMouseEvent('mousedown', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+     if(elem != null && elem != undefined){
+       elem.dispatchEvent(evt);
+  
+       elem.click();
+       elem.click();
+       
+     }
+  }
+
   callAllStopLimitOffers() {
-    console.log('my tstr')
+    //console.log('my tstr')
     //this.allStoplimitButtonStatus = true;
 
 

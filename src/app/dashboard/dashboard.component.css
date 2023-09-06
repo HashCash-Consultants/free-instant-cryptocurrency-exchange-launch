@@ -62,8 +62,8 @@
         padding-right: 9px;   
     }
     .order_row_ml{
-        margin-left: -9px;
-        margin-right: -9px;
+        margin-left: -1px;
+        margin-right: -27px;
     }
     .left-container_fluid{
         padding-left:8px;
@@ -85,18 +85,28 @@
         top: 0.5px;
     }
     .dashboardContent{
-        padding-left: 7px;
+        padding-left: 0px;
         zoom: 80%;
     
+    }
+    .chartDiv{
+        transform: translate(0px, 0px);
+        margin-top: 0px !important; 
+        margin-left:5px;
     }
     @media (max-width:480px){
         .stoploss-col{
             margin-top: 5px;
         }
+        .chartDiv{
+            transform: translate(0px, 0px);
+            margin-top: 292px !important; 
+            margin-left:5px;
+        }
       }
       @media (min-width: 1500px) {
         .dashboardContent{
-            padding-left: 10px;
+            padding-left: 0px;
             zoom: 80%;
             
         
@@ -134,9 +144,24 @@
         }
     
     }
+    .toggleButon{
+        background-color: #24262d;
+    }
+    .toggleButtonLite{
+        background-color: #d3dddd;
 
-    .extrapaddingDashboard{
-        padding-top: 17px !important;
+        
+    }
+
+    .activeButton{
+        background: #1f8881 !important;
+    }
+
+    .chartoff{
+        display: block;
+    }
+    .charton{
+        display: none;
     }
 
     

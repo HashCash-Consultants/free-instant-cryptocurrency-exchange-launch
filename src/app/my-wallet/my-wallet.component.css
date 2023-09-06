@@ -153,6 +153,7 @@ a{
   padding: 0 !important;
 }
 
+
 .newRowShade{
 background-color: #31313a ;
 border-top: 6px solid #24262d;
@@ -252,5 +253,8 @@ td{
       color: #d7dce1 !important;
       opacity: 1; /* Firefox */
     }
-
+    .childTabExpLight ul{
+      border-bottom: 2px solid #101a30 !important;
+  
+    }
  

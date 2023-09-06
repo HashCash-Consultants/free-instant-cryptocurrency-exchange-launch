@@ -1,0 +1,45 @@
+[  
+    {  
+        "broker_id":"DEFI20072023194041",
+        "exchange":"Bricsprime",
+        "exchange_logo":"https://trade.bowo.exchange/assets/img/logo-white-paybito.png",
+		"company_name":"Bricsprime",
+		"company_email":"customer-support@hashcashconsultants.com",
+		"company_address":"2100 Geng Road, Palo Alto, CA, 94303, USA",
+		"company_website":"https://www.paybito.com/",
+		"support":"customer-support@hashcashconsultants.com",
+		"copyright":"2018",
+		"ios_logo":"https://trade.bowo.exchange/assets/img/appstore-btn.png",
+		"ios_link":"https://apps.apple.com/in/app/paybitotrade/id1492071529",
+		"android_logo":"https://trade.bowo.exchange/assets/img/gplay-btn.png",
+		"android_link":"https://play.google.com/store/apps/details?id=com.hashcash.paybito",
+		"facebook_logo":"https://trade.bowo.exchange/assets/img/ic-fb.jpg",
+		"facebook_link":"https://www.facebook.com/paybito/",
+		"linkedin_logo":"https://trade.bowo.exchange/assets/img/ic-ln.jpg",
+		"linkedin_link":"https://www.linkedin.com/company/paybito",
+		"twitter_logo":"https://trade.bowo.exchange/assets/img/ic-tw.jpg",
+		"twitter_link":"https://twitter.com/paybito/"
+    },
+	{
+        "broker_id":"DEFI20072023194041",
+        "exchange":"Bricsprime",
+        "exchange_logo":"https://www.xobico.com/images/logo-wide.png",
+		"company_name":"XOBICO",
+		"company_email":"customer-support@XOBICO.com",
+		"company_address":"2100 Geng Road, Palo Alto, CA, 94303, USA",
+		"company_website":"https://www.xobico.com/",
+		"support":"customer-support@xobico.com",
+		"copyright":"2022",
+		"ios_logo":"https://files.coinswitch.co/ui/public/images/download-app-store.png",
+		"ios_link":"https://apps.apple.com/us/app/coinswitch/id1540214951",
+		"android_logo":"https://coinswitch.co/static/download-play-store-ae245891babad7417b96527bccc5dbf8.png",
+		"android_link":"https://apps.apple.com/us/app/coinswitch/id1540214951",
+		"facebook_logo":"https://files.coinswitch.co/ui/public/images/facebook--white.png?version=2021101408",
+		"facebook_link":"https://www.facebook.com/coinswitch",
+		"linkedin_logo":"https://files.coinswitch.co/ui/public/images/linkedin_share.png?version=2021101408",
+		"linkedin_link":"https://www.linkedin.com/company/13437199",
+		"twitter_logo":"https://files.coinswitch.co/ui/public/images/twitter--white.png?version=2021101408",
+		"twitter_link":"https://www.twitter.com/CoinSwitchKuber"
+    }
+    
+]

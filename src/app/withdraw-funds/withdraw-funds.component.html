@@ -162,7 +162,7 @@
             </div>
           </div>
         </div>
-        <div><span [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">*Withdrawal will be credited to the below account</span></div>
+        <div><span class="text-white">*Withdrawal will be credited to the below account</span></div>
         <ul class="list-group mb-2">
           <li [ngClass]="Themecolor == 'Dark' ? 'list-group-item user-deposit-data' : 'list-group-item-light user-deposit-data'">
             <div class="d-flex">
@@ -336,20 +336,20 @@
     </div>
   </div>
   <ng-template #twoFactorAuth let-modal>
-    <div  class="modal-header test proper-alighnment-header">
-      <h4 class="modal-title" id="modal-basic-title" style="color: brgb(248, 240, 240);">Security Authentication</h4>
+    <div  class="modal-header test proper-alighnment-header" [ngClass]="Themecolor == 'Dark' ? '' : 'lightTheme'">
+      <h4 class="modal-title" id="modal-basic-title" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Security Authentication</h4>
       
-      <div class="modal-body">
+      <div class="modal-body" [ngClass]="Themecolor == 'Dark' ? '' : 'lightThemeModalBody'">
           <!-- <p class="text-left" style="color: rgb(248, 240, 240);">Input otp from your google authenticator</p> -->
           <!-- <p class="text-left" style="margin-top: -21px; color: black;">{{hiddenEmail}}</p> -->
     
           
           <form>
             <div class="form-group">
-              <p class="text-left" style="color: rgb(248, 240, 240);">Input otp from your registered email address</p>
+              <p class="text-left" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'">Input otp from your registered email address</p>
               <div class="row">
                 <div class="col-md-8">
-                  <input numbersOnly class="form-control " name="emailVerificationCode" id="emailOtp" type="password" [(ngModel)]="emailOtp" placeholder="OTP" autofocus >
+                  <input class="form-control" [ngClass]="Themecolor == 'Dark' ? 'form-control' : 'form-control-light'" numbersOnly name="emailVerificationCode" id="emailOtp" type="password" [(ngModel)]="emailOtp" placeholder="OTP" autofocus >
                   
                 </div>
                 <button (click)="getCodeFromEmail()" class="btn getbtn btn-primary" [disabled]="isGetCodeButtonDisabled">Get Code</button>
@@ -359,23 +359,23 @@
             <div class="form-group">
               <span id="messageotp">{{messageotp}}</span>
             </div>
-            <div class="form-group">
+            <!-- <div class="form-group">
               <p class="text-left" style="color: rgb(248, 240, 240);">Input otp from your registered phone number</p>
               <div class="row">
                 <div class="col-md-8">
-                  <input numbersOnly class="form-control " name="emailVerificationCode" id="smsOtp" type="password" [(ngModel)]="smsOtp" placeholder="OTP" autofocus >
+                  <input class="form-control " numbersOnly name="emailVerificationCode" id="smsOtp" type="password" [(ngModel)]="smsOtp" placeholder="OTP" autofocus >
                   
                 </div>
                 <button (click)="getCodeFromSmsForExternalWallet()" class="btn getbtn btn-primary" [disabled]="isGetCodeButtonForSmsDisabled">Get Code</button>
               </div> 
               
-            </div>
-            <div class="form-group">
+            </div> -->
+           <!--  <div class="form-group">
               <span id="messageotp">{{messageotpforsms}}</span>
-            </div>
+            </div> -->
             <div class="form-group">
               <p class="text-left" style="color: rgb(248, 240, 240);">Input otp from your google authenticator</p>
-              <input class="form-control" name="emailVerificationCode" id="twoFactorOtp" type="password" [(ngModel)]="twoFactorOtp" placeholder="Two-Factor Authenticator code" autofocus >
+              <input class="form-control" [ngClass]="Themecolor == 'Dark' ? 'form-control' : 'form-control-light'" name="emailVerificationCode" id="twoFactorOtp" type="password" [(ngModel)]="twoFactorOtp" placeholder="Two-Factor Authenticator code" autofocus >
               
     
             </div>

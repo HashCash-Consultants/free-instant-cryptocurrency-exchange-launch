@@ -48,7 +48,7 @@ export class LoginWithFacebookComponent implements OnInit {
   authWindow: any;
   socialMediaIdUsedForTwoFactorAuth: string;
   @ViewChild('loginRef') loginElement!: ElementRef;
-  @ViewChild('twoFactorAuthSocial') twoFactorAuthSocial: any;
+  @ViewChild('twoFactorAuthSocial') twoFactorAuth: any;
   @ViewChild('smsAuth') smsAuth: any;
   userSmsAuthStatus: any;
   userPhoneUsingForSendingSms: any;
@@ -63,6 +63,7 @@ export class LoginWithFacebookComponent implements OnInit {
   socialMediaId: any;
   socialMediaToken: any;
   socialMediaType: any;
+  userPhoneCountryCodeUsingForSendingSms: any;
 
   constructor(
     public httpH: HttpClient,
@@ -142,7 +143,6 @@ export class LoginWithFacebookComponent implements OnInit {
         localStorage.setItem('google_email', profile.getEmail());
         localStorage.setItem('google_image', profile.getImageUrl());
         localStorage.setItem('socialLoginType', 'google')
-        // this.handleLoginAPICall(localStorage.getItem('google_app_id'), googleAuthUser.getAuthResponse().id_token, 'Google')
         this.handleCheckMf(localStorage.getItem('google_app_id'), googleAuthUser.getAuthResponse().id_token, 'Google')
       }, (error: any) => {
         console.log(error)
@@ -234,6 +234,8 @@ export class LoginWithFacebookComponent implements OnInit {
         loginObj['longitude'] = longitude;
         loginObj['ipAddress'] = ipaddress;
         loginObj['location'] = location;
+        loginObj['callFrom'] = 'web';
+
         if(this.isPhoneVerificationEnable){
           loginObj['phoneOtp'] = this.smsOtp
         }
@@ -264,8 +266,7 @@ export class LoginWithFacebookComponent implements OnInit {
           loginObj['deviceType'] = 'Desktop browser';
         }
         loginObj['socialMediaId'] = this.socialMediaId;
-
-        loginObj['loginType'] = this.loginType;
+        loginObj['loginType'] = 2;
 
         loginObj['socialMediaToken'] = this.socialMediaToken;
         loginObj['socialMediaType'] = this.socialMediaType;
@@ -276,64 +277,18 @@ export class LoginWithFacebookComponent implements OnInit {
             // error
             this.modalService.dismissAll();
             if (data['error']['error_data'] == '1') {
-              /* this.error = true;
-              this.loader = false; */
-              //this.errormessage = data['error']['error_msg'];
+             
               this.data.alert(data['error']['error_msg'], 'error')
-              //this.isLoginButtonEnabled = true
-              if (this.loginType > 0) {
-                //localStorage.setItem('force_reload_current_page','true')
+               if (this.loginType > 0) {
                 this.route.navigateByUrl('/social-signup');
-                // this.data.handlePageReloadForecibily(100)
-                //window.location.href="https://trade.paybito.com/social-signup"
               }
+              
               document.body.classList.remove('overlay')
             } else if (data['error']['error_data'] == '0') {
-              //this.error = false;
               this.loginResponse = data
-              localStorage.setItem('twoFactorAuth', data['userResult']['twoFactorAuth']);
-              this.userSmsAuthStatus = data['userResult']['phoneValidation']
-              localStorage.setItem('userSmsAuthStatus', this.userSmsAuthStatus)
-              this.userPhoneUsingForSendingSms = data['userResult']['phone'];
-              if (data['userResult']['phoneValidation'] == '1') {
-                this.accessTokenWillBeComingAfterVerifing = 'phone'
-              } else if (data['userResult']['twoFactorAuth'] == '1') {
-                this.accessTokenWillBeComingAfterVerifing = '2fa'
-              } else if (data['userResult']['phoneValidation'] == '1' && data['userResult']['twoFactorAuth'] == '1') {
-                this.accessTokenWillBeComingAfterVerifing = '2fa'
-              } else {
-                this.accessTokenWillBeComingAfterVerifing = 'none'
-              }
-              console.log('PHONE AUTH STATUS => ', this.userSmsAuthStatus, typeof (this.userSmsAuthStatus))
-              console.log('2FA AUTH STATUS => ', data['userResult']['twoFactorAuth'])
+              
               this.setLoginData(this.loginResponse);
-              /* if (this.userSmsAuthStatus == 1) {
-                this.socialMediaIdUsedForTwoFactorAuth = param;
-                document.body.classList.remove('overlay')
-                console.log('IN IF')
-                this.handleOpenSmsOtp();
-              } else if (data['userResult']['twoFactorAuth'] == 1) {
-                console.log('IN ELSE IF')
-                //this.loader = false;
-                //this.otpBlock = true;
-                //console.log('In two factor auth')
-                document.body.classList.remove('overlay')
-                this.modalService.dismissAll()
-                this.socialMediaIdUsedForTwoFactorAuth = param;
-                //console.log(this.twoFactorAuth,this.modalService)
-                //this.modalService.open(this.twoFactorAuth, { centered: true });
-                $('#authModalTrigger').click();
-
-                //$('.otp_segment').show();
-                //$('.otp_btn').show();
-                //$('.login_btn').hide();
-                //$('#loginInputOTP').focus();
-
-              } else {
-                console.log('IN ELSE')
-                this.setLoginData(this.loginResponse);
-
-              } */
+              
 
             } else {
               //this.loader = false;
@@ -363,20 +318,10 @@ export class LoginWithFacebookComponent implements OnInit {
 
   /* Method defination for two factor authentication  */
   loginThroughOtp() {
-    console.log('social media id', this.socialMediaIdUsedForTwoFactorAuth);
-    
     document.body.classList.add('overlay')
     var otpObj = {};
     //otpObj['email'] = this.email;
-    if (localStorage.getItem('socialLoginType') == 'google') {
-      otpObj['socialMediaId'] = localStorage.getItem('google_app_id')
-
-    }
-    else{
-    otpObj['socialMediaId'] = localStorage.getItem('linkedin_app_id')
-
-
-    }
+    otpObj['socialMediaId'] = this.socialMediaIdUsedForTwoFactorAuth
     otpObj['otp'] = this.twoFactorOtp;
     otpObj['callFrom'] = 'login';
     var jsonString = JSON.stringify(otpObj);
@@ -454,52 +399,38 @@ export class LoginWithFacebookComponent implements OnInit {
           localStorage.setItem('selling_crypto_asset', 'usd');
           localStorage.setItem('UserTiretype', dataRecheck.userResult.userTierType);
           localStorage.setItem('exist2FaKey', dataRecheck.userResult.exist2FaKey);
-          localStorage.setItem('BROKERID', dataRecheck.userResult.brokerId);
-              this.data.BROKERID = dataRecheck.userResult.brokerId;
-
-              this.data.getAllBrokerDetails();
-              this.data.getAllBrokerMarkets();
-
           this.cookie.set('access_token', localStorage.getItem('access_token'), 60);
           var accesstoken = localStorage.getItem('access_token');
-          document.cookie = cookieName2 + "=" + accesstoken + ";expires=" + myDate + ";domain=.paybito.com;path=/";
-                      if (sessionStorage.getItem('basicroute') == 'basic') {
-                        this.zone.run(() => {
-              this.route.navigate(['/basic']);
+          this.userSmsAuthStatus = data.userResult.phoneValidation
+          localStorage.setItem('userSmsAuthStatus', this.userSmsAuthStatus)
 
-            });
+          localStorage.setItem('BROKERID', dataRecheck.userResult.brokerId);
+          this.data.BROKERID = dataRecheck.userResult.brokerId;
+
+          this.data.getAllBrokerDetails();
+
+          document.cookie = cookieName2 + "=" + accesstoken + ";expires=" + myDate + ";domain=.paybito.com;path=/";
+          if (sessionStorage.getItem('basicroute') == 'basic') {
+            this.route.navigate(['/basic']);
+            this.data.handlePageReloadForecibily(100)
           }
           else if (sessionStorage.getItem('otcroute') == 'otc') {
-            this.zone.run(() => {
-              this.route.navigate(['/otc']);
-
-            });
-            
+            this.route.navigate(['/otc']);
+            this.data.handlePageReloadForecibily(100)
           }
           else if (sessionStorage.getItem('proDashboard') == 'pro') {
-            this.zone.run(() => {
-              // this.route.navigate(['/dashboard']);
-              this.routeTolocation();
+            // this.route.navigate(['/dashboard']);
+            this.routeTolocation();
 
-
-            });
-           
           }
           else {
             if (dataRecheck.userResult.userTierType == 2 || dataRecheck.userResult.userTierType == 3) {
-              this.zone.run(() => {
-                // this.route.navigate(['/dashboard']);
-                this.routeTolocation();
-  
-              });
+              // this.route.navigateByUrl('/dashboard');
+              this.routeTolocation();
             }
             else {
-              this.zone.run(() => {
-                
-                this.route.navigate(['/identity-verification']);
-  
-              });
-             
+              this.route.navigateByUrl('/identity-verification');
+              this.data.handlePageReloadForecibily(100)
             }
           }
           this.modalService.dismissAll()
@@ -515,10 +446,9 @@ export class LoginWithFacebookComponent implements OnInit {
     }); */
   }
 
-
   async routeTolocation(){
 
-    var a = await this.data.getAllBrokerMarkets();
+    var a = await this.data.getAllBrokerDetails();
 
     console.log('spot',this.data.isSpot,this.data.isFutures,this.data.isOptions);
     
@@ -527,21 +457,29 @@ export class LoginWithFacebookComponent implements OnInit {
         if(this.data.isFutures == 0 ){
             if(this.data.isOptions == 0){
                 this.route.navigateByUrl('/profile-details');
+            this.data.handlePageReloadForecibily(100)
+
                 }
 
         else{
 
       this.route.navigateByUrl('/options-dashboard');
+      this.data.handlePageReloadForecibily(100)
+
             }
 
       }
       else{
         this.route.navigateByUrl('/derivative-dashboard');
+        this.data.handlePageReloadForecibily(100)
+
           }
 
     }
     else{
         this.route.navigateByUrl('/dashboard');
+        this.data.handlePageReloadForecibily(100)
+
       }
     }
 
@@ -600,7 +538,7 @@ export class LoginWithFacebookComponent implements OnInit {
 
 
 
-    this.httpH.get(this.data.WEBSERVICE + '/home/getLinkedInData/desktop?code=' + param, { responseType: 'text' })
+    this.httpH.get(this.data.WEBSERVICE + '/home/getLinkedInData/web?code=' + param, { responseType: 'text' })
       .subscribe(data => {
         let res = JSON.parse(data)
         console.log('res', data);
@@ -616,8 +554,7 @@ export class LoginWithFacebookComponent implements OnInit {
           localStorage.setItem('linkedin_email', res['email'])
           localStorage.setItem('linkedin_name', res['firstName'] + ' ' + res['lastName'])
           localStorage.setItem('socialLoginType', 'linkedin')
-          console.log('Linked Token', localStorage.getItem('linkedin_app_id'))
-          // this.handleLoginAPICall(localStorage.getItem('linkedin_app_id'), res['linkedinToken'], 'LinkedIn')
+          console.log('Linked Token', res['linkedinToken'])
           this.handleCheckMf(localStorage.getItem('linkedin_app_id'), res['linkedinToken'], 'LinkedIn')
         } else {
           document.body.classList.remove('overlay');
@@ -631,98 +568,95 @@ export class LoginWithFacebookComponent implements OnInit {
 
   }
 
-    /* Method defination for calling base login API */
-    handleCheckMf = (param, socialAccessToken, socialType) => {
+  /* Method defination for calling base login API */
+  handleCheckMf = (param, socialAccessToken, socialType) => {
 
-      this.socialMediaId = param;
-      this.socialMediaToken = socialAccessToken;
-      this.socialMediaType = socialType;
+    this.socialMediaId = param;
+    this.socialMediaToken = socialAccessToken;
+    this.socialMediaType = socialType;
 
-      let payload = {
+
+    let payload = {
       socialMediaId: param,
       loginType: 2,
     }
-      this.httpH.post(this.data.WEBSERVICE + '/user/checkMfaStatus', JSON.stringify(payload), { headers: { 'content-Type': 'application/json' } })
-        .subscribe(data => {
-          // error
-          this.modalService.dismissAll();
-          if (data['error']['error_data'] == '1') {
-            /* this.error = true;
-            this.loader = false; */
-            //this.errormessage = data['error']['error_msg'];
-            this.data.alert(data['error']['error_msg'], 'danger')
-            //this.isLoginButtonEnabled = true
-            /* if (this.loginType > 0) {
-              //localStorage.setItem('force_reload_current_page','true')
-              this.route.navigateByUrl('/social-signup');
-              this.data.handlePageReloadForecibily(100)
-              //window.location.href="https://trade.paybito.com/social-signup"
-            } */
-            document.body.classList.remove('overlay')
-          } else if (data['error']['error_data'] == '0') {
-            //this.error = false;
-            this.loginResponse = data
-            localStorage.setItem('twoFactorAuth', data['userResult']['twoFactorAuth']);
-            this.userSmsAuthStatus = data['userResult']['phoneValidation']
-            this.userPhoneUsingForSendingSms = data['userResult']['phone'];
-            if (this.userSmsAuthStatus == 1) {
-              this.isPhoneVerificationEnable = true
-              console.log('in trueeee p');
-
-            } else {
-              this.isPhoneVerificationEnable = false
-              console.log('in false p');
-
-            }
-            if (data['userResult']['twoFactorAuth'] == 1) {
-              this.isGoogleAuthEnable = true
-              console.log('in trueeee g');
-              
-            } else {
-              this.isGoogleAuthEnable = false
-              console.log('in false g');
-
-            }
-  
-  
-            if (this.isGoogleAuthEnable || this.isPhoneVerificationEnable) {
-              console.log('in first');
-              
-              this.modalService.dismissAll()
-              document.body.classList.remove('overlay')
-              this.modalService.open(this.twoFactorAuthSocial, { centered: true, backdrop: false, keyboard: false });
-
-              // $('#authModalTrigger').click();
-              this.socialMediaIdUsedForTwoFactorAuth = param;
-            } else {
-              console.log('IN ELSE')
-              this.handleLoginAPICall();
-
-              
-            }
-  
-  
-  
-          } else {
-            //this.loader = false;
-            //this.otpBlock = true;
-            this.modalService.dismissAll()
-  
-            //this.modalService.open(this.twoFactorAuth, { centered: true });
-  
-            //this.isLoginButtonEnabled = true
-            $('.otp_segment').show();
-            $('.otp_btn').show();
-            $('.login_btn').hide();
-            $('#loginInputOTP').focus();
-          }
-  
-        }, error => {
-          //this.loader = true;
+    this.httpH.post(this.data.WEBSERVICE + '/user/checkMfaStatus', JSON.stringify(payload), { headers: { 'content-Type': 'application/json' } })
+      .subscribe(data => {
+        // error
+        this.modalService.dismissAll();
+        if (data['error']['error_data'] == '1') {
+          /* this.error = true;
+          this.loader = false; */
+          //this.errormessage = data['error']['error_msg'];
+          this.data.alert(data['error']['error_msg'], 'danger')
           //this.isLoginButtonEnabled = true
-        })
-  
-    }
+          /* if (this.loginType > 0) {
+            //localStorage.setItem('force_reload_current_page','true')
+            this.route.navigateByUrl('/social-signup');
+            this.data.handlePageReloadForecibily(100)
+            //window.location.href="https://exchange.beardbroz.io/social-signup"
+          } */
+          document.body.classList.remove('overlay')
+        }else if(data['error']['error_data'] == '2'){
+          if (this.loginType == 2) {
+            //localStorage.setItem('force_reload_current_page','true')
+            this.route.navigateByUrl('/social-signup');
+            this.data.handlePageReloadForecibily(100)
+            //window.location.href="https://exchange.beardbroz.io/social-signup"
+          }
+        } else if (data['error']['error_data'] == '0') {
+          //this.error = false;
+          this.loginResponse = data
+          localStorage.setItem('twoFactorAuth', data['userResult']['twoFactorAuth']);
+            localStorage.setItem('userSmsAuthStatus',data['userResult']['phoneValidation'])
+          this.userSmsAuthStatus = data['userResult']['phoneValidation']
+          this.userPhoneUsingForSendingSms = data['userResult']['phone'];
+          if (this.userSmsAuthStatus == 1) {
+            this.isPhoneVerificationEnable = true
+          } else {
+            this.isPhoneVerificationEnable = false
+          }
+          if (data['userResult']['twoFactorAuth'] == 1) {
+            this.isGoogleAuthEnable = true
+          } else {
+            this.isGoogleAuthEnable = false
+          }
+
+
+          if (this.isGoogleAuthEnable || this.isPhoneVerificationEnable) {
+            this.modalService.dismissAll()
+            document.body.classList.remove('overlay')
+            $('#authModalTrigger').click();
+            this.socialMediaIdUsedForTwoFactorAuth = param;
+          } else {
+            console.log('IN ELSE')
+            this.handleLoginAPICall();
+            
+            // this.setLoginData(this.loginResponse);
+          }
+
+
+
+        } else {
+          //this.loader = false;
+          //this.otpBlock = true;
+          this.modalService.dismissAll()
+
+          //this.modalService.open(this.twoFactorAuth, { centered: true });
+
+          //this.isLoginButtonEnabled = true
+          $('.otp_segment').show();
+          $('.otp_btn').show();
+          $('.login_btn').hide();
+          $('#loginInputOTP').focus();
+        }
+
+      }, error => {
+        //this.loader = true;
+        //this.isLoginButtonEnabled = true
+      })
+
+  }
 
   /* method defination for opening SMS otp popup */
   handleOpenSmsOtp = () => {
@@ -740,33 +674,12 @@ export class LoginWithFacebookComponent implements OnInit {
     }
   }
   /* Method defination for calling API for sms auth   */
-  async handleSmsAuthSubmit() {
-    let isOtpValidated = await this.data.handleConfirmOtpInSmsForLogin('loginverifymobileotp', this.userPhoneUsingForSendingSms, this.smsOtp, '', this.socialMediaIdUsedForTwoFactorAuth);
-    if (isOtpValidated) {
-      if (localStorage.getItem('twoFactorAuth') == '0') {
-        this.loginResponse = JSON.parse(localStorage.getItem('loginData'))
-        this.setLoginData(this.loginResponse);
-      } else {
-        //this.otpBlock = true;
-        this.modalService.dismissAll()
-
-        this.modalService.open(this.twoFactorAuthSocial, { centered: true, backdrop: false, keyboard: false });
-
-        // this.isLoginButtonEnabled = true
-        // $('.otp_segment').show();
-        // $('.otp_btn').show();
-        // $('.login_btn').hide();
-        // $('#loginInputOTP').focus();
-      }
-    } else {
-
-    }
-  }
+  /* Get Code button for sms auth popup */
 
   /* Get Code button for sms auth popup */
   async handleSendOtpThroughSms() {
     let payload = {
-      phone : this.userPhoneUsingForSendingSms
+      phone: this.userPhoneUsingForSendingSms
     }
     let isOtpSendToPhone = await this.data.handleSendOtpInSms(payload, 'loginmobileotp');
     if (isOtpSendToPhone) {
@@ -847,7 +760,6 @@ export class LoginWithFacebookComponent implements OnInit {
     if (localStorage.getItem('isCallLoginApi') == 'true') {
       localStorage.setItem('isCallLoginApi', 'false');
       localStorage.setItem('socialLoginType', 'facebook')
-      // this.handleLoginAPICall(localStorage.getItem('facebook_app_id'), localStorage.getItem('facebookAccessToken'), 'Facebook')
       this.handleCheckMf(localStorage.getItem('facebook_app_id'), localStorage.getItem('facebookAccessToken'), 'Facebook')
     }
 

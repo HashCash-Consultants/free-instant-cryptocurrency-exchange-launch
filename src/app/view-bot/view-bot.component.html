@@ -1,0 +1,111 @@
+<!-- <app-navbar></app-navbar> -->
+<app-navbar (themeChanged)="themeChangedHandler($event)"></app-navbar>
+
+<div class="content-wrapper pt-0 pl-3" >
+
+  <div class="container-fluid" data-ng-controller="profileCtrl" data-ng-init="loginDuration();">
+    <div class="row d-flex">
+
+      <div class="col-12 col-md-12 mt-3">
+        <div class=" p-2 pr-3 rounded align-self-stretch h-100" [ngClass]="Themecolor == 'Dark' ? 'bg-dark' : 'bg-light'">
+          <div class="w-100 mt-2"></div>
+
+          <div class="row">
+            <div class=" col-md-6 col-sm-12">
+
+              <div class="card">
+               <div class="d-flex justify-content-between">
+                  <div class="d-flex flex-column">
+                    <div class="p-2"><span class="traderLabel">Bot Name</span> 
+                      <span><h5>binancewunder</h5></span>
+                    </div>
+                    <div class="p-2"><span class="traderLabel">Followers</span> &nbsp;&nbsp; <span class="traderValue">0</span></div>
+                    <div class="p-2"><span class="traderLabel">Market</span> &nbsp;&nbsp; <span class="traderValue">---REVİZE AŞAMASINDADIR.EN KISA ZAMANDA</span></div>
+                    <div class="p-2"><span class="traderLabel">Minimum Capital Requirement</span>&nbsp;&nbsp;<span class="traderValue">$20,000.00</span></div>
+
+                  </div>
+                  <div class="traderProfileImage">
+                    <!-- <button class="imgBtn btn btn-secondary"> <img src="https://i.imgur.com/wvxPV9S.png" height="70"
+                      width="70" /></button> -->
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+            <div class="col-md-6 col-sm-12">
+
+              <div class="card">
+
+                <div class="table-responsive-sm paddingforMobile" >
+            
+
+           
+                  <table class="table table-sm table-hover">
+                    <thead>
+                      <tr  [ngClass]="Themecolor == 'Dark' ? 'bg-black text-white' : 'tableHeader-bg-light'">
+                        <th  scope="col" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="" style="font-size:16px"></th>
+                        <th scope="col" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="" style="font-size:16px">All Time</th>
+                        <th scope="col" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="" style="font-size:16px">Month</th>
+                        <th scope="col" [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="" style="font-size:16px">Week</th>
+                      </tr>
+                    </thead>
+
+                    <tbody>
+                      <tr [ngClass]="Themecolor == 'Dark' ? 'newRowShade' : 'newRowShade-light'">
+                        <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="extraPaddingTop">P/L</td>
+                        <td [ngClass]="Themecolor == 'Dark' ? 'text-white smallFont' : 'text-black smallFont'"  class="extraPaddingTop">$ 34749.75</td>
+                        <td [ngClass]="Themecolor == 'Dark' ? 'text-white smallFont' : 'text-black smallFont'"  class="extraPaddingTop">$ 34749.75</td>
+                        <td [ngClass]="Themecolor == 'Dark' ? 'text-white smallFont' : 'text-black smallFont'"  class="extraPaddingTop">$ 32589.25</td>
+                      </tr>
+
+                      <tr [ngClass]="Themecolor == 'Dark' ? 'newRowShade' : 'newRowShade-light'">
+                        <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="extraPaddingTop">Volume</td>
+                        <td [ngClass]="Themecolor == 'Dark' ? 'text-white smallFont' : 'text-black smallFont'"  class="extraPaddingTop">3128706 $</td>
+                        <td [ngClass]="Themecolor == 'Dark' ? 'text-white smallFont' : 'text-black smallFont'"  class="extraPaddingTop">139579 $</td>
+                        <td [ngClass]="Themecolor == 'Dark' ? 'text-white smallFont' : 'text-black smallFont'"  class="extraPaddingTop">129579 $</td>
+                      </tr>
+
+                      <tr [ngClass]="Themecolor == 'Dark' ? 'newRowShade' : 'newRowShade-light'">
+                        <td [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'"  class="extraPaddingTop">Number Of Trades</td>
+                        <td [ngClass]="Themecolor == 'Dark' ? 'text-white smallFont' : 'text-black smallFont'"  class="extraPaddingTop">10316</td>
+                        <td [ngClass]="Themecolor == 'Dark' ? 'text-white smallFont' : 'text-black smallFont'"  class="extraPaddingTop">459</td>
+                        <td [ngClass]="Themecolor == 'Dark' ? 'text-white smallFont' : 'text-black smallFont'"  class="extraPaddingTop">62</td>
+                      </tr>
+                      </tbody>
+                      </table>
+
+              </div>
+
+            </div>
+
+          </div>
+
+          
+
+          
+
+
+        
+
+          
+          
+        </div>
+      </div>
+
+
+
+         
+      
+      
+    </div>
+  </div>
+
+ 
+  <footer class="sticky-footer">
+    <div class="container">
+      <div class="text-center"> <small>Copyright © Paybito 2019</small> </div>
+    </div>
+  </footer>
+  <a class="scroll-to-top rounded" href="#page-top"> <i class="fa fa-angle-up"></i> </a>
+</div>

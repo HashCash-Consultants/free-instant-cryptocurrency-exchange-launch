@@ -32,13 +32,13 @@ export class DerivativeTvChartWebSocketAPI {
     
     
     _connect() {
-       //// //console.log('TV CONNECT')
+       //// console.log('TV CONNECT')
         if (localStorage.getItem('access_token') !== null && localStorage.getItem('access_token') !== undefined) {
-          //// //console.log('if')
+          //// console.log('if')
           let ws = new SockJS(this.webSocketEndPoint);
           this.stompClient = Stomp.over(ws);
           const _this = this;
-          //// //console.log(_this.stompClient)
+          //// console.log(_this.stompClient)
         _this.stompClient.connect({}, function (frame) {
             _this.stompClient.subscribe(_this.topic, function (sdkEvent) {
                 _this.onMessageReceived(sdkEvent);
@@ -46,32 +46,21 @@ export class DerivativeTvChartWebSocketAPI {
         }, this.errorCallBack);
         this.stompClient.debug = null
       }else{
-        //// //console.log('else')
-        // window.location.href = "https://trade.paybito.com/";
+        //// console.log('else')
+        // window.location.href = this.data.brokerDomain;
       }
         
     };
 
     _disconnect() {
-
-      try{
         if (this.stompClient !== null) {
-          this.stompClient.disconnect();
-      }
-
-      }
-      catch{
-
-        console.log('connection not established yet')
-
-      }
-
-       
+            this.stompClient.disconnect();
+        }
     }
 
     // on error, schedule a reconnection attempt
     errorCallBack(error) {
-        //// //console.log("errorCallBack -> " + error)
+        //// console.log("errorCallBack -> " + error)
         setTimeout(() => {
             this._connect();
         }, 5000);
@@ -82,12 +71,12 @@ export class DerivativeTvChartWebSocketAPI {
 	 * @param {*} message 
 	 */
     _send(message) {
-       // // //console.log('TV MESSAGE SENT')
+       // // console.log('TV MESSAGE SENT')
         this.stompClient.send("/app/sendRequest/tradingView", {}, JSON.stringify(message));
     }
 
     onMessageReceived(message) {
-       // // //console.log('TV MESSAGE RECEIVED')
+       // // console.log('TV MESSAGE RECEIVED')
         var str = JSON.stringify(message.body);
        var obj = JSON.parse(str);
        this.changeMessage(obj);
@@ -99,12 +88,12 @@ export class DerivativeTvChartWebSocketAPI {
     }
 
     subscribe() {
-        //// //console.log(this.stompClient)
+        //// console.log(this.stompClient)
         if (
           localStorage.getItem("buying_crypto_asset") !== null && localStorage.getItem("buying_crypto_asset") !== undefined &&
           localStorage.getItem("selling_crypto_asset") !== null && localStorage.getItem("selling_crypto_asset") !== undefined
         ) {
-        //// //console.log('TV MESSAGE SUBS')
+        //// console.log('TV MESSAGE SUBS')
           this.buyingasset = localStorage.getItem("buying_crypto_asset").toLocaleLowerCase();
           localStorage.setItem('lastBuyingAsset', this.buyingasset);
           this.sellingasset = localStorage.getItem("selling_crypto_asset").toLocaleLowerCase();
@@ -172,7 +161,7 @@ export class DerivativeTvChartWebSocketAPI {
 
           // if(isUnsubscribeOccured == 'true'){
 
-            //console.log('in socket subscribe' + resolutionData + resolutionDataFromStorage)
+            console.log('in socket subscribe' + resolutionData + resolutionDataFromStorage)
           const req = {
             "method": "SUBSCRIBE",
             "base":this.sellingasset.toUpperCase(),
@@ -216,17 +205,17 @@ export class DerivativeTvChartWebSocketAPI {
             };
             this._send(req);
             localStorage.setItem('isUnsubscribeOccuredChart','true')
-            //console.log('unsubscribe try block')
+            console.log('unsubscribe try block')
     
           }
           else {
-            //console.log('unsubscribe error block')
-           // window.location.href = "https://trade.paybito.com/";
+            console.log('unsubscribe error block')
+           // window.location.href = this.data.brokerDomain;
           }
         }
         catch (e) {
-         // window.location.href = "https://trade.paybito.com/";
-        //  location.reload();
+         // window.location.href = this.data.brokerDomain;
+         location.reload();
         }
     
     

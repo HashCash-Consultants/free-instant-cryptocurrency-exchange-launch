@@ -1,5 +1,5 @@
 <app-navbar (themeChanged)="themeChangedHandler($event)"></app-navbar>
-<div class="content-wrapper pt-0 pl-3" [ngClass]="Themecolor == 'Dark' ? '' : 'content-wrapper-light extMrgn'">
+<div class="content-wrapper pt-0 pl-3" [ngClass]="Themecolor == 'Dark' ? '' : 'content-wrapper-light'">
 
   <div class="container-fluid" data-ng-init="loginDuration();">
     <div class="row d-flex">
@@ -25,7 +25,7 @@
         <!-- <span class="required">*</span> -->
         <input class="form-control sign-up-from validate" [ngClass]="Themecolor == 'Dark' ? '' : 'form-control-light'"
           [class.is-invalid]="email.dirty && email.invalid" name="email" id="signupInputEmail" placeholder="Type your friend's email here"
-          [(ngModel)]="signupObj.email" placeholder="{{signupObj.email}}" appForbiddenName="bob" required
+          [(ngModel)]="signupObj.email"  appForbiddenName="bob" required
           #email="ngModel" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
         <span class="text-danger" *ngIf="email.dirty && email.invalid">Enter a valid email</span>
       </div>
@@ -33,17 +33,17 @@
     <button class="btn btn-primary" id="submit_btn" (click)="referralEmail()">Submit</button>
   </div>
   <div class="row">
-    <div class="p-3">
+    <!-- <div class="p-3">
       <p [ngClass]="Themecolor == 'Dark' ? 'text-white' : 'text-black'" style="padding-left: 13px;">Share your Referral
-        Code with your friends on Facebook, whatsapp, linkedin and twitter</p>
+        Code with your friends on Social Media</p>
       
-      <button type="button" id="facebookShare" class="btn btn-primary" style="margin-left:15px;" shareButton="facebook" [url]="main.shareUrlForFacebook" (click)="openInBrowser()"><i class="fa fa-facebook" aria-hidden="true"></i> Share</button>
-      <a class="btn btn-success" (click)="openInBrowser()" href="https://api.whatsapp.com/send?text={{main.shareUrlForWhatsapp}}"  target="_blank" style="margin-left:15px;"><i class="fa fa-whatsapp" aria-hidden="true"></i> Share</a>
-      <button type="button" (click)="openInBrowser()" class="btn btn-info" style="margin-left:15px;" shareButton="twitter" [url]="main.shareUrlForTwitter"><i class="fa fa-twitter" aria-hidden="true"></i> Share</button>
-      <!-- <button type="button" class="btn btn-linked-in" style="margin-left:15px;" shareButton="linkedin" [url]="main.shareUrlForLinkedIn"><i class="fa fa-linkedin" aria-hidden="true"></i> Share</button> -->
-      <a href="{{main.shareUrlForLinkedIn}}" (click)="openInBrowser()" target="_blank" class="btn btn-linked-in" style="margin-left:15px;" ><i class="fa fa-linkedin" aria-hidden="true"></i> Share</a>
+      <button type="button" class="btn btn-primary" style="margin-left:15px;" shareButton="facebook" [url]="main.shareUrlForFacebook"><i class="fa fa-facebook" aria-hidden="true"></i> Share</button>
+      <a class="btn btn-success" href="https://api.whatsapp.com/send?text={{main.shareUrlForWhatsapp}}"  target="_blank" style="margin-left:15px;"><i class="fa fa-whatsapp" aria-hidden="true"></i> Share</a>
+      <button type="button" class="btn btn-info" style="margin-left:15px;" shareButton="twitter" [url]="main.shareUrlForTwitter"><i class="fa fa-twitter" aria-hidden="true"></i> Share</button>
+     
+      <a href="{{main.shareUrlForLinkedIn}}" target="_blank" class="btn btn-linked-in" style="margin-left:15px;" ><i class="fa fa-linkedin" aria-hidden="true"></i> Share</a>
       
-    </div>
+    </div> -->
   </div>
 
   <div class="row">

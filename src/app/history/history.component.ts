@@ -70,7 +70,7 @@ export class HistoryComponent implements OnInit {
     document.body.classList.add("overlay")
     this.main.getDashBoardInfo();
     //  this.main.transactionHistory(1,this.Themecolor);
-    //this.marginTransactionHistory(this.selectedMarginType);
+   // this.marginTransactionHistory(this.selectedMarginType);
     // this.gettradingInvoice();
     this.collection = this.main.noOfItemPerPage;
     /*** calling method for rendering futures txn history ****/
@@ -270,8 +270,7 @@ export class HistoryComponent implements OnInit {
       no_of_items_per_page : this.collection,
       page_no : this.fpage,
       // userId :  localStorage.getItem('user_id'),
-      uuid : localStorage.getItem('uuid')
-
+      uuid :  localStorage.getItem('uuid')
     }
     this.http.post<any>(this.data.WEBSERVICE + '/fTrade/userAllTransactions',JSON.stringify(payload),{
       headers: {
@@ -300,8 +299,8 @@ renderOptionsTxnHistory = () => {
   let payload = {
     no_of_items_per_page : this.collection,
     page_no : this.page,
-    uuid : localStorage.getItem('uuid'),
-    // userId :  localStorage.getItem('user_id')
+    // userId :  localStorage.getItem('user_id'),
+    uuid :  localStorage.getItem('uuid')
   }
   this.http.post<any>(this.data.WEBSERVICE + '/optionsTrade/userAllTransactions',JSON.stringify(payload),{
     headers: {
@@ -330,10 +329,10 @@ renderOptionsTxnHistory = () => {
      var historyObj = {};
      historyObj['pageNo'] = pageNo;
      historyObj['noOfItemsPerPage']=20;
-    //  historyObj['userId'] = localStorage.getItem('user_id');
+     //historyObj['userId'] = localStorage.getItem('user_id');
      historyObj['uuid'] = localStorage.getItem('uuid');
 
-     historyObj['timeSpan'] = this.timeSpan;
+     historyObj['timeSpan'] = this.main.timeSpan;
      historyObj['transactionType']='all';
      var jsonString = JSON.stringify(historyObj);
      this.http.post<any>(this.data.WEBSERVICE + '/transaction/getUserAllTransaction', jsonString, {
@@ -545,10 +544,10 @@ renderOptionsTxnHistory = () => {
 
      historyObj['pageNo'] = pageNo;
      historyObj['noOfItemsPerPage']=20;
-    //  historyObj['userId'] = localStorage.getItem('user_id');
+     //historyObj['userId'] = localStorage.getItem('user_id');
      historyObj['uuid'] = localStorage.getItem('uuid');
 
-     historyObj['timeSpan'] = this.timeSpan;
+     historyObj['timeSpan'] = this.main.timeSpan;
      historyObj['transactionType']='all';
      var jsonString = JSON.stringify(historyObj);
      this.http.post<any>(this.data.WEBSERVICE + '/transaction/getUserAllTransaction', jsonString, {
