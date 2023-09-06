@@ -142,7 +142,7 @@ background:#17aa9d;color:#212833;border-color:transparent;box-shadow:none;font-w
 
   button.navbar-toggler {
     display: none !important;
-}
+} 
 
 re-captcha.is-invalid > div {
   border: 1px solid #dc3545 !important;
